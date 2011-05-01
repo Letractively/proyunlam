@@ -1,0 +1,2 @@
+serviceClass: ar.com.iEventTask.client.GreetingService
+path: 83606E5402E23F6F380CC77AC84FAD6B.gwt.rpc
