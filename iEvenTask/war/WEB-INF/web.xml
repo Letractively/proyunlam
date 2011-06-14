@@ -8,17 +8,17 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>ar.com.iEventTask.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>ar.com.AmberSoft.iEvenTask.server.GreetingServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/ieventtask/greet</url-pattern>
+    <url-pattern>/ieventask/greet</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>IEventTask.html</welcome-file>
+    <welcome-file>IEvenTask.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
