@@ -1,4 +1,4 @@
-package ar.com.iEventTask.client;
+package ar.com.AmberSoft.iEvenTask.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class IEventTask implements EntryPoint {
+public class IEvenTask implements EntryPoint {
 	  private Desktop desktop = new Desktop();
 
 	  private void itemSelected(ComponentEvent ce) {

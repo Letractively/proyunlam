@@ -1,4 +1,4 @@
-package ar.com.iEventTask.shared;
+package ar.com.AmberSoft.iEvenTask.shared;
 
 /**
  * <p>

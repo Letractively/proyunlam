@@ -1,4 +1,4 @@
-package ar.com.iEventTask.client;
+package ar.com.AmberSoft.iEvenTask.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

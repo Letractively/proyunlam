@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='ieventtask'>
+<module rename-to='ieventask'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
 
@@ -15,12 +15,11 @@
   <inherits name='com.extjs.gxt.desktop.WebDesktop' />
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='ar.com.iEventTask.client.IEventTask'/>
+  <entry-point class='ar.com.AmberSoft.iEvenTask.client.IEvenTask'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
-  <entry-point class="ar.com.iEventTask.client.Prueba"/>
   <stylesheet src="js/ext/resources/css/ext-all.css"/>
   <script src="js/ext/adapter/ext/ext-base.js"/>
   <script src="js/ext/ext-all.js"/>

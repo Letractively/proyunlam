@@ -1,7 +1,8 @@
-package ar.com.iEventTask.server;
+package ar.com.AmberSoft.iEvenTask.server;
 
-import ar.com.iEventTask.client.GreetingService;
-import ar.com.iEventTask.shared.FieldVerifier;
+import ar.com.AmberSoft.iEvenTask.client.GreetingService;
+import ar.com.AmberSoft.iEvenTask.shared.FieldVerifier;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
