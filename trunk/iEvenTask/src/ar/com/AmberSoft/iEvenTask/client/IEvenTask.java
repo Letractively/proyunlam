@@ -36,8 +36,10 @@ import com.extjs.gxt.ui.client.widget.toolbar.SeparatorToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.extjs.gxt.ui.client.widget.treepanel.TreePanel;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 /**
@@ -45,6 +47,11 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
  */
 public class IEvenTask implements EntryPoint {
 	  private Desktop desktop = new Desktop();
+	  
+		/**
+		 * Create a remote service proxy to talk to the server-side Greeting service.
+		 */
+		private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
 
 	  private void itemSelected(ComponentEvent ce) {
 	    Window w;
@@ -141,7 +148,19 @@ public class IEvenTask implements EntryPoint {
 	    tool.addSelectionListener(new SelectionListener<MenuEvent>() {
 	      @Override
 	      public void componentSelected(MenuEvent ce) {
-	        Info.display("Event", "The 'Settings' tool was clicked");
+	        Info.display("Invocacion a servicio asincronico", "Se invoca al primer servicio para probar funcionamiento de Hibernate.");
+			greetingService.greetServer("EstoViajaAlServidor",
+					new AsyncCallback<String>() {
+						public void onFailure(Throwable caught) {
+							// Show the RPC error message to the user
+							Info.display("Resultado de llamada", "Remote Procedure Call - Failure");
+						}
+
+						public void onSuccess(String result) {
+							Info.display("Resultado de llamada", "Remote Procedure Call - OK");
+						}
+					});
+	        
 	      }
 	    });
 	    menu.addTool(tool);
