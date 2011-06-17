@@ -1,2 +1,0 @@
-serviceClass: ar.com.AmberSoft.iEvenTask.client.GreetingService
-path: 882F5C69B5E6E64EB1C81FBC3A8F65C9.gwt.rpc
