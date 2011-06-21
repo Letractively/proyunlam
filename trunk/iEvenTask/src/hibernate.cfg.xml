@@ -5,10 +5,21 @@
 <hibernate-configuration>
 	<session-factory>
 		<!-- Database connection settings -->
-		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
+		<!-- property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
 		<property name="connection.url">jdbc:jtds:sqlserver://5.183.8.31:1433/ieventask</property>
 		<property name="connection.username">sa</property>
+		<property name="connection.password">Amber2011</property-->
+		
+		<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="connection.url">jdbc:mysql://5.183.8.31:3306/ieventtaskdb</property>
+		<property name="connection.username">root</property>
 		<property name="connection.password">Amber2011</property>
+		
+		<!-- property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<property name="connection.url">jdbc:sqlserver://5.183.8.31;instanceName=SQLEXPRESS;databaseName=ieventask</property>
+		<property name="connection.username">sa</property>
+		<property name="connection.password">Amber2011</property-->
+		
 		<!-- JDBC connection pool (use the built-in) -->
 		<property name="connection.pool_size">1</property>
 		<!-- SQL dialect -->
