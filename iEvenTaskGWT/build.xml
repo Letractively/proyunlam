@@ -10,11 +10,20 @@
 		<echo message="Finaliza el proceso de generacion del WAR" />
 	</target>
 	<target name="GWT.to.Web">
+		<delete includeEmptyDirs="true">
+		    <fileset dir="../iEvenTask/WebContent/"/>
+		  </delete>
 		<copy todir="../iEvenTask/WebContent/">
 			<fileset dir="./war/">
 				<!--exclude name="**/*.java" /-->
 			</fileset>
 		</copy>
+		<copy todir="../iEvenTask/WebContent/WEB-INF/lib/">
+			<fileset dir="../iEvenTaskBackEnd/lib/">
+				<!--exclude name="**/*.java" /-->
+			</fileset>
+		</copy>
+		
 	</target>
 
 
