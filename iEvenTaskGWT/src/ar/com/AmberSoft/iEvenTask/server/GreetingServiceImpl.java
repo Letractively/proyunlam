@@ -1,7 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.server;
 
+import ar.com.AmberSoft.iEvenTask.backend.services.TestService;
 import ar.com.AmberSoft.iEvenTask.client.GreetingService;
-import ar.com.AmberSoft.iEvenTask.server.hibernate.HibernateUtil;
 import ar.com.AmberSoft.iEvenTask.shared.FieldVerifier;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -15,7 +15,8 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 
 	public String greetServer(String input) throws IllegalArgumentException {
 		
-		HibernateUtil.getSessionFactory();
+		TestService service = new TestService();
+		service.conectarse();
 		
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {
