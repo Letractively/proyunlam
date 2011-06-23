@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="iEvenTask" default="default" basedir=".">
-    <description>
+	<description>
         Genera el archivo WAR para desplegar la aplicacion 
         en un application server
     </description>
-  <target name="default">
-		<echo message="Se comienza a generar el WAR"/>
-		  <war destfile="./deploy/iEvenTask.war"
-  			   webxml="./war/WEB-INF/web.xml"
-  			   basedir="./war"
-  			/>
-  		<echo message="Finaliza el proceso de generacion del WAR"/>	
-  </target>
-  
-    
-    
+	<target name="default">
+		<echo message="Se comienza a generar el WAR" />
+		<war destfile="./deploy/iEvenTask.war" webxml="./war/WEB-INF/web.xml" basedir="./war" />
+		<echo message="Finaliza el proceso de generacion del WAR" />
+	</target>
+	<target name="GWT.to.Web">
+		<copy todir="../iEvenTask/WebContent/">
+			<fileset dir="./war/">
+				<!--exclude name="**/*.java" /-->
+			</fileset>
+		</copy>
+	</target>
+
+
+
 </project>
