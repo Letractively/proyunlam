@@ -7,9 +7,8 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Operation;
 import ar.com.AmberSoft.iEvenTask.server.hibernate.HibernateUtil;
 
 public class TestService {
-	
-	
-	public void conectarse(){
+
+	public void conectarse() {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
 		Operation operation = new Operation();
@@ -17,6 +16,5 @@ public class TestService {
 		session.save(operation);
 		transaction.commit();
 	}
-	
-	
+
 }
