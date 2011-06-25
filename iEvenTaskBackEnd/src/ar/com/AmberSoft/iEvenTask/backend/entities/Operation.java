@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table (name="operation")
 public class Operation {
 	private String id;
-	private String descripcion;
+	private String description;
 	
 	@Id
 	public String getId() {
@@ -20,11 +20,11 @@ public class Operation {
 	}
 	
 	@Basic
-	public String getDescripcion() {
-		return descripcion;
+	public String getDescription() {
+		return description;
 	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setDescription(String descripcion) {
+		this.description = descripcion;
 	}
 	
 
