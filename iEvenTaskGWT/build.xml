@@ -4,26 +4,56 @@
         Genera el archivo WAR para desplegar la aplicacion 
         en un application server
     </description>
+
+	<property file="build.properties" />
+
 	<target name="default">
-		<echo message="Se comienza a generar el WAR" />
-		<war destfile="./deploy/iEvenTask.war" webxml="./war/WEB-INF/web.xml" basedir="./war" />
-		<echo message="Finaliza el proceso de generacion del WAR" />
+		<echo message="Por default no realiza ninguna tarea" />
 	</target>
 	<target name="GWT.to.Web">
-		<delete includeEmptyDirs="true">
-		    <fileset dir="../iEvenTask/WebContent/"/>
-		  </delete>
+		<echo message="Inicio GWT To WAR" />
+		<echo message="Se elimina ../iEvenTask/WebContent/" />
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="../iEvenTask/WebContent/" />
+		</delete>
+		<echo message="Fin, Se elimina ../iEvenTask/WebContent/" />
+		<echo message="Compilacion iEvenTaskGWT" />
+		
+		<java classname="${gwt.compiler.class}" fork="true" failonerror="true">
+			
+			<arg value="${iet.gwt.module}" />
+
+			<classpath>
+				<fileset dir="${java.home}/lib/">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${java.home}/lib/ext/">
+					<include name="**/*.jar" />
+				</fileset>
+				<pathelement path="${iet.gwt.src}" />
+				<fileset dir="${gwt.sdk.path}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${iet.gwt.lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+		<echo message="Fin Compilacion iEvenTaskGWT" />
+		<echo message="Se copia generado por GWT en ../iEvenTask/WebContent/" />
 		<copy todir="../iEvenTask/WebContent/">
 			<fileset dir="./war/">
 				<!--exclude name="**/*.java" /-->
 			</fileset>
 		</copy>
+		<echo message="Fin, Se copia generado por GWT en ../iEvenTask/WebContent/" />
+		<echo message="Se copian librerias de iEvenTaskBackEnd en ../iEvenTask/WebContent/" />
 		<copy todir="../iEvenTask/WebContent/WEB-INF/lib/">
 			<fileset dir="../iEvenTaskBackEnd/lib/">
 				<!--exclude name="**/*.java" /-->
 			</fileset>
 		</copy>
-		
+
 	</target>
 
 
