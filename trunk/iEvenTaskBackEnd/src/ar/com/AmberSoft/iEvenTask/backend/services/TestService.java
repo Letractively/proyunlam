@@ -12,7 +12,9 @@ public class TestService {
 	public void conectarse(){
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
-		session.save(new Operation());
+		Operation operation = new Operation();
+		operation.setId("prueba");
+		session.save(operation);
 		transaction.commit();
 	}
 	
