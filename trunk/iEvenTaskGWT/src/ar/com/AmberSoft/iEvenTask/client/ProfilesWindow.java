@@ -11,6 +11,10 @@ import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.extjs.gxt.ui.client.widget.button.IconButton;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.Text;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 
 public class ProfilesWindow extends Window {
 
@@ -20,9 +24,6 @@ public class ProfilesWindow extends Window {
 		
 		ButtonBar buttonBar = new ButtonBar();
 		
-		IconButton iconButton = new IconButton("botonAdd");
-		buttonBar.add(iconButton);
-		
 		Button btnAdd = new Button("Add");
 		buttonBar.add(btnAdd);
 		add(buttonBar);
@@ -30,6 +31,24 @@ public class ProfilesWindow extends Window {
 		TabPanel tabPanel = new TabPanel();
 		
 		TabItem tbtmNewTabitem = new TabItem("Detalles");
+		tbtmNewTabitem.setLayout(new RowLayout(Orientation.HORIZONTAL));
+		
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		
+		VerticalPanel verticalPanel_1 = new VerticalPanel();
+		
+		Text txtNombre = new Text("Nombre");
+		verticalPanel_1.add(txtNombre);
+		horizontalPanel.add(verticalPanel_1);
+		verticalPanel_1.setSize("97px", "31px");
+		
+		VerticalPanel verticalPanel_2 = new VerticalPanel();
+		
+		TextField textField = new TextField();
+		verticalPanel_2.add(textField);
+		horizontalPanel.add(verticalPanel_2);
+		verticalPanel_2.setHeight("31px");
+		tbtmNewTabitem.add(horizontalPanel, new RowData(800.0, 20.0, new Margins()));
 		tabPanel.add(tbtmNewTabitem);
 		tbtmNewTabitem.setSize("770px", "148px");
 		add(tabPanel, new RowData(Style.DEFAULT, 200.0, new Margins()));
