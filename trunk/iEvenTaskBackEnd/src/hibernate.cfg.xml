@@ -33,6 +33,7 @@
 		<!-- Drop and re-create the database schema on startup -->
 		<!-- property name="hbm2ddl.auto">update</property-->
 		<!-- mapping resource="org/hibernate/tutorial/domain/Event.hbm.xml" /-->
-		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Operation"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Permiso"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Perfil"/>
 	</session-factory>
 </hibernate-configuration>
