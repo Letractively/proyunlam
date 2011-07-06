@@ -5,11 +5,13 @@ import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
 import ar.com.AmberSoft.iEvenTask.server.hibernate.HibernateUtil;
+import ar.com.AmberSoft.util.LDAPClient;
 
 public class TestService {
 	
 	
 	public void conectarse(){
+		//LDAPClient.autenticar();
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
 		Perfil operation = new Perfil();
