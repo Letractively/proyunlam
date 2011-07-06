@@ -27,6 +27,7 @@ public class LoginWindow extends Window {
 	private Timer timer;
 	private TextField fldUser;
 	private TextField fldPassword;
+	private FormPanel frmLogin;
 	
 	public LoginWindow() {
 		
@@ -36,11 +37,11 @@ public class LoginWindow extends Window {
 		setHeading("iEvenTask - Autenticaci\u00F3n de Usuarios");
 		setLayout(new FillLayout(Orientation.HORIZONTAL));
 		
-		FormPanel frmpnlNewFormpanel = new FormPanel();
-		frmpnlNewFormpanel.setHeaderVisible(false);
-		frmpnlNewFormpanel.setHeading("New FormPanel");
-		frmpnlNewFormpanel.setCollapsible(true);
-		frmpnlNewFormpanel.setLayout(new FlowLayout(5));
+		frmLogin = new FormPanel();
+		frmLogin.setHeaderVisible(false);
+		frmLogin.setHeading("New FormPanel");
+		frmLogin.setCollapsible(true);
+		frmLogin.setLayout(new FlowLayout(5));
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		
@@ -62,7 +63,7 @@ public class LoginWindow extends Window {
 		fldUser.setAllowBlank(Boolean.FALSE);
 		verticalPanel_1.add(fldUser);
 		horizontalPanel.add(verticalPanel_1);
-		frmpnlNewFormpanel.add(horizontalPanel);
+		frmLogin.add(horizontalPanel);
 		
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
 		
@@ -85,8 +86,8 @@ public class LoginWindow extends Window {
 		fldPassword.setPassword(true);
 		verticalPanel_3.add(fldPassword);
 		horizontalPanel_1.add(verticalPanel_3);
-		frmpnlNewFormpanel.add(horizontalPanel_1);
-		add(frmpnlNewFormpanel);
+		frmLogin.add(horizontalPanel_1);
+		add(frmLogin);
 	}
 
 	private void mostrarMensajeDemoraEnter() {
@@ -108,6 +109,9 @@ public class LoginWindow extends Window {
 	private void presionoEnter(ComponentEvent event) {
 		final LoginWindow loginWindow = this;
 		if (event.getKeyCode() == KeyCodes.KEY_ENTER){
+			
+			if (frmLogin.isValid()) {
+			
 			HashMap params = new HashMap<String,String>();
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
 			params.put(ParamsConst.USER, fldUser.getValue());
@@ -123,10 +127,12 @@ public class LoginWindow extends Window {
 				public void onSuccess(Object result) {
 					Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Bienvenido " + fldUser.getValue());
 					loginWindow.hide();
-					timer.schedule(0);
 					timer.cancel();
 				}
 			});
+			} else {
+				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Faltan completar campos obligatorios.");
+			}
 		
 		}
 	}
