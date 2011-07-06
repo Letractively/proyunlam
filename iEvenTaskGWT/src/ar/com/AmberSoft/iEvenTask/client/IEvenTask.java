@@ -17,6 +17,9 @@ public class IEvenTask implements EntryPoint {
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
 		
+		LoginWindow loginWindow = new LoginWindow();
+		loginWindow.show();
+		
 		MenuBar menuBar = new MenuBar();
 		
 		Menu menu = new Menu();

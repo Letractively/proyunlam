@@ -14,15 +14,14 @@ import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.Field;
+import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
-import com.extjs.gxt.ui.client.widget.form.FormPanel;
-import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.google.gwt.core.client.GWT;
 
 public class ProfilesWindow extends Window {
 
@@ -72,6 +71,7 @@ public class ProfilesWindow extends Window {
 		horizontalPanel_2.add(campoConexion);
 		verticalPanel.add(horizontalPanel_2);
 		horizontalPanel_2.setWidth("268px");
+		campoConexion.setAllowBlank(Boolean.FALSE);
 		
 		HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
 		
@@ -84,6 +84,7 @@ public class ProfilesWindow extends Window {
 		horizontalPanel_3.add(campoGrupo);
 		verticalPanel.add(horizontalPanel_3);
 		horizontalPanel_3.setWidth("268px");
+		campoGrupo.setAllowBlank(Boolean.FALSE);
 		
 		Button btnAgregar = new Button("Agregar");
 		btnAgregar.addSelectionListener(new SelectionListener<ButtonEvent>() {
