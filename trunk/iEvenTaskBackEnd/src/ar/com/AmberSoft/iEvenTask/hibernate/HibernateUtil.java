@@ -1,4 +1,4 @@
-package ar.com.AmberSoft.iEvenTask.server.hibernate;
+package ar.com.AmberSoft.iEvenTask.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
