@@ -4,7 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
-import ar.com.AmberSoft.iEvenTask.server.hibernate.HibernateUtil;
+import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.util.LDAPClient;
 
 public class TestService {
@@ -15,7 +15,7 @@ public class TestService {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
 		Perfil operation = new Perfil();
-		operation.setId("prueba");
+		//operation.setId("prueba");
 		session.save(operation);
 		transaction.commit();
 	}
