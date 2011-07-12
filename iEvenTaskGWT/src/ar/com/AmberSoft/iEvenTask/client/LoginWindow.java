@@ -1,6 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -112,7 +113,7 @@ public class LoginWindow extends Window {
 			
 			if (frmLogin.isValid()) {
 			
-			HashMap params = new HashMap<String,String>();
+			Map params = new HashMap<String,String>();
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
 			params.put(ParamsConst.USER, fldUser.getValue());
 			params.put(ParamsConst.PASSWORD, fldPassword.getValue());
@@ -121,6 +122,9 @@ public class LoginWindow extends Window {
 				@Override
 				public void onFailure(Throwable caught) {
 					Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o contraseña incorrectos.");
+					//TODO: Se colocan las siguientes dos lineas para cuando esta caido el servidor de dominios
+					loginWindow.hide();
+					timer.cancel();
 				}
 
 				@Override

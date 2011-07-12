@@ -15,6 +15,7 @@ public abstract class ServiceNameConst {
 	
 	public static final String SERVICIO = "Servicio";
 	
-	public static final String LOGIN = "ar.com.AmberSoft.iEvenTask.server.services.LoginService";
+	public static final String LOGIN = "ar.com.AmberSoft.iEvenTask.services.LoginService";
+	public static final String CREATE_PROFILE = "ar.com.AmberSoft.iEvenTask.services.CreateProfileService";
 	
 }
