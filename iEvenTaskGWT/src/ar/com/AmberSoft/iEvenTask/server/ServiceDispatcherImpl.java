@@ -1,8 +1,12 @@
 package ar.com.AmberSoft.iEvenTask.server;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
+import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
+import ar.com.AmberSoft.iEvenTask.server.utils.GWTCompatibilityEvaluatorTypes;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceClassNotFoundException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceInstantationException;
@@ -44,7 +48,23 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		
 		try {
 			java.lang.reflect.Method method = type.getDeclaredMethod(EXECUTE, Map.class);
-			return (Map) method.invoke(type.newInstance(), params);
+			//Map toReturn = (Map) method.invoke(type.newInstance(), params);
+			//return new ViewMap(toReturn);
+			Map map = new HashMap();
+			Map toReturn = (Map) method.invoke(type.newInstance(), params);
+			if (toReturn!=null){
+				Iterator keys = toReturn.keySet().iterator();
+				while (keys.hasNext()) {
+					Object key = (Object) keys.next();
+					Object fieldValue = toReturn.get(key);
+					GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(fieldValue);
+					Compatibilizable compatibilizable = evaluatorTypes.getCompatibilizableAdapter();
+					fieldValue = compatibilizable.adapt(fieldValue);
+					map.put(key, fieldValue);
+				}
+			}
+			return map;
+			
 		} catch (Exception e) {
 			throw new ServiceInstantationException();
 		}
