@@ -10,6 +10,9 @@ create table iet_permiso (
 	descripcion varchar(255) not null
 );
 
+insert into iet_permiso values (1, 'Gestion de objetivos');
+insert into iet_permiso values (2, 'Herramientas de administracion');
+
 create table iet_permiso_perfil (
 	id_permiso int not null, 
 	id_perfil int not null
