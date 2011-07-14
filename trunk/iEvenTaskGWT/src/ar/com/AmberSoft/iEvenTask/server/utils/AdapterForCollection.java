@@ -1,0 +1,29 @@
+package ar.com.AmberSoft.iEvenTask.server.utils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+public class AdapterForCollection implements Compatibilizable {
+
+	@Override
+	public Object adapt(Object actual) {
+		
+		if (actual instanceof Collection) {
+			Collection update = new ArrayList();
+			Collection actualMap = (Collection) actual;
+			Iterator it = actualMap.iterator();
+			while (it.hasNext()) {
+				Object fieldValue = (Object) it.next();
+				GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(fieldValue);
+				Compatibilizable compatibilizable = evaluatorTypes.getCompatibilizableAdapter();
+				fieldValue = compatibilizable.adapt(fieldValue);
+				update.add(fieldValue);
+				return update;
+			}
+		}
+		
+		return null;
+	}
+
+}

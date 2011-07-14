@@ -1,6 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -13,8 +14,11 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
+import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
@@ -28,6 +32,9 @@ import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
+import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
@@ -176,6 +183,55 @@ public class ProfilesWindow extends Window {
 		tabPanel.add(tbtmDetalles);
 		tbtmDetalles.setHeight("72px");
 		add(tabPanel, new RowData(475.0, Style.DEFAULT, new Margins()));
+
+		// Tabla
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+		
+		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
+		configs.add(clmncnfgNombre);
+		
+		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONECTION, "Conexion", 150);
+		configs.add(clmncnfgConexion);
+		
+		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 150);
+		configs.add(clmncnfgGrupoLdap);
+
+		final ListStore store = new ListStore();
+		final Grid grid = new Grid(store, new ColumnModel(configs));
+		add(grid, new RowData(470.0, Style.DEFAULT, new Margins()));
+		grid.setSize("450", "100");
+		grid.setBorders(true);
+		
+		// Para rellenar la tabla voy a buscar la lista de todos los registros a mostrar
+		Map params = new HashMap<String,String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_PROFILE);
+		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display("iEvenTask", "No pudo obtener el listado de perfiles.");
+			}
+
+			@Override
+			public void onSuccess(Object result) {
+				Info.display("iEvenTask", "Se obtuvo correctamente el listado de perfiles.");
+				if (result instanceof Map) {
+					Map resultMap = (Map) result;
+					Collection list = (Collection) resultMap.get(ParamsConst.LIST);
+					for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+						Map actual = (Map) iterator.next();
+						BaseModel baseModel = new BaseModel();
+						baseModel.set(ParamsConst.NAME, actual.get(ParamsConst.NAME));
+						baseModel.set(ParamsConst.CONECTION, actual.get(ParamsConst.CONECTION));
+						baseModel.set(ParamsConst.GROUP, actual.get(ParamsConst.GROUP));
+						store.add(baseModel);
+						grid.repaint();
+					}
+				}
+			}
+		});
+		
+
 	}
 
 	public Boolean isValid(){
