@@ -30,6 +30,9 @@ import com.extjs.gxt.ui.client.widget.button.ButtonBar;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.google.gwt.user.client.ui.DecoratedStackPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.extjs.gxt.ui.client.widget.button.ToggleButton;
+import com.extjs.gxt.ui.client.event.WidgetListener;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -42,7 +45,7 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.setSize("1024", "768");
 		
 		LoginWindow loginWindow = new LoginWindow();
-		//loginWindow.show();
+		loginWindow.show();
 		
 		MenuBar menuBar = new MenuBar();
 		
@@ -113,12 +116,30 @@ public class IEvenTask implements EntryPoint {
 		
 		TabPanel tabPanel = new TabPanel();
 		rootPanel.add(tabPanel);
-		rootPanel.setWidgetPosition(tabPanel, 0, 50);
-		tabPanel.setSize("578px", "418px");
+		rootPanel.setWidgetPosition(tabPanel, 0, 81);
+		tabPanel.setSize("578px", "387px");
 		
 		ToolBar toolBar = new ToolBar();
+		
+		Button btnNuevaTarea = new Button("Nueva Tarea");
+		btnNuevaTarea.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent be) {
+				TaskWindow taskWindow = new TaskWindow();
+				taskWindow.show();
+			}
+		});
+		toolBar.add(btnNuevaTarea);
+		
+		Button btnNuevoObjetivo = new Button("Nuevo Objetivo");
+		btnNuevoObjetivo.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent be) {
+				ObjectiveWindow objectiveWindow = new ObjectiveWindow();
+				objectiveWindow.show();
+			}
+		});
+		toolBar.add(btnNuevoObjetivo);
 		rootPanel.add(toolBar);
 		rootPanel.setWidgetPosition(toolBar, 0, 24);
-		toolBar.setSize("566px", "15px");
+		toolBar.setSize("562px", "34px");
 	}
 }
