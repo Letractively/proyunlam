@@ -15,8 +15,8 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
-import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
@@ -32,11 +32,15 @@ import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.grid.CellEditor;
+import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
+import com.extjs.gxt.ui.client.widget.menu.Menu;
+import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
@@ -44,6 +48,7 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 public class ProfilesWindow extends Window {
 	
 	List<Field> toValidate = new ArrayList<Field>();
+	
 
 	public ProfilesWindow() {
 		final TextField fldName = new TextField();
@@ -51,6 +56,32 @@ public class ProfilesWindow extends Window {
 		final TextField fldGroup = new TextField();
 		final CheckBox fldObjective = new CheckBox();
 		final CheckBox fldAdmin = new CheckBox();
+		final ListStore store = new ListStore();
+		final Grid grid = new Grid(store, new ColumnModel(getGridConfig()));
+		grid.addPlugin(new CheckColumnConfig(ParamsConst.SELECT, "", 55));
+		
+		Menu contextMenu = new Menu();
+		MenuItem itemSelectAll = new MenuItem();
+		itemSelectAll.setText("Seleccionar todos");
+		itemSelectAll.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				grid.getSelectionModel().selectAll();
+			}
+		});
+		contextMenu.add(itemSelectAll);
+		MenuItem itemDelete = new MenuItem();
+		itemDelete.setText("Elimnar Perfiles");
+		itemDelete.addSelectionListener(new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				List seleccionados = grid.getSelectionModel().getSelectedItems();
+				Info.display("Info", "Esta intentando eliminar, funcion aun no implementada.");
+				
+			}
+		});
+		contextMenu.add(itemDelete);
+		grid.setContextMenu(contextMenu);
 		
 		setInitialWidth(490);
 		setMaximizable(true);
@@ -86,6 +117,7 @@ public class ProfilesWindow extends Window {
 							fldGroup.setValue("");
 							fldObjective.setValue(Boolean.FALSE);
 							fldAdmin.setValue(Boolean.FALSE);
+							obtainProfiles(store, grid);
 						}
 					});
 	
@@ -95,17 +127,8 @@ public class ProfilesWindow extends Window {
 		});
 		toolBar.add(btnGuardar);
 		
-		Button btnCancelar_1 = new Button("Cancelar");
-		btnCancelar_1.addSelectionListener(new SelectionListener<ButtonEvent>() {
-			public void componentSelected(ButtonEvent ce) {
-				fldName.setValue("");
-				fldConection.setValue("");
-				fldGroup.setValue("");
-				fldObjective.setValue(Boolean.FALSE);
-				fldAdmin.setValue(Boolean.FALSE);
-			}
-		});
-		toolBar.add(btnCancelar_1);
+		Button button = new Button("Cancelar");
+		toolBar.add(button);
 		add(toolBar);
 		
 		TabPanel tabPanel = new TabPanel();
@@ -185,8 +208,33 @@ public class ProfilesWindow extends Window {
 		add(tabPanel, new RowData(475.0, Style.DEFAULT, new Margins()));
 
 		// Tabla
-		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+		add(grid, new RowData(470.0, Style.DEFAULT, new Margins()));
+		grid.setSize("450", "100");
+		grid.setBorders(true);
 		
+		obtainProfiles(store, grid);
+		
+
+	}
+
+	/**
+	 * Retorna la configuracion de la grilla
+	 */
+	private List getGridConfig() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+
+	    /*CheckColumnConfig checkColumn = new CheckColumnConfig(ParamsConst.SELECT, "", 55);
+	    CellEditor checkBoxEditor = new CellEditor(new CheckBox());
+	    checkBoxEditor.setEnabled(Boolean.TRUE);
+	    checkColumn.setEditor(checkBoxEditor);
+	    configs.add(checkColumn);*/
+
+	    // Se agrega esta columna para mantener el identificador de los perfiles
+		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
+		clmncnfgId.setHidden(Boolean.TRUE);
+		configs.add(clmncnfgId);
+
+	    
 		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
 		configs.add(clmncnfgNombre);
 		
@@ -195,12 +243,19 @@ public class ProfilesWindow extends Window {
 		
 		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 150);
 		configs.add(clmncnfgGrupoLdap);
+		
+		
+		return configs;
+	}
 
-		final ListStore store = new ListStore();
-		final Grid grid = new Grid(store, new ColumnModel(configs));
-		add(grid, new RowData(470.0, Style.DEFAULT, new Margins()));
-		grid.setSize("450", "100");
-		grid.setBorders(true);
+	/**
+	 * Invoca al servicio de obtencion de perfiles, para que puedan ser listados en la grilla
+	 * @param store
+	 * @param grid
+	 */
+	private void obtainProfiles(final ListStore store, final Grid grid) {
+		// Vaciamos la lista
+		store.removeAll();
 		
 		// Para rellenar la tabla voy a buscar la lista de todos los registros a mostrar
 		Map params = new HashMap<String,String>();
@@ -221,17 +276,17 @@ public class ProfilesWindow extends Window {
 					for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 						Map actual = (Map) iterator.next();
 						BaseModel baseModel = new BaseModel();
+						baseModel.set(ParamsConst.ID, actual.get(ParamsConst.ID));
 						baseModel.set(ParamsConst.NAME, actual.get(ParamsConst.NAME));
 						baseModel.set(ParamsConst.CONECTION, actual.get(ParamsConst.CONECTION));
 						baseModel.set(ParamsConst.GROUP, actual.get(ParamsConst.GROUP));
 						store.add(baseModel);
+					
 						grid.repaint();
 					}
 				}
 			}
 		});
-		
-
 	}
 
 	public Boolean isValid(){
