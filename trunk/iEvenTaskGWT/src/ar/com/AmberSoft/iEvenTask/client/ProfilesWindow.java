@@ -15,7 +15,11 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -32,7 +36,6 @@ import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.grid.CellEditor;
 import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
@@ -42,13 +45,14 @@ import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
+import com.google.gwt.dev.shell.OophmSessionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
 public class ProfilesWindow extends Window {
 	
+	private Boolean editing = Boolean.FALSE;
 	List<Field> toValidate = new ArrayList<Field>();
-	
 
 	public ProfilesWindow() {
 		final TextField fldName = new TextField();
@@ -57,8 +61,34 @@ public class ProfilesWindow extends Window {
 		final CheckBox fldObjective = new CheckBox();
 		final CheckBox fldAdmin = new CheckBox();
 		final ListStore store = new ListStore();
+		final MenuItem itemDelete = new MenuItem();
 		final Grid grid = new Grid(store, new ColumnModel(getGridConfig()));
+		itemDelete.setEnabled(Boolean.FALSE);
 		grid.addPlugin(new CheckColumnConfig(ParamsConst.SELECT, "", 55));
+		grid.getSelectionModel().addListener(Events.SelectionChange, new Listener() {
+			@Override
+			public void handleEvent(BaseEvent be) {
+				List seleccionados = grid.getSelectionModel().getSelection();
+				itemDelete.setEnabled(Boolean.TRUE);
+				if (seleccionados.size()==1){
+					Iterator it = seleccionados.iterator();
+					if (it.hasNext()){
+						BaseModel baseModel = (BaseModel) it.next();
+						fldName.setValue(baseModel.get(ParamsConst.NAME));
+						fldConection.setValue(baseModel.get(ParamsConst.CONECTION));
+						fldGroup.setValue(baseModel.get(ParamsConst.GROUP));
+						editing = Boolean.TRUE;
+					}
+				} else {
+					if ((seleccionados.size()==0)||(seleccionados==null)){
+						itemDelete.setEnabled(Boolean.FALSE);
+					}
+					resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
+					editing = Boolean.FALSE;
+				}
+			}
+		});
+		
 		
 		Menu contextMenu = new Menu();
 		MenuItem itemSelectAll = new MenuItem();
@@ -67,17 +97,40 @@ public class ProfilesWindow extends Window {
 			@Override
 			public void componentSelected(MenuEvent ce) {
 				grid.getSelectionModel().selectAll();
+				editing = Boolean.FALSE;
 			}
 		});
 		contextMenu.add(itemSelectAll);
-		MenuItem itemDelete = new MenuItem();
 		itemDelete.setText("Elimnar Perfiles");
 		itemDelete.addSelectionListener(new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent ce) {
+				editing = Boolean.FALSE;
+				resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
+				Collection ids = new ArrayList();
 				List seleccionados = grid.getSelectionModel().getSelectedItems();
-				Info.display("Info", "Esta intentando eliminar, funcion aun no implementada.");
-				
+				Iterator it = seleccionados.iterator();
+				while (it.hasNext()) {
+					BaseModel model = (BaseModel) it.next();
+					ids.add(model.get(ParamsConst.ID));
+				}
+				Map params = new HashMap<String,String>();
+				params.put(ParamsConst.IDS, ids);
+				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_PROFILE);
+				DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display("iEvenTask", "No se han podido eliminar los perfiles. Aguarde un momento y vuelva a intentarlo.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						Info.display("iEvenTask", "Se eliminaron los perfiles con exito.");
+						obtainProfiles(store, grid);
+					}
+
+				});
 			}
 		});
 		contextMenu.add(itemDelete);
@@ -95,31 +148,43 @@ public class ProfilesWindow extends Window {
 		btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
 				if (isValid()){
-					Map params = new HashMap<String,String>();
-					params.put(ParamsConst.NAME, fldName.getValue());
-					params.put(ParamsConst.CONECTION, fldConection.getValue());
-					params.put(ParamsConst.GROUP, fldGroup.getValue());
-					params.put(ParamsConst.CHECK_OBJECTIVE, fldObjective.getValue());
-					params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue());
-					params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_PROFILE);
-					DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							Info.display("iEvenTask", "No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
+					
+						Map params = new HashMap<String,String>();
+						params.put(ParamsConst.NAME, fldName.getValue());
+						params.put(ParamsConst.CONECTION, fldConection.getValue());
+						params.put(ParamsConst.GROUP, fldGroup.getValue());
+						params.put(ParamsConst.CHECK_OBJECTIVE, fldObjective.getValue());
+						params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue());
+						if (editing.booleanValue()){
+							List seleccionados = grid.getSelectionModel().getSelection();
+							if (seleccionados.size()==1){
+								Iterator it = seleccionados.iterator();
+								if (it.hasNext()){
+									BaseModel baseModel = (BaseModel) it.next();
+									params.put(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+								}
+							}
+							params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_PROFILE);
+						} else {
+							params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_PROFILE);
 						}
+						DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+	
+							@Override
+							public void onFailure(Throwable caught) {
+								Info.display("iEvenTask", "No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
+							}
+	
+							@Override
+							public void onSuccess(Object result) {
+								Info.display("iEvenTask", "Se almaceno el perfil con exito.");
+								resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
+								obtainProfiles(store, grid);
+							}
 
-						@Override
-						public void onSuccess(Object result) {
-							Info.display("iEvenTask", "Se almaceno el perfil con exito.");
-							fldName.setValue("");
-							fldConection.setValue("");
-							fldGroup.setValue("");
-							fldObjective.setValue(Boolean.FALSE);
-							fldAdmin.setValue(Boolean.FALSE);
-							obtainProfiles(store, grid);
-						}
-					});
+
+						});
+					
 	
 				}
 				
@@ -127,8 +192,17 @@ public class ProfilesWindow extends Window {
 		});
 		toolBar.add(btnGuardar);
 		
-		Button button = new Button("Cancelar");
-		toolBar.add(button);
+		Button buttonCancelar = new Button("Cancelar");
+		buttonCancelar.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void componentSelected(ComponentEvent ce) {
+				resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
+				editing = Boolean.FALSE;
+			}
+		
+		});
+		toolBar.add(buttonCancelar);
 		add(toolBar);
 		
 		TabPanel tabPanel = new TabPanel();
@@ -216,18 +290,24 @@ public class ProfilesWindow extends Window {
 		
 
 	}
+	
+	private void resetFields(final TextField fldName,
+			final TextField fldConection,
+			final TextField fldGroup,
+			final CheckBox fldObjective,
+			final CheckBox fldAdmin) {
+		fldName.setValue("");
+		fldConection.setValue("");
+		fldGroup.setValue("");
+		fldObjective.setValue(Boolean.FALSE);
+		fldAdmin.setValue(Boolean.FALSE);
+	}
 
 	/**
 	 * Retorna la configuracion de la grilla
 	 */
 	private List getGridConfig() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-
-	    /*CheckColumnConfig checkColumn = new CheckColumnConfig(ParamsConst.SELECT, "", 55);
-	    CellEditor checkBoxEditor = new CellEditor(new CheckBox());
-	    checkBoxEditor.setEnabled(Boolean.TRUE);
-	    checkColumn.setEditor(checkBoxEditor);
-	    configs.add(checkColumn);*/
 
 	    // Se agrega esta columna para mantener el identificador de los perfiles
 		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
