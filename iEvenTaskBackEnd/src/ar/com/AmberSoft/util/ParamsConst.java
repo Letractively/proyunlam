@@ -7,7 +7,9 @@ public abstract class ParamsConst {
 	public static final String LIST = "LIST";
 	public static final String USER = "USER";
 	public static final String PASSWORD = "PASSWORD";
-	
+
+	public static final String IDS = "ids"; 
+	public static final String ID = "id"; 
 	public static final String NAME = "nombre";
 	public static final String CONECTION = "conexion";
 	public static final String GROUP = "grupoLDAP";

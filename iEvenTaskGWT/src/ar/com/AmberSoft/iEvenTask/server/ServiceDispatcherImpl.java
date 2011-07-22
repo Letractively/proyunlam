@@ -66,6 +66,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			return map;
 			
 		} catch (Exception e) {
+			System.err.println(e.getMessage());
 			throw new ServiceInstantationException();
 		}
 	}

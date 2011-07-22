@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -12,23 +13,23 @@ import ar.com.AmberSoft.util.PKGenerator;
 
 @Entity
 @Table (name="iet_perfil")
-public class Perfil {
+public class Perfil implements Serializable{
 	
-	private int id = 0;
+	private Integer id;
 	private String nombre;
 	private String conexion;
 	private String grupoLDAP;
 	private Set<Permiso> permisos;
 	
 	@Id @Column (name="id_perfil")
-	public int getId() {
-		if (id==0){
+	public Integer getId() {
+		if (id==null){
 			PKGenerator pkGenerator = new PKGenerator();
-			id = pkGenerator.getIntLastTime();
+			id = new Integer(pkGenerator.getIntLastTime());
 		}
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	@Basic

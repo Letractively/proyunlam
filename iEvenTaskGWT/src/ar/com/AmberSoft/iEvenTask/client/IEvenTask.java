@@ -1,39 +1,18 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuBar;
 import com.extjs.gxt.ui.client.widget.menu.MenuBarItem;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.extjs.gxt.ui.client.widget.custom.Portal;
-import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
-import com.extjs.gxt.ui.client.widget.toolbar.SeparatorToolItem;
-import com.extjs.gxt.ui.client.widget.button.SplitButton;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.widget.form.FormPanel;
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
-import com.extjs.gxt.ui.client.store.ListStore;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.TabPanel;
-import com.extjs.gxt.ui.client.widget.Window;
-import com.extjs.gxt.ui.client.widget.grid.EditorGrid;
-import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
-import java.util.Collections;
-import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
-import com.extjs.gxt.ui.client.widget.Header;
-import com.extjs.gxt.ui.client.widget.button.ButtonBar;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.google.gwt.user.client.ui.DecoratedStackPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.extjs.gxt.ui.client.widget.button.ToggleButton;
-import com.extjs.gxt.ui.client.event.WidgetListener;
-import com.extjs.gxt.ui.client.event.ComponentEvent;
+import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -47,8 +26,8 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.setStyleName("dialogVPanel");
 		rootPanel.setSize("1024", "768");
 
-		LoginWindow loginWindow = new LoginWindow();
-		loginWindow.show();
+		//LoginWindow loginWindow = new LoginWindow();
+		//loginWindow.show();
 
 		MenuBar menuBar = new MenuBar();
 
