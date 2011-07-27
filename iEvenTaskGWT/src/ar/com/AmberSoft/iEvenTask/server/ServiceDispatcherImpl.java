@@ -37,7 +37,6 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		} catch (ClassNotFoundException e) {
 			// Si la clase no existe, es probable que se encuentre ejecutando el APP ENGINE
 			// Con lo cual se buscará un emulador del servicio
-			
 			String onlyName = serviceName.substring(serviceName.lastIndexOf("."));
 			try {
 				type = Class.forName(EMULATE_PACKAGE + onlyName);
@@ -48,8 +47,6 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		
 		try {
 			java.lang.reflect.Method method = type.getDeclaredMethod(EXECUTE, Map.class);
-			//Map toReturn = (Map) method.invoke(type.newInstance(), params);
-			//return new ViewMap(toReturn);
 			Map map = new HashMap();
 			Map toReturn = (Map) method.invoke(type.newInstance(), params);
 			if (toReturn!=null){

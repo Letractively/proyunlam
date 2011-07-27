@@ -7,6 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
+import ar.com.AmberSoft.iEvenTask.client.utils.GridDataCallback;
+import ar.com.AmberSoft.iEvenTask.client.utils.Loader;
 import ar.com.AmberSoft.iEvenTask.client.validaciones.ValidaMultiField;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -40,12 +43,13 @@ import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
+import com.extjs.gxt.ui.client.widget.grid.filters.GridFilters;
+import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
-import com.google.gwt.dev.shell.OophmSessionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
@@ -60,11 +64,29 @@ public class ProfilesWindow extends Window {
 		final TextField fldGroup = new TextField();
 		final CheckBox fldObjective = new CheckBox();
 		final CheckBox fldAdmin = new CheckBox();
-		final ListStore store = new ListStore();
+		
+		// La siguiente porcion del codigo se encarga del paginado
+		final GridDataCallback callback = new GridDataCallback();
+		final Loader loader = new Loader(ServiceNameConst.LIST_PROFILE, callback); 
+		final ListStore store = new ListStore(loader);
+		
 		final MenuItem itemDelete = new MenuItem();
+		this.setIcon(Resources.ICONS.table());
+		final GridFilters filters = new GridFilters();
+		filters.setLocal(Boolean.FALSE);
+		StringFilter stringFilter = new StringFilter(ParamsConst.NAME);
+		filters.addFilter(stringFilter);
+		
 		final Grid grid = new Grid(store, new ColumnModel(getGridConfig()));
+		this.add(grid);
+		callback.setGrid(grid);
+		
 		itemDelete.setEnabled(Boolean.FALSE);
+
+		
+		
 		grid.addPlugin(new CheckColumnConfig(ParamsConst.SELECT, "", 55));
+		grid.addPlugin(filters);
 		grid.getSelectionModel().addListener(Events.SelectionChange, new Listener() {
 			@Override
 			public void handleEvent(BaseEvent be) {
@@ -127,7 +149,7 @@ public class ProfilesWindow extends Window {
 					@Override
 					public void onSuccess(Object result) {
 						Info.display("iEvenTask", "Se eliminaron los perfiles con exito.");
-						obtainProfiles(store, grid);
+						refreshGrid(grid);
 					}
 
 				});
@@ -179,7 +201,7 @@ public class ProfilesWindow extends Window {
 							public void onSuccess(Object result) {
 								Info.display("iEvenTask", "Se almaceno el perfil con exito.");
 								resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
-								obtainProfiles(store, grid);
+								refreshGrid(grid);
 							}
 
 
@@ -286,9 +308,16 @@ public class ProfilesWindow extends Window {
 		grid.setSize("450", "100");
 		grid.setBorders(true);
 		
-		obtainProfiles(store, grid);
-		
+		refreshGrid(grid);
 
+	}
+	
+	private void refreshGrid(final Grid grid) {
+		Map params = new HashMap();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_PROFILE);
+		GridDataCallback callback = new GridDataCallback();
+		callback.setGrid(grid);
+		DispatcherUtil.getDispatcher().execute(params, callback);
 	}
 	
 	private void resetFields(final TextField fldName,
@@ -313,10 +342,10 @@ public class ProfilesWindow extends Window {
 		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
 		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
-
 	    
 		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
 		configs.add(clmncnfgNombre);
+	
 		
 		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONECTION, "Conexion", 150);
 		configs.add(clmncnfgConexion);
@@ -333,12 +362,11 @@ public class ProfilesWindow extends Window {
 	 * @param store
 	 * @param grid
 	 */
-	private void obtainProfiles(final ListStore store, final Grid grid) {
+/*	private void obtainProfiles(final ListStore store, final Grid grid, Map params) {
 		// Vaciamos la lista
 		store.removeAll();
 		
 		// Para rellenar la tabla voy a buscar la lista de todos los registros a mostrar
-		Map params = new HashMap<String,String>();
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_PROFILE);
 		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
 
@@ -367,7 +395,7 @@ public class ProfilesWindow extends Window {
 				}
 			}
 		});
-	}
+	}*/
 
 	public Boolean isValid(){
 		Boolean valid = Boolean.TRUE;
