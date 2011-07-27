@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.hibernate.Query;
@@ -16,6 +17,15 @@ public class ListProfileService implements Service {
 
 	@Override
 	public Map execute(Map params) {
+		
+		Collection filters = (Collection) params.get("filters");
+		if (filters!=null){
+			Iterator it = filters.iterator();
+			while (it.hasNext()) {
+				Object object = (Object) it.next();
+				
+			}
+		}
 		
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		session.beginTransaction();
