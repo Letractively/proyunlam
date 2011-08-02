@@ -15,12 +15,15 @@ public class Loader extends BasePagingLoader{
 		//return super.newLoadConfig();
 	}
 
-	public Loader(String service, AsyncCallback callback) {
+	public Loader(String service) {
 		super(null);
 		proxy = new Proxy();
 		((Proxy)proxy).setService(service);
-		((Proxy)proxy).setCallback(callback);
 		setRemoteSort(Boolean.TRUE);
+	}
+	
+	public void setCallback(AsyncCallback asyncCallback){
+		((Proxy)proxy).setCallback(asyncCallback);
 	}
 
 
