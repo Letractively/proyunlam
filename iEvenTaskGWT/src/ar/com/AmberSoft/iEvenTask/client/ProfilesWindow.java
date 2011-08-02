@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
+import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.client.utils.GridDataCallback;
-import ar.com.AmberSoft.iEvenTask.client.utils.Loader;
 import ar.com.AmberSoft.iEvenTask.client.validaciones.ValidaMultiField;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -25,7 +25,6 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
@@ -39,15 +38,10 @@ import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
-import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
-import com.extjs.gxt.ui.client.widget.grid.Grid;
-import com.extjs.gxt.ui.client.widget.grid.filters.GridFilters;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
-import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -59,72 +53,35 @@ public class ProfilesWindow extends Window {
 	List<Field> toValidate = new ArrayList<Field>();
 
 	public ProfilesWindow() {
+		
+		// Campos
 		final TextField fldName = new TextField();
 		final TextField fldConection = new TextField();		
 		final TextField fldGroup = new TextField();
 		final CheckBox fldObjective = new CheckBox();
 		final CheckBox fldAdmin = new CheckBox();
 		
-		// La siguiente porcion del codigo se encarga del paginado
-		final GridDataCallback callback = new GridDataCallback();
-		final Loader loader = new Loader(ServiceNameConst.LIST_PROFILE, callback); 
-		final ListStore store = new ListStore(loader);
+		// Grilla
+		final Grid grid = new Grid(ServiceNameConst.LIST_PROFILE, getGridConfig());
 		
-		final MenuItem itemDelete = new MenuItem();
-		this.setIcon(Resources.ICONS.table());
-		final GridFilters filters = new GridFilters();
-		filters.setLocal(Boolean.FALSE);
-		StringFilter stringFilter = new StringFilter(ParamsConst.NAME);
-		filters.addFilter(stringFilter);
-		
-		final Grid grid = new Grid(store, new ColumnModel(getGridConfig()));
+		// Agrega la grilla a la ventana actual
 		this.add(grid);
-		callback.setGrid(grid);
-		
-		itemDelete.setEnabled(Boolean.FALSE);
 
+		// Filtros sobre la grilla
+		grid.addFilter(new StringFilter(ParamsConst.NAME));
+		grid.addFilter(new StringFilter(ParamsConst.CONECTION));
 		
+		this.setIcon(Resources.ICONS.table());
 		
-		grid.addPlugin(new CheckColumnConfig(ParamsConst.SELECT, "", 55));
-		grid.addPlugin(filters);
-		grid.getSelectionModel().addListener(Events.SelectionChange, new Listener() {
-			@Override
-			public void handleEvent(BaseEvent be) {
-				List seleccionados = grid.getSelectionModel().getSelection();
-				itemDelete.setEnabled(Boolean.TRUE);
-				if (seleccionados.size()==1){
-					Iterator it = seleccionados.iterator();
-					if (it.hasNext()){
-						BaseModel baseModel = (BaseModel) it.next();
-						fldName.setValue(baseModel.get(ParamsConst.NAME));
-						fldConection.setValue(baseModel.get(ParamsConst.CONECTION));
-						fldGroup.setValue(baseModel.get(ParamsConst.GROUP));
-						editing = Boolean.TRUE;
-					}
-				} else {
-					if ((seleccionados.size()==0)||(seleccionados==null)){
-						itemDelete.setEnabled(Boolean.FALSE);
-					}
-					resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
-					editing = Boolean.FALSE;
-				}
-			}
-		});
-		
-		
-		Menu contextMenu = new Menu();
-		MenuItem itemSelectAll = new MenuItem();
-		itemSelectAll.setText("Seleccionar todos");
-		itemSelectAll.addSelectionListener(new SelectionListener<MenuEvent>() {
+		// Menu contextual de la grilla
+		grid.addContextMenuItem("Seleccionar todos", Boolean.TRUE, new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent ce) {
 				grid.getSelectionModel().selectAll();
 				editing = Boolean.FALSE;
 			}
 		});
-		contextMenu.add(itemSelectAll);
-		itemDelete.setText("Elimnar Perfiles");
-		itemDelete.addSelectionListener(new SelectionListener<MenuEvent>() {
+		final MenuItem itemDelete = grid.addContextMenuItem("Elimnar Perfiles", Boolean.FALSE, new SelectionListener<MenuEvent>() {
 			@Override
 			public void componentSelected(MenuEvent ce) {
 				editing = Boolean.FALSE;
@@ -155,14 +112,45 @@ public class ProfilesWindow extends Window {
 				});
 			}
 		});
-		contextMenu.add(itemDelete);
-		grid.setContextMenu(contextMenu);
 		
+		
+		// Acciones a realizar cuando selecciona algun registro de la grilla
+		grid.getSelectionModel().addListener(Events.SelectionChange, new Listener() {
+			@Override
+			public void handleEvent(BaseEvent be) {
+				List seleccionados = grid.getSelectionModel().getSelection();
+				itemDelete.setEnabled(Boolean.TRUE);
+				if (seleccionados.size()==1){
+					Iterator it = seleccionados.iterator();
+					if (it.hasNext()){
+						BaseModel baseModel = (BaseModel) it.next();
+						fldName.setValue(baseModel.get(ParamsConst.NAME));
+						fldConection.setValue(baseModel.get(ParamsConst.CONECTION));
+						fldGroup.setValue(baseModel.get(ParamsConst.GROUP));
+						editing = Boolean.TRUE;
+					}
+				} else {
+					if ((seleccionados.size()==0)||(seleccionados==null)){
+						itemDelete.setEnabled(Boolean.FALSE);
+					}
+					resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
+					editing = Boolean.FALSE;
+				}
+			}
+		});		
+		
+		
+		
+
+		// Propiedades basicas de la ventana actual
 		setInitialWidth(490);
 		setMaximizable(true);
 		setTitleCollapse(true);
 		setHeading("Gesti\u00F3n de Perfiles");
 		setLayout(new RowLayout(Orientation.VERTICAL));
+		
+		
+		
 		
 		ToolBar toolBar = new ToolBar();
 		
@@ -357,45 +345,6 @@ public class ProfilesWindow extends Window {
 		return configs;
 	}
 
-	/**
-	 * Invoca al servicio de obtencion de perfiles, para que puedan ser listados en la grilla
-	 * @param store
-	 * @param grid
-	 */
-/*	private void obtainProfiles(final ListStore store, final Grid grid, Map params) {
-		// Vaciamos la lista
-		store.removeAll();
-		
-		// Para rellenar la tabla voy a buscar la lista de todos los registros a mostrar
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_PROFILE);
-		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Info.display("iEvenTask", "No pudo obtener el listado de perfiles.");
-			}
-
-			@Override
-			public void onSuccess(Object result) {
-				Info.display("iEvenTask", "Se obtuvo correctamente el listado de perfiles.");
-				if (result instanceof Map) {
-					Map resultMap = (Map) result;
-					Collection list = (Collection) resultMap.get(ParamsConst.LIST);
-					for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-						Map actual = (Map) iterator.next();
-						BaseModel baseModel = new BaseModel();
-						baseModel.set(ParamsConst.ID, actual.get(ParamsConst.ID));
-						baseModel.set(ParamsConst.NAME, actual.get(ParamsConst.NAME));
-						baseModel.set(ParamsConst.CONECTION, actual.get(ParamsConst.CONECTION));
-						baseModel.set(ParamsConst.GROUP, actual.get(ParamsConst.GROUP));
-						store.add(baseModel);
-					
-						grid.repaint();
-					}
-				}
-			}
-		});
-	}*/
 
 	public Boolean isValid(){
 		Boolean valid = Boolean.TRUE;

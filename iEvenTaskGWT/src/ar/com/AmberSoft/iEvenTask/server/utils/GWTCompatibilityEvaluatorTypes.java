@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.server.utils;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,6 +51,9 @@ public class GWTCompatibilityEvaluatorTypes {
 			compatibleTypes1 = new ArrayList();
 			compatibleTypes2 = new ArrayList();
 			compatibleTypes3 = new ArrayList();
+			adapters = new HashMap();
+			typesGroups = new ArrayList();	
+
 			compatibleTypes1.add(Integer.class);
 			compatibleTypes1.add(String.class);
 			compatibleTypes1.add(Long.class);
@@ -57,11 +61,11 @@ public class GWTCompatibilityEvaluatorTypes {
 			compatibleTypes1.add(Double.class);
 			compatibleTypes2.add(Collection.class);
 			compatibleTypes3.add(Map.class);
-			adapters = new HashMap();
+			
 			adapters.put(compatibleTypes1, new AdapterForCompatibleType());
 			adapters.put(compatibleTypes2, new AdapterForCollection());
 			adapters.put(compatibleTypes3, new AdapterForMap());
-			typesGroups = new ArrayList();
+			
 			typesGroups.add(compatibleTypes1);
 			typesGroups.add(compatibleTypes2);
 			typesGroups.add(compatibleTypes3);
