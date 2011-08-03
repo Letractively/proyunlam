@@ -21,10 +21,12 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
 	public Grid(String serviceName, List<ColumnConfig> configs){
 		super(new ListStore(new Loader(serviceName)), new ColumnModel(configs));
-		((Loader)this.getStore().getLoader()).setCallback(callback);
+		Loader loader = (Loader) this.getStore().getLoader(); 
+		loader.setCallback(callback);
 		callback.setGrid(this);	
 		filters.setLocal(Boolean.FALSE);
 		this.addPlugin(filters);
+		loader.setRemoteSort(Boolean.TRUE);
 	}
 	
 	
