@@ -11,7 +11,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
 import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.util.ParamsConst;
 
-public class DeleteProfileService implements Service {
+public class DeleteProfileService extends Service {
 
 	@Override
 	public Map execute(Map params) {

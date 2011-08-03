@@ -1,8 +1,14 @@
 package ar.com.AmberSoft.iEvenTask.server;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
 import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
@@ -30,25 +36,11 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			throw new ServiceNameNotFoundException();
 		}
 		
-		String serviceName = (String) params.get(ServiceNameConst.SERVICIO);
-		Class type;
 		try {
-			type = Class.forName(serviceName);
-		} catch (ClassNotFoundException e) {
-			// Si la clase no existe, es probable que se encuentre ejecutando el APP ENGINE
-			// Con lo cual se buscará un emulador del servicio
-			String onlyName = serviceName.substring(serviceName.lastIndexOf("."));
-			try {
-				type = Class.forName(EMULATE_PACKAGE + onlyName);
-			} catch (ClassNotFoundException e1) {
-				throw new ServiceClassNotFoundException();
-			}
-		}
-		
-		try {
-			java.lang.reflect.Method method = type.getDeclaredMethod(EXECUTE, Map.class);
+			Class type = getType(params);
+			Map toReturn = invokeExecute(type.newInstance(), type, params);
+			
 			Map map = new HashMap();
-			Map toReturn = (Map) method.invoke(type.newInstance(), params);
 			if (toReturn!=null){
 				Iterator keys = toReturn.keySet().iterator();
 				while (keys.hasNext()) {
@@ -66,6 +58,37 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			System.err.println(e.getMessage());
 			throw new ServiceInstantationException();
 		}
+	}
+
+	private Map invokeExecute(Object instance, Class type, Map params) {
+		if (!Object.class.getName().equals(type.getClass().getName())){
+			try {
+				Method method = type.getDeclaredMethod(EXECUTE, Map.class);
+				return (Map) method.invoke(instance, params);
+			} catch (Exception e){
+				return invokeExecute(instance, type.getSuperclass(), params);
+			}
+		}
+		// TODO: En lugar de retornar nulo, lanzar una excepcion ya que no encontro el metodo execute
+		return null;
+	}
+
+	private Class getType(Map params) {
+		String serviceName = (String) params.get(ServiceNameConst.SERVICIO);
+		Class type;
+		try {
+			type = Class.forName(serviceName);
+		} catch (ClassNotFoundException e) {
+			// Si la clase no existe, es probable que se encuentre ejecutando el APP ENGINE
+			// Con lo cual se buscará un emulador del servicio
+			String onlyName = serviceName.substring(serviceName.lastIndexOf("."));
+			try {
+				type = Class.forName(EMULATE_PACKAGE + onlyName);
+			} catch (ClassNotFoundException e1) {
+				throw new ServiceClassNotFoundException();
+			}
+		}
+		return type;
 	}
 
 

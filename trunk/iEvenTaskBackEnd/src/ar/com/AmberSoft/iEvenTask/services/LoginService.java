@@ -6,7 +6,7 @@ import ar.com.AmberSoft.iEvenTask.shared.exceptions.LoginFailureException;
 import ar.com.AmberSoft.util.LDAPClient;
 import ar.com.AmberSoft.util.ParamsConst;
 
-public class LoginService implements Service {
+public class LoginService extends Service {
 
 	@Override
 	public Map execute(Map params) {
