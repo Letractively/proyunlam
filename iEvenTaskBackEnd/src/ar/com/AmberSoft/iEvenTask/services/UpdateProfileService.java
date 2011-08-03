@@ -9,7 +9,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
 import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.util.ParamsConst;
 
-public class UpdateProfileService implements Service {
+public class UpdateProfileService extends Service {
 
 	@Override
 	public Map execute(Map params) {
