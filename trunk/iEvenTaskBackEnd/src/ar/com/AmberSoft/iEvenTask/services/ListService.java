@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.beanutils.MethodUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -18,6 +19,8 @@ import com.extjs.gxt.ui.client.data.BaseFilterConfig;
 
 public abstract class ListService extends Service {
 
+	public static String NAME = "name";
+	
 	protected Query query;
 	protected StringBuffer queryText;
 	
@@ -33,6 +36,8 @@ public abstract class ListService extends Service {
 		queryText.append(getEntity());
 		
 		setFiltersInQueryText(params);
+		
+		setOrder(params);
 		
 		previousCreateQuery(params);
 		
@@ -51,6 +56,24 @@ public abstract class ListService extends Service {
 		previousReturnMap(params, map);
 		
 		return map;
+	}
+
+
+	private void setOrder(Map params) {
+		String sortField = (String) params.get(SORT_FIELD); 
+		Object sortDir = params.get(SORT_DIR);
+		
+		if ((sortField!=null) && (sortDir!=null)){
+			try {
+				String sortDirText = (String) MethodUtils.invokeExactMethod(sortDir, NAME, null);
+				queryText.append(ORDER_BY);
+				queryText.append(sortField);
+				queryText.append(SPACE);
+				queryText.append(sortDirText);
+			} catch (Exception e) {
+			}
+
+		}
 	}
 	
 
