@@ -14,6 +14,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.google.gwt.user.client.ui.NamedFrame;
+import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.Text;
+import com.google.gwt.user.client.ui.TextArea;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -114,7 +118,7 @@ public class IEvenTask implements EntryPoint {
 		toolBar.add(btnNuevoObjetivo);
 		rootPanel.add(toolBar);
 		rootPanel.setWidgetPosition(toolBar, 0, 24);
-		toolBar.setSize("574px", "29px");
+		toolBar.setSize("545px", "29px");
 		taskFlexTable.setStyleName("flexTable");
 
 		// Crea la tabla para guardar las tareas
@@ -135,5 +139,36 @@ public class IEvenTask implements EntryPoint {
 		
 
 		rootPanel.add(taskFlexTable, 10, 80);
+		
+		final ContentPanel commentPanel = new ContentPanel();
+		commentPanel.setHeading("Comentarios");
+		
+		final TextArea newTextComment = new TextArea();
+		newTextComment.setCharacterWidth(35);
+		newTextComment.setVisibleLines(5);
+		commentPanel.add(newTextComment);
+		newTextComment.setSize("290", "80");
+		
+		final TextArea otherTextComment = new TextArea();
+		otherTextComment.setCharacterWidth(35);
+		otherTextComment.setVisibleLines(5);
+		otherTextComment.setDirectionEstimator(true);
+		otherTextComment.setReadOnly(true);
+		otherTextComment.setVisible(false);
+		
+		Button btnAddComment = new Button("Add Comment");
+		btnAddComment.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent be) {
+				otherTextComment.setText(newTextComment.getText());
+				otherTextComment.setVisible(true);
+			}
+		});
+		commentPanel.setTopComponent(btnAddComment);
+		commentPanel.add(otherTextComment);
+		otherTextComment.setWidth("290");
+		
+		rootPanel.add(commentPanel);
+		rootPanel.setWidgetPosition(commentPanel, 449, 77);
+		commentPanel.setSize("300px", "287px");
 	}
 }
