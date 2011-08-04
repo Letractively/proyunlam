@@ -16,6 +16,7 @@ import com.google.gwt.user.client.Element;
 
 public class TaskWindow extends Window {
 	public TaskWindow() {
+		setInitialWidth(400);
 	}
 
 	private VerticalPanel vp;
@@ -27,7 +28,7 @@ public class TaskWindow extends Window {
 		vp.setSpacing(10);
 		createForm1();
 		add(vp);
-		vp.setSize("500", "450");
+		vp.setSize("360", "330");
 	}
 	
 	private void createForm1() {
