@@ -13,6 +13,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.extjs.gxt.ui.client.widget.ContentPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -23,13 +24,14 @@ public class IEvenTask implements EntryPoint {
 
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setStyleName("dialogVPanel");
+		rootPanel.setStyleName("toolBarButton");
 		rootPanel.setSize("1024", "768");
 
 		//LoginWindow loginWindow = new LoginWindow();
 		//loginWindow.show();
 
 		MenuBar menuBar = new MenuBar();
+		menuBar.setStyleName("menuBar");
 
 		Menu menu = new Menu();
 		menuBar.setContextMenu(menu);
@@ -90,13 +92,8 @@ public class IEvenTask implements EntryPoint {
 		menuBar.setSize("578px", "18px");
 		rootPanel.setWidgetPosition(menuBar, 0, 0);
 
-		LayoutContainer layoutContainer = new LayoutContainer();
-		rootPanel.add(layoutContainer);
-		rootPanel.setWidgetPosition(layoutContainer, 584, 0);
-		layoutContainer.setSize("164px", "466px");
-		layoutContainer.setBorders(true);
-
 		ToolBar toolBar = new ToolBar();
+		toolBar.setStyleName("toolBar");
 
 		Button btnNuevaTarea = new Button("Nueva Tarea");
 		btnNuevaTarea.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -117,7 +114,8 @@ public class IEvenTask implements EntryPoint {
 		toolBar.add(btnNuevoObjetivo);
 		rootPanel.add(toolBar);
 		rootPanel.setWidgetPosition(toolBar, 0, 24);
-		toolBar.setSize("562px", "34px");
+		toolBar.setSize("574px", "29px");
+		taskFlexTable.setStyleName("flexTable");
 
 		// Crea la tabla para guardar las tareas
 		taskFlexTable.setText(0, 0, "ID");
