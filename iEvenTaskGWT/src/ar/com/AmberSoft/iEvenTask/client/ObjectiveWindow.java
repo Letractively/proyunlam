@@ -11,8 +11,10 @@ import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.google.gwt.user.client.Element;
   
-public class ObjectiveWindow extends Window {
+public class ObjectiveWindow extends Window  {
 	public ObjectiveWindow() {
+		setModal(true);
+		setInitialWidth(400);
 	}  
   
 	private VerticalPanel vp;
