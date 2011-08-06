@@ -1,6 +1,9 @@
 package ar.com.AmberSoft.iEvenTask.client.utils;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -15,9 +18,29 @@ import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
 	private final GridDataCallback callback = new GridDataCallback();
-	final GridFilters filters = new GridFilters();
-	Menu contextMenu;
+	private final GridFilters filters = new GridFilters();
+	private Menu contextMenu;
+	private Collection list;
+
+	public Collection getList() {
+		return list;
+	}
+
+	public void setList(Collection list) {
+		this.list = list;
+	}
 	
+	public Map search(String field, Object value){
+		Iterator it = list.iterator();
+		while (it.hasNext()) {
+			Map actual = (Map) it.next();
+			if (actual.get(field).equals(value)){
+				return actual;
+			}
+		}
+		return null;
+	}
+
 
 	public Grid(String serviceName, List<ColumnConfig> configs){
 		super(new ListStore(new Loader(serviceName)), new ColumnModel(configs));
