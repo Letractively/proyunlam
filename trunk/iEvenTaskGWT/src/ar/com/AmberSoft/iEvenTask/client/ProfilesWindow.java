@@ -124,9 +124,28 @@ public class ProfilesWindow extends Window {
 					Iterator it = seleccionados.iterator();
 					if (it.hasNext()){
 						BaseModel baseModel = (BaseModel) it.next();
-						fldName.setValue(baseModel.get(ParamsConst.NAME));
-						fldConection.setValue(baseModel.get(ParamsConst.CONECTION));
-						fldGroup.setValue(baseModel.get(ParamsConst.GROUP));
+						Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+						
+						if (actual!=null){
+							fldName.setValue(actual.get(ParamsConst.NAME));
+							fldConection.setValue(actual.get(ParamsConst.CONECTION));
+							fldGroup.setValue(actual.get(ParamsConst.GROUP));
+							fldObjective.setValue(Boolean.FALSE);
+							fldAdmin.setValue(Boolean.FALSE);
+							Collection permisos = (Collection) actual.get(ParamsConst.PERMISOS);
+							Iterator itPermisos = permisos.iterator();
+							while (itPermisos.hasNext()) {
+								Map permiso = (Map) itPermisos.next();
+								if (permiso.get(ParamsConst.ID)=="1"){
+									fldObjective.setValue(Boolean.TRUE);
+								}
+								if (permiso.get(ParamsConst.ID)=="2"){
+									fldAdmin.setValue(Boolean.TRUE);
+								}
+								
+							}
+						}
+		
 						editing = Boolean.TRUE;
 					}
 				} else {
@@ -158,7 +177,6 @@ public class ProfilesWindow extends Window {
 		btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
 				if (isValid()){
-					
 						Map params = new HashMap<String,String>();
 						params.put(ParamsConst.NAME, fldName.getValue());
 						params.put(ParamsConst.CONECTION, fldConection.getValue());

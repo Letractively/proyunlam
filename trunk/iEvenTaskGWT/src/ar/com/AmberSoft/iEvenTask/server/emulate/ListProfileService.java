@@ -29,6 +29,7 @@ public class ListProfileService implements Emulate {
 	private void add(Collection list, String perfil, String grupo,
 			String conexion) {
 		Map profile = new HashMap();
+		profile.put(ParamsConst.ID, perfil);
 		profile.put(ParamsConst.NAME, perfil);
 		profile.put(ParamsConst.CONECTION, conexion);
 		profile.put(ParamsConst.GROUP, grupo);

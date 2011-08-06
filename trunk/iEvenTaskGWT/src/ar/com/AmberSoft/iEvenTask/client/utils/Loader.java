@@ -11,8 +11,6 @@ public class Loader extends BasePagingLoader{
 	protected Object newLoadConfig() {
         BasePagingLoadConfig config = new BaseFilterPagingLoadConfig();  
         return config;
-        // Revisar si es necesario reescribir este metodo
-		//return super.newLoadConfig();
 	}
 
 	public Loader(String service) {
