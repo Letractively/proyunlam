@@ -1,12 +1,17 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import ar.com.AmberSoft.util.PKGenerator;
@@ -53,15 +58,24 @@ public class Perfil implements Serializable{
 	public void setGrupoLDAP(String grupoLDAP) {
 		this.grupoLDAP = grupoLDAP;
 	}
-	/*@ManyToOne(targetEntity=ar.com.AmberSoft.iEvenTask.backend.entities.Permiso.class)
+	@ManyToMany (fetch=FetchType.EAGER)
+	@JoinTable(name="iet_permiso_perfil", 
+			joinColumns = { @JoinColumn(name = "id_perfil") }, 
+			inverseJoinColumns = { @JoinColumn(name = "id_permiso") })
+	public Set<Permiso> getPermisos() {
+		return permisos;
+	}
+
 	public void setPermisos(Set<Permiso> permisos) {
 		this.permisos = permisos;
 	}
-	public Set<Permiso> getPermisos() {
-		return permisos;
-	}*/
 	
-	
+	public void addPermiso(Permiso permiso){
+		if (permisos==null){
+			permisos = new HashSet<Permiso>();
+		}
+		permisos.add(permiso);
+	}
 	
 	
 	

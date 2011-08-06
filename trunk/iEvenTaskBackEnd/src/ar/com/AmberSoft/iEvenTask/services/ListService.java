@@ -8,9 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.hibernate.Query;
-import org.hibernate.Session;
 
-import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.iEvenTask.utils.FiltersWrapperFactory;
 import ar.com.AmberSoft.iEvenTask.utils.Wrapper;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -29,8 +27,7 @@ public abstract class ListService extends Service {
 		
 		initList(params);
 				
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		session.beginTransaction();
+		getSession().beginTransaction();
 		queryText = new StringBuffer();
 		queryText.append(FROM);
 		queryText.append(getEntity());
@@ -41,7 +38,7 @@ public abstract class ListService extends Service {
 		
 		previousCreateQuery(params);
 		
-		query = session.createQuery(queryText.toString());
+		query = getSession().createQuery(queryText.toString());
 		
 		postCreateQuery(params);
 		
@@ -51,7 +48,7 @@ public abstract class ListService extends Service {
 		Collection list = new ArrayList();
 		map.put(ParamsConst.LIST, query.list());
 		
-		session.getTransaction().commit();
+		getSession().getTransaction().commit();
 		
 		previousReturnMap(params, map);
 		
