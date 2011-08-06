@@ -3,6 +3,10 @@ package ar.com.AmberSoft.iEvenTask.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hibernate.Session;
+
+import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
+
 import com.extjs.gxt.ui.client.data.BaseStringFilterConfig;
 
 public abstract class Service {
@@ -21,11 +25,18 @@ public abstract class Service {
 	
 	public static Map operatorOnWhere;
 	
+	private Session session;
+	
+	public Session getSession() {
+		return session;
+	}
+
 	public Service(){
 		if (Service.operatorOnWhere==null){
 			operatorOnWhere = new HashMap();
 			operatorOnWhere.put(BaseStringFilterConfig.class.getName(), LIKE);
 		}
+		session = HibernateUtil.getSessionFactory().getCurrentSession();
 	}
 	
 	public abstract Map execute(Map params);
