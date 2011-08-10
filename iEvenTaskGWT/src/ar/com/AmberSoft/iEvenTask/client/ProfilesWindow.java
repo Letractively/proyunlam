@@ -9,7 +9,6 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
-import ar.com.AmberSoft.iEvenTask.client.utils.GridDataCallback;
 import ar.com.AmberSoft.iEvenTask.client.validaciones.ValidaMultiField;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -66,6 +65,8 @@ public class ProfilesWindow extends Window {
 		
 		// Agrega la grilla a la ventana actual
 		this.add(grid);
+		this.setBottomComponent(grid.getToolBar());  
+
 
 		// Filtros sobre la grilla
 		grid.addFilter(new StringFilter(ParamsConst.NAME));
@@ -106,7 +107,8 @@ public class ProfilesWindow extends Window {
 					@Override
 					public void onSuccess(Object result) {
 						Info.display("iEvenTask", "Se eliminaron los perfiles con exito.");
-						refreshGrid(grid);
+						//FIXME: Invocar a la primer pagina
+						//refreshGrid(grid);
 					}
 
 				});
@@ -163,6 +165,7 @@ public class ProfilesWindow extends Window {
 
 		// Propiedades basicas de la ventana actual
 		setInitialWidth(490);
+	    setHeight(400);
 		setMaximizable(true);
 		setTitleCollapse(true);
 		setHeading("Gesti\u00F3n de Perfiles");
@@ -207,7 +210,8 @@ public class ProfilesWindow extends Window {
 							public void onSuccess(Object result) {
 								Info.display("iEvenTask", "Se almaceno el perfil con exito.");
 								resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
-								refreshGrid(grid);
+								//FIXME: Invocar a la primer pagina
+								//refreshGrid(grid);
 							}
 
 
@@ -311,20 +315,20 @@ public class ProfilesWindow extends Window {
 
 		// Tabla
 		add(grid, new RowData(470.0, Style.DEFAULT, new Margins()));
-		grid.setSize("450", "100");
+		grid.setSize("450", "200");
 		grid.setBorders(true);
 		
-		refreshGrid(grid);
+//		refreshGrid(grid);
 
 	}
 	
-	private void refreshGrid(final Grid grid) {
+/*	private void refreshGrid(final Grid grid) {
 		Map params = new HashMap();
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_PROFILE);
 		GridDataCallback callback = new GridDataCallback();
 		callback.setGrid(grid);
 		DispatcherUtil.getDispatcher().execute(params, callback);
-	}
+	} */
 	
 	private void resetFields(final TextField fldName,
 			final TextField fldConection,

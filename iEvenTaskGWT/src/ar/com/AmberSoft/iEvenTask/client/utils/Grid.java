@@ -5,22 +5,32 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.extjs.gxt.ui.client.Style.SortDir;
+import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
+import com.extjs.gxt.ui.client.data.PagingLoadConfig;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.GridEvent;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.filters.Filter;
 import com.extjs.gxt.ui.client.widget.grid.filters.GridFilters;
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
+import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 
 public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
-	private final GridDataCallback callback = new GridDataCallback();
 	private final GridFilters filters = new GridFilters();
 	private Menu contextMenu;
 	private Collection list;
+	private PagingToolBar toolBar;
+
+	public PagingToolBar getToolBar() {
+		return toolBar;
+	}
 
 	public Collection getList() {
 		return list;
@@ -43,13 +53,40 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
 
 	public Grid(String serviceName, List<ColumnConfig> configs){
-		super(new ListStore(new Loader(serviceName)), new ColumnModel(configs));
-		Loader loader = (Loader) this.getStore().getLoader(); 
-		loader.setCallback(callback);
-		callback.setGrid(this);	
+		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
+		final Loader loader = (Loader) this.getStore().getLoader(); 
+		loader.setGrid(this);
 		filters.setLocal(Boolean.FALSE);
 		this.addPlugin(filters);
 		loader.setRemoteSort(Boolean.TRUE);
+		toolBar = new PagingToolBar(3);  
+	    toolBar.bind(loader);
+	    
+	    setStateId("pagingGridExample");  
+	    setStateful(true);  
+	    addListener(Events.Attach, new Listener<GridEvent>() {  
+	      public void handleEvent(GridEvent be) {  
+	        PagingLoadConfig config = new BaseFilterPagingLoadConfig();  
+	        config.setOffset(0);  
+	        config.setLimit(50);  
+	          
+	        Map<String, Object> state = getState();  
+	        if (state.containsKey("offset")) {  
+	          int offset = (Integer)state.get("offset");  
+	          int limit = (Integer)state.get("limit");  
+	          config.setOffset(offset);  
+	          config.setLimit(limit);  
+	        }  
+	        if (state.containsKey("sortField")) {  
+	          config.setSortField((String)state.get("sortField"));  
+	          config.setSortDir(SortDir.valueOf((String)state.get("sortDir")));  
+	        }  
+	        loader.load(config);  
+	      }  
+	    });  
+	    
+	    setLoadMask(Boolean.TRUE); 
+	    
 	}
 	
 	
@@ -74,5 +111,6 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 			this.setContextMenu(contextMenu);
 		}
 	}
+	
 	
 }

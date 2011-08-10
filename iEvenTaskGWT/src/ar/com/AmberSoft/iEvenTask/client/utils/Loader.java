@@ -1,28 +1,18 @@
 package ar.com.AmberSoft.iEvenTask.client.utils;
 
-import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
-import com.extjs.gxt.ui.client.data.BasePagingLoadConfig;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Loader extends BasePagingLoader{
 
-	@Override
-	protected Object newLoadConfig() {
-        BasePagingLoadConfig config = new BaseFilterPagingLoadConfig();  
-        return config;
-	}
-
-	public Loader(String service) {
+	public Loader(String service, Grid grid) {
 		super(null);
-		proxy = new Proxy();
-		((Proxy)proxy).setService(service);
+		proxy = new Proxy(service, grid);
 		setRemoteSort(Boolean.TRUE);
 	}
 	
-	public void setCallback(AsyncCallback asyncCallback){
-		((Proxy)proxy).setCallback(asyncCallback);
+	public void setGrid(Grid grid) {
+		((Proxy)proxy).setGrid(grid);
 	}
 
-
+	
 }

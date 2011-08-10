@@ -40,8 +40,8 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			Class type = getType(params);
 			Map toReturn = invokeExecute(type.newInstance(), type, params);
 			
-			Map map = new HashMap();
 			if (toReturn!=null){
+				Map map = toReturn.getClass().newInstance();
 				Iterator keys = toReturn.keySet().iterator();
 				while (keys.hasNext()) {
 					Object key = (Object) keys.next();
@@ -51,9 +51,9 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 					fieldValue = compatibilizable.adapt(fieldValue);
 					map.put(key, fieldValue);
 				}
+				return map;
 			}
-			return map;
-			
+			return null;
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			throw new ServiceInstantationException();
