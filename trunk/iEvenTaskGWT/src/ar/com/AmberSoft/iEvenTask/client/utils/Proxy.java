@@ -9,33 +9,34 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
- 
+
 public class Proxy extends RpcProxy {
-	
-	private AsyncCallback callback;
-	private Map params = new HashMap<String,String>();
 
-	public void setCallback(AsyncCallback callback) {
-		this.callback = callback;
-	}
+	private final GridDataCallback callback;
+	private Map params = new HashMap<String, String>();
 
-	/**
-	 * Define el nombre del servicio que se invocará
-	 */
-	public void setService(String service){
+	public Proxy(String service, Grid grid){
+		callback = new GridDataCallback(grid);
 		params.put(ServiceNameConst.SERVICIO, service);
 	}
+	
+	public void setGrid(Grid grid) {
+		callback.setGrid(grid);
+	}
 
+	public GridDataCallback getCallback() {
+		return callback;
+	}
+
+	
 	@Override
-	protected void load(Object loadConfig, AsyncCallback callbackParam) {
-		
+	protected void load(Object loadConfig, AsyncCallback proxyCallback) {
+
 		if (loadConfig instanceof BaseFilterPagingLoadConfig) {
 			BaseFilterPagingLoadConfig config = (BaseFilterPagingLoadConfig) loadConfig;
 			params.putAll(config.getProperties());
 		}
-		
+		callback.setProxyCallback(proxyCallback);
 		DispatcherUtil.getDispatcher().execute(params, callback);
-
 	}
-
 }

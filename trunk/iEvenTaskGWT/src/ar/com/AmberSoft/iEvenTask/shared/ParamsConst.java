@@ -4,6 +4,9 @@ public abstract class ParamsConst {
 
 	private ParamsConst(){}
 	
+	public static final String DATA = "DATA";
+	public static final String OFFSET = "OFFSET";
+	public static final String TOTAL_COUNT = "TOTAL_COUNT";
 	public static final String LIST = "LIST";
 	public static final String USER = "USER";
 	public static final String PASSWORD = "PASSWORD";

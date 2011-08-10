@@ -5,15 +5,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 public class ListProfileService implements Emulate {
 
 	@Override
 	public Map execute(Map params) {
-		Map map = new HashMap();
+		PagingLoadResult map = new PagingLoadResult();
 		Collection list = new ArrayList();
-		map.put(ParamsConst.LIST, list);
+		map.put(ParamsConst.DATA, list);
 		
 		add(list, "Perfil1", "Grupo1", "Conexion1");
 		add(list, "Perfil2", "Grupo2", "Conexion2");
@@ -22,6 +23,10 @@ public class ListProfileService implements Emulate {
 		add(list, "Perfil5", "Grupo5", "Conexion5");
 		add(list, "Perfil6", "Grupo6", "Conexion6");
 		add(list, "Perfil7", "Grupo7", "Conexion7");
+		
+		
+		map.setOffset(1);
+		map.setTotalLength(10);
 		
 		return map;
 	}

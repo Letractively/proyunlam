@@ -2,13 +2,13 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.hibernate.Query;
 
+import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
 import ar.com.AmberSoft.iEvenTask.utils.FiltersWrapperFactory;
 import ar.com.AmberSoft.iEvenTask.utils.Wrapper;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -44,9 +44,9 @@ public abstract class ListService extends Service {
 		
 		setFiltersValuesInQuery(params);
 		
-		Map map = new HashMap();
+		Map map = new PagingLoadResult();
 		Collection list = new ArrayList();
-		map.put(ParamsConst.LIST, query.list());
+		map.put(ParamsConst.DATA, query.list());
 		
 		getSession().getTransaction().commit();
 		
