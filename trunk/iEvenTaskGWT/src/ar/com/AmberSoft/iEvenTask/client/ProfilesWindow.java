@@ -61,7 +61,7 @@ public class ProfilesWindow extends Window {
 		final CheckBox fldAdmin = new CheckBox();
 		
 		// Grilla
-		final Grid grid = new Grid(ServiceNameConst.LIST_PROFILE, getGridConfig());
+		final Grid grid = new Grid(ServiceNameConst.LIST_PROFILE, getGridConfig(), 7);
 		
 		// Agrega la grilla a la ventana actual
 		this.add(grid);

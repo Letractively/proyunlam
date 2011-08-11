@@ -18,8 +18,10 @@ import com.extjs.gxt.ui.client.data.BaseFilterConfig;
 public abstract class ListService extends Service {
 
 	public static String NAME = "name";
+	public static String SELECT_COUNT = "SELECT COUNT(*) ";
 	
 	protected Query query;
+	protected Query queryCount;
 	protected StringBuffer queryText;
 	
 	@Override
@@ -39,14 +41,21 @@ public abstract class ListService extends Service {
 		previousCreateQuery(params);
 		
 		query = getSession().createQuery(queryText.toString());
+		queryCount = getSession().createQuery(SELECT_COUNT + queryText.toString());
+		
+		query.setFirstResult((Integer) params.get("offset"));
+		query.setMaxResults((Integer) params.get("limit"));
 		
 		postCreateQuery(params);
 		
-		setFiltersValuesInQuery(params);
+		setFiltersValuesInQuery(params, query);
+		setFiltersValuesInQuery(params, queryCount);
 		
 		Map map = new PagingLoadResult();
 		Collection list = new ArrayList();
 		map.put(ParamsConst.DATA, query.list());
+		map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
+		map.put(ParamsConst.OFFSET, (Integer) params.get("offset"));
 		
 		getSession().getTransaction().commit();
 		
@@ -74,7 +83,7 @@ public abstract class ListService extends Service {
 	}
 	
 
-	public void setFiltersValuesInQuery(Map params) {
+	public void setFiltersValuesInQuery(Map params, Query query) {
 		Collection filters = (Collection) params.get(FILTERS);
 		if (filters!=null){
 			int index = 0;
