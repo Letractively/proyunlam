@@ -23,12 +23,12 @@ public class PagingLoadResult implements
 
 	@Override
 	public int getOffset() {
-		return (Integer) map.get(ParamsConst.OFFSET);
+		return getIntValue(map.get(ParamsConst.OFFSET));
 	}
 
 	@Override
 	public int getTotalLength() {
-		return (Integer) map.get(ParamsConst.TOTAL_COUNT);	
+		return getIntValue(map.get(ParamsConst.TOTAL_COUNT));	
 	}
 
 	@Override
@@ -100,6 +100,16 @@ public class PagingLoadResult implements
 	@Override
 	public Collection values() {
 		return map.values();
+	}
+	
+	private int getIntValue(Object value){
+		if (value!=null){
+			if (value instanceof Number) {
+				Number valueNumber = (Number) value;
+				return valueNumber.intValue();
+			}
+		}
+		return -1;
 	}
 
 }

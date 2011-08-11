@@ -77,7 +77,4 @@ public class Perfil implements Serializable{
 		permisos.add(permiso);
 	}
 	
-	
-	
-	
 }

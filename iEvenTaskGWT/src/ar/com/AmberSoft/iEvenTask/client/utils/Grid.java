@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.extjs.gxt.ui.client.Style.SortDir;
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.event.Events;
@@ -52,14 +51,14 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	}
 
 
-	public Grid(String serviceName, List<ColumnConfig> configs){
+	public Grid(String serviceName, List<ColumnConfig> configs, final Integer pageSize){
 		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
 		final Loader loader = (Loader) this.getStore().getLoader(); 
 		loader.setGrid(this);
 		filters.setLocal(Boolean.FALSE);
 		this.addPlugin(filters);
 		loader.setRemoteSort(Boolean.TRUE);
-		toolBar = new PagingToolBar(3);  
+		toolBar = new PagingToolBar(pageSize);  
 	    toolBar.bind(loader);
 	    
 	    setStateId("pagingGridExample");  
@@ -68,22 +67,10 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	      public void handleEvent(GridEvent be) {  
 	        PagingLoadConfig config = new BaseFilterPagingLoadConfig();  
 	        config.setOffset(0);  
-	        config.setLimit(50);  
-	          
-	        Map<String, Object> state = getState();  
-	        if (state.containsKey("offset")) {  
-	          int offset = (Integer)state.get("offset");  
-	          int limit = (Integer)state.get("limit");  
-	          config.setOffset(offset);  
-	          config.setLimit(limit);  
-	        }  
-	        if (state.containsKey("sortField")) {  
-	          config.setSortField((String)state.get("sortField"));  
-	          config.setSortDir(SortDir.valueOf((String)state.get("sortDir")));  
-	        }  
-	        loader.load(config);  
-	      }  
-	    });  
+	        config.setLimit(pageSize);  
+	        loader.load(config);
+	      }
+	    });
 	    
 	    setLoadMask(Boolean.TRUE); 
 	    
