@@ -35,13 +35,15 @@ public abstract class ListService extends Service {
 		queryText.append(getEntity());
 		
 		setFiltersInQueryText(params);
-		
+
+		StringBuffer queryTextWithoutOrder = new StringBuffer();
+		queryTextWithoutOrder.append(queryText);
 		setOrder(params);
 		
 		previousCreateQuery(params);
 		
 		query = getSession().createQuery(queryText.toString());
-		queryCount = getSession().createQuery(SELECT_COUNT + queryText.toString());
+		queryCount = getSession().createQuery(SELECT_COUNT + queryTextWithoutOrder.toString());
 		
 		query.setFirstResult((Integer) params.get("offset"));
 		query.setMaxResults((Integer) params.get("limit"));
