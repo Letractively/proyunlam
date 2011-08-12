@@ -7,11 +7,14 @@ import java.util.Map;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
+import com.extjs.gxt.ui.client.event.EventType;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.GridEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.Store;
+import com.extjs.gxt.ui.client.store.StoreEvent;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.filters.Filter;
@@ -71,11 +74,9 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	        loader.load(config);
 	      }
 	    });
-	    
 	    setLoadMask(Boolean.TRUE); 
 	    
 	}
-	
 	
 	public void addFilter(Filter filter){
 		filters.addFilter(filter);
