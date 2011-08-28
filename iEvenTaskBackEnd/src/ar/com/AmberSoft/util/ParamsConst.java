@@ -20,4 +20,13 @@ public abstract class ParamsConst {
 	public static final String PERMISOS = "permisos";
 	public static final String CHECK_OBJECTIVE = "CHECK_OBJECTIVE";
 	public static final String CHECK_ADMIN = "CHECK_ADMIN";	
+	
+	public static final String FECHACREACION = "FECHACREACION";
+	public static final String FECHAFIN = "FECHAFIN";
+	public static final String HORASASIGNADAS = "HORASASIGNADAS";
+	public static final String ID_USUARIO = "ID_USUARIO";
+	public static final String FECHAMODIFICACION = "FECHAMODIFICACION";
+	public static final String ESTADO = "ESTADO";
+	public static final String CUMPLIMIENTO = "CUMPLIMIENTO";
+	public static final String TIPO_TAREA = "TIPO_TAREA";
 }
