@@ -22,8 +22,9 @@ import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
-import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
@@ -33,17 +34,20 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
-public class ProfilesWindow extends Window {
+public class EventWindow extends Window {
+
 
 	// Campos
-	final TextField fldName = new TextField();
-	final TextField fldConection = new TextField();
-	final TextField fldGroup = new TextField();
-	final CheckBox fldObjective = new CheckBox();
-	final CheckBox fldAdmin = new CheckBox();
+	private final TextField fldName = new TextField();
+	private final TextField fldPeriodicity = new TextField();
+	private final DateField fldExpiration = new DateField();
+	private final TextField fldIterations = new TextField();
+	private final ComboBox fldType = new ComboBox();
+	private final TextField fldCodigoLDAP = new TextField();
 	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 7);
 	
-	public ProfilesWindow() {
+	
+	public EventWindow() {
 		super();
 
 		initialize();
@@ -75,7 +79,7 @@ public class ProfilesWindow extends Window {
 		setHeight(400);
 		setMaximizable(true);
 		setTitleCollapse(true);
-		setHeading("Gesti\u00F3n de Perfiles");
+		setHeading("Gesti\u00F3n de Eventos");
 		setLayout(new RowLayout(Orientation.VERTICAL));
 	}
 
@@ -115,14 +119,22 @@ public class ProfilesWindow extends Window {
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldName);
 		
-		verticalPanel.add(getFieldHorizontalLine(fldConection, "Conexion", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldPeriodicity, "Periodicidad", "262px", "75px"));
 		//field.setAllowBlank(Boolean.FALSE);
-		registerField(fldConection);
+		registerField(fldPeriodicity);
 
-		verticalPanel.add(getFieldHorizontalLine(fldGroup, "Grupo LDAP", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", "262px", "75px"));
 		//field.setAllowBlank(Boolean.FALSE);
-		registerField(fldGroup);
-		
+		registerField(fldExpiration);
+
+		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", "262px", "75px"));
+		//field.setAllowBlank(Boolean.FALSE);
+		registerField(fldIterations);
+
+		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", "262px", "75px"));
+		//field.setAllowBlank(Boolean.FALSE);
+		registerField(fldType);
+
 		return verticalPanel;
 	}
 
@@ -142,7 +154,7 @@ public class ProfilesWindow extends Window {
 		CheckBoxGroup chckbxgrpPermisos = new CheckBoxGroup();
 		chckbxgrpPermisos.setOrientation(Orientation.VERTICAL);
 
-		chckbxgrpPermisos.add(fldObjective);
+		/*chckbxgrpPermisos.add(fldObjective);
 		fldObjective.setBoxLabel("Gesti\u00F3n de Objetivos");
 		fldObjective.setHideLabel(true);
 
@@ -156,7 +168,7 @@ public class ProfilesWindow extends Window {
 		chckbxgrpPermisos.setSize("172px", "50px");
 		chckbxgrpPermisos.setFieldLabel("Permisos");
 		verticalPanel_1.setSize("188px", "67px");
-		
+		*/
 		return verticalPanel_1;
 	}
 	
@@ -223,7 +235,7 @@ public class ProfilesWindow extends Window {
 
 		if (actual != null) {
 			fldName.setValue(actual.get(ParamsConst.NAME));
-			fldConection.setValue(actual.get(ParamsConst.CONECTION));
+		/*	fldConection.setValue(actual.get(ParamsConst.CONECTION));
 			fldGroup.setValue(actual.get(ParamsConst.GROUP));
 			fldObjective.setValue(Boolean.FALSE);
 			fldAdmin.setValue(Boolean.FALSE);
@@ -240,7 +252,7 @@ public class ProfilesWindow extends Window {
 					}
 					
 				}
-			}
+			}*/
 		}
 		
 	}
@@ -250,11 +262,11 @@ public class ProfilesWindow extends Window {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.NAME, fldName.getValue());
-			params.put(ParamsConst.CONECTION, fldConection.getValue());
+		/*	params.put(ParamsConst.CONECTION, fldConection.getValue());
 			params.put(ParamsConst.GROUP, fldGroup.getValue());
 			params.put(ParamsConst.CHECK_OBJECTIVE,
 					fldObjective.getValue());
-			params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue());
+			params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue()); */
 			if (windowState.equals(State.UPDATE_STATE)) {
 				List seleccionados = grid.getSelectionModel()
 						.getSelection();
@@ -298,5 +310,8 @@ public class ProfilesWindow extends Window {
 	}
 
 
+
+
+	
 
 }

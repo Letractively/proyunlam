@@ -1,22 +1,17 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import ar.com.AmberSoft.iEvenTask.client.menu.MainMenu;
+
 import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.Status;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.menu.Menu;
-import com.extjs.gxt.ui.client.widget.menu.MenuBar;
-import com.extjs.gxt.ui.client.widget.menu.MenuBarItem;
-import com.extjs.gxt.ui.client.widget.menu.MenuItem;
+import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.google.gwt.user.client.ui.NamedFrame;
-import com.extjs.gxt.ui.client.widget.VerticalPanel;
-import com.extjs.gxt.ui.client.widget.Text;
 import com.google.gwt.user.client.ui.TextArea;
 
 /**
@@ -24,33 +19,56 @@ import com.google.gwt.user.client.ui.TextArea;
  */
 public class IEvenTask implements EntryPoint {
 
+	public static Integer appWindowWidth = 1024;
+	public static Integer appWindowHeigth = 623;
+	
 	private FlexTable	taskFlexTable	= new FlexTable();
 
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setStyleName("toolBarButton");
-		rootPanel.setSize("1024", "768");
+		rootPanel.setStyleName("body");
+		rootPanel.setSize(appWindowWidth.toString(), appWindowHeigth.toString());
 
 		//LoginWindow loginWindow = new LoginWindow();
 		//loginWindow.show();
 
-		MenuBar menuBar = new MenuBar();
-		menuBar.setStyleName("menuBar");
+		
+		
+		
+		/*
+		  MenuBar menuBar = new MenuBar();
 
 		Menu menu = new Menu();
 		menuBar.setContextMenu(menu);
 
 		Menu menu_1 = new Menu();
 
+
 		MenuItem mntmPerfiles = new MenuItem("Perfiles");
 		mntmPerfiles.addSelectionListener(new SelectionListener<MenuEvent>() {
 			public void componentSelected(MenuEvent ce) {
 				ProfilesWindow profilesWindow = new ProfilesWindow();
-				profilesWindow.show();
+				try {
+					profilesWindow.show();
+				} catch (WindowPreviouslyRegisteredException e){
+					// FIXME: Mostrar por interfaz grafica un mensaje de error
+				}
 			}
 		});
+		
 		menu_1.add(mntmPerfiles);
-
+		
+		
+		MenuItem mntmEvent = new MenuItem("Eventos");
+		mntmEvent.addSelectionListener(new SelectionListener<MenuEvent>() {
+			public void componentSelected(MenuEvent ce) {
+				EventWindow eventWindow = new EventWindow();
+				eventWindow.show();
+			}
+		});
+		mntmEvent.setIcon(Resources.ICONS.add24());
+		
+		menu_1.add(mntmEvent);
 		MenuItem mntmAcciones = new MenuItem("Acciones");
 		menu_1.add(mntmAcciones);
 
@@ -93,11 +111,14 @@ public class IEvenTask implements EntryPoint {
 		MenuBarItem mnbrtmAyuda = new MenuBarItem("Ayuda", menu_5);
 		menuBar.add(mnbrtmAyuda);
 		rootPanel.add(menuBar);
-		menuBar.setSize("578px", "18px");
-		rootPanel.setWidgetPosition(menuBar, 0, 0);
+		menuBar.setSize(appWindowWidth.toString(), "24px");
+		*/
+		
+		MainMenu mainMenu = new MainMenu();
+		rootPanel.add(mainMenu);
+		rootPanel.setWidgetPosition(mainMenu, 0, 0);
 
-		ToolBar toolBar = new ToolBar();
-		toolBar.setStyleName("toolBar");
+		ToolBar buttonsBar = new ToolBar();
 
 		Button btnNuevaTarea = new Button("Nueva Tarea");
 		btnNuevaTarea.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -106,7 +127,7 @@ public class IEvenTask implements EntryPoint {
 				taskWindow.show();
 			}
 		});
-		toolBar.add(btnNuevaTarea);
+		buttonsBar.add(btnNuevaTarea);
 
 		Button btnNuevoObjetivo = new Button("Nuevo Objetivo");
 		btnNuevoObjetivo.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -115,11 +136,9 @@ public class IEvenTask implements EntryPoint {
 				objectiveWindow.show();
 			}
 		});
-		toolBar.add(btnNuevoObjetivo);
-		rootPanel.add(toolBar);
-		rootPanel.setWidgetPosition(toolBar, 0, 24);
-		toolBar.setSize("545px", "29px");
-		taskFlexTable.setStyleName("flexTable");
+		buttonsBar.add(btnNuevoObjetivo);
+		rootPanel.add(buttonsBar);
+		rootPanel.setWidgetPosition(buttonsBar, 0, 24);
 
 		// Crea la tabla para guardar las tareas
 		taskFlexTable.setText(0, 0, "ID");
@@ -131,12 +150,12 @@ public class IEvenTask implements EntryPoint {
 
 		// Agrega estilos a los elementos de la tabla de tareas.
 		taskFlexTable.setCellPadding(6);
-		taskFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
+		/*taskFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
 		taskFlexTable.addStyleName("watchList");
 		taskFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
 		taskFlexTable.getCellFormatter().addStyleName(0, 2, "watchListNumericColumn");
 		taskFlexTable.getCellFormatter().addStyleName(0, 3, "watchListRemoveColumn");
-		
+		*/
 
 		rootPanel.add(taskFlexTable, 10, 80);
 		
@@ -170,5 +189,21 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.add(commentPanel);
 		rootPanel.setWidgetPosition(commentPanel, 449, 77);
 		commentPanel.setSize("300px", "287px");
+		
+		
+		// Barra de estado
+	    ToolBar statusBar = new ToolBar();  
+	    
+	    Status status = new Status();  
+	    status.setText("Not writing");  
+	    statusBar.add(status);  
+	    statusBar.add(new FillToolItem());
+		rootPanel.add(statusBar);
+		rootPanel.setWidgetPosition(statusBar, 0, new Integer(appWindowHeigth - 30));
+	
+		
+		
+		
+		
 	}
 }
