@@ -195,7 +195,7 @@ public class ProfilesWindow extends Window {
 			ids.add(model.get(ParamsConst.ID));
 		}
 		Map params = new HashMap<String, String>();
-		params.put(ParamsConst.ID, ids);
+		params.put(ParamsConst.IDS, ids);
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_PROFILE);
 		DispatcherUtil.getDispatcher().execute(params,
 				new AsyncCallback() {
@@ -211,6 +211,7 @@ public class ProfilesWindow extends Window {
 					public void onSuccess(Object result) {
 						Info.display("iEvenTask",
 								"Se eliminaron los perfiles con exito.");
+						grid.getStore().getLoader().load();
 					}
 
 				});
@@ -286,8 +287,7 @@ public class ProfilesWindow extends Window {
 							Info.display("iEvenTask",
 									"Se almaceno el perfil con exito.");
 							clear();
-							// FIXME: Evaluar si no hay algo mejor que el repaint, ya que este demora mucho
-							grid.repaint();
+							grid.getStore().getLoader().load();						
 						}
 
 					});
