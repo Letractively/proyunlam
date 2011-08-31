@@ -21,7 +21,6 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 
 	protected State windowState;
-	protected Context context = Context.getInstance();
 	protected Collection<Field> fields = new ArrayList<Field>();
 	
 	
@@ -49,15 +48,6 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 		windowState = state;
 	}
 	
-	/**
-	 * Antes de ser visualizada por primera vez se intenta registrar la ventana
-	 */
-	@Override
-	protected void afterShow() {
-		context.registerWindow(this);
-		super.afterShow();
-	}
-
 
 	/**
 	 * Valida que todos los campos a validar sean validos
@@ -155,6 +145,20 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 		fieldHorizontalLine.add(field);
 		field.setAutoValidate(Boolean.TRUE);
 		return fieldHorizontalLine;
+	}
+	
+	/**
+	 * Retorna un Model Data Basico
+	 * Usualmente utilizado en los combos
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	protected BaseModel getModelData(String key, String value) {
+		BaseModel baseModel = new BaseModel();
+		baseModel.set("key", key);
+		baseModel.set("text", value);
+		return baseModel;
 	}
 	
 }
