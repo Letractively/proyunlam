@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
-import ar.com.AmberSoft.iEvenTask.client.validaciones.ValidaMultiField;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -16,15 +15,22 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.data.ModelData;
+import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
+import com.extjs.gxt.ui.client.event.SelectionChangedListener;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
-import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
+import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
+import com.extjs.gxt.ui.client.widget.form.FileUploadField;
+import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
@@ -36,16 +42,34 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 
 public class EventWindow extends Window {
 
-
+	public static Integer especificPanelWidth = 200;
+	public static Integer especificPanelHeigth = 70;
+ 
 	// Campos
 	private final TextField fldName = new TextField();
 	private final TextField fldPeriodicity = new TextField();
 	private final DateField fldExpiration = new DateField();
 	private final TextField fldIterations = new TextField();
 	private final ComboBox fldType = new ComboBox();
-	private final TextField fldCodigoLDAP = new TextField();
 	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 7);
 	
+	private final VerticalPanel vPanelLDAP = new VerticalPanel();
+	private final VerticalPanel vPanelPatron = new VerticalPanel();
+	private final VerticalPanel vPanelArchivos = new VerticalPanel();
+	private final VerticalPanel vPanelServicios = new VerticalPanel();
+
+	// Campos para Eventos LDAP
+	private final TextField fldCode = new TextField();
+	// Campos para Eventos Patrones en Logs
+	private final FileUploadField fldPathLogs = new FileUploadField();
+	private final TextArea fldPatern = new TextArea();
+	// Campos para Archivos
+	private final ComboBox fldControlType = new ComboBox();
+	private final FileUploadField fldPathFields = new FileUploadField();
+	// Campos para Servicios
+	private final TextField fldHost = new TextField();
+	private final TextField fldPort = new TextField();
+	//private final CheckBox fldCloseTask = new CheckBox();
 	
 	public EventWindow() {
 		super();
@@ -62,7 +86,16 @@ public class EventWindow extends Window {
 		tbtmDetalles.setHeight("72px");
 
 		horizontalPanel.add(getPanelFields());
-		horizontalPanel.add(getPermissions());
+		
+		initializeLDAPPanel();
+		initializePatronPanel();
+		initializeArchivosPanel();
+		initializeServiciosPanel();
+		
+		horizontalPanel.add(vPanelLDAP);
+		horizontalPanel.add(vPanelPatron);
+		horizontalPanel.add(vPanelArchivos);
+		horizontalPanel.add(vPanelServicios);
 
 		add(tabPanel, new RowData(475.0, Style.DEFAULT, new Margins()));
 		
@@ -135,42 +168,120 @@ public class EventWindow extends Window {
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldType);
 
+		ListStore listStore = new ListStore();
+		listStore.add(getModelData("1", "LDAP"));
+		listStore.add(getModelData("2", "Patron en logs"));
+		listStore.add(getModelData("3", "Archivos"));
+		listStore.add(getModelData("4", "Servicios"));
+		fldType.setStore(listStore);
+		fldType.setEditable(Boolean.FALSE);
+		fldType.setTypeAhead(true);  
+		fldType.setTriggerAction(TriggerAction.ALL); 
+		
+		fldType.addSelectionChangedListener(new SelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(SelectionChangedEvent se) {
+						ModelData modelData = se.getSelectedItem();
+						if (modelData!=null){
+							String key = modelData.get("key");
+							if ("1".equals(modelData.get("key"))){
+								vPanelLDAP.show();
+								vPanelPatron.setVisible(Boolean.FALSE);
+								vPanelArchivos.setVisible(Boolean.FALSE);
+								vPanelServicios.setVisible(Boolean.FALSE);
+							}
+							if ("2".equals(modelData.get("key"))){
+								vPanelLDAP.setVisible(Boolean.FALSE);
+								vPanelPatron.show();
+								vPanelArchivos.setVisible(Boolean.FALSE);
+								vPanelServicios.setVisible(Boolean.FALSE);
+							}		
+							if ("3".equals(modelData.get("key"))){
+								vPanelLDAP.setVisible(Boolean.FALSE);
+								vPanelPatron.setVisible(Boolean.FALSE);
+								vPanelArchivos.show();
+								vPanelServicios.setVisible(Boolean.FALSE);
+							}		
+							if ("4".equals(modelData.get("key"))){
+								vPanelLDAP.setVisible(Boolean.FALSE);
+								vPanelPatron.setVisible(Boolean.FALSE);
+								vPanelArchivos.setVisible(Boolean.FALSE);
+								vPanelServicios.show();
+							}		
+						}
+					}
+				});
+		
 		return verticalPanel;
 	}
+	
 
-	/**
-	 * Agrega un apartado de seleccion de permisos
-	 * @param tabPanel
-	 * @param tbtmDetalles
-	 * @param horizontalPanel
-	 */
-	private VerticalPanel getPermissions() {
-		VerticalPanel verticalPanel_1 = new VerticalPanel();
 
-		CaptionPanel cptnpnlPermisos = new CaptionPanel("Permisos");
-		verticalPanel_1.add(cptnpnlPermisos);
-		cptnpnlPermisos.setSize("182px", "66px");
+	private void initializeLDAPPanel() {
+		VerticalPanel vPanel = this.vPanelLDAP;
 
-		CheckBoxGroup chckbxgrpPermisos = new CheckBoxGroup();
-		chckbxgrpPermisos.setOrientation(Orientation.VERTICAL);
-
-		/*chckbxgrpPermisos.add(fldObjective);
-		fldObjective.setBoxLabel("Gesti\u00F3n de Objetivos");
-		fldObjective.setHideLabel(true);
-
-		chckbxgrpPermisos.add(fldAdmin);
-		fldAdmin.setBoxLabel("Herramientas de Administraci\u00F3n");
-		fldAdmin.setHideLabel(true);
-		cptnpnlPermisos.setContentWidget(chckbxgrpPermisos);
-		registerField(chckbxgrpPermisos);
-		chckbxgrpPermisos.setAutoValidate(true);
-		chckbxgrpPermisos.setValidator(new ValidaMultiField());
-		chckbxgrpPermisos.setSize("172px", "50px");
-		chckbxgrpPermisos.setFieldLabel("Permisos");
-		verticalPanel_1.setSize("188px", "67px");
-		*/
-		return verticalPanel_1;
+		CaptionPanel caption = new CaptionPanel("LDAP");
+		vPanel.add(caption);
+		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", "300px", "75px"));
+		
+		vPanel.setVisible(Boolean.FALSE);
 	}
+
+	private void initializePatronPanel() {
+		VerticalPanel vPanel = this.vPanelPatron;
+
+		CaptionPanel caption = new CaptionPanel("Patron en Logs");
+		vPanel.add(caption);
+		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+		
+		VerticalPanel bodyCaption = new VerticalPanel();
+		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, "Ruta", "300px", "75px"));
+		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", "300px", "75px"));
+		caption.add(bodyCaption);
+		
+		vPanel.setVisible(Boolean.FALSE);
+	}
+
+	private void initializeArchivosPanel() {
+		VerticalPanel vPanel = this.vPanelArchivos;
+
+		CaptionPanel caption = new CaptionPanel("Archivos");
+		vPanel.add(caption);
+		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+
+		VerticalPanel bodyCaption = new VerticalPanel();
+		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", "300px", "75px"));
+		bodyCaption.add(getFieldHorizontalLine(fldPathFields, "Ruta", "300px", "75px"));
+		caption.add(bodyCaption);
+		
+		ListStore listStore = new ListStore();
+		listStore.add(getModelData("1", "Creacion"));
+		listStore.add(getModelData("2", "Modificacion"));
+		fldControlType.setStore(listStore);
+		fldControlType.setEditable(Boolean.FALSE);
+		fldControlType.setTypeAhead(true);  
+		fldControlType.setTriggerAction(TriggerAction.ALL); 
+		
+		vPanel.setVisible(Boolean.FALSE);
+	}
+
+	private void initializeServiciosPanel() {
+		VerticalPanel vPanel = this.vPanelServicios;
+
+		CaptionPanel caption = new CaptionPanel("Servicios");
+		vPanel.add(caption);
+		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+		
+		VerticalPanel bodyCaption = new VerticalPanel();
+		bodyCaption.add(getFieldHorizontalLine(fldHost, "Direccion del servidor", "300px", "75px"));
+		bodyCaption.add(getFieldHorizontalLine(fldPort, "Puerto", "300px", "75px"));
+		caption.add(bodyCaption);
+
+		vPanel.setVisible(Boolean.FALSE);
+	}
+
 	
 	/**
 	 * Retorna la configuracion de la grilla
