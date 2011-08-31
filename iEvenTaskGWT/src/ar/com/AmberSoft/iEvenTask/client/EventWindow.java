@@ -25,7 +25,6 @@ import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
-import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
@@ -42,16 +41,27 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 
 public class EventWindow extends Window {
 
-	public static Integer especificPanelWidth = 200;
-	public static Integer especificPanelHeigth = 70;
- 
+	public static final Integer WINDOW_WIDTH = 665;
+	public static final Integer WINDOW_HEIGTH = 470;
+
+	public static final Integer FIELD_WIDTH = 150;
+	public static final Integer LABEL_WIDTH = 150;
+	
+	public static final Integer DETAILS_HEIGTH = 72;
+	
+	public static final Integer ESPECIFIC_PANEL_WIDTH = LABEL_WIDTH + FIELD_WIDTH;
+	public static final Integer ESPECIFIC_PANEL_HEIGTH = 70;
+	
+	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
+	public static final Integer GRID_HEIGTH = 250;
+
 	// Campos
 	private final TextField fldName = new TextField();
 	private final TextField fldPeriodicity = new TextField();
 	private final DateField fldExpiration = new DateField();
 	private final TextField fldIterations = new TextField();
 	private final ComboBox fldType = new ComboBox();
-	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 7);
+	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
 	
 	private final VerticalPanel vPanelLDAP = new VerticalPanel();
 	private final VerticalPanel vPanelPatron = new VerticalPanel();
@@ -83,7 +93,7 @@ public class EventWindow extends Window {
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		tabPanel.add(tbtmDetalles);
 		tbtmDetalles.add(horizontalPanel);
-		tbtmDetalles.setHeight("72px");
+		tbtmDetalles.setHeight(DETAILS_HEIGTH.toString());
 
 		horizontalPanel.add(getPanelFields());
 		
@@ -97,7 +107,7 @@ public class EventWindow extends Window {
 		horizontalPanel.add(vPanelArchivos);
 		horizontalPanel.add(vPanelServicios);
 
-		add(tabPanel, new RowData(475.0, Style.DEFAULT, new Margins()));
+		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
 		
 		addGrid();
 		
@@ -108,8 +118,8 @@ public class EventWindow extends Window {
 	 * Inicializa la ventana actual
 	 */
 	private void initialize() {
-		setInitialWidth(490);
-		setHeight(400);
+		setInitialWidth(WINDOW_WIDTH);
+		setHeight(WINDOW_HEIGTH);
 		setMaximizable(true);
 		setTitleCollapse(true);
 		setHeading("Gesti\u00F3n de Eventos");
@@ -134,11 +144,11 @@ public class EventWindow extends Window {
 		grid.addFilter(new StringFilter(ParamsConst.NAME));
 		grid.addFilter(new StringFilter(ParamsConst.CONECTION));
 		grid.defaultContextMenu();
-		grid.setSize("450", "200");
+		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
 		grid.setBorders(true);
 		grid.defaultActionOnSelectItem();
 		this.setBottomComponent(grid.getToolBar());
-		add(grid, new RowData(470.0, Style.DEFAULT, new Margins()));
+		add(grid, new RowData(GRID_WIDTH, Style.DEFAULT, new Margins()));
 	}
 
 	/**
@@ -148,23 +158,23 @@ public class EventWindow extends Window {
 	private VerticalPanel getPanelFields() {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		
-		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldName);
 		
-		verticalPanel.add(getFieldHorizontalLine(fldPeriodicity, "Periodicidad", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldPeriodicity, "Periodicidad", FIELD_WIDTH, LABEL_WIDTH));
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldPeriodicity);
 
-		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", FIELD_WIDTH, LABEL_WIDTH));
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldExpiration);
 
-		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", FIELD_WIDTH, LABEL_WIDTH));
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldIterations);
 
-		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", "262px", "75px"));
+		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", FIELD_WIDTH, LABEL_WIDTH));
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldType);
 
@@ -223,8 +233,8 @@ public class EventWindow extends Window {
 
 		CaptionPanel caption = new CaptionPanel("LDAP");
 		vPanel.add(caption);
-		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
-		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", "300px", "75px"));
+		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
+		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", FIELD_WIDTH, LABEL_WIDTH));
 		
 		vPanel.setVisible(Boolean.FALSE);
 	}
@@ -234,11 +244,11 @@ public class EventWindow extends Window {
 
 		CaptionPanel caption = new CaptionPanel("Patron en Logs");
 		vPanel.add(caption);
-		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 		
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, "Ruta", "300px", "75px"));
-		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", "300px", "75px"));
+		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
+		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 		
 		vPanel.setVisible(Boolean.FALSE);
@@ -249,11 +259,11 @@ public class EventWindow extends Window {
 
 		CaptionPanel caption = new CaptionPanel("Archivos");
 		vPanel.add(caption);
-		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", "300px", "75px"));
-		bodyCaption.add(getFieldHorizontalLine(fldPathFields, "Ruta", "300px", "75px"));
+		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", FIELD_WIDTH, LABEL_WIDTH));
+		bodyCaption.add(getFieldHorizontalLine(fldPathFields, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 		
 		ListStore listStore = new ListStore();
@@ -272,16 +282,15 @@ public class EventWindow extends Window {
 
 		CaptionPanel caption = new CaptionPanel("Servicios");
 		vPanel.add(caption);
-		caption.setSize(especificPanelWidth.toString(), especificPanelHeigth.toString());
+		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 		
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldHost, "Direccion del servidor", "300px", "75px"));
-		bodyCaption.add(getFieldHorizontalLine(fldPort, "Puerto", "300px", "75px"));
+		bodyCaption.add(getFieldHorizontalLine(fldHost, "Direccion del servidor", FIELD_WIDTH, LABEL_WIDTH));
+		bodyCaption.add(getFieldHorizontalLine(fldPort, "Puerto", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 
 		vPanel.setVisible(Boolean.FALSE);
 	}
-
 	
 	/**
 	 * Retorna la configuracion de la grilla

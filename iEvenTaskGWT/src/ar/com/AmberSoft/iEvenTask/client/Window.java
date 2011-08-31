@@ -20,11 +20,10 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
  */
 public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 
+	public static final Integer EXTRA_WIDTH = 20;
+	
 	protected State windowState;
 	protected Collection<Field> fields = new ArrayList<Field>();
-	
-	
-	private List<Field> toValidate = new ArrayList<Field>();
 	
 	public Window(){
 		windowState =  State.UNKNOW_STATE;
@@ -132,21 +131,23 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 	 * Genera un panel horizontal con una etiqueta y el campo correspondiente
 	 * @param field
 	 * @param labelText
-	 * @param lineWith
+	 * @param fieldWith
 	 * @param labelWidth
 	 * @return
 	 */
-	protected HorizontalPanel getFieldHorizontalLine(Field field, String labelText, String lineWith, String labelWidth) {
+	protected HorizontalPanel getFieldHorizontalLine(Field field, String labelText, Integer fieldWith, Integer labelWidth) {
 		HorizontalPanel fieldHorizontalLine = new HorizontalPanel();
-		fieldHorizontalLine.setWidth(lineWith);
+		fieldHorizontalLine.setWidth(new Integer(fieldWith + labelWidth + EXTRA_WIDTH));
 		LabelField labelField = new LabelField(labelText);
 		fieldHorizontalLine.add(labelField);
 		labelField.setWidth(labelWidth);
 		fieldHorizontalLine.add(field);
-		field.setAutoValidate(Boolean.TRUE);
+		//No se valida despues de escribir sino al guardar
+		//field.setAutoValidate(Boolean.TRUE);
+		field.setWidth(fieldWith);
 		return fieldHorizontalLine;
 	}
-	
+	 
 	/**
 	 * Retorna un Model Data Basico
 	 * Usualmente utilizado en los combos
