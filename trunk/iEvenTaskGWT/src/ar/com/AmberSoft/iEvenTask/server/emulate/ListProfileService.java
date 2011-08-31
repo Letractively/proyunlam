@@ -22,6 +22,9 @@ public class ListProfileService implements Emulate {
 			add(list, "Perfil5", "Grupo5", "Conexion5");
 			add(list, "Perfil6", "Grupo6", "Conexion6");
 			add(list, "Perfil7", "Grupo7", "Conexion7");
+			add(list, "Perfil8", "Grupo8", "Conexion8");
+			add(list, "Perfil9", "Grupo9", "Conexion9");
+			add(list, "Perfil10", "Grupo10", "Conexion10");
 			map.put(ParamsConst.DATA, list);
 			map.put(ParamsConst.TOTAL_COUNT, new Long(list.size()));
 			map.put(ParamsConst.OFFSET, (Integer) params.get("offset"));
