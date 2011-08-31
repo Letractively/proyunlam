@@ -35,13 +35,27 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 
 public class ProfilesWindow extends Window {
 
+	public static final Integer WINDOW_WIDTH = 500;
+	public static final Integer WINDOW_HEIGTH = 436;
+	
+	public static final Integer FIELD_WIDTH = 150;
+	public static final Integer LABEL_WIDTH = 100;
+	
+	public static final Integer DETAILS_HEIGTH = 72;
+	
+	public static final Integer ESPECIFIC_PANEL_WIDTH = LABEL_WIDTH + FIELD_WIDTH;
+	public static final Integer ESPECIFIC_PANEL_HEIGTH = 70;
+	
+	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
+	public static final Integer GRID_HEIGTH = 250;
+	
 	// Campos
 	final TextField fldName = new TextField();
 	final TextField fldConection = new TextField();
 	final TextField fldGroup = new TextField();
 	final CheckBox fldObjective = new CheckBox();
 	final CheckBox fldAdmin = new CheckBox();
-	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 7);
+	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
 	
 	public ProfilesWindow() {
 		super();
@@ -55,15 +69,14 @@ public class ProfilesWindow extends Window {
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		tabPanel.add(tbtmDetalles);
 		tbtmDetalles.add(horizontalPanel);
-		tbtmDetalles.setHeight("72px");
+		tbtmDetalles.setHeight(DETAILS_HEIGTH.toString());
 
 		horizontalPanel.add(getPanelFields());
 		horizontalPanel.add(getPermissions());
 
-		add(tabPanel, new RowData(475.0, Style.DEFAULT, new Margins()));
+		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
 		
 		addGrid();
-		
 
 	}
 
@@ -71,8 +84,8 @@ public class ProfilesWindow extends Window {
 	 * Inicializa la ventana actual
 	 */
 	private void initialize() {
-		setInitialWidth(490);
-		setHeight(400);
+		setInitialWidth(WINDOW_WIDTH);
+		setHeight(WINDOW_HEIGTH);
 		setMaximizable(true);
 		setTitleCollapse(true);
 		setHeading("Gesti\u00F3n de Perfiles");
@@ -97,11 +110,11 @@ public class ProfilesWindow extends Window {
 		grid.addFilter(new StringFilter(ParamsConst.NAME));
 		grid.addFilter(new StringFilter(ParamsConst.CONECTION));
 		grid.defaultContextMenu();
-		grid.setSize("450", "200");
+		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
 		grid.setBorders(true);
 		grid.defaultActionOnSelectItem();
 		this.setBottomComponent(grid.getToolBar());
-		add(grid, new RowData(470.0, Style.DEFAULT, new Margins()));
+		add(grid, new RowData(GRID_WIDTH, Style.DEFAULT, new Margins()));
 	}
 
 	/**
@@ -111,16 +124,16 @@ public class ProfilesWindow extends Window {
 	private VerticalPanel getPanelFields() {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		
-		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", "262px", "75px"));
-		//field.setAllowBlank(Boolean.FALSE);
+		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
+		fldName.setAllowBlank(Boolean.FALSE);
 		registerField(fldName);
 		
-		verticalPanel.add(getFieldHorizontalLine(fldConection, "Conexion", "262px", "75px"));
-		//field.setAllowBlank(Boolean.FALSE);
+		verticalPanel.add(getFieldHorizontalLine(fldConection, "Conexion", FIELD_WIDTH, LABEL_WIDTH));
+		fldConection.setAllowBlank(Boolean.FALSE);
 		registerField(fldConection);
 
-		verticalPanel.add(getFieldHorizontalLine(fldGroup, "Grupo LDAP", "262px", "75px"));
-		//field.setAllowBlank(Boolean.FALSE);
+		verticalPanel.add(getFieldHorizontalLine(fldGroup, "Grupo LDAP", FIELD_WIDTH, LABEL_WIDTH));
+		fldGroup.setAllowBlank(Boolean.FALSE);
 		registerField(fldGroup);
 		
 		return verticalPanel;
