@@ -30,4 +30,12 @@ public abstract class ParamsConst {
 	public static final String CUMPLIMIENTO = "CUMPLIMIENTO";
 	public static final String TIPO_TAREA = "TIPO_TAREA";
 	
+	public static final String PERIODICITY = "PERIODICITY";
+	public static final String EXPIRATION = "EXPIRATION";
+	public static final String ITERATIONS = "ITERATIONS";
+	
+	public static final String CODE = "CODE";
+	
+	
+	
 }

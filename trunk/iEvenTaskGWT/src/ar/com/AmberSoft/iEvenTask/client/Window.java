@@ -142,8 +142,9 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 		fieldHorizontalLine.add(labelField);
 		labelField.setWidth(labelWidth);
 		fieldHorizontalLine.add(field);
-		//No se valida despues de escribir sino al guardar
-		//field.setAutoValidate(Boolean.TRUE);
+		// Realiza la validacion del campo cuando pierde el foco
+		field.setAutoValidate(Boolean.TRUE);
+		field.setValidateOnBlur(Boolean.TRUE);
 		field.setWidth(fieldWith);
 		return fieldHorizontalLine;
 	}

@@ -75,3 +75,47 @@ ADD CONSTRAINT fk_visualiza_tarea FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id
 ALTER TABLE iet_visualiza 
 ADD CONSTRAINT pk_visualiza PRIMARY KEY (id_tarea, id_usuario);
 
+create table iet_evento (
+	id_evento int primary key, 
+	nombre varchar(50) not null,
+	periodicidad int not null,
+	fecha_expiracion timestamp,
+	iteraciones int
+);
+
+create table iet_evento_ldap (
+	id_evento int primary key,
+	codigo varchar(50) not null
+);
+
+ALTER TABLE iet_evento_ldap 
+ADD CONSTRAINT fk_evento_eventoldap FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
+
+create table iet_evento_logs (
+	id_evento int primary key,
+	ruta varchar(255) not null,
+	patron varchar(255) not null
+);
+
+ALTER TABLE iet_evento_logs 
+ADD CONSTRAINT fk_evento_eventologs FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
+
+create table iet_evento_archivos (
+	id_evento int primary key,
+	tipo int not null,
+	ruta varchar(255) not null
+);
+
+ALTER TABLE iet_evento_archivos 
+ADD CONSTRAINT fk_evento_eventoarchivos FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
+
+create table iet_evento_servicios (
+	id_evento int primary key,
+	servidor varchar(255) not null,
+	port varchar(10) not null
+);
+
+ALTER TABLE iet_evento_servicios 
+ADD CONSTRAINT fk_evento_eventoservicios FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
+
+

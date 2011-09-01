@@ -26,3 +26,18 @@ DROP CONSTRAINT fk_subtarea_subtarea;
 DROP TABLE iet_subtarea;
 
 DROP TABLE iet_tarea;
+
+ALTER TABLE iet_evento_ldap 
+DROP CONSTRAINT fk_evento_eventoldap;
+ALTER TABLE iet_evento_logs 
+DROP CONSTRAINT fk_evento_eventologs;
+ALTER TABLE iet_evento_archivos 
+DROP CONSTRAINT fk_evento_eventoarchivos;
+ALTER TABLE iet_evento_servicios
+DROP CONSTRAINT fk_evento_eventoservicios;
+
+DROP TABLE iet_evento_ldap;
+DROP TABLE iet_evento_logs;
+DROP TABLE iet_evento_archivos;
+DROP TABLE iet_evento_servicios;
+DROP TABLE iet_evento;
