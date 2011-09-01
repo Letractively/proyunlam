@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.client.validaciones.IntegerValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -61,7 +62,7 @@ public class EventWindow extends Window {
 	private final DateField fldExpiration = new DateField();
 	private final TextField fldIterations = new TextField();
 	private final ComboBox fldType = new ComboBox();
-	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
+	final Grid grid = new Grid(this, ServiceNameConst.LIST_EVENT, getGridConfig(), 10);
 	
 	private final VerticalPanel vPanelLDAP = new VerticalPanel();
 	private final VerticalPanel vPanelPatron = new VerticalPanel();
@@ -159,11 +160,12 @@ public class EventWindow extends Window {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		
 		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
+		fldName.setAllowBlank(Boolean.FALSE);
 		registerField(fldName);
 		
 		verticalPanel.add(getFieldHorizontalLine(fldPeriodicity, "Periodicidad", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
+		fldPeriodicity.setAllowBlank(Boolean.FALSE);
+		fldPeriodicity.setValidator(new IntegerValidator());
 		registerField(fldPeriodicity);
 
 		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", FIELD_WIDTH, LABEL_WIDTH));
@@ -171,11 +173,12 @@ public class EventWindow extends Window {
 		registerField(fldExpiration);
 
 		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", FIELD_WIDTH, LABEL_WIDTH));
+		fldIterations.setValidator(new IntegerValidator());
 		//field.setAllowBlank(Boolean.FALSE);
 		registerField(fldIterations);
 
 		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
+		fldType.setAllowBlank(Boolean.FALSE);
 		registerField(fldType);
 
 		ListStore listStore = new ListStore();
@@ -235,7 +238,8 @@ public class EventWindow extends Window {
 		vPanel.add(caption);
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", FIELD_WIDTH, LABEL_WIDTH));
-		
+		fldCode.setAllowBlank(Boolean.FALSE);
+		registerField(fldCode);
 		vPanel.setVisible(Boolean.FALSE);
 	}
 
@@ -248,7 +252,9 @@ public class EventWindow extends Window {
 		
 		VerticalPanel bodyCaption = new VerticalPanel();
 		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
+		fldPathLogs.setAllowBlank(Boolean.FALSE);
 		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", FIELD_WIDTH, LABEL_WIDTH));
+		fldPatern.setAllowBlank(Boolean.FALSE);
 		caption.add(bodyCaption);
 		
 		vPanel.setVisible(Boolean.FALSE);
@@ -283,7 +289,7 @@ public class EventWindow extends Window {
 		CaptionPanel caption = new CaptionPanel("Servicios");
 		vPanel.add(caption);
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
-		
+
 		VerticalPanel bodyCaption = new VerticalPanel();
 		bodyCaption.add(getFieldHorizontalLine(fldHost, "Direccion del servidor", FIELD_WIDTH, LABEL_WIDTH));
 		bodyCaption.add(getFieldHorizontalLine(fldPort, "Puerto", FIELD_WIDTH, LABEL_WIDTH));
@@ -354,7 +360,7 @@ public class EventWindow extends Window {
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 
 		if (actual != null) {
-			fldName.setValue(actual.get(ParamsConst.NAME));
+			//fldName.setValue(actual.get(ParamsConst.NAME));
 		/*	fldConection.setValue(actual.get(ParamsConst.CONECTION));
 			fldGroup.setValue(actual.get(ParamsConst.GROUP));
 			fldObjective.setValue(Boolean.FALSE);
@@ -382,12 +388,23 @@ public class EventWindow extends Window {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.NAME, fldName.getValue());
-		/*	params.put(ParamsConst.CONECTION, fldConection.getValue());
-			params.put(ParamsConst.GROUP, fldGroup.getValue());
-			params.put(ParamsConst.CHECK_OBJECTIVE,
-					fldObjective.getValue());
-			params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue()); */
-			if (windowState.equals(State.UPDATE_STATE)) {
+			params.put(ParamsConst.PERIODICITY, fldPeriodicity.getValue());
+			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue());
+			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
+
+			/*listStore.add(getModelData("1", "LDAP"));
+			listStore.add(getModelData("2", "Patron en logs"));
+			listStore.add(getModelData("3", "Archivos"));
+			listStore.add(getModelData("4", "Servicios"));*/
+
+			// Si es de tipo LDAP
+			if ("1".equals(fldType.getValue().get("key"))){
+				params.put(ParamsConst.CODE,	fldCode.getValue());
+				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+			}
+			
+			
+			/*if (windowState.equals(State.UPDATE_STATE)) {
 				List seleccionados = grid.getSelectionModel()
 						.getSelection();
 				if (seleccionados.size() == 1) {
@@ -403,24 +420,24 @@ public class EventWindow extends Window {
 			} else {
 				params.put(ServiceNameConst.SERVICIO,
 						ServiceNameConst.CREATE_PROFILE);
-			}
+			}*/
+			
+			
 			DispatcherUtil.getDispatcher().execute(params,
 					new AsyncCallback() {
 
 						@Override
 						public void onFailure(Throwable caught) {
 							Info.display("iEvenTask",
-									"No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
+									"No pudo almacenarse el evento. Aguarde un momento y vuelva a intentarlo.");
 						}
 
 						@Override
 						public void onSuccess(Object result) {
 							Info.display("iEvenTask",
-									"Se almaceno el perfil con exito.");
+									"Se almaceno el evento con exito.");
 							clear();
-							// FIXME: Evaluar si no hay algo mejor que el repaint, ya que este demora mucho
-							grid.repaint();
-						}
+							grid.getStore().getLoader().load();						}
 
 					});
 

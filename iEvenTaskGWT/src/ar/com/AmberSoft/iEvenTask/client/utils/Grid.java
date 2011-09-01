@@ -7,10 +7,8 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.State;
 import ar.com.AmberSoft.iEvenTask.client.Window;
-import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
-import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.Events;

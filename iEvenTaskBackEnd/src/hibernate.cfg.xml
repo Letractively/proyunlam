@@ -35,5 +35,10 @@
 		<!-- mapping resource="org/hibernate/tutorial/domain/Event.hbm.xml" /-->
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Permiso"/>
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Perfil"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Event"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventServices"/>
 	</session-factory>
 </hibernate-configuration>

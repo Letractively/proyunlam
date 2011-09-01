@@ -16,9 +16,11 @@ import ar.com.AmberSoft.util.ParamsConst;
 import com.extjs.gxt.ui.client.data.BaseFilterConfig;
 
 public abstract class ListService extends Service {
-
-	public static String NAME = "name";
+	
 	public static String SELECT_COUNT = "SELECT COUNT(*) ";
+	public static String NAME = "name";
+	public static String OFFSET = "offset";
+	public static String LIMIT = "limit";
 	
 	protected Query query;
 	protected Query queryCount;
@@ -45,8 +47,8 @@ public abstract class ListService extends Service {
 		query = getSession().createQuery(queryText.toString());
 		queryCount = getSession().createQuery(SELECT_COUNT + queryTextWithoutOrder.toString());
 		
-		query.setFirstResult((Integer) params.get("offset"));
-		query.setMaxResults((Integer) params.get("limit"));
+		query.setFirstResult((Integer) params.get(OFFSET));
+		query.setMaxResults((Integer) params.get(LIMIT));
 		
 		postCreateQuery(params);
 		
@@ -57,7 +59,7 @@ public abstract class ListService extends Service {
 		Collection list = new ArrayList();
 		map.put(ParamsConst.DATA, query.list());
 		map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
-		map.put(ParamsConst.OFFSET, (Integer) params.get("offset"));
+		map.put(ParamsConst.OFFSET, (Integer) params.get(OFFSET));
 		
 		getSession().getTransaction().commit();
 		
