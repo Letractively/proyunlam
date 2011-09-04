@@ -25,9 +25,9 @@ public class CreateEventLDAPService extends Service {
 
 	protected void setAttributes(Map params, EventLDAP event) {
 		event.setName((String) params.get(ParamsConst.NAME));
-		event.setPeriodicity((Integer) params.get(ParamsConst.PERIODICITY));
-		event.setExpiration((Date) params.get(ParamsConst.EXPIRATION));
-		event.setIterations( (Integer) params.get(ParamsConst.ITERATIONS));
+		event.setPeriodicity(Service.stringToInteger((String)params.get(ParamsConst.PERIODICITY)));
+		//event.setExpiration(new Date());
+		event.setIterations(Service.stringToInteger((String)params.get(ParamsConst.ITERATIONS)));
 		event.setCode((String) params.get(ParamsConst.CODE));
 	}
 

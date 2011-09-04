@@ -2,17 +2,15 @@ package ar.com.AmberSoft.iEvenTask.server;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.MethodUtils;
-import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
 import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
 import ar.com.AmberSoft.iEvenTask.server.utils.GWTCompatibilityEvaluatorTypes;
+import ar.com.AmberSoft.iEvenTask.server.utils.Tools;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceClassNotFoundException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceInstantationException;
@@ -27,16 +25,21 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		ServiceDispatcher {
 	
+	private static Logger logger = Logger.getLogger(ServiceDispatcherImpl.class);
+	
 	public static String EXECUTE = "execute";
 	public static String EMULATE_PACKAGE = "ar.com.AmberSoft.iEvenTask.server.emulate";
 
 	public Map execute(Map params) throws IllegalArgumentException {
+		
+		logger.debug("Inicio ServiceDispatcher");
 		
 		if ((params==null)||(params.get(ServiceNameConst.SERVICIO)==null)){
 			throw new ServiceNameNotFoundException();
 		}
 		
 		try {
+			logger.debug("Invocando " + params.get(ServiceNameConst.SERVICIO));
 			Class type = getType(params);
 			Map toReturn = invokeExecute(type.newInstance(), type, params);
 			
@@ -55,18 +58,30 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			}
 			return null;
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			logger.error(Tools.getStackTrace(e));
 			throw new ServiceInstantationException();
+		} finally {
+			logger.debug("Fin ServiceDispatcher");
 		}
 	}
 
 	private Map invokeExecute(Object instance, Class type, Map params) {
 		if (!Object.class.getName().equals(type.getClass().getName())){
+			Method method;
 			try {
-				Method method = type.getDeclaredMethod(EXECUTE, Map.class);
+				method = type.getDeclaredMethod(EXECUTE, Map.class);
 				return (Map) method.invoke(instance, params);
-			} catch (Exception e){
+			} catch (SecurityException e) {
+				logger.error(Tools.getStackTrace(e));
+			} catch (NoSuchMethodException e) {
+				logger.error(Tools.getStackTrace(e));
 				return invokeExecute(instance, type.getSuperclass(), params);
+			} catch (IllegalArgumentException e) {
+				logger.error(Tools.getStackTrace(e));
+			} catch (IllegalAccessException e) {
+				logger.error(Tools.getStackTrace(e));
+			} catch (InvocationTargetException e) {
+				logger.error(Tools.getStackTrace(e));
 			}
 		}
 		// TODO: En lugar de retornar nulo, lanzar una excepcion ya que no encontro el metodo execute

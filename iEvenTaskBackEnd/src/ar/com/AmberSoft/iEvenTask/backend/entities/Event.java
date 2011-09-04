@@ -24,12 +24,13 @@ public abstract class Event implements Serializable {
 	private Date expiration;
 	private Integer iterations;
 
+	public Event (){
+		PKGenerator pkGenerator = new PKGenerator();
+		id = new Integer(pkGenerator.getIntLastTime());
+	}
+	
 	@Id @Column (name="id_evento")
 	public Integer getId() {
-		if (id==null){
-			PKGenerator pkGenerator = new PKGenerator();
-			id = new Integer(pkGenerator.getIntLastTime());
-		}
 		return id;
 	}
 	public void setId(Integer id) {
@@ -52,13 +53,13 @@ public abstract class Event implements Serializable {
 		this.periodicity = periodicity;
 	}
 	
-	@Basic @Column (name="fecha_expiracion")
+/*	@Basic @Column (name="fecha_expiracion")
 	public Date getExpiration() {
 		return expiration;
 	}
 	public void setExpiration(Date expiration) {
 		this.expiration = expiration;
-	}
+	}*/
 	
 	@Basic @Column (name="iteraciones")
 	public Integer getIterations() {
