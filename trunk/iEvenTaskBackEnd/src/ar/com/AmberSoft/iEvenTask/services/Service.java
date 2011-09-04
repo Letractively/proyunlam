@@ -42,4 +42,16 @@ public abstract class Service {
 	
 	public abstract Map execute(Map params);
 	
+	/**
+	 * Transforma un string en un integer
+	 * @param value
+	 * @return
+	 */
+	public static Integer stringToInteger(String value){
+		if ((value!=null) && (!"".equals(value))){
+			return new Integer(value);
+		}
+		return null;
+	}
+	
 }

@@ -309,14 +309,17 @@ public class EventWindow extends Window {
 		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
-		configs.add(clmncnfgNombre);
+		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
+		configs.add(clmncnfg1);
 
-		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONECTION, "Conexion", 150);
-		configs.add(clmncnfgConexion);
+		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PERIODICITY, "Periodicidad", 150);
+		configs.add(clmncnfg2);
 
-		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 150);
-		configs.add(clmncnfgGrupoLdap);
+		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.EXPIRATION, "Expiracion", 150);
+		configs.add(clmncnfg3);
+
+		ColumnConfig clmncnfg4 = new ColumnConfig(ParamsConst.ITERATIONS, "Iteraciones", 150);
+		configs.add(clmncnfg4);
 
 		return configs;
 	}
