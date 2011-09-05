@@ -6,6 +6,7 @@ import java.util.Map;
 import org.hibernate.Session;
 
 import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
+import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
 
 import com.extjs.gxt.ui.client.data.BaseStringFilterConfig;
 
@@ -37,10 +38,34 @@ public abstract class Service {
 			operatorOnWhere = new HashMap();
 			operatorOnWhere.put(BaseStringFilterConfig.class.getName(), LIKE);
 		}
-		session = HibernateUtil.getSessionFactory().getCurrentSession();
+		// Si no se esta emulando obtenemos una session de hibernate
+		if (!AppAdmin.getInstance().getConfig().isEmulate()){
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+		}	
+		
 	}
 	
-	public abstract Map execute(Map params);
+	public Map execute(Map params){
+		if (AppAdmin.getInstance().getConfig().isEmulate()){
+			return onEmulate(params);
+		}
+		return onExecute(params);
+	}
+	
+	/**
+	 * Ejecuta el servicio real
+	 * @param params
+	 * @return
+	 */
+	public abstract Map onExecute(Map params);
+	
+	/**
+	 * Emula la ejecucion del servicio
+	 * Solo se ejecuta con la emulacion activada
+	 * @param params
+	 * @return
+	 */
+	public abstract Map onEmulate(Map params);
 	
 	/**
 	 * Transforma un string en un integer

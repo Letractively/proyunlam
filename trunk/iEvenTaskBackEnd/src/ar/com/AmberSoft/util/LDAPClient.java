@@ -13,8 +13,11 @@ public class LDAPClient {
 	
 	public static final String DOMAIN = "java.naming.security.domain";
 	public static final String DOUBLE_BAR = "\\";
-	
+
 	public static void authenticate(String user, String password){
+		
+		
+		//FIXME: CORREGIR PARA QUE LLAME AL APPADMIN QUE YA TIENE LA CONFIGURACION CARGADA
 		ResourceBundle config = ResourceBundle.getBundle("config");
         Hashtable env = new Hashtable();
 

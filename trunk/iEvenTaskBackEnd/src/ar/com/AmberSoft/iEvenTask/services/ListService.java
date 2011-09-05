@@ -2,13 +2,13 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.hibernate.Query;
 
-import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
 import ar.com.AmberSoft.iEvenTask.utils.FiltersWrapperFactory;
 import ar.com.AmberSoft.iEvenTask.utils.Wrapper;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -26,11 +26,11 @@ public abstract class ListService extends Service {
 	protected Query queryCount;
 	protected StringBuffer queryText;
 	
+	
 	@Override
-	public Map execute(Map params) {
-		
+	public Map onExecute(Map params) {
 		initList(params);
-				
+		
 		getSession().beginTransaction();
 		queryText = new StringBuffer();
 		queryText.append(FROM);
@@ -55,11 +55,12 @@ public abstract class ListService extends Service {
 		setFiltersValuesInQuery(params, query);
 		setFiltersValuesInQuery(params, queryCount);
 		
-		Map map = new PagingLoadResult();
+		Map map = new HashMap();
 		Collection list = new ArrayList();
 		map.put(ParamsConst.DATA, query.list());
 		map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
 		map.put(ParamsConst.OFFSET, (Integer) params.get(OFFSET));
+		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
 		
 		getSession().getTransaction().commit();
 		

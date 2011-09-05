@@ -56,5 +56,13 @@
 
 	</target>
 
+	<target name="Jar_iEvenTaskBackEnd">
+		<jar destfile="${iet.gwt.lib}/iEvenTaskBackEnd.jar" basedir="../iEvenTaskBackEnd/bin/" />
+		<copy todir="${iet.gwt.lib}/">
+			<fileset dir="../iEvenTaskBackEnd/lib/" />
+		</copy>
+	</target>
+	
+	
 
 </project>

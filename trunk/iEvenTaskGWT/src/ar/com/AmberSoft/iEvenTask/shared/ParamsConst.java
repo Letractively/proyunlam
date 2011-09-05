@@ -4,6 +4,11 @@ public abstract class ParamsConst {
 
 	private ParamsConst(){}
 	
+	public static final String CLASS = "class";
+	public static final String EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";
+	
+	public static final String PAGING_LOAD_RESULT = "PAGING_LOAD_RESULT";
+	
 	public static final String DATA = "DATA";
 	public static final String OFFSET = "OFFSET";
 	public static final String TOTAL_COUNT = "TOTAL_COUNT";
@@ -14,28 +19,27 @@ public abstract class ParamsConst {
 	
 	public static final String IDS = "ids";
 	public static final String ID = "id";
-	public static final String NAME = "nombre";
-	public static final String CONECTION = "conexion";
-	public static final String GROUP = "grupoLDAP";
+	public static final String NAME = "name";
+	public static final String CONECTION = "conection";
+	public static final String GROUP = "group";
 	public static final String PERMISOS = "permisos";
-	public static final String CHECK_OBJECTIVE = "CHECK_OBJECTIVE";
-	public static final String CHECK_ADMIN = "CHECK_ADMIN";
+	public static final String CHECK_OBJECTIVE = "checkObjective";
+	public static final String CHECK_ADMIN = "checkAdmin";
 	
-	public static final String FECHACREACION = "FECHACREACION";
-	public static final String FECHAFIN = "FECHAFIN";
-	public static final String HORASASIGNADAS = "HORASASIGNADAS";
-	public static final String ID_USUARIO = "ID_USUARIO";
-	public static final String FECHAMODIFICACION = "FECHAMODIFICACION";
-	public static final String ESTADO = "ESTADO";
-	public static final String CUMPLIMIENTO = "CUMPLIMIENTO";
-	public static final String TIPO_TAREA = "TIPO_TAREA";
+	public static final String FECHACREACION = "fechaCreacion";
+	public static final String FECHAFIN = "fechaFin";
+	public static final String HORASASIGNADAS = "horas";
+	public static final String ID_USUARIO = "idUsuario";
+	public static final String FECHAMODIFICACION = "fechaModificacion";
+	public static final String ESTADO = "estado";
+	public static final String CUMPLIMIENTO = "cumplimiento";
+	public static final String TIPO_TAREA = "tipoTarea";
 	
-	public static final String PERIODICITY = "PERIODICITY";
-	public static final String EXPIRATION = "EXPIRATION";
-	public static final String ITERATIONS = "ITERATIONS";
+	public static final String PERIODICITY = "periodicity";
+	public static final String EXPIRATION = "expiration";
+	public static final String ITERATIONS = "iterations";
 	
-	public static final String CODE = "CODE";
-	
+	public static final String CODE = "code";
 	
 	
 }

@@ -8,7 +8,10 @@ import java.util.List;
 import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
 
 import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.data.ModelData;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
@@ -161,6 +164,24 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 		baseModel.set("key", key);
 		baseModel.set("text", value);
 		return baseModel;
+	}
+	
+	/**
+	 * Setea el valor seleccionado de un combo
+	 * @param comboBox
+	 * @param key
+	 */
+	protected void setCombo(ComboBox comboBox, String key) {
+		ListStore<ModelData> listStore = comboBox.getStore();
+		ModelData modelData = null;
+		Iterator it = listStore.getModels().iterator();
+		while (it.hasNext()) {
+			ModelData mdAux = (ModelData) it.next();
+			if (key.equals(mdAux.get("key"))){
+				modelData = mdAux;
+			}
+		}
+		comboBox.setValue(modelData);
 	}
 	
 }

@@ -14,19 +14,6 @@ public class CreateProfileService extends Service {
 	public static String ID_OBJECTIVE = "1";
 	public static String ID_ADMIN = "2";
 	
-	@Override
-	public Map execute(Map params) {
-		Perfil perfil = new Perfil();
-		setAttributes(params, perfil);
-		
-		Transaction transaction = getSession().beginTransaction();
-		
-		getSession().save(perfil);
-		transaction.commit();
-
-		return null;
-	}
-
 	protected void setAttributes(Map params, Perfil perfil) {
 		perfil.setNombre((String) params.get(ParamsConst.NAME));
 		perfil.setConexion((String) params.get(ParamsConst.CONECTION));
@@ -45,6 +32,25 @@ public class CreateProfileService extends Service {
 			permiso.setId(idPermiso);
 			perfil.addPermiso(permiso);
 		}
+	}
+
+	@Override
+	public Map onExecute(Map params) {
+		Perfil perfil = new Perfil();
+		setAttributes(params, perfil);
+		
+		Transaction transaction = getSession().beginTransaction();
+		
+		getSession().save(perfil);
+		transaction.commit();
+
+		return null;
+	}
+
+	@Override
+	public Map onEmulate(Map params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
