@@ -12,7 +12,7 @@ import ar.com.AmberSoft.util.ParamsConst;
 public class DeleteProfileService extends Service {
 
 	@Override
-	public Map execute(Map params) {
+	public Map onExecute(Map params) {
 		
 		Transaction transaction = getSession().beginTransaction();
 		Collection ids = (Collection) params.get(ParamsConst.IDS);
@@ -23,6 +23,11 @@ public class DeleteProfileService extends Service {
 		}
 		transaction.commit();
 		
+		return null;	}
+
+	@Override
+	public Map onEmulate(Map params) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -2,23 +2,12 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.sql.Date;
 import java.util.Map;
-import java.util.Set;
 
-import ar.com.AmberSoft.iEvenTask.backend.entities.Comentario;
-import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class CreateTaskService extends Service {
 
-	@Override
-	public Map execute(Map params) {
-		// TODO Auto-generated method stub
-		Tarea tarea = new Tarea();
-		setAttributes(params, tarea);
-		return null;
-	}
-	
 	protected void setAttributes(Map params, Tarea tarea) {
 		
 		tarea.setFechaCreacion((Date) params.get(ParamsConst.FECHACREACION));
@@ -31,6 +20,20 @@ public class CreateTaskService extends Service {
 		tarea.setTipo_tarea((Integer) params.get(ParamsConst.TIPO_TAREA));
 		
 		//private Set<Comentario> comentarios;
+	}
+
+	@Override
+	public Map onExecute(Map params) {
+		// TODO Auto-generated method stub
+		Tarea tarea = new Tarea();
+		setAttributes(params, tarea);
+		return null;
+	}
+
+	@Override
+	public Map onEmulate(Map params) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

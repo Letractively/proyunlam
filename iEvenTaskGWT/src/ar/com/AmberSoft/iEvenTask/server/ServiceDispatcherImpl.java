@@ -8,13 +8,16 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
+import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
 import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
 import ar.com.AmberSoft.iEvenTask.server.utils.GWTCompatibilityEvaluatorTypes;
 import ar.com.AmberSoft.iEvenTask.server.utils.Tools;
+import ar.com.AmberSoft.iEvenTask.services.Service;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceClassNotFoundException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceInstantationException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceNameNotFoundException;
+import ar.com.AmberSoft.util.ParamsConst;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -41,9 +44,16 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		try {
 			logger.debug("Invocando " + params.get(ServiceNameConst.SERVICIO));
 			Class type = getType(params);
-			Map toReturn = invokeExecute(type.newInstance(), type, params);
+			Map toReturn = invokeExecute(type.newInstance(), params);
 			
 			if (toReturn!=null){
+				
+				if (toReturn.get(ParamsConst.PAGING_LOAD_RESULT)!=null){
+					Map aux = new PagingLoadResult();
+					aux.putAll(toReturn);
+					toReturn = aux;
+				}
+				
 				Map map = toReturn.getClass().newInstance();
 				Iterator keys = toReturn.keySet().iterator();
 				while (keys.hasNext()) {
@@ -65,26 +75,11 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		}
 	}
 
-	private Map invokeExecute(Object instance, Class type, Map params) {
-		if (!Object.class.getName().equals(type.getClass().getName())){
-			Method method;
-			try {
-				method = type.getDeclaredMethod(EXECUTE, Map.class);
-				return (Map) method.invoke(instance, params);
-			} catch (SecurityException e) {
-				logger.error(Tools.getStackTrace(e));
-			} catch (NoSuchMethodException e) {
-				logger.error(Tools.getStackTrace(e));
-				return invokeExecute(instance, type.getSuperclass(), params);
-			} catch (IllegalArgumentException e) {
-				logger.error(Tools.getStackTrace(e));
-			} catch (IllegalAccessException e) {
-				logger.error(Tools.getStackTrace(e));
-			} catch (InvocationTargetException e) {
-				logger.error(Tools.getStackTrace(e));
-			}
+	private Map invokeExecute(Object instance, Map params) {
+		if ((instance!=null) && (instance instanceof Service)){
+			Service service = (Service) instance;
+			return service.execute(params);
 		}
-		// TODO: En lugar de retornar nulo, lanzar una excepcion ya que no encontro el metodo execute
 		return null;
 	}
 

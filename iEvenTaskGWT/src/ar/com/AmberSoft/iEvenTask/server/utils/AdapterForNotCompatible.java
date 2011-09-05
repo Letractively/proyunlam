@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
+import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
+
 public class AdapterForNotCompatible implements Compatibilizable {
 
 	private static Logger logger = Logger
@@ -19,6 +21,7 @@ public class AdapterForNotCompatible implements Compatibilizable {
 	public Object adapt(Object actual) {
 		Map map = new HashMap();
 		try {
+			map.put(ParamsConst.CLASS, actual.getClass().getName());
 			Collection properties = Arrays.asList(PropertyUtils
 					.getPropertyDescriptors(actual));
 			Iterator itProperties = properties.iterator();

@@ -198,37 +198,41 @@ public class EventWindow extends Window {
 						ModelData modelData = se.getSelectedItem();
 						if (modelData!=null){
 							String key = modelData.get("key");
-							if ("1".equals(modelData.get("key"))){
-								vPanelLDAP.show();
-								vPanelPatron.setVisible(Boolean.FALSE);
-								vPanelArchivos.setVisible(Boolean.FALSE);
-								vPanelServicios.setVisible(Boolean.FALSE);
-							}
-							if ("2".equals(modelData.get("key"))){
-								vPanelLDAP.setVisible(Boolean.FALSE);
-								vPanelPatron.show();
-								vPanelArchivos.setVisible(Boolean.FALSE);
-								vPanelServicios.setVisible(Boolean.FALSE);
-							}		
-							if ("3".equals(modelData.get("key"))){
-								vPanelLDAP.setVisible(Boolean.FALSE);
-								vPanelPatron.setVisible(Boolean.FALSE);
-								vPanelArchivos.show();
-								vPanelServicios.setVisible(Boolean.FALSE);
-							}		
-							if ("4".equals(modelData.get("key"))){
-								vPanelLDAP.setVisible(Boolean.FALSE);
-								vPanelPatron.setVisible(Boolean.FALSE);
-								vPanelArchivos.setVisible(Boolean.FALSE);
-								vPanelServicios.show();
-							}		
+							setPanelVisible(key);		
 						}
 					}
+
 				});
 		
 		return verticalPanel;
 	}
 	
+	private void setPanelVisible(String key) {
+		if ("1".equals(key)){
+			vPanelLDAP.show();
+			vPanelPatron.setVisible(Boolean.FALSE);
+			vPanelArchivos.setVisible(Boolean.FALSE);
+			vPanelServicios.setVisible(Boolean.FALSE);
+		}
+		if ("2".equals(key)){
+			vPanelLDAP.setVisible(Boolean.FALSE);
+			vPanelPatron.show();
+			vPanelArchivos.setVisible(Boolean.FALSE);
+			vPanelServicios.setVisible(Boolean.FALSE);
+		}		
+		if ("3".equals(key)){
+			vPanelLDAP.setVisible(Boolean.FALSE);
+			vPanelPatron.setVisible(Boolean.FALSE);
+			vPanelArchivos.show();
+			vPanelServicios.setVisible(Boolean.FALSE);
+		}		
+		if ("4".equals(key)){
+			vPanelLDAP.setVisible(Boolean.FALSE);
+			vPanelPatron.setVisible(Boolean.FALSE);
+			vPanelArchivos.setVisible(Boolean.FALSE);
+			vPanelServicios.show();
+		}
+	}
 
 
 	private void initializeLDAPPanel() {
@@ -363,25 +367,17 @@ public class EventWindow extends Window {
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 
 		if (actual != null) {
-			//fldName.setValue(actual.get(ParamsConst.NAME));
-		/*	fldConection.setValue(actual.get(ParamsConst.CONECTION));
-			fldGroup.setValue(actual.get(ParamsConst.GROUP));
-			fldObjective.setValue(Boolean.FALSE);
-			fldAdmin.setValue(Boolean.FALSE);
-			Collection permisos = (Collection) actual.get(ParamsConst.PERMISOS);
-			if (permisos!=null){
-				Iterator itPermisos = permisos.iterator();
-				while (itPermisos.hasNext()) {
-					Map permiso = (Map) itPermisos.next();
-					if (permiso.get(ParamsConst.ID)=="1"){
-						fldObjective.setValue(Boolean.TRUE);
-					}
-					if (permiso.get(ParamsConst.ID)=="2"){
-						fldAdmin.setValue(Boolean.TRUE);
-					}
-					
-				}
-			}*/
+			fldName.setValue(actual.get(ParamsConst.NAME));
+			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
+			//fldExpiration.setValue(actual.get(ParamsConst.EXPIRATION));
+			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
+			
+			if (ParamsConst.EVENT_LDAP.equals(actual.get(ParamsConst.CLASS))){
+				setCombo(fldType, "1");
+				fldCode.setValue(actual.get(ParamsConst.CODE));
+				setPanelVisible("1");
+			}
+			
 		}
 		
 	}

@@ -9,8 +9,7 @@ import ar.com.AmberSoft.util.ParamsConst;
 public class LoginService extends Service {
 
 	@Override
-	public Map execute(Map params) {
-
+	public Map onExecute(Map params) {
 		try {
 			LDAPClient.authenticate((String) params.get(ParamsConst.USER),
 					(String) params.get(ParamsConst.PASSWORD));
@@ -18,6 +17,10 @@ public class LoginService extends Service {
 			throw new LoginFailureException();
 		}
 
+		return null;	}
+
+	@Override
+	public Map onEmulate(Map params) {
 		return null;
 	}
 
