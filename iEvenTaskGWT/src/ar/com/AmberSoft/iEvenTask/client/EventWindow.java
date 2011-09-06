@@ -373,11 +373,30 @@ public class EventWindow extends Window {
 			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
 			
 			if (ParamsConst.EVENT_LDAP.equals(actual.get(ParamsConst.CLASS))){
-				setCombo(fldType, "1");
 				fldCode.setValue(actual.get(ParamsConst.CODE));
+				setCombo(fldType, "1");
 				setPanelVisible("1");
 			}
-			
+			if (ParamsConst.EVENT_LOGS.equals(actual.get(ParamsConst.CLASS))){
+				fldPathLogs.setValue((String)actual.get(ParamsConst.PATH));
+				fldPatern.setValue((String)actual.get(ParamsConst.PATERN));
+				setCombo(fldType, "2");
+				setPanelVisible("2");
+			}
+			if (ParamsConst.EVENT_FILE.equals(actual.get(ParamsConst.CLASS))){
+				setCombo(fldControlType, actual.get(ParamsConst.CONTROL_TYPE).toString());
+				fldPathFields.setValue((String) actual.get(ParamsConst.PATH));
+				setCombo(fldType, "3");
+				setPanelVisible("3");
+			}
+			if (ParamsConst.EVENT_SERVICE.equals(actual.get(ParamsConst.CLASS))){
+				fldHost.setValue((String) actual.get(ParamsConst.HOST));
+				fldPort.setValue(actual.get(ParamsConst.PORT).toString());
+				setCombo(fldType, "4");
+				setPanelVisible("4");
+			}			
+
+
 		}
 		
 	}
@@ -391,36 +410,33 @@ public class EventWindow extends Window {
 			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue());
 			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
 
-			/*listStore.add(getModelData("1", "LDAP"));
-			listStore.add(getModelData("2", "Patron en logs"));
-			listStore.add(getModelData("3", "Archivos"));
-			listStore.add(getModelData("4", "Servicios"));*/
-
 			// Si es de tipo LDAP
 			if ("1".equals(fldType.getValue().get("key"))){
-				params.put(ParamsConst.CODE,	fldCode.getValue());
+				params.put(ParamsConst.CODE, fldCode.getValue());
 				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
 			}
-			
-			
-			/*if (windowState.equals(State.UPDATE_STATE)) {
-				List seleccionados = grid.getSelectionModel()
-						.getSelection();
-				if (seleccionados.size() == 1) {
-					Iterator it = seleccionados.iterator();
-					if (it.hasNext()) {
-						BaseModel baseModel = (BaseModel) it.next();
-						params.put(ParamsConst.ID,
-								baseModel.get(ParamsConst.ID));
-					}
-				}
-				params.put(ServiceNameConst.SERVICIO,
-						ServiceNameConst.UPDATE_PROFILE);
-			} else {
-				params.put(ServiceNameConst.SERVICIO,
-						ServiceNameConst.CREATE_PROFILE);
-			}*/
-			
+			// Si es de tipo Logs
+			if ("2".equals(fldType.getValue().get("key"))){
+				params.put(ParamsConst.PATH, fldPathLogs.getValue());
+				params.put(ParamsConst.PATERN, fldPatern.getValue());
+				//FIXME: Llamar al servicio que corresponde
+				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+			}			
+			// Si es de tipo Files
+			if ("3".equals(fldType.getValue().get("key"))){
+				params.put(ParamsConst.CONTROL_TYPE, fldControlType.getValue());
+				params.put(ParamsConst.PATH, fldPathFields.getValue());
+				//FIXME: Llamar al servicio que corresponde
+				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+			}			
+			// Si es de tipo Services 
+			if ("4".equals(fldType.getValue().get("key"))){
+				params.put(ParamsConst.HOST, fldHost.getValue());
+				params.put(ParamsConst.PORT, fldPort.getValue());
+				//FIXME: Llamar al servicio que corresponde
+				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+			}			
+
 			
 			DispatcherUtil.getDispatcher().execute(params,
 					new AsyncCallback() {

@@ -6,6 +6,9 @@ public abstract class ParamsConst {
 	
 	public static final String CLASS = "class";
 	public static final String EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";
+	public static final String EVENT_FILE = "ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles";
+	public static final String EVENT_SERVICE = "ar.com.AmberSoft.iEvenTask.backend.entities.EventServices";
+	public static final String EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
 	
 	public static final String PAGING_LOAD_RESULT = "PAGING_LOAD_RESULT";
 	
@@ -38,6 +41,11 @@ public abstract class ParamsConst {
 	public static final String PERIODICITY = "periodicity";
 	public static final String EXPIRATION = "expiration";
 	public static final String ITERATIONS = "iterations";
+	public static final String PATH = "path";
+	public static final String PATERN = "patern";
+	public static final String CONTROL_TYPE = "controlType";
+	public static final String HOST = "host";
+	public static final String PORT = "port";
 	
 	public static final String CODE = "code";
 	
