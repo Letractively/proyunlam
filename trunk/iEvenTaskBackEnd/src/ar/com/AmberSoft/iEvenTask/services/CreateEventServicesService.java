@@ -4,22 +4,23 @@ import java.util.Map;
 
 import org.hibernate.Transaction;
 
-import ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP;
+import ar.com.AmberSoft.iEvenTask.backend.entities.EventServices;
 import ar.com.AmberSoft.util.ParamsConst;
 
-public class CreateEventLDAPService extends Service {
+public class CreateEventServicesService extends Service {
 
-	protected void setAttributes(Map params, EventLDAP event) {
+	protected void setAttributes(Map params, EventServices event) {
 		event.setName((String) params.get(ParamsConst.NAME));
 		event.setPeriodicity(Service.stringToInteger((String)params.get(ParamsConst.PERIODICITY)));
 		//event.setExpiration(new Date());
 		event.setIterations(Service.stringToInteger((String)params.get(ParamsConst.ITERATIONS)));
-		event.setCode((String) params.get(ParamsConst.CODE));
+		event.setHost((String) params.get(ParamsConst.HOST));
+		event.setPort((String) params.get(ParamsConst.PORT));
 	}
 
 	@Override
 	public Map onExecute(Map params) {
-		EventLDAP event = new EventLDAP();
+		EventServices event = new EventServices();
 		setAttributes(params, event);
 		
 		Transaction transaction = getSession().beginTransaction();

@@ -43,6 +43,11 @@ public abstract class ParamsConst {
 	public static final String PERIODICITY = "periodicity";
 	public static final String EXPIRATION = "expiration";
 	public static final String ITERATIONS = "iterations";
+	public static final String PATH = "path";
+	public static final String PATERN = "patern";
+	public static final String CONTROL_TYPE = "controlType";
+	public static final String HOST = "host";
+	public static final String PORT = "port";
 	
 	public static final String CODE = "code";
 }
