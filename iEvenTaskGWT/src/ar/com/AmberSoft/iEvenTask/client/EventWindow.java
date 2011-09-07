@@ -82,6 +82,76 @@ public class EventWindow extends Window {
 	private final TextField fldPort = new TextField();
 	//private final CheckBox fldCloseTask = new CheckBox();
 	
+	/**
+	 * Representa la opcion elegida en el combo de tipos de eventos
+	 */
+	private EventWindowOption eventWindowOption;
+	
+
+	public VerticalPanel getvPanelLDAP() {
+		return vPanelLDAP;
+	}
+
+	public VerticalPanel getvPanelPatron() {
+		return vPanelPatron;
+	}
+
+	public VerticalPanel getvPanelArchivos() {
+		return vPanelArchivos;
+	}
+
+	public VerticalPanel getvPanelServicios() {
+		return vPanelServicios;
+	}
+	
+	public TextField getFldName() {
+		return fldName;
+	}
+
+	public TextField getFldPeriodicity() {
+		return fldPeriodicity;
+	}
+
+	public DateField getFldExpiration() {
+		return fldExpiration;
+	}
+
+	public TextField getFldIterations() {
+		return fldIterations;
+	}
+
+	public ComboBox getFldType() {
+		return fldType;
+	}
+
+	public TextField getFldCode() {
+		return fldCode;
+	}
+
+	public FileUploadField getFldPathLogs() {
+		return fldPathLogs;
+	}
+
+	public TextArea getFldPatern() {
+		return fldPatern;
+	}
+
+	public ComboBox getFldControlType() {
+		return fldControlType;
+	}
+
+	public FileUploadField getFldPathFields() {
+		return fldPathFields;
+	}
+
+	public TextField getFldHost() {
+		return fldHost;
+	}
+
+	public TextField getFldPort() {
+		return fldPort;
+	}
+
 	public EventWindow() {
 		super();
 
@@ -182,10 +252,10 @@ public class EventWindow extends Window {
 		registerField(fldType);
 
 		ListStore listStore = new ListStore();
-		listStore.add(getModelData("1", "LDAP"));
-		listStore.add(getModelData("2", "Patron en logs"));
-		listStore.add(getModelData("3", "Archivos"));
-		listStore.add(getModelData("4", "Servicios"));
+		listStore.add(getModelData(EventWindowOption.LDAP, "LDAP"));
+		listStore.add(getModelData(EventWindowOption.LOGS, "Patron en logs"));
+		listStore.add(getModelData(EventWindowOption.FILES, "Archivos"));
+		listStore.add(getModelData(EventWindowOption.SERVICES, "Servicios"));
 		fldType.setStore(listStore);
 		fldType.setEditable(Boolean.FALSE);
 		fldType.setTypeAhead(true);  
@@ -198,7 +268,7 @@ public class EventWindow extends Window {
 						ModelData modelData = se.getSelectedItem();
 						if (modelData!=null){
 							String key = modelData.get("key");
-							setPanelVisible(key);		
+							setVisiblePanel(key);
 						}
 					}
 
@@ -207,34 +277,11 @@ public class EventWindow extends Window {
 		return verticalPanel;
 	}
 	
-	private void setPanelVisible(String key) {
-		if ("1".equals(key)){
-			vPanelLDAP.show();
-			vPanelPatron.setVisible(Boolean.FALSE);
-			vPanelArchivos.setVisible(Boolean.FALSE);
-			vPanelServicios.setVisible(Boolean.FALSE);
-		}
-		if ("2".equals(key)){
-			vPanelLDAP.setVisible(Boolean.FALSE);
-			vPanelPatron.show();
-			vPanelArchivos.setVisible(Boolean.FALSE);
-			vPanelServicios.setVisible(Boolean.FALSE);
-		}		
-		if ("3".equals(key)){
-			vPanelLDAP.setVisible(Boolean.FALSE);
-			vPanelPatron.setVisible(Boolean.FALSE);
-			vPanelArchivos.show();
-			vPanelServicios.setVisible(Boolean.FALSE);
-		}		
-		if ("4".equals(key)){
-			vPanelLDAP.setVisible(Boolean.FALSE);
-			vPanelPatron.setVisible(Boolean.FALSE);
-			vPanelArchivos.setVisible(Boolean.FALSE);
-			vPanelServicios.show();
-		}
+	public void setVisiblePanel(String key){
+		eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption(key, this);
+		eventWindowOption.setVisiblePanel();
 	}
-
-
+	
 	private void initializeLDAPPanel() {
 		VerticalPanel vPanel = this.vPanelLDAP;
 
@@ -243,7 +290,6 @@ public class EventWindow extends Window {
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", FIELD_WIDTH, LABEL_WIDTH));
 		fldCode.setAllowBlank(Boolean.FALSE);
-		registerField(fldCode);
 		vPanel.setVisible(Boolean.FALSE);
 	}
 
@@ -276,6 +322,9 @@ public class EventWindow extends Window {
 		bodyCaption.add(getFieldHorizontalLine(fldPathFields, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 		
+		fldControlType.setAllowBlank(Boolean.FALSE);
+		fldPathFields.setAllowBlank(Boolean.FALSE);
+		
 		ListStore listStore = new ListStore();
 		listStore.add(getModelData("1", "Creacion"));
 		listStore.add(getModelData("2", "Modificacion"));
@@ -299,6 +348,9 @@ public class EventWindow extends Window {
 		bodyCaption.add(getFieldHorizontalLine(fldPort, "Puerto", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 
+		fldHost.setAllowBlank(Boolean.FALSE);
+		fldPort.setAllowBlank(Boolean.FALSE);
+		
 		vPanel.setVisible(Boolean.FALSE);
 	}
 	
@@ -367,35 +419,15 @@ public class EventWindow extends Window {
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 
 		if (actual != null) {
+			
+			eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption((String)actual.get(ParamsConst.CLASS), this);
+			
 			fldName.setValue(actual.get(ParamsConst.NAME));
 			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
 			//fldExpiration.setValue(actual.get(ParamsConst.EXPIRATION));
 			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
 			
-			if (ParamsConst.EVENT_LDAP.equals(actual.get(ParamsConst.CLASS))){
-				fldCode.setValue(actual.get(ParamsConst.CODE));
-				setCombo(fldType, "1");
-				setPanelVisible("1");
-			}
-			if (ParamsConst.EVENT_LOGS.equals(actual.get(ParamsConst.CLASS))){
-				fldPathLogs.setValue((String)actual.get(ParamsConst.PATH));
-				fldPatern.setValue((String)actual.get(ParamsConst.PATERN));
-				setCombo(fldType, "2");
-				setPanelVisible("2");
-			}
-			if (ParamsConst.EVENT_FILE.equals(actual.get(ParamsConst.CLASS))){
-				setCombo(fldControlType, actual.get(ParamsConst.CONTROL_TYPE).toString());
-				fldPathFields.setValue((String) actual.get(ParamsConst.PATH));
-				setCombo(fldType, "3");
-				setPanelVisible("3");
-			}
-			if (ParamsConst.EVENT_SERVICE.equals(actual.get(ParamsConst.CLASS))){
-				fldHost.setValue((String) actual.get(ParamsConst.HOST));
-				fldPort.setValue(actual.get(ParamsConst.PORT).toString());
-				setCombo(fldType, "4");
-				setPanelVisible("4");
-			}			
-
+			eventWindowOption.beforeUpdate(actual);
 
 		}
 		
@@ -410,33 +442,7 @@ public class EventWindow extends Window {
 			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue());
 			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
 
-			// Si es de tipo LDAP
-			if ("1".equals(fldType.getValue().get("key"))){
-				params.put(ParamsConst.CODE, fldCode.getValue());
-				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
-			}
-			// Si es de tipo Logs
-			if ("2".equals(fldType.getValue().get("key"))){
-				params.put(ParamsConst.PATH, fldPathLogs.getValue());
-				params.put(ParamsConst.PATERN, fldPatern.getValue());
-				//FIXME: Llamar al servicio que corresponde
-				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
-			}			
-			// Si es de tipo Files
-			if ("3".equals(fldType.getValue().get("key"))){
-				params.put(ParamsConst.CONTROL_TYPE, fldControlType.getValue());
-				params.put(ParamsConst.PATH, fldPathFields.getValue());
-				//FIXME: Llamar al servicio que corresponde
-				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
-			}			
-			// Si es de tipo Services 
-			if ("4".equals(fldType.getValue().get("key"))){
-				params.put(ParamsConst.HOST, fldHost.getValue());
-				params.put(ParamsConst.PORT, fldPort.getValue());
-				//FIXME: Llamar al servicio que corresponde
-				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
-			}			
-
+			eventWindowOption.onSave(params);
 			
 			DispatcherUtil.getDispatcher().execute(params,
 					new AsyncCallback() {
@@ -453,15 +459,20 @@ public class EventWindow extends Window {
 									"Se almaceno el evento con exito.");
 							clear();
 							grid.getStore().getLoader().load();						}
-
 					});
-
 		}
-
-		
 	}
 
-
+	@Override
+	protected Boolean isValid() {
+		Boolean isValidCommons = super.isValid();
+		if (eventWindowOption!=null){
+			Boolean isValidEspecific = eventWindowOption.isValid();
+			return (isValidCommons&&isValidEspecific);
+		} else {
+			return super.isValid();
+		}
+	}
 
 
 	

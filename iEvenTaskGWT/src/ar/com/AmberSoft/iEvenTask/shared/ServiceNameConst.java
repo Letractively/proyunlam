@@ -27,8 +27,15 @@ public abstract class ServiceNameConst {
 	public static final String LIST_TASK = "ar.com.AmberSoft.iEvenTask.services.ListTaskService";
 
 	public static final String CREATE_EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.services.CreateEventLDAPService";
-	public static final String CREATE_EVENT = "ar.com.AmberSoft.iEvenTask.services.CreateProfileService";
-	public static final String UPDATE_EVENT = "ar.com.AmberSoft.iEvenTask.services.UpdateProfileService";
+	public static final String CREATE_EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.services.CreateEventLogsService";
+	public static final String CREATE_EVENT_FILES = "ar.com.AmberSoft.iEvenTask.services.CreateEventFilesService";
+	public static final String CREATE_EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.services.CreateEventServicesService";
+	
+	public static final String UPDATE_EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.services.UpdateEventLDAPService";
+	public static final String UPDATE_EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.services.UpdateEventLogsService";
+	public static final String UPDATE_EVENT_FILES = "ar.com.AmberSoft.iEvenTask.services.UpdateEventFilesService";
+	public static final String UPDATE_EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.services.UpdateEventServicesService";
+	
 	public static final String DELETE_EVENT = "ar.com.AmberSoft.iEvenTask.services.DeleteProfileService";
 	public static final String LIST_EVENT = "ar.com.AmberSoft.iEvenTask.services.ListEventService";
 
