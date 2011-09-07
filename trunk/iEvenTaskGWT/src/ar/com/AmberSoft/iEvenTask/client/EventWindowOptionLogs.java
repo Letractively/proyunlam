@@ -10,8 +10,14 @@ public class EventWindowOptionLogs extends EventWindowOption {
 	@Override
 	public void onSave(Map params) {
 		params.put(ParamsConst.PATH, eventWindow.getFldPathLogs().getValue());
-		params.put(ParamsConst.PATERN, eventWindow.getFldPatern().getValue());
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LOGS);
+		params.put(ParamsConst.PATERN, eventWindow.getFldPatern().getValue());		
+		if (eventWindow.getWindowState().equals(State.UPDATE_STATE)) {
+			setId(params);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_EVENT_LOGS);
+		} else {
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LOGS);
+		}
+
 	}
 	
 	@Override

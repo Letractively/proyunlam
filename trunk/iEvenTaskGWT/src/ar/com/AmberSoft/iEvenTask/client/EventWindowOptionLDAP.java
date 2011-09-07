@@ -10,7 +10,13 @@ public class EventWindowOptionLDAP extends EventWindowOption {
 	@Override
 	public void onSave(Map params) {
 		params.put(ParamsConst.CODE, eventWindow.getFldCode().getValue());
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+		if (eventWindow.getWindowState().equals(State.UPDATE_STATE)) {
+			setId(params);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_EVENT_LDAP);
+		} else {
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+		}
+
 	}
 
 	@Override
