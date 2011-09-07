@@ -62,7 +62,7 @@ public class EventWindow extends Window {
 	private final DateField fldExpiration = new DateField();
 	private final TextField fldIterations = new TextField();
 	private final ComboBox fldType = new ComboBox();
-	final Grid grid = new Grid(this, ServiceNameConst.LIST_EVENT, getGridConfig(), 10);
+	private final Grid grid = new Grid(this, ServiceNameConst.LIST_EVENT, getGridConfig(), 10);
 	
 	private final VerticalPanel vPanelLDAP = new VerticalPanel();
 	private final VerticalPanel vPanelPatron = new VerticalPanel();
@@ -88,6 +88,10 @@ public class EventWindow extends Window {
 	private EventWindowOption eventWindowOption;
 	
 
+	public Grid getGrid() {
+		return grid;
+	}
+	
 	public VerticalPanel getvPanelLDAP() {
 		return vPanelLDAP;
 	}

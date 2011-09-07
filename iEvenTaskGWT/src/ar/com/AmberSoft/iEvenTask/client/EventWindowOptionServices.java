@@ -11,7 +11,13 @@ public class EventWindowOptionServices extends EventWindowOption {
 	public void onSave(Map params) {
 		params.put(ParamsConst.HOST, eventWindow.getFldHost().getValue());
 		params.put(ParamsConst.PORT, eventWindow.getFldPort().getValue());
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+		if (eventWindow.getWindowState().equals(State.UPDATE_STATE)) {
+			setId(params);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_EVENT_SERVICES);
+		} else {
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_SERVICES);
+		}
+
 	}
 	
 	@Override
