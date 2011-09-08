@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.beanutils.MethodUtils;
 import org.hibernate.Query;
 
+import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.utils.FiltersWrapperFactory;
 import ar.com.AmberSoft.iEvenTask.utils.Wrapper;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -103,17 +104,14 @@ public abstract class ListService extends Service {
 	}
 
 	public void setFiltersInQueryText(Map params) {
-		Boolean first = Boolean.TRUE;
+		queryText.append(WHERE);
+		queryText.append(Entity.DELETE_COLUMN);
+		queryText.append(IS_NULL);
 		Collection filters = (Collection) params.get(FILTERS);
 		if (filters!=null){
 			Iterator it = filters.iterator();
 			while (it.hasNext()) {
-				if (first){
-					queryText.append(WHERE);
-					first = Boolean.FALSE;	
-				} else {
-					queryText.append(AND);
-				}
+				queryText.append(AND);
 				BaseFilterConfig filter = (BaseFilterConfig) it.next();
 				queryText.append(filter.getField());
 				queryText.append(operatorOnWhere.get(filter.getClass().getName()));

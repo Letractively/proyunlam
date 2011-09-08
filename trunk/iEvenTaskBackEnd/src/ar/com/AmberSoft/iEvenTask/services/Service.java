@@ -23,7 +23,7 @@ public abstract class Service {
 	public static String SORT_FIELD = "sortField";
 	public static String SORT_DIR = "sortDir";
 	public static String SPACE = " ";
-
+	public static String IS_NULL = " IS NULL ";
 	
 	public static Map operatorOnWhere;
 	

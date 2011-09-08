@@ -79,8 +79,9 @@ create table iet_evento (
 	id_evento int primary key, 
 	nombre varchar(50) not null,
 	periodicidad int not null,
-	fecha_expiracion timestamp,
-	iteraciones int
+	fecha_expiracion datetime,
+	iteraciones int,
+	eliminado datetime
 );
 
 create table iet_evento_ldap (
