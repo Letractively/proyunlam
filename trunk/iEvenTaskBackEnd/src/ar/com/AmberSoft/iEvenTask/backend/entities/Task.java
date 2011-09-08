@@ -8,7 +8,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import ar.com.AmberSoft.util.PKGenerator;
@@ -16,27 +17,35 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Entity
 @Table (name="iet_tarea")
 public class Task implements Serializable {
+	
 	private Integer id;
+	private String name;
 	private Date start;
 	private Date end;
 	private Integer hs;
 	private String user;
 	private Date creation;
 	private Date lastModify;
-	
 	private Integer complete;
 	private Set subtasks;
+
+	@Basic @Column (name="nombre")
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
-	
-	
-	@OneToMany 
+	/*@OneToMany 
 	public Set getSubtasks() {
 		return subtasks;
 	}
 
 	public void setSubtasks(Set subtasks) {
 		this.subtasks = subtasks;
-	}
+	}*/
 
 	@Id @Column (name="id_tarea")
 	public Integer getId() {
@@ -115,6 +124,14 @@ public class Task implements Serializable {
 	}
 	
 	
-	
+	@PrePersist
+    protected void onCreate() {
+		creation = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+    	lastModify = new Date();
+    }
 	
 }

@@ -119,4 +119,8 @@ create table iet_evento_servicios (
 ALTER TABLE iet_evento_servicios 
 ADD CONSTRAINT fk_evento_eventoservicios FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
 
-
+create table iet_tarea_plantilla (
+	id_tarea int primary key,
+	id_usuario varchar(255) not null,
+	nombre varchar(255) not null
+);
