@@ -40,7 +40,7 @@ public class ListEventService extends ListService {
 		return map;
 	}
 
-	private void addEventLDAP(Collection list) {
+	protected void addEventLDAP(Collection list) {
 		EventLDAP eventLDAP = new EventLDAP();
 		eventLDAP.setCode(eventLDAP.getId().toString());
 		eventLDAP.setIterations(eventLDAP.getId());
@@ -49,7 +49,7 @@ public class ListEventService extends ListService {
 		list.add(eventLDAP);
 	}
 
-	private void addEventFile(Collection list) {
+	protected void addEventFile(Collection list) {
 		EventFiles event = new EventFiles();
 		event.setIterations(event.getId());
 		event.setName("EventFile" + event.getId().toString());
@@ -59,7 +59,7 @@ public class ListEventService extends ListService {
 		list.add(event);
 	}
 
-	private void addEventLogs(Collection list) {
+	protected void addEventLogs(Collection list) {
 		EventLogs event = new EventLogs();
 		event.setIterations(event.getId());
 		event.setName("EventLogs" + event.getId().toString());
@@ -69,7 +69,7 @@ public class ListEventService extends ListService {
 		list.add(event);
 	}
 
-	private void addEventService(Collection list) {
+	protected void addEventService(Collection list) {
 		EventServices event = new EventServices();
 		event.setIterations(event.getId());
 		event.setName("EventService" + event.getId().toString());

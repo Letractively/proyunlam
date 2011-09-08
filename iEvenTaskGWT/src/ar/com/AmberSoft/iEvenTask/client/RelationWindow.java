@@ -27,11 +27,11 @@ import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
-import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
@@ -40,7 +40,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
-public class EventWindow extends Window {
+public class RelationWindow extends Window {
 
 	public static final Integer WINDOW_WIDTH = 665;
 	public static final Integer WINDOW_HEIGTH = 470;
@@ -57,6 +57,9 @@ public class EventWindow extends Window {
 	public static final Integer GRID_HEIGTH = 250;
 
 	// Campos
+	private final ComboBox fldEventType = new ComboBox();
+	private final ComboBox fldEvent = new ComboBox();
+	
 	private final TextField fldName = new TextField();
 	private final TextField fldPeriodicity = new TextField();
 	private final DateField fldExpiration = new DateField();
@@ -156,7 +159,7 @@ public class EventWindow extends Window {
 		return fldPort;
 	}
 
-	public EventWindow() {
+	public RelationWindow() {
 		super();
 
 		initialize();
@@ -197,7 +200,7 @@ public class EventWindow extends Window {
 		setHeight(WINDOW_HEIGTH);
 		setMaximizable(true);
 		setTitleCollapse(true);
-		setHeading("Gesti\u00F3n de Eventos");
+		setHeading("Gesti\u00F3n de Relaciones");
 		setLayout(new RowLayout(Orientation.VERTICAL));
 	}
 
@@ -232,6 +235,68 @@ public class EventWindow extends Window {
 	 */
 	private VerticalPanel getPanelFields() {
 		VerticalPanel verticalPanel = new VerticalPanel();
+		
+		verticalPanel.add(getFieldHorizontalLine(fldEventType, "Tipo de Evento", FIELD_WIDTH, LABEL_WIDTH));
+		fldEventType.setAllowBlank(Boolean.FALSE);
+		registerField(fldEventType);
+		verticalPanel.add(getFieldHorizontalLine(fldEvent, "Evento", FIELD_WIDTH, LABEL_WIDTH));
+		fldEvent.setAllowBlank(Boolean.FALSE);
+		registerField(fldEvent);
+		
+		ListStore listStoreEventType = new ListStore();
+		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_LDAP, "LDAP"));
+		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_LOGS, "Patron en logs"));
+		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_FILES, "Archivos"));
+		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_SERVICES, "Servicios"));
+		fldEventType.setStore(listStoreEventType);
+		fldEventType.setEditable(Boolean.FALSE);
+		fldEventType.setTypeAhead(true);  
+		fldEventType.setTriggerAction(TriggerAction.ALL);
+		
+		ListStore listStoreEvent = new ListStore();
+		fldEvent.setStore(listStoreEvent);
+		fldEvent.setEditable(Boolean.FALSE);
+		fldEvent.setTypeAhead(true);  
+		fldEvent.setTriggerAction(TriggerAction.ALL);
+		
+		fldEventType.addSelectionChangedListener(new SelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent se) {
+				ModelData modelData = se.getSelectedItem();
+				if (modelData!=null){
+					String serviceKey = modelData.get("key");
+
+					Map params = new HashMap<String, String>();
+					params.put(ServiceNameConst.SERVICIO, serviceKey);
+					DispatcherUtil.getDispatcher().execute(params,
+							new AsyncCallback() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									Info.display(
+											"iEvenTask",
+											"No se han podido consultar el listado de eventos.");
+								}
+
+								@Override
+								public void onSuccess(Object result) {
+									fldEvent.clear();
+									ListStore listStoreEvent = new ListStore();
+									Map mapResult = (Map) result;
+									Collection data = (Collection) mapResult.get(ParamsConst.DATA);
+									for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+										Map event = (Map) iterator.next();
+										listStoreEvent.add(getModelData(event.get(ParamsConst.ID).toString(), (String)event.get(ParamsConst.NAME)));
+									}
+									fldEvent.setStore(listStoreEvent);
+									
+								}
+							});
+				}
+			}
+		});
+		
 		
 		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
 		fldName.setAllowBlank(Boolean.FALSE);
@@ -282,7 +347,7 @@ public class EventWindow extends Window {
 	}
 	
 	public void setVisiblePanel(String key){
-		eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption(key, this);
+		//eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption(key, this);
 		eventWindowOption.setVisiblePanel();
 	}
 	
@@ -425,7 +490,7 @@ public class EventWindow extends Window {
 
 		if (actual != null) {
 			
-			eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption((String)actual.get(ParamsConst.CLASS), this);
+			//eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption((String)actual.get(ParamsConst.CLASS), this);
 			
 			fldName.setValue(actual.get(ParamsConst.NAME));
 			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
