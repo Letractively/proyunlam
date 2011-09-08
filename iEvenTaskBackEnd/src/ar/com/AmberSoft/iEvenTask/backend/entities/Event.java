@@ -1,6 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -16,7 +15,7 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Entity
 @Table (name="iet_evento")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class Event implements Serializable {
+public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity {
 
 	private Integer id;
 	private String name;
