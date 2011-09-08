@@ -396,8 +396,8 @@ public class EventWindow extends Window {
 			ids.add(model.get(ParamsConst.ID));
 		}
 		Map params = new HashMap<String, String>();
-		params.put(ParamsConst.ID, ids);
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_PROFILE);
+		params.put(ParamsConst.IDS, ids);
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_EVENT);
 		DispatcherUtil.getDispatcher().execute(params,
 				new AsyncCallback() {
 
@@ -405,13 +405,14 @@ public class EventWindow extends Window {
 					public void onFailure(Throwable caught) {
 						Info.display(
 								"iEvenTask",
-								"No se han podido eliminar los perfiles. Aguarde un momento y vuelva a intentarlo.");
+								"No se han podido eliminar los eventos. Aguarde un momento y vuelva a intentarlo.");
 					}
 
 					@Override
 					public void onSuccess(Object result) {
 						Info.display("iEvenTask",
-								"Se eliminaron los perfiles con exito.");
+								"Se eliminaron los eventos con exito.");
+						grid.getStore().getLoader().load();	
 					}
 
 				});

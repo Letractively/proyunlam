@@ -36,7 +36,7 @@ public abstract class ServiceNameConst {
 	public static final String UPDATE_EVENT_FILES = "ar.com.AmberSoft.iEvenTask.services.UpdateEventFilesService";
 	public static final String UPDATE_EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.services.UpdateEventServicesService";
 	
-	public static final String DELETE_EVENT = "ar.com.AmberSoft.iEvenTask.services.DeleteProfileService";
+	public static final String DELETE_EVENT = "ar.com.AmberSoft.iEvenTask.services.DeleteEventService";
 	public static final String LIST_EVENT = "ar.com.AmberSoft.iEvenTask.services.ListEventService";
 
 }
