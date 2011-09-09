@@ -56,107 +56,67 @@ public class RelationWindow extends Window {
 	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
 	public static final Integer GRID_HEIGTH = 250;
 
+	private final Grid grid = new Grid(this, ServiceNameConst.LIST_RELATION, getGridConfig(), 10);
+	
 	// Campos
 	private final ComboBox fldEventType = new ComboBox();
 	private final ComboBox fldEvent = new ComboBox();
+	private final ComboBox fldAction = new ComboBox();
 	
-	private final TextField fldName = new TextField();
-	private final TextField fldPeriodicity = new TextField();
-	private final DateField fldExpiration = new DateField();
-	private final TextField fldIterations = new TextField();
-	private final ComboBox fldType = new ComboBox();
-	private final Grid grid = new Grid(this, ServiceNameConst.LIST_EVENT, getGridConfig(), 10);
-	
-	private final VerticalPanel vPanelLDAP = new VerticalPanel();
-	private final VerticalPanel vPanelPatron = new VerticalPanel();
-	private final VerticalPanel vPanelArchivos = new VerticalPanel();
-	private final VerticalPanel vPanelServicios = new VerticalPanel();
+	private final VerticalPanel vPanelCreateTask = new VerticalPanel();
+	private final VerticalPanel vPanelModifyStatus = new VerticalPanel();
 
-	// Campos para Eventos LDAP
-	private final TextField fldCode = new TextField();
-	// Campos para Eventos Patrones en Logs
-	private final FileUploadField fldPathLogs = new FileUploadField();
-	private final TextArea fldPatern = new TextArea();
-	// Campos para Archivos
-	private final ComboBox fldControlType = new ComboBox();
-	private final FileUploadField fldPathFields = new FileUploadField();
-	// Campos para Servicios
-	private final TextField fldHost = new TextField();
-	private final TextField fldPort = new TextField();
-	//private final CheckBox fldCloseTask = new CheckBox();
+	// Campos para Creacion de Tareas
+	private final TextField fldName = new TextField();
+	private final TextField fldUser = new TextField();
+	
+	// Campos para Modificacion de Estados
+	private final ComboBox fldFromState = new ComboBox();
+	private final ComboBox fldToState = new ComboBox();;
 	
 	/**
 	 * Representa la opcion elegida en el combo de tipos de eventos
 	 */
-	private EventWindowOption eventWindowOption;
-	
+	private RelationWindowOption relationWindowOption;
 
-	public Grid getGrid() {
-		return grid;
+	public ComboBox getFldEventType() {
+		return fldEventType;
+	}
+
+	public ComboBox getFldEvent() {
+		return fldEvent;
 	}
 	
-	public VerticalPanel getvPanelLDAP() {
-		return vPanelLDAP;
+	public ComboBox getFldFromState() {
+		return fldFromState;
 	}
 
-	public VerticalPanel getvPanelPatron() {
-		return vPanelPatron;
-	}
-
-	public VerticalPanel getvPanelArchivos() {
-		return vPanelArchivos;
-	}
-
-	public VerticalPanel getvPanelServicios() {
-		return vPanelServicios;
+	public ComboBox getFldToState() {
+		return fldToState;
 	}
 	
 	public TextField getFldName() {
 		return fldName;
 	}
 
-	public TextField getFldPeriodicity() {
-		return fldPeriodicity;
+	public TextField getFldUser() {
+		return fldUser;
+	}
+	
+	public Grid getGrid() {
+		return grid;
+	}
+	
+	public VerticalPanel getvPanelCreateTask() {
+		return vPanelCreateTask;
 	}
 
-	public DateField getFldExpiration() {
-		return fldExpiration;
+	public VerticalPanel getvPanelModifyState() {
+		return vPanelModifyStatus;
 	}
 
-	public TextField getFldIterations() {
-		return fldIterations;
-	}
-
-	public ComboBox getFldType() {
-		return fldType;
-	}
-
-	public TextField getFldCode() {
-		return fldCode;
-	}
-
-	public FileUploadField getFldPathLogs() {
-		return fldPathLogs;
-	}
-
-	public TextArea getFldPatern() {
-		return fldPatern;
-	}
-
-	public ComboBox getFldControlType() {
-		return fldControlType;
-	}
-
-	public FileUploadField getFldPathFields() {
-		return fldPathFields;
-	}
-
-	public TextField getFldHost() {
-		return fldHost;
-	}
-
-	public TextField getFldPort() {
-		return fldPort;
+	public ComboBox getFldAction() {
+		return fldAction;
 	}
 
 	public RelationWindow() {
@@ -175,15 +135,11 @@ public class RelationWindow extends Window {
 
 		horizontalPanel.add(getPanelFields());
 		
-		initializeLDAPPanel();
-		initializePatronPanel();
-		initializeArchivosPanel();
-		initializeServiciosPanel();
+		initializeCreatePanel();
+		initializeModifyStatusPanel();
 		
-		horizontalPanel.add(vPanelLDAP);
-		horizontalPanel.add(vPanelPatron);
-		horizontalPanel.add(vPanelArchivos);
-		horizontalPanel.add(vPanelServicios);
+		horizontalPanel.add(vPanelCreateTask);
+		horizontalPanel.add(vPanelModifyStatus);
 
 		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
 		
@@ -298,39 +254,19 @@ public class RelationWindow extends Window {
 		});
 		
 		
-		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
-		fldName.setAllowBlank(Boolean.FALSE);
-		registerField(fldName);
-		
-		verticalPanel.add(getFieldHorizontalLine(fldPeriodicity, "Periodicidad", FIELD_WIDTH, LABEL_WIDTH));
-		fldPeriodicity.setAllowBlank(Boolean.FALSE);
-		fldPeriodicity.setValidator(new IntegerValidator());
-		registerField(fldPeriodicity);
-
-		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
-		registerField(fldExpiration);
-
-		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", FIELD_WIDTH, LABEL_WIDTH));
-		fldIterations.setValidator(new IntegerValidator());
-		//field.setAllowBlank(Boolean.FALSE);
-		registerField(fldIterations);
-
-		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", FIELD_WIDTH, LABEL_WIDTH));
-		fldType.setAllowBlank(Boolean.FALSE);
-		registerField(fldType);
+		verticalPanel.add(getFieldHorizontalLine(fldAction, "Accion", FIELD_WIDTH, LABEL_WIDTH));
+		fldAction.setAllowBlank(Boolean.FALSE);
+		registerField(fldAction);
 
 		ListStore listStore = new ListStore();
-		listStore.add(getModelData(EventWindowOption.LDAP, "LDAP"));
-		listStore.add(getModelData(EventWindowOption.LOGS, "Patron en logs"));
-		listStore.add(getModelData(EventWindowOption.FILES, "Archivos"));
-		listStore.add(getModelData(EventWindowOption.SERVICES, "Servicios"));
-		fldType.setStore(listStore);
-		fldType.setEditable(Boolean.FALSE);
-		fldType.setTypeAhead(true);  
-		fldType.setTriggerAction(TriggerAction.ALL); 
+		listStore.add(getModelData(RelationWindowOption.CREATE_TASK, "Crear Tarea"));
+		listStore.add(getModelData(RelationWindowOption.MODIFY_STATE, "Modificar Estado"));
+		fldAction.setStore(listStore);
+		fldAction.setEditable(Boolean.FALSE);
+		fldAction.setTypeAhead(true);  
+		fldAction.setTriggerAction(TriggerAction.ALL); 
 		
-		fldType.addSelectionChangedListener(new SelectionChangedListener() {
+		fldAction.addSelectionChangedListener(new SelectionChangedListener() {
 
 					@Override
 					public void selectionChanged(SelectionChangedEvent se) {
@@ -347,81 +283,59 @@ public class RelationWindow extends Window {
 	}
 	
 	public void setVisiblePanel(String key){
-		//eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption(key, this);
-		eventWindowOption.setVisiblePanel();
+		relationWindowOption = RelationWindowOptionFactory.getInstance().getRelationWindowOption(key, this);
+		relationWindowOption.setVisiblePanel();
 	}
 	
-	private void initializeLDAPPanel() {
-		VerticalPanel vPanel = this.vPanelLDAP;
+	private void initializeCreatePanel() {
+		VerticalPanel vPanel = this.vPanelCreateTask;
 
-		CaptionPanel caption = new CaptionPanel("LDAP");
-		vPanel.add(caption);
-		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
-		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", FIELD_WIDTH, LABEL_WIDTH));
-		fldCode.setAllowBlank(Boolean.FALSE);
-		vPanel.setVisible(Boolean.FALSE);
-	}
-
-	private void initializePatronPanel() {
-		VerticalPanel vPanel = this.vPanelPatron;
-
-		CaptionPanel caption = new CaptionPanel("Patron en Logs");
+		CaptionPanel caption = new CaptionPanel("Creacion de Tareas");
 		vPanel.add(caption);
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 		
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
-		fldPathLogs.setAllowBlank(Boolean.FALSE);
-		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", FIELD_WIDTH, LABEL_WIDTH));
-		fldPatern.setAllowBlank(Boolean.FALSE);
+		bodyCaption.add(getFieldHorizontalLine(fldName, "Nombre de la tarea", FIELD_WIDTH, LABEL_WIDTH));
+		fldName.setAllowBlank(Boolean.FALSE);
+		bodyCaption.add(getFieldHorizontalLine(fldUser, "Usuario responsable", FIELD_WIDTH, LABEL_WIDTH));
+		fldUser.setAllowBlank(Boolean.FALSE);
 		caption.add(bodyCaption);
 		
 		vPanel.setVisible(Boolean.FALSE);
 	}
 
-	private void initializeArchivosPanel() {
-		VerticalPanel vPanel = this.vPanelArchivos;
+	private void initializeModifyStatusPanel() {
+		VerticalPanel vPanel = this.vPanelModifyStatus;
 
-		CaptionPanel caption = new CaptionPanel("Archivos");
+		CaptionPanel caption = new CaptionPanel("Modificar Estado");
 		vPanel.add(caption);
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 
+		ListStore listStoreState = new ListStore();
+		listStoreState.add(getModelData("Creada", "Creada"));
+		listStoreState.add(getModelData("En curso", "En curso"));
+
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", FIELD_WIDTH, LABEL_WIDTH));
-		bodyCaption.add(getFieldHorizontalLine(fldPathFields, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
+		bodyCaption.add(getFieldHorizontalLine(fldFromState, "Estado inicial", FIELD_WIDTH, LABEL_WIDTH));
+		fldFromState.setAllowBlank(Boolean.FALSE);
+		fldFromState.setStore(listStoreState);
+		fldFromState.setEditable(Boolean.FALSE);
+		fldFromState.setTypeAhead(true);  
+		fldFromState.setTriggerAction(TriggerAction.ALL);
+		
+		bodyCaption.add(getFieldHorizontalLine(fldToState, "Nuevo Estado", FIELD_WIDTH, LABEL_WIDTH));
+		fldToState.setAllowBlank(Boolean.FALSE);
+		fldToState.setAllowBlank(Boolean.FALSE);
+		fldToState.setStore(listStoreState);
+		fldToState.setEditable(Boolean.FALSE);
+		fldToState.setTypeAhead(true);  
+		fldToState.setTriggerAction(TriggerAction.ALL);
+
 		caption.add(bodyCaption);
-		
-		fldControlType.setAllowBlank(Boolean.FALSE);
-		fldPathFields.setAllowBlank(Boolean.FALSE);
-		
-		ListStore listStore = new ListStore();
-		listStore.add(getModelData("1", "Creacion"));
-		listStore.add(getModelData("2", "Modificacion"));
-		fldControlType.setStore(listStore);
-		fldControlType.setEditable(Boolean.FALSE);
-		fldControlType.setTypeAhead(true);  
-		fldControlType.setTriggerAction(TriggerAction.ALL); 
 		
 		vPanel.setVisible(Boolean.FALSE);
 	}
 
-	private void initializeServiciosPanel() {
-		VerticalPanel vPanel = this.vPanelServicios;
-
-		CaptionPanel caption = new CaptionPanel("Servicios");
-		vPanel.add(caption);
-		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
-
-		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldHost, "Direccion del servidor", FIELD_WIDTH, LABEL_WIDTH));
-		bodyCaption.add(getFieldHorizontalLine(fldPort, "Puerto", FIELD_WIDTH, LABEL_WIDTH));
-		caption.add(bodyCaption);
-
-		fldHost.setAllowBlank(Boolean.FALSE);
-		fldPort.setAllowBlank(Boolean.FALSE);
-		
-		vPanel.setVisible(Boolean.FALSE);
-	}
 	
 	/**
 	 * Retorna la configuracion de la grilla
@@ -430,21 +344,12 @@ public class RelationWindow extends Window {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
 		// Se agrega esta columna para mantener el identificador de los perfiles
-		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
-		clmncnfgId.setHidden(Boolean.TRUE);
+		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, "Identificador", 150);
+		//clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
+		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NAME, "Nombre del Evento", 300);
 		configs.add(clmncnfg1);
-
-		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PERIODICITY, "Periodicidad", 150);
-		configs.add(clmncnfg2);
-
-		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.EXPIRATION, "Expiracion", 150);
-		configs.add(clmncnfg3);
-
-		ColumnConfig clmncnfg4 = new ColumnConfig(ParamsConst.ITERATIONS, "Iteraciones", 150);
-		configs.add(clmncnfg4);
 
 		return configs;
 	}
@@ -490,14 +395,14 @@ public class RelationWindow extends Window {
 
 		if (actual != null) {
 			
-			//eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption((String)actual.get(ParamsConst.CLASS), this);
+			relationWindowOption = RelationWindowOptionFactory.getInstance().getRelationWindowOption((String)actual.get(ParamsConst.CLASS), this);
 			
-			fldName.setValue(actual.get(ParamsConst.NAME));
+			/*fldName.setValue(actual.get(ParamsConst.NAME));
 			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
-			//fldExpiration.setValue(actual.get(ParamsConst.EXPIRATION));
-			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
+			fldExpiration.setValue(actual.get(ParamsConst.EXPIRATION));
+			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));*/
 			
-			eventWindowOption.beforeUpdate(actual);
+			relationWindowOption.beforeUpdate(actual);
 
 		}
 		
@@ -507,12 +412,12 @@ public class RelationWindow extends Window {
 	public void onSave() {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
-			params.put(ParamsConst.NAME, fldName.getValue());
+			/*params.put(ParamsConst.NAME, fldName.getValue());
 			params.put(ParamsConst.PERIODICITY, fldPeriodicity.getValue());
 			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue());
 			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
-
-			eventWindowOption.onSave(params);
+*/
+			relationWindowOption.onSave(params);
 			
 			DispatcherUtil.getDispatcher().execute(params,
 					new AsyncCallback() {
@@ -536,8 +441,8 @@ public class RelationWindow extends Window {
 	@Override
 	protected Boolean isValid() {
 		Boolean isValidCommons = super.isValid();
-		if (eventWindowOption!=null){
-			Boolean isValidEspecific = eventWindowOption.isValid();
+		if (relationWindowOption!=null){
+			Boolean isValidEspecific = relationWindowOption.isValid();
 			return (isValidCommons&&isValidEspecific);
 		} else {
 			return super.isValid();
