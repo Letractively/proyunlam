@@ -40,6 +40,7 @@
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs"/>
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles"/>
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventServices"/>
-		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.TaskTemplate"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Relation"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask"/>
 	</session-factory>
 </hibernate-configuration>

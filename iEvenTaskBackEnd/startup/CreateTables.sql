@@ -119,8 +119,20 @@ create table iet_evento_servicios (
 ALTER TABLE iet_evento_servicios 
 ADD CONSTRAINT fk_evento_eventoservicios FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
 
-create table iet_tarea_plantilla (
-	id_tarea int primary key,
-	id_usuario varchar(255) not null,
+create table iet_relacion (
+	id_relacion int primary key,
+	id_evento int not null
+);
+
+create table iet_relacion_nueva_tarea (
+	id_relacion int primary key,
+	id_user varchar(255) not null,
 	nombre varchar(255) not null
 );
+
+ALTER TABLE iet_relacion 
+ADD CONSTRAINT fk_relacion_evento FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
+
+ALTER TABLE iet_relacion_nueva_tarea 
+ADD CONSTRAINT fk_relacion_nueva_tarea_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
+

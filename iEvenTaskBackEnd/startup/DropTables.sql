@@ -40,4 +40,14 @@ DROP TABLE iet_evento_archivos;
 DROP TABLE iet_evento_servicios;
 DROP TABLE iet_evento;
 
-DROP TABLE iet_tarea_plantilla;
+ALTER TABLE iet_relacion
+DROP CONSTRAINT fk_relacion_evento;
+ALTER TABLE iet_relacion_nueva_tarea
+DROP CONSTRAINT fk_relacion_nueva_tarea_relacion;
+
+DROP TABLE iet_relacion_nueva_tarea;
+DROP TABLE iet_relacion;
+
+
+
+
