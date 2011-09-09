@@ -42,5 +42,7 @@ public abstract class ServiceNameConst {
 	public static final String LIST_EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.services.ListEventLogsService";
 	public static final String LIST_EVENT_FILES = "ar.com.AmberSoft.iEvenTask.services.ListEventFilesService";
 	public static final String LIST_EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.services.ListEventServicesService";
+	
+	public static final String LIST_RELATION = "ar.com.AmberSoft.iEvenTask.services.ListRelationService";
 
 }
