@@ -123,7 +123,7 @@ public class IEvenTask implements EntryPoint {
 		Button btnNuevaTarea = new Button("Nueva Tarea");
 		btnNuevaTarea.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent be) {
-				TaskWindow taskWindow = new TaskWindow();
+				TaskWindowOld taskWindow = new TaskWindowOld();
 				taskWindow.show();
 			}
 		});
