@@ -10,8 +10,8 @@ import com.extjs.gxt.ui.client.data.BaseModel;
 
 public abstract class RelationWindowOption {
 	
-	public static final String CREATE_TASK = "ar.com.AmberSoft.iEvenTask.backend.entities.RelationWindowOptionCreateTask";
-	public static final String MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
+	public static final String CREATE_TASK = "ar.com.AmberSoft.iEvenTask.client.RelationWindowOptionCreateTask";
+	public static final String MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.client.ReelationWindowOptionModifyState";
 
 	protected RelationWindow relationWindow;
 
