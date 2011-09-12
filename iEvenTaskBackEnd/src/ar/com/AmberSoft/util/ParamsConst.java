@@ -50,4 +50,11 @@ public abstract class ParamsConst {
 	public static final String PORT = "port";
 	
 	public static final String CODE = "code";
+	
+	public static final String FROM_STATE = "fromState";
+	public static final String TO_STATE = "toState";
+	
+	public static final String ENTITY = "entity";
+	
+	public static final String EVENT = "event";
 }
