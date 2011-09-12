@@ -108,7 +108,7 @@ public class ProfilesWindow extends Window {
 	 */
 	private void addGrid() {
 		grid.addFilter(new StringFilter(ParamsConst.NAME));
-		grid.addFilter(new StringFilter(ParamsConst.CONECTION));
+		grid.addFilter(new StringFilter(ParamsConst.CONNECTION));
 		grid.defaultContextMenu();
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
 		grid.setBorders(true);
@@ -187,7 +187,7 @@ public class ProfilesWindow extends Window {
 		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
 		configs.add(clmncnfgNombre);
 
-		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONECTION, "Conexion", 150);
+		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONNECTION, "Conexion", 150);
 		configs.add(clmncnfgConexion);
 
 		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 150);
@@ -237,11 +237,11 @@ public class ProfilesWindow extends Window {
 
 		if (actual != null) {
 			fldName.setValue(actual.get(ParamsConst.NAME));
-			fldConection.setValue(actual.get(ParamsConst.CONECTION));
+			fldConection.setValue(actual.get(ParamsConst.CONNECTION));
 			fldGroup.setValue(actual.get(ParamsConst.GROUP));
 			fldObjective.setValue(Boolean.FALSE);
 			fldAdmin.setValue(Boolean.FALSE);
-			Collection permisos = (Collection) actual.get(ParamsConst.PERMISOS);
+			Collection permisos = (Collection) actual.get(ParamsConst.PERMISSIONS);
 			if (permisos!=null){
 				Iterator itPermisos = permisos.iterator();
 				while (itPermisos.hasNext()) {
@@ -264,7 +264,7 @@ public class ProfilesWindow extends Window {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.NAME, fldName.getValue());
-			params.put(ParamsConst.CONECTION, fldConection.getValue());
+			params.put(ParamsConst.CONNECTION, fldConection.getValue());
 			params.put(ParamsConst.GROUP, fldGroup.getValue());
 			params.put(ParamsConst.CHECK_OBJECTIVE,
 					fldObjective.getValue());

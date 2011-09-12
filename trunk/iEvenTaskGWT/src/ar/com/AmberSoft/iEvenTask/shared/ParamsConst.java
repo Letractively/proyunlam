@@ -23,9 +23,9 @@ public abstract class ParamsConst {
 	public static final String IDS = "ids";
 	public static final String ID = "id";
 	public static final String NAME = "name";
-	public static final String CONECTION = "conection";
-	public static final String GROUP = "group";
-	public static final String PERMISOS = "permisos";
+	public static final String CONNECTION = "connection";
+	public static final String GROUP = "groupLDAP";
+	public static final String PERMISSIONS = "permissions";
 	public static final String CHECK_OBJECTIVE = "checkObjective";
 	public static final String CHECK_ADMIN = "checkAdmin";
 	
