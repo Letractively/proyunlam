@@ -48,8 +48,12 @@ public abstract class ListService extends Service {
 		query = getSession().createQuery(queryText.toString());
 		queryCount = getSession().createQuery(SELECT_COUNT + queryTextWithoutOrder.toString());
 		
-		query.setFirstResult((Integer) params.get(OFFSET));
-		query.setMaxResults((Integer) params.get(LIMIT));
+		if (params.get(OFFSET)!=null){
+			query.setFirstResult((Integer) params.get(OFFSET));
+		}
+		if (params.get(LIMIT)!=null){
+			query.setMaxResults((Integer) params.get(LIMIT));
+		}
 		
 		postCreateQuery(params);
 		
