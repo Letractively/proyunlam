@@ -4,8 +4,8 @@ import java.util.Map;
 
 import org.hibernate.Transaction;
 
-import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
-import ar.com.AmberSoft.iEvenTask.backend.entities.Permiso;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Permission;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class CreateProfileService extends Service {
@@ -14,10 +14,10 @@ public class CreateProfileService extends Service {
 	public static String ID_OBJECTIVE = "1";
 	public static String ID_ADMIN = "2";
 	
-	protected void setAttributes(Map params, Perfil perfil) {
-		perfil.setNombre((String) params.get(ParamsConst.NAME));
-		perfil.setConexion((String) params.get(ParamsConst.CONECTION));
-		perfil.setGrupoLDAP((String) params.get(ParamsConst.GROUP));
+	protected void setAttributes(Map params, Profile perfil) {
+		perfil.setName((String) params.get(ParamsConst.NAME));
+		perfil.setConnection((String) params.get(ParamsConst.CONNECTION));
+		perfil.setGroupLDAP((String) params.get(ParamsConst.GROUP));
 		
 		Boolean checkObjective = (Boolean) params.get(ParamsConst.CHECK_OBJECTIVE);
 		Boolean checkAdmin = (Boolean) params.get(ParamsConst.CHECK_ADMIN);
@@ -26,9 +26,9 @@ public class CreateProfileService extends Service {
 		setPermiso(perfil, checkAdmin, CreateProfileService.ID_ADMIN);
 	}
 
-	public void setPermiso(Perfil perfil, Boolean toCheck, String idPermiso) {
+	public void setPermiso(Profile perfil, Boolean toCheck, String idPermiso) {
 		if (toCheck){
-			Permiso permiso = new Permiso();
+			Permission permiso = new Permission();
 			permiso.setId(idPermiso);
 			perfil.addPermiso(permiso);
 		}
@@ -36,7 +36,7 @@ public class CreateProfileService extends Service {
 
 	@Override
 	public Map onExecute(Map params) {
-		Perfil perfil = new Perfil();
+		Profile perfil = new Profile();
 		setAttributes(params, perfil);
 		
 		Transaction transaction = getSession().beginTransaction();

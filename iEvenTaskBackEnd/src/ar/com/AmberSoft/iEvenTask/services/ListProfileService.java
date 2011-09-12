@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
-import ar.com.AmberSoft.iEvenTask.backend.entities.Permiso;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Permission;
 import ar.com.AmberSoft.util.ParamsConst;
 
 
@@ -14,7 +14,7 @@ public class ListProfileService extends ListService {
 
 	@Override
 	protected String getEntity() {
-		return Perfil.class.getName();
+		return Profile.class.getName();
 	}
 
 	@Override
@@ -39,10 +39,10 @@ public class ListProfileService extends ListService {
 	}
 
 	private void addPerfil(Collection list, Boolean permiso1, Boolean permiso2) {
-		Perfil perfil = new Perfil();
-		perfil.setNombre("Perfil" + perfil.getId().toString());
-		perfil.setConexion("Conexion" + perfil.getId().toString());
-		perfil.setGrupoLDAP("Grupo" + perfil.getId().toString());
+		Profile perfil = new Profile();
+		perfil.setName("Perfil" + perfil.getId().toString());
+		perfil.setConnection("Conexion" + perfil.getId().toString());
+		perfil.setGroupLDAP("Grupo" + perfil.getId().toString());
 		if (permiso1) {
 			addPermiso(perfil, CreateProfileService.ID_OBJECTIVE);
 		}
@@ -52,8 +52,8 @@ public class ListProfileService extends ListService {
 		list.add(perfil);
 	}
 
-	private void addPermiso(Perfil perfil, String id) {
-		Permiso permiso = new Permiso();
+	private void addPermiso(Profile perfil, String id) {
+		Permission permiso = new Permission();
 		permiso.setId(id);
 		perfil.addPermiso(permiso);
 	}

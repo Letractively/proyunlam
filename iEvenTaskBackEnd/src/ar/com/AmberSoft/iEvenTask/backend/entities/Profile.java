@@ -1,6 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,13 +17,13 @@ import ar.com.AmberSoft.util.PKGenerator;
 
 @Entity
 @Table (name="iet_perfil")
-public class Perfil implements Serializable{
+public class Profile extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity  {
 	
 	private Integer id;
-	private String nombre;
-	private String conexion;
-	private String grupoLDAP;
-	private Set<Permiso> permisos;
+	private String name;
+	private String connection;
+	private String groupLDAP;
+	private Set<Permission> permissions;
 	
 	@Id @Column (name="id_perfil")
 	public Integer getId() {
@@ -37,44 +36,45 @@ public class Perfil implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Basic
-	public String getNombre() {
-		return nombre;
+	@Basic @Column (name="nombre")
+	public String getName() {
+		return name;
 	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setName(String name) {
+		this.name = name;
 	}
 	@Basic @Column (name="ruta_conexion")
-	public String getConexion() {
-		return conexion;
+	public String getConnection() {
+		return connection;
 	}
-	public void setConexion(String conexion) {
-		this.conexion = conexion;
+	public void setConnection(String connection) {
+		this.connection = connection;
 	}
 	@Basic @Column(name="grupo_ldap")
-	public String getGrupoLDAP() {
-		return grupoLDAP;
+	public String getGroupLDAP() {
+		return groupLDAP;
 	}
-	public void setGrupoLDAP(String grupoLDAP) {
-		this.grupoLDAP = grupoLDAP;
+	public void setGroupLDAP(String groupLDAP) {
+		this.groupLDAP = groupLDAP;
 	}
+	
 	@ManyToMany (fetch=FetchType.EAGER)
 	@JoinTable(name="iet_permiso_perfil", 
 			joinColumns = { @JoinColumn(name = "id_perfil") }, 
 			inverseJoinColumns = { @JoinColumn(name = "id_permiso") })
-	public Set<Permiso> getPermisos() {
-		return permisos;
+	public Set<Permission> getPermissions() {
+		return permissions;
 	}
 
-	public void setPermisos(Set<Permiso> permisos) {
-		this.permisos = permisos;
+	public void setPermissions(Set<Permission> permissions) {
+		this.permissions = permissions;
 	}
 	
-	public void addPermiso(Permiso permiso){
-		if (permisos==null){
-			permisos = new HashSet<Permiso>();
+	public void addPermiso(Permission permiso){
+		if (permissions==null){
+			permissions = new HashSet<Permission>();
 		}
-		permisos.add(permiso);
+		permissions.add(permiso);
 	}
 	
 }

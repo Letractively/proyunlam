@@ -8,10 +8,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name="iet_permiso")
-public class Permiso {
+public class Permission {
 
 	private String id;
-	private String descripcion;
+	private String description;
 	@Id @Column(name="id_permiso")
 	public String getId() {
 		return id;
@@ -19,12 +19,12 @@ public class Permiso {
 	public void setId(String id) {
 		this.id = id;
 	}
-	@Basic
-	public String getDescripcion() {
-		return descripcion;
+	@Basic @Column (name="descripcion")
+	public String getDescription() {
+		return description;
 	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }
