@@ -123,7 +123,8 @@ ADD CONSTRAINT fk_evento_eventoservicios FOREIGN KEY (id_evento) REFERENCES iet_
 
 create table iet_relacion (
 	id_relacion int primary key,
-	id_evento int not null
+	id_evento int not null,
+	eliminado datetime
 );
 
 create table iet_relacion_nueva_tarea (
@@ -132,9 +133,18 @@ create table iet_relacion_nueva_tarea (
 	nombre varchar(255) not null
 );
 
+create table iet_relacion_modifica_estado (
+	id_relacion int primary key,
+	estado_inicial varchar(10) not null,
+	estado_final varchar(10) not null
+);
+
 ALTER TABLE iet_relacion 
 ADD CONSTRAINT fk_relacion_evento FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
 
 ALTER TABLE iet_relacion_nueva_tarea 
 ADD CONSTRAINT fk_relacion_nueva_tarea_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
+
+ALTER TABLE iet_relacion_modifica_estado 
+ADD CONSTRAINT fk_relacion_modifica_estado_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
 
