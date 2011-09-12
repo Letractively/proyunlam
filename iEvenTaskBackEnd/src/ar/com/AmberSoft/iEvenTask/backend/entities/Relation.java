@@ -2,6 +2,7 @@ package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -32,8 +33,8 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 		this.id = id;
 	}
 
-	@ManyToOne
-	@JoinColumn (name="id_evento", updatable = true, insertable = true)
+	@ManyToOne (fetch=FetchType.LAZY)
+	@JoinColumn (name="id_evento")
 	public Event getEvent() {
 		return event;
 	}
