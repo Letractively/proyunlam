@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.hibernate.Transaction;
 
-import ar.com.AmberSoft.iEvenTask.backend.entities.Perfil;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class DeleteProfileService extends Service {
@@ -18,7 +18,7 @@ public class DeleteProfileService extends Service {
 		Collection ids = (Collection) params.get(ParamsConst.IDS);
 		for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 			Integer id = (Integer) iterator.next();
-			Perfil perfil = (Perfil) getSession().get(Perfil.class, id);
+			Profile perfil = (Profile) getSession().get(Profile.class, id);
 			getSession().delete(perfil);
 		}
 		transaction.commit();

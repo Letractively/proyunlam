@@ -1,16 +1,12 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import ar.com.AmberSoft.util.PKGenerator;
@@ -36,8 +32,8 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 		this.id = id;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(name = "iet_evento", joinColumns = { @JoinColumn(name = "id_evento") }, inverseJoinColumns = { @JoinColumn(name = "id_relacion") })
+	@ManyToOne
+	@JoinColumn (name="id_evento", updatable = true, insertable = true)
 	public Event getEvent() {
 		return event;
 	}

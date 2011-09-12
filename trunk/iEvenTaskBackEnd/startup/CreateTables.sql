@@ -2,7 +2,8 @@ create table iet_perfil (
 	id_perfil int primary key, 
 	nombre varchar(50) not null, 
 	ruta_conexion varchar(255) not null, 
-	grupo_ldap char(50) not null
+	grupo_ldap char(50) not null,
+	eliminado datetime
 );
 
 create table iet_permiso (
@@ -26,6 +27,7 @@ ADD CONSTRAINT fk_perp_perfil FOREIGN KEY (id_perfil) REFERENCES iet_perfil(id_p
 
 ALTER TABLE iet_permiso_perfil 
 ADD CONSTRAINT pk_perp PRIMARY KEY (id_permiso, id_perfil);
+
 
 create table iet_tarea (
 	id_tarea int primary key,
