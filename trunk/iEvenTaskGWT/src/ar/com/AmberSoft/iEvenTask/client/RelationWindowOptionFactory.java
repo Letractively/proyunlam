@@ -11,7 +11,7 @@ public class RelationWindowOptionFactory {
 	private RelationWindowOptionFactory(){
 		relationWindowOptions = new HashMap<String, RelationWindowOption>();
 		relationWindowOptions.put(RelationWindowOption.CREATE_TASK, new RelationWindowOptionCreateTask());
-		relationWindowOptions.put(RelationWindowOption.MODIFY_STATE, new ReelationWindowOptionModifyState());
+		relationWindowOptions.put(RelationWindowOption.MODIFY_STATE, new RelationWindowOptionModifyState());
 	}
 	
 	public static RelationWindowOptionFactory getInstance(){

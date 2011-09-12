@@ -55,6 +55,11 @@ public class RelationWindow extends Window {
 	
 	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
 	public static final Integer GRID_HEIGTH = 250;
+	
+	public static final String EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";
+	public static final String EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
+	public static final String EVENT_FILES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles";
+	public static final String EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventServices";
 
 	private final Grid grid = new Grid(this, ServiceNameConst.LIST_RELATION, getGridConfig(), 10);
 	
@@ -73,6 +78,8 @@ public class RelationWindow extends Window {
 	// Campos para Modificacion de Estados
 	private final ComboBox fldFromState = new ComboBox();
 	private final ComboBox fldToState = new ComboBox();;
+	
+	private Map entityServiceRelation = new HashMap(); 
 	
 	/**
 	 * Representa la opcion elegida en el combo de tipos de eventos
@@ -158,6 +165,11 @@ public class RelationWindow extends Window {
 		setTitleCollapse(true);
 		setHeading("Gesti\u00F3n de Relaciones");
 		setLayout(new RowLayout(Orientation.VERTICAL));
+		
+		entityServiceRelation.put(EVENT_LDAP, ServiceNameConst.LIST_EVENT_LDAP);
+		entityServiceRelation.put(EVENT_LOGS, ServiceNameConst.LIST_EVENT_LOGS);
+		entityServiceRelation.put(EVENT_FILES, ServiceNameConst.LIST_EVENT_FILES);
+		entityServiceRelation.put(EVENT_SERVICES, ServiceNameConst.LIST_EVENT_SERVICES);
 	}
 
 	/**
@@ -176,7 +188,7 @@ public class RelationWindow extends Window {
 	 */
 	private void addGrid() {
 		grid.addFilter(new StringFilter(ParamsConst.NAME));
-		grid.addFilter(new StringFilter(ParamsConst.CONECTION));
+		grid.addFilter(new StringFilter(ParamsConst.CONNECTION));
 		grid.defaultContextMenu();
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
 		grid.setBorders(true);
@@ -397,10 +409,9 @@ public class RelationWindow extends Window {
 			
 			relationWindowOption = RelationWindowOptionFactory.getInstance().getRelationWindowOption((String)actual.get(ParamsConst.CLASS), this);
 			
-			/*fldName.setValue(actual.get(ParamsConst.NAME));
-			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
-			fldExpiration.setValue(actual.get(ParamsConst.EXPIRATION));
-			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));*/
+			setCombo(getFldEventType(), (String) entityServiceRelation.get((String)((Map)actual.get("event")).get(ParamsConst.CLASS)));
+			setCombo(getFldEvent(), ((Map)actual.get("event")).get(ParamsConst.ID).toString());
+			setCombo(getFldAction(), (String)(actual.get(ParamsConst.CLASS)));
 			
 			relationWindowOption.beforeUpdate(actual);
 
@@ -412,11 +423,8 @@ public class RelationWindow extends Window {
 	public void onSave() {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
-			/*params.put(ParamsConst.NAME, fldName.getValue());
-			params.put(ParamsConst.PERIODICITY, fldPeriodicity.getValue());
-			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue());
-			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
-*/
+			params.put(ParamsConst.EVENT,	((ModelData)fldEvent.getValue()).get("key"));
+
 			relationWindowOption.onSave(params);
 			
 			DispatcherUtil.getDispatcher().execute(params,

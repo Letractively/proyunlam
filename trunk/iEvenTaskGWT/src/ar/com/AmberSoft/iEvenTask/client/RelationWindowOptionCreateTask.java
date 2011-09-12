@@ -13,9 +13,9 @@ public class RelationWindowOptionCreateTask extends RelationWindowOption {
 		params.put(ParamsConst.USER, relationWindow.getFldName().getValue());
 		if (relationWindow.getWindowState().equals(State.UPDATE_STATE)) {
 			setId(params);
-			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_EVENT_LDAP);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_RELATION_CREATE_TASK);
 		} else {
-			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_RELATION_CREATE_TASK);
 		}
 
 	}

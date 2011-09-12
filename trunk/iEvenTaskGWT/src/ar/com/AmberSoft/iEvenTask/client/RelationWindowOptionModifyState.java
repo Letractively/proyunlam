@@ -5,7 +5,7 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
-public class ReelationWindowOptionModifyState extends RelationWindowOption {
+public class RelationWindowOptionModifyState extends RelationWindowOption {
 
 	@Override
 	public void onSave(Map params) {

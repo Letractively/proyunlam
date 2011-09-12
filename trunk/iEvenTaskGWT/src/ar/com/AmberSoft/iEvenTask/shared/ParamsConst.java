@@ -52,4 +52,6 @@ public abstract class ParamsConst {
 	public static final String FROM_STATE = "fromState";
 	public static final String TO_STATE = "toState";
 	
+	public static final String EVENT = "event";
+	
 }

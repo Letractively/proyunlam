@@ -217,7 +217,7 @@ public class EventWindow extends Window {
 	 */
 	private void addGrid() {
 		grid.addFilter(new StringFilter(ParamsConst.NAME));
-		grid.addFilter(new StringFilter(ParamsConst.CONECTION));
+		grid.addFilter(new StringFilter(ParamsConst.CONNECTION));
 		grid.defaultContextMenu();
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
 		grid.setBorders(true);

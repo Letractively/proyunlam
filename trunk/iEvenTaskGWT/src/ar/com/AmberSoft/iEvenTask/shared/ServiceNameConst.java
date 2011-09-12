@@ -44,5 +44,9 @@ public abstract class ServiceNameConst {
 	public static final String LIST_EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.services.ListEventServicesService";
 	
 	public static final String LIST_RELATION = "ar.com.AmberSoft.iEvenTask.services.ListRelationService";
+	public static final String CREATE_RELATION_CREATE_TASK = "ar.com.AmberSoft.iEvenTask.services.CreateRelationCreateTaskService";
+	public static final String UPDATE_RELATION_CREATE_TASK = "ar.com.AmberSoft.iEvenTask.services.UpdateRelationCreateTaskService";
+	public static final String CREATE_RELATION_MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.services.CreateRelationModifyStateService";
+	public static final String UPDATE_RELATION_MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.services.UpdateRelationModifyStateService";
 
 }
