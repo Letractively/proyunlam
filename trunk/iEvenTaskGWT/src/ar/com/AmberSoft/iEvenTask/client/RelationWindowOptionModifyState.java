@@ -5,6 +5,7 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+//TODO: PARA FINALIZAR ESTA PARTE ES NECESARIO QUE ESTE TERMINADA LA OPCION DE GESTION DE TAREAS
 public class RelationWindowOptionModifyState extends RelationWindowOption {
 
 	@Override
@@ -13,9 +14,9 @@ public class RelationWindowOptionModifyState extends RelationWindowOption {
 		params.put(ParamsConst.TO_STATE, relationWindow.getFldToState().getValue());
 		if (relationWindow.getWindowState().equals(State.UPDATE_STATE)) {
 			setId(params);
-			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_EVENT_LDAP);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_RELATION_MODIFY_STATE);
 		} else {
-			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_EVENT_LDAP);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_RELATION_MODIFY_STATE);
 		}
 	}
 
@@ -27,6 +28,7 @@ public class RelationWindowOptionModifyState extends RelationWindowOption {
 
 	@Override
 	public void beforeUpdate(Map actual) {
+		relationWindow.setCombo(relationWindow.getFldFromState(),(String) actual.get(ParamsConst.FROM_STATE));
 		relationWindow.setCombo(relationWindow.getFldFromState(),(String) actual.get(ParamsConst.FROM_STATE));
 		relationWindow.setCombo(relationWindow.getFldToState(),(String) actual.get(ParamsConst.TO_STATE));
 		setVisiblePanel();
