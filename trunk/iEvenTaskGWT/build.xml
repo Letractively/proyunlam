@@ -43,14 +43,14 @@
 		<echo message="Se copia generado por GWT en ../iEvenTask/WebContent/" />
 		<copy todir="../iEvenTask/WebContent/">
 			<fileset dir="./war/">
-				<!--exclude name="**/*.java" /-->
+				<exclude name="**/geronimo*.*"/>
 			</fileset>
 		</copy>
 		<echo message="Fin, Se copia generado por GWT en ../iEvenTask/WebContent/" />
 		<echo message="Se copian librerias de iEvenTaskBackEnd en ../iEvenTask/WebContent/" />
 		<copy todir="../iEvenTask/WebContent/WEB-INF/lib/">
 			<fileset dir="../iEvenTaskBackEnd/lib/">
-				<!--exclude name="**/*.java" /-->
+				<exclude name="**/geronimo*.*"/>
 			</fileset>
 		</copy>
 
