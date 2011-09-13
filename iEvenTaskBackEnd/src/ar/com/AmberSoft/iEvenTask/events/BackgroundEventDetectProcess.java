@@ -32,8 +32,10 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	
 	public BackgroundEventDetectProcess(Event event){
 		logger.debug("Inicializando BackgroundEventDetectProcess");
-		this.event = event;
-		timer.schedule(this, event.getPeriodicity());
+		if (isAvaiable()){
+			this.event = event;
+			timer.schedule(this, event.getPeriodicity());
+		}
 		logger.debug("Fin Inicializacion BackgroundEventDetectProcess");
 	}
 	
@@ -50,14 +52,22 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 		
 		eventDetect();
 		
-		// Si se supero la cantidad de iteraciones o se supero la fecha de expiracion 
-		// se cancela el proceso para que no vuelva a ejecutarse
-		Date actual = new Date();
-		if (((event.getIterations()!=null) && (executionCount >= event.getIterations()))
-			|| ((event.getExpiration()!=null) && (actual.after(event.getExpiration())))) {
+		if (isAvaiable()){
 			timer.cancel();
 		}
 		logger.debug("Finaliza la ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 	}
 
+	/**
+	 * Indica si esta habilitado para ejecutarse o continuar ejecutandose
+	 * Si se supero la cantidad de iteraciones o se supero la fecha de expiracion 
+	 * se cancela el proceso para que no vuelva a ejecutarse
+	 * @return
+	 */
+	public Boolean isAvaiable(){
+		Date actual = new Date();
+		return (((event.getIterations()==null) || (executionCount < event.getIterations()))
+				&& ((event.getExpiration()==null) || (actual.after(event.getExpiration()))));
+	}
+	
 }
