@@ -11,7 +11,7 @@ import com.extjs.gxt.ui.client.data.BaseModel;
 public abstract class RelationWindowOption {
 	
 	public static final String CREATE_TASK = "ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask";
-	public static final String MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.client.ReelationWindowOptionModifyState";
+	public static final String MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithModifyStateTask";
 
 	protected RelationWindow relationWindow;
 
