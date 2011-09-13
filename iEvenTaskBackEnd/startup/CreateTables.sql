@@ -135,6 +135,7 @@ create table iet_relacion_nueva_tarea (
 
 create table iet_relacion_modifica_estado (
 	id_relacion int primary key,
+	id_tarea int not null,
 	estado_inicial varchar(10) not null,
 	estado_final varchar(10) not null
 );

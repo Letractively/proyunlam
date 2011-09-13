@@ -1,6 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import ar.com.AmberSoft.util.PKGenerator;
@@ -22,6 +24,7 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 	private Integer periodicity;
 	private Date expiration;
 	private Integer iterations;
+	private Set<Relation> relations;
 
 	public Event (){
 		PKGenerator pkGenerator = new PKGenerator();
@@ -52,13 +55,13 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 		this.periodicity = periodicity;
 	}
 	
-/*	@Basic @Column (name="fecha_expiracion")
+	@Basic @Column (name="fecha_expiracion")
 	public Date getExpiration() {
 		return expiration;
 	}
 	public void setExpiration(Date expiration) {
 		this.expiration = expiration;
-	}*/
+	}
 	
 	@Basic @Column (name="iteraciones")
 	public Integer getIterations() {
@@ -67,6 +70,16 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 	public void setIterations(Integer iterations) {
 		this.iterations = iterations;
 	}
-	
+
+	@OneToMany (mappedBy="event")
+	public Set<Relation> getRelations() {
+		return relations;
+	}
+
+	public void setRelations(Set<Relation> relations) {
+		this.relations = relations;
+	}
+
+
 	
 }
