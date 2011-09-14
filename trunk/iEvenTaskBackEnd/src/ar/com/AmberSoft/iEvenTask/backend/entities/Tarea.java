@@ -10,15 +10,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import ar.com.AmberSoft.util.PKGenerator;
 
 @Entity
 @Table (name="iet_tarea")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Tarea implements Serializable{
 
 	private Integer id;
@@ -108,14 +113,8 @@ public class Tarea implements Serializable{
 	public void setTipo_tarea(int tipo_tarea) {
 		this.tipo_tarea = tipo_tarea;
 	}
-	/*
-	 * TODO ver que relacion tienen con la tabla de comentarios
-	 * 
-	@ManyToMany (fetch=FetchType.EAGER)
-	@JoinTable(name="iet_permiso_perfil", 
-			joinColumns = { @JoinColumn(name = "id_perfil") }, 
-			inverseJoinColumns = { @JoinColumn(name = "id_permiso") })
-	*/
+	
+	@OneToMany (mappedBy="task")
 	public Set<Comentario> getComentarios() {
 		return comentarios;
 	}
