@@ -1,12 +1,17 @@
 package ar.com.AmberSoft.iEvenTask.events;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
+import ar.com.AmberSoft.iEvenTask.services.GetEventService;
+import ar.com.AmberSoft.iEvenTask.services.UpdateEntityService;
+import ar.com.AmberSoft.util.ParamsConst;
 
 /**
  * Proceso encargado de la deteccion de eventos en la aplicacion 
@@ -23,7 +28,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	/**
 	 * Controlador del tiempo entre ejecuciones
 	 */
-	private Timer timer;
+	private Timer timer = new Timer();
 	
 	/**
 	 * Contador de ejecuciones
@@ -32,8 +37,8 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	
 	public BackgroundEventDetectProcess(Event event){
 		logger.debug("Inicializando BackgroundEventDetectProcess");
+		this.event = event;
 		if (isAvaiable()){
-			this.event = event;
 			timer.schedule(this, event.getPeriodicity());
 		}
 		logger.debug("Fin Inicializacion BackgroundEventDetectProcess");
@@ -47,17 +52,35 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	
 	@Override
 	public void run() {
-		executionCount++;
-		logger.debug("Ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 		
-		eventDetect();
-		
-		if (isAvaiable()){
+		Map params = new HashMap();
+		params.put(ParamsConst.ID, event.getId().toString());
+		GetEventService getEventService = new GetEventService();
+		Map result = getEventService.execute(params);
+		Event realEvent = (Event) result.get(ParamsConst.ENTITY); 
+		if(realEvent.getExecutions()!=null){
+			executionCount = realEvent.getExecutions(); 
+		}
+		if ((realEvent!=null) && (isAvaiable())){
+			executionCount++;
+			logger.debug("Ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
+			
+			eventDetect();
+
+			realEvent.setExecutions(executionCount);
+			UpdateEntityService updateEntityService = new UpdateEntityService();
+			updateEntityService.execute(result);
+			BackgroundEventDetectProcess process = BackgroundEventController.getInstance().getFactory().getProcess(event);
+			process.executionCount = executionCount;
+			
+			logger.debug("Finaliza la ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
+		} else {
+			logger.debug("Se cancela el proceso de deteccion para el evento: " + event.getName());
 			timer.cancel();
 		}
-		logger.debug("Finaliza la ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
+		
 	}
-
+	
 	/**
 	 * Indica si esta habilitado para ejecutarse o continuar ejecutandose
 	 * Si se supero la cantidad de iteraciones o se supero la fecha de expiracion 
@@ -66,7 +89,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	 */
 	public Boolean isAvaiable(){
 		Date actual = new Date();
-		return (((event.getIterations()==null) || (executionCount < event.getIterations()))
+		return (((event.getIterations()==null) || (executionCount <= event.getIterations()))
 				&& ((event.getExpiration()==null) || (actual.after(event.getExpiration()))));
 	}
 	
