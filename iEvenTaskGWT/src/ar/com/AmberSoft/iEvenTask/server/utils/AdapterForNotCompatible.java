@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.LazyInitializationException;
 
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
@@ -32,7 +33,12 @@ public class AdapterForNotCompatible implements Compatibilizable {
 						descriptor.getDisplayName()))
 						&& (PropertyUtils.isReadable(actual,
 								descriptor.getDisplayName()))) {
-					Object propertyValue = PropertyUtils.getProperty(actual, descriptor.getName());
+					Object propertyValue = null;
+					try {
+						propertyValue = PropertyUtils.getProperty(actual, descriptor.getName());
+					} catch (LazyInitializationException e){
+						logger.info("La propiedad " + descriptor.getName() + " se encuentra Lazy y será ignorada");
+					}
 					GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(propertyValue);
 					Compatibilizable compatibilizable = evaluatorTypes.getCompatibilizableAdapter();
 					if (propertyValue!=null){
