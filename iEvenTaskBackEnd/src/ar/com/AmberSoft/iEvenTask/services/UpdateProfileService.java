@@ -2,27 +2,24 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.Map;
 
-import org.hibernate.Transaction;
-
+import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class UpdateProfileService extends CreateProfileService {
 
 	@Override
-	public Map execute(Map params) {
-		
-		Profile perfil = new Profile();
-		perfil.setId((Integer) params.get(ParamsConst.ID));
-
-		setAttributes(params, perfil);
-		
-		Transaction transaction = getSession().beginTransaction();
-		getSession().saveOrUpdate(perfil);
-		transaction.commit();
-		
-		return null;
+	public Entity getEntity(Map params) {
+		Profile profile = (Profile) super.getEntity(params);
+		profile.setId((Integer) params.get(ParamsConst.ID));
+		return profile;
 	}
 	
+	@Override
+	public Map onExecute(Map params) {
+		getSession().saveOrUpdate(getEntity(params));
+		return null;
+	}
 
+	
 }

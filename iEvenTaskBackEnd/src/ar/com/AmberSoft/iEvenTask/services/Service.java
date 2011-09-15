@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
+import ar.com.AmberSoft.util.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseStringFilterConfig;
 
@@ -50,7 +52,30 @@ public abstract class Service {
 		if (AppAdmin.getInstance().getConfig().isEmulate()){
 			return onEmulate(params);
 		}
-		return onExecute(params);
+		Transaction transaction = null;
+		if (isTransactionControl(params)){
+			transaction = getSession().beginTransaction();
+		}
+		Map result = onExecute(params);
+		if (isTransactionControl(params)){
+			transaction.commit();
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Define si el mismo servicio maneja el control transaccional del acceso a BD
+	 * Por defecto lo maneja el mismo servicio
+	 * @param params
+	 * @return
+	 */
+	private Boolean isTransactionControl(Map params) {
+		Boolean transactionControl = (Boolean) params.get(ParamsConst.TRANSACTION_CONTROL);
+		if (transactionControl==null){
+			transactionControl = Boolean.TRUE;
+		}
+		return transactionControl;
 	}
 	
 	/**

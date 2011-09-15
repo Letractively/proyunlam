@@ -1,34 +1,12 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.hibernate.Transaction;
-
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
-import ar.com.AmberSoft.util.ParamsConst;
 
-public class DeleteProfileService extends Service {
-
-	@Override
-	public Map onExecute(Map params) {
-		
-		Transaction transaction = getSession().beginTransaction();
-		Collection ids = (Collection) params.get(ParamsConst.IDS);
-		for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
-			Integer id = (Integer) iterator.next();
-			Profile perfil = (Profile) getSession().get(Profile.class, id);
-			getSession().delete(perfil);
-		}
-		transaction.commit();
-		
-		return null;	}
+public class DeleteProfileService extends DeleteService {
 
 	@Override
-	public Map onEmulate(Map params) {
-		// TODO Auto-generated method stub
-		return null;
+	public Class getEntity() {
+		return Profile.class;
 	}
 
 }

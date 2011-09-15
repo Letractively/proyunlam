@@ -2,31 +2,24 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.Map;
 
-import org.hibernate.Transaction;
-
+import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class UpdateEventLDAPService extends CreateEventLDAPService {
 
 	@Override
-	public Map onExecute(Map params) {
-		EventLDAP event = new EventLDAP();
+	public Entity getEntity(Map params) {
+		EventLDAP event = (EventLDAP) super.getEntity(params);
 		event.setId((Integer) params.get(ParamsConst.ID));
-
-		setAttributes(params, event);
-		
-		Transaction transaction = getSession().beginTransaction();
-		getSession().saveOrUpdate(event);
-		transaction.commit();
-		
-		return null;
+		return event;
 	}
-
+	
 	@Override
-	public Map onEmulate(Map params) {
-		// TODO Auto-generated method stub
+	public Map onExecute(Map params) {
+		getSession().saveOrUpdate(getEntity(params));
 		return null;
 	}
+
 
 }

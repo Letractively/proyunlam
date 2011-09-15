@@ -15,7 +15,7 @@ public abstract class GetEntityService extends Service {
 
 		String id = (String) params.get(ParamsConst.ID);
 		
-		getSession().beginTransaction();
+		//getSession().beginTransaction();
 
 		StringBuffer queryText = new StringBuffer();
 		queryText.append(FROM);
