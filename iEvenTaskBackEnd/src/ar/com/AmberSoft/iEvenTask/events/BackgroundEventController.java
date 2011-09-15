@@ -10,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
 import ar.com.AmberSoft.iEvenTask.services.ListEventService;
@@ -41,6 +42,7 @@ public class BackgroundEventController extends TimerTask {
 	
 	private Map<Integer, BackgroundEventDetectProcess> activeProcesses; 
 	
+	private BackgroundEventFactory factory;
 	
 	private ResourceBundle config = ResourceBundle.getBundle("config");
 
@@ -50,8 +52,23 @@ public class BackgroundEventController extends TimerTask {
 		if (detectActivate){
 			activeProcesses = new HashMap<Integer, BackgroundEventDetectProcess>();
 			periodicity = new Long(config.getString("event.controller.periodicity"));
+			factory = new BackgroundEventFactory();
+			timer = new Timer();
+			timer.schedule(this, periodicity);
+
+		}
+	}
+
+	private BackgroundEventController(BackgroundEventController controller){
+		detectActivate = controller.detectActivate;
+		if (detectActivate){
+			activeProcesses = controller.activeProcesses;
+			periodicity = controller.periodicity;
+			factory = controller.factory;
+			timer = new Timer();
 			timer.schedule(this, periodicity);
 		}
+
 	}
 	
 	public static BackgroundEventController getInstance(){
@@ -62,23 +79,36 @@ public class BackgroundEventController extends TimerTask {
 	}
 
 	@Override
+	/**
+	 * El primer run debe ser forzado por la aplicacion
+	 * el resto de ejecuciones se planifica segun la periodicidad definida en configuracion
+	 */
 	public void run() {
 		logger.debug("Ejecutando BackgroundEventController");
 	
 		ListEventService listEventService = new ListEventService();
-		Map result = listEventService.execute(null);
+		Transaction transaction = listEventService.getSession().beginTransaction();
+		Map param = new HashMap();
+		param.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
+		Map result = listEventService.execute(param);
 		
 		Collection events = (Collection) result.get(ParamsConst.DATA);
 		// Se lanza la deteccion para los eventos que tienen alguna relacion establecida
+		// y que no se encuentren actualmente en ejecucion
 		for (Iterator iterator = events.iterator(); iterator.hasNext();) {
 			Event event = (Event) iterator.next();
 			Set relations = event.getRelations();
 			if ((activeProcesses.get(event.getId())==null) && (relations!=null) && (relations.size()>0)){
-				//FIXME: lanzar ejecucion del proceso asociado a el evento
-				
+				activeProcesses.put(event.getId(), factory.getProcess(event));
 			}
 		}
+		transaction.commit();
+		new BackgroundEventController(this);
 		logger.debug("Fin BackgroundEventController");
+	}
+
+	public BackgroundEventFactory getFactory() {
+		return factory;
 	}
 
 }
