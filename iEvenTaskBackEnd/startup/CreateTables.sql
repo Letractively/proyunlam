@@ -83,6 +83,7 @@ create table iet_evento (
 	periodicidad int not null,
 	fecha_expiracion datetime,
 	iteraciones int,
+	ejecuciones int,
 	eliminado datetime
 );
 
