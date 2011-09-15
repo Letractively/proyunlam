@@ -101,7 +101,7 @@ public class TaskWindowOld extends Window {
 //						params.put(ParamsConst.FECHAFIN, fecha_fin.getValue());
 						System.out.println("ID_USUARIO: " + responsable.getValue());
 						params.put(ParamsConst.ID_USUARIO, responsable.getValue());
-//						params.put(ParamsConst.FECHAMODIFICACION, fecha_fin.getValue());
+						params.put(ParamsConst.FECHAMODIFICACION, fecha_fin.getValue());
 //						params.put(ParamsConst.ESTADO, fldAdmin.getValue());
 //						params.put(ParamsConst.CUMPLIMIENTO, fldAdmin.getValue());
 //						params.put(ParamsConst.TIPO_TAREA, fldAdmin.getValue());

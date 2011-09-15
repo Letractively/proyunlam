@@ -1,5 +1,12 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
+import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
+
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.util.Margins;
@@ -9,6 +16,8 @@ import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 
@@ -28,6 +37,8 @@ public class TaskWindow extends Window {
 	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
 	public static final Integer GRID_HEIGTH = 250;
 	
+	public static final Integer TOOLBAR_WIDTH = WINDOW_WIDTH -15;
+	public static final Integer TOOLBAR_HEIGTH = 4;
 	// Campos
 	@SuppressWarnings("rawtypes")
 	private final TextField fldName = new TextField();			//nombre de la tarea
@@ -70,10 +81,14 @@ public class TaskWindow extends Window {
 	
 	private void addToolBar() {
 		ToolBar toolBar = new ToolBar();
+		toolBar.setEnableOverflow(false);
+		toolBar.setWidth(TOOLBAR_WIDTH);
+		toolBar.setHeight(TOOLBAR_HEIGTH);
 		toolBar.add(new SaveButton(this));
 		toolBar.add(new CancelButton(this));
 		add(toolBar);
 	}
+	
 	
 	private VerticalPanel getPanelFields() {
 		VerticalPanel verticalPanel = new VerticalPanel();
