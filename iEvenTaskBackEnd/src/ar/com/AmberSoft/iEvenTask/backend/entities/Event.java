@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -24,6 +25,7 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 	private Integer periodicity;
 	private Date expiration;
 	private Integer iterations;
+	private Integer executions;
 	private Set<Relation> relations;
 
 	public Event (){
@@ -71,7 +73,7 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 		this.iterations = iterations;
 	}
 
-	@OneToMany (mappedBy="event")
+	@OneToMany (mappedBy="event", fetch= FetchType.LAZY)
 	public Set<Relation> getRelations() {
 		return relations;
 	}
@@ -80,6 +82,13 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 		this.relations = relations;
 	}
 
+	@Basic @Column (name="ejecuciones")
+	public Integer getExecutions() {
+		return executions;
+	}
 
+	public void setExecutions(Integer executions) {
+		this.executions = executions;
+	}
 	
 }
