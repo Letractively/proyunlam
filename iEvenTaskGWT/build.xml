@@ -51,6 +51,7 @@
 		<copy todir="../iEvenTask/WebContent/WEB-INF/lib/">
 			<fileset dir="../iEvenTaskBackEnd/lib/">
 				<exclude name="**/geronimo*.*"/>
+				<exclude name="**/iEvenTaskBackEnd.jar"/>
 			</fileset>
 		</copy>
 
