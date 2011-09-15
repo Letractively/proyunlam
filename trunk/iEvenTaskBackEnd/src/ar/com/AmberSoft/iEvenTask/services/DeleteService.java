@@ -24,7 +24,7 @@ public abstract class DeleteService extends Service {
 	
 	@Override
 	public Map onExecute(Map params) {
-		Transaction transaction = getSession().beginTransaction();
+		//Transaction transaction = getSession().beginTransaction();
 		Collection ids = (Collection) params.get(ParamsConst.IDS);
 		for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 			Integer id = (Integer) iterator.next();
@@ -32,7 +32,7 @@ public abstract class DeleteService extends Service {
 			entity.setDelete(new Date());
 			getSession().saveOrUpdate(entity);
 		}
-		transaction.commit();
+		//transaction.commit();
 		
 		return null;		
 	}

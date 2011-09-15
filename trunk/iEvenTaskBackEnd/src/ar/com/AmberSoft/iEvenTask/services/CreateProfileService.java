@@ -2,28 +2,35 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.Map;
 
-import org.hibernate.Transaction;
-
-import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Permission;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.util.ParamsConst;
 
-public class CreateProfileService extends Service {
+public class CreateProfileService extends CreateService {
 
 	// Los siguientes IDs tienen que tener relacion con los ids que se encuentran en la tabla de permisos
 	public static String ID_OBJECTIVE = "1";
 	public static String ID_ADMIN = "2";
-	
-	protected void setAttributes(Map params, Profile perfil) {
-		perfil.setName((String) params.get(ParamsConst.NAME));
-		perfil.setConnection((String) params.get(ParamsConst.CONNECTION));
-		perfil.setGroupLDAP((String) params.get(ParamsConst.GROUP));
+
+	@Override
+	public Map onEmulate(Map params) {
+		return null;
+	}
+
+	@Override
+	public Entity getEntity(Map params) {
+		Profile profile = new Profile();
+		profile.setName((String) params.get(ParamsConst.NAME));
+		profile.setConnection((String) params.get(ParamsConst.CONNECTION));
+		profile.setGroupLDAP((String) params.get(ParamsConst.GROUP));
 		
 		Boolean checkObjective = (Boolean) params.get(ParamsConst.CHECK_OBJECTIVE);
 		Boolean checkAdmin = (Boolean) params.get(ParamsConst.CHECK_ADMIN);
 		
-		setPermiso(perfil, checkObjective, CreateProfileService.ID_OBJECTIVE);
-		setPermiso(perfil, checkAdmin, CreateProfileService.ID_ADMIN);
+		setPermiso(profile, checkObjective, CreateProfileService.ID_OBJECTIVE);
+		setPermiso(profile, checkAdmin, CreateProfileService.ID_ADMIN);
+		return profile;
 	}
 
 	public void setPermiso(Profile perfil, Boolean toCheck, String idPermiso) {
@@ -34,23 +41,5 @@ public class CreateProfileService extends Service {
 		}
 	}
 
-	@Override
-	public Map onExecute(Map params) {
-		Profile perfil = new Profile();
-		setAttributes(params, perfil);
-		
-		Transaction transaction = getSession().beginTransaction();
-		
-		getSession().save(perfil);
-		transaction.commit();
-
-		return null;
-	}
-
-	@Override
-	public Map onEmulate(Map params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 }

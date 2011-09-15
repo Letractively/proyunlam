@@ -32,7 +32,7 @@ public abstract class ListService extends Service {
 	public Map onExecute(Map params) {
 		initList(params);
 		
-		getSession().beginTransaction();
+		//getSession().beginTransaction();
 		queryText = new StringBuffer();
 		queryText.append(FROM);
 		queryText.append(getEntity());
@@ -67,7 +67,7 @@ public abstract class ListService extends Service {
 		map.put(ParamsConst.OFFSET, (Integer) params.get(OFFSET));
 		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
 		
-		getSession().getTransaction().commit();
+		//getSession().getTransaction().commit();
 		
 		previousReturnMap(params, map);
 		
