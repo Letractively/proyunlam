@@ -33,6 +33,9 @@ ALTER TABLE iet_evento_archivos
 DROP CONSTRAINT fk_evento_eventoarchivos;
 ALTER TABLE iet_evento_servicios
 DROP CONSTRAINT fk_evento_eventoservicios;
+ALTER TABLE iet_relacion
+DROP CONSTRAINT fk_relacion_evento;
+
 
 DROP TABLE iet_evento_ldap;
 DROP TABLE iet_evento_logs;
@@ -40,8 +43,6 @@ DROP TABLE iet_evento_archivos;
 DROP TABLE iet_evento_servicios;
 DROP TABLE iet_evento;
 
-ALTER TABLE iet_relacion
-DROP CONSTRAINT fk_relacion_evento;
 ALTER TABLE iet_relacion_nueva_tarea
 DROP CONSTRAINT fk_relacion_nueva_tarea_relacion;
 ALTER TABLE iet_relacion_modifica_estado
