@@ -33,7 +33,7 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 		this.id = id;
 	}
 
-	@ManyToOne (fetch=FetchType.LAZY)
+	@ManyToOne (fetch=FetchType.EAGER)
 	@JoinColumn (name="id_evento")
 	public Event getEvent() {
 		return event;

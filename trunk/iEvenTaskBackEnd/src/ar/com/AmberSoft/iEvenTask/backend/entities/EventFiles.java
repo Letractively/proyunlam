@@ -27,5 +27,5 @@ public class EventFiles extends Event {
 	public void setPath(String path) {
 		this.path = path;
 	}
-
+	
 }

@@ -28,5 +28,4 @@ public class EventLogs extends Event {
 		this.patern = patern;
 	}
 	
-	
 }
