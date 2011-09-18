@@ -16,6 +16,7 @@ import com.extjs.gxt.ui.client.event.GridEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.filters.Filter;
@@ -218,5 +219,48 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				});		
 	}
 	
+	/* 
+	 * se agrega este metodo ya que no lo invoco desde un componente windows
+	 */
+	public Grid(LayoutContainer layoutContainer, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {
+		// Se invoca al constructor padre para que se inicialice todo
+		// convenientemente
+		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
+		this.window = window;
+
+		// Se obtiene el loader para indicarle cual es la grilla con la que
+		// trabaja y que el orden de las columnas se establece de forma remota
+		final Loader loader = (Loader) this.getStore().getLoader();
+		loader.setGrid(this);
+		loader.setRemoteSort(Boolean.TRUE);
+
+		// Se establece que los filtros se trabajaran de forma remota
+		filters.setLocal(Boolean.FALSE);
+		this.addPlugin(filters);
+
+		// Establecemos una barra de herramientas y la relacionamos con el
+		// loader actual
+		toolBar = new PagingToolBar(pageSize);
+		toolBar.bind(loader);
+
+		setStateId("pagingGridExample");
+		setStateful(Boolean.TRUE);
+
+		// Se agrega un listener necesario para recargar la informacion de la
+		// grilla cuando se introduce algun filtro
+		addListener(Events.Attach, new Listener<GridEvent>() {
+			public void handleEvent(GridEvent be) {
+				PagingLoadConfig config = new BaseFilterPagingLoadConfig();
+				config.setOffset(0);
+				config.setLimit(pageSize);
+				loader.load(config);
+			}
+		});
+
+		// Habilitamos para que se muestre una mascara mientras se esta cargando
+		// la grilla
+		setLoadMask(Boolean.TRUE);
+
+	}
 	
 }
