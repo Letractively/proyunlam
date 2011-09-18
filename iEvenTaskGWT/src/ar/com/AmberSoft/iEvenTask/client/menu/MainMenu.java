@@ -11,7 +11,7 @@ public class MainMenu extends MenuBar {
 	
 	public MainMenu(){
 		super();
-		setSize(IEvenTask.appWindowWidth.toString(), "24px");
+		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.DEFAULT_MENU_HEIGTH.toString());
 		
 		mnuFile = new MenuBarItem("Archivo", new FileMenu());
 		this.add(mnuFile);
