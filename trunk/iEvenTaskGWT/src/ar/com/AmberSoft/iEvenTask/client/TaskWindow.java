@@ -37,8 +37,7 @@ public class TaskWindow extends Window {
 	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
 	public static final Integer GRID_HEIGTH = 250;
 	
-	public static final Integer TOOLBAR_WIDTH = WINDOW_WIDTH -15;
-	public static final Integer TOOLBAR_HEIGTH = 4;
+
 	// Campos
 	@SuppressWarnings("rawtypes")
 	private final TextField fldName = new TextField();			//nombre de la tarea
@@ -50,22 +49,32 @@ public class TaskWindow extends Window {
 	private final TextField fldDescripcion = new TextField(); 	//descripcion
 	@SuppressWarnings("rawtypes")
 	private final TextField fldResponsable = new TextField(); 	//responsable
+	@SuppressWarnings("unchecked")
+
 	
 	public TaskWindow() {
 		super();
 		initialize();
-		addToolBar();
+		
 		
 		TabPanel tabPanel = new TabPanel();
+		tabPanel.setHeight(50);
 		TabItem tbtmDetalles = new TabItem("Detalles");
+		tbtmDetalles.setHeight(50);
+		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		tabPanel.add(tbtmDetalles);
+		
 		tbtmDetalles.add(horizontalPanel);
-		tbtmDetalles.setHeight(DETAILS_HEIGTH.toString());
+		tabPanel.add(tbtmDetalles);
+		tbtmDetalles.setSize("50", "50");
+		
 
 		horizontalPanel.add(getPanelFields());
 		
-		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
+		add(tabPanel);
+//		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));		
+		
+		addToolBar();
 
 	}
 	/**
@@ -82,8 +91,6 @@ public class TaskWindow extends Window {
 	private void addToolBar() {
 		ToolBar toolBar = new ToolBar();
 		toolBar.setEnableOverflow(false);
-		toolBar.setWidth(TOOLBAR_WIDTH);
-		toolBar.setHeight(TOOLBAR_HEIGTH);
 		toolBar.add(new SaveButton(this));
 		toolBar.add(new CancelButton(this));
 		add(toolBar);
@@ -119,7 +126,7 @@ public class TaskWindow extends Window {
 		
 		return verticalPanel;
 	}
-	
+
 	public void beforeUpdate(BaseModel baseModel) {
 		
 	}
