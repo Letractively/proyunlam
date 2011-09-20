@@ -62,6 +62,7 @@ public class LoginWindow extends Window {
 			}
 		});
 		fldUser.setAllowBlank(Boolean.FALSE);
+		
 		verticalPanel_1.add(fldUser);
 		horizontalPanel.add(verticalPanel_1);
 		frmLogin.add(horizontalPanel);
@@ -100,7 +101,7 @@ public class LoginWindow extends Window {
 		timer = new Timer() {
 			@Override
 			public void run() {
-				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Debe colocar usuario y cotraseña.\nLuego presione enter.");
+				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Debe colocar usuario y cotrase\u00f1a.\nLuego presione enter.");
 				crearTimer(periodicidad);
 			}
 		};
@@ -121,7 +122,8 @@ public class LoginWindow extends Window {
 
 				@Override
 				public void onFailure(Throwable caught) {
-					Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o contraseña incorrectos.");
+					Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o contrase\u00f1a incorrectos.");
+					Info.display("Message: " + caught.getMessage(), "Cause" + caught.getCause());
 					//TODO: Se colocan las siguientes dos lineas para cuando esta caido el servidor de dominios
 					loginWindow.hide();
 					timer.cancel();
@@ -137,9 +139,6 @@ public class LoginWindow extends Window {
 			} else {
 				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Faltan completar campos obligatorios.");
 			}
-		
 		}
 	}
-
-
 }
