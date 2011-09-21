@@ -177,6 +177,7 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
 		Iterator it = listStore.getModels().iterator();
 		while (it.hasNext()) {
 			ModelData mdAux = (ModelData) it.next();
+			Context.getInstance().addDetailExecution("Comparando " + key + " con " + mdAux.get("key"));
 			if (key.equals(mdAux.get("key"))){
 				modelData = mdAux;
 			}
