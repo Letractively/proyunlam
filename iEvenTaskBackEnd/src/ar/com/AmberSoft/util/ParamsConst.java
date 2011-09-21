@@ -44,6 +44,7 @@ public abstract class ParamsConst {
 	public static final String EXPIRATION = "expiration";
 	public static final String ITERATIONS = "iterations";
 	public static final String PATH = "path";
+	public static final String IS_DIRECTORY = "isDirectory";
 	public static final String PATERN = "patern";
 	public static final String CONTROL_TYPE = "controlType";
 	public static final String HOST = "host";
