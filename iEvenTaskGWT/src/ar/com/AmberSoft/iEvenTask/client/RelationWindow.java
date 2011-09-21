@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
-import ar.com.AmberSoft.iEvenTask.client.validaciones.IntegerValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -27,11 +26,8 @@ import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
-import com.extjs.gxt.ui.client.widget.form.DateField;
-import com.extjs.gxt.ui.client.widget.form.FileUploadField;
-import com.extjs.gxt.ui.client.widget.form.TextArea;
-import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
@@ -56,9 +52,9 @@ public class RelationWindow extends Window {
 	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
 	public static final Integer GRID_HEIGTH = 250;
 	
+	public static final String EVENT_FILES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles";
 	public static final String EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";
 	public static final String EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
-	public static final String EVENT_FILES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles";
 	public static final String EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventServices";
 
 	private final Grid grid = new Grid(this, ServiceNameConst.LIST_RELATION, getGridConfig(), 10);
@@ -232,36 +228,7 @@ public class RelationWindow extends Window {
 			@Override
 			public void selectionChanged(SelectionChangedEvent se) {
 				ModelData modelData = se.getSelectedItem();
-				if (modelData!=null){
-					String serviceKey = modelData.get("key");
-
-					Map params = new HashMap<String, String>();
-					params.put(ServiceNameConst.SERVICIO, serviceKey);
-					DispatcherUtil.getDispatcher().execute(params,
-							new AsyncCallback() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									Info.display(
-											"iEvenTask",
-											"No se han podido consultar el listado de eventos.");
-								}
-
-								@Override
-								public void onSuccess(Object result) {
-									fldEvent.clear();
-									ListStore listStoreEvent = new ListStore();
-									Map mapResult = (Map) result;
-									Collection data = (Collection) mapResult.get(ParamsConst.DATA);
-									for (Iterator iterator = data.iterator(); iterator.hasNext();) {
-										Map event = (Map) iterator.next();
-										listStoreEvent.add(getModelData(event.get(ParamsConst.ID).toString(), (String)event.get(ParamsConst.NAME)));
-									}
-									fldEvent.setStore(listStoreEvent);
-									
-								}
-							});
-				}
+				UpdateFldEvent(modelData, null);
 			}
 		});
 		
@@ -292,6 +259,48 @@ public class RelationWindow extends Window {
 				});
 		
 		return verticalPanel;
+	}
+	
+	/**
+	 * Actualiza la informacion del combo de eventos
+	 * en funcion a el model data que supone sacado del combo de tipos de eventos
+	 * @param modelData
+	 */
+	public void UpdateFldEvent(ModelData modelData, final UpdateFldEventListener eventListener) {
+		if (modelData!=null){
+			String serviceKey = modelData.get("key");
+
+			Map params = new HashMap<String, String>();
+			params.put(ServiceNameConst.SERVICIO, serviceKey);
+			DispatcherUtil.getDispatcher().execute(params,
+					new AsyncCallback() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Info.display(
+									"iEvenTask",
+									"No se han podido consultar el listado de eventos.");
+						}
+
+						@Override
+						public void onSuccess(Object result) {
+							fldEvent.clear();
+							ListStore listStoreEvent = new ListStore();
+							Map mapResult = (Map) result;
+							Collection data = (Collection) mapResult.get(ParamsConst.DATA);
+							for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+								Map event = (Map) iterator.next();
+								listStoreEvent.add(getModelData(event.get(ParamsConst.ID).toString(), (String)event.get(ParamsConst.NAME)));
+							}
+							fldEvent.setStore(listStoreEvent);
+							if (eventListener!=null){
+								eventListener.execute();
+							}
+							
+						}
+					}
+			);
+		}
 	}
 	
 	public void setVisiblePanel(String key){
@@ -403,16 +412,20 @@ public class RelationWindow extends Window {
 
 	@Override
 	public void beforeUpdate(BaseModel baseModel) {
-		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+		final Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 
 		if (actual != null) {
 			
 			relationWindowOption = RelationWindowOptionFactory.getInstance().getRelationWindowOption((String)actual.get(ParamsConst.CLASS), this);
-			
 			setCombo(getFldEventType(), (String) entityServiceRelation.get((String)((Map)actual.get("event")).get(ParamsConst.CLASS)));
-			setCombo(getFldEvent(), ((Map)actual.get("event")).get(ParamsConst.ID).toString());
-			setCombo(getFldAction(), (String)(actual.get(ParamsConst.CLASS)));
+			UpdateFldEvent(getFldEventType().getValue(), new UpdateFldEventListener() {
+				@Override
+				public void execute() {
+					setCombo(getFldEvent(), ((Map)actual.get("event")).get(ParamsConst.ID).toString());
+				}
+			});
 			
+			setCombo(getFldAction(), (String)(actual.get(ParamsConst.CLASS)));
 			relationWindowOption.beforeUpdate(actual);
 
 		}
