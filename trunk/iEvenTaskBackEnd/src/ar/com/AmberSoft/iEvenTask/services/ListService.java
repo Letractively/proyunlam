@@ -32,7 +32,6 @@ public abstract class ListService extends Service {
 	public Map onExecute(Map params) {
 		initList(params);
 		
-		//getSession().beginTransaction();
 		queryText = new StringBuffer();
 		queryText.append(FROM);
 		queryText.append(getEntity());
@@ -61,13 +60,10 @@ public abstract class ListService extends Service {
 		setFiltersValuesInQuery(params, queryCount);
 		
 		Map map = new HashMap();
-		Collection list = new ArrayList();
 		map.put(ParamsConst.DATA, query.list());
 		map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
 		map.put(ParamsConst.OFFSET, (Integer) params.get(OFFSET));
 		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
-		
-		//getSession().getTransaction().commit();
 		
 		previousReturnMap(params, map);
 		
