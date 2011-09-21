@@ -10,7 +10,7 @@ public class RelationWindowOptionCreateTask extends RelationWindowOption {
 	@Override
 	public void onSave(Map params) {
 		params.put(ParamsConst.NAME, relationWindow.getFldName().getValue());
-		params.put(ParamsConst.USER, relationWindow.getFldName().getValue());
+		params.put(ParamsConst.USER, relationWindow.getFldUser().getValue());
 		if (relationWindow.getWindowState().equals(State.UPDATE_STATE)) {
 			setId(params);
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_RELATION_CREATE_TASK);
