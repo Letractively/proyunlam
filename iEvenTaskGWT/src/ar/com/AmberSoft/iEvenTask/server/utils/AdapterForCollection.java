@@ -12,15 +12,19 @@ public class AdapterForCollection implements Compatibilizable {
 		if (actual instanceof Collection) {
 			Collection update = new ArrayList();
 			Collection actualMap = (Collection) actual;
-			Iterator it = actualMap.iterator();
-			while (it.hasNext()) {
-				Object fieldValue = (Object) it.next();
-				GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(
-						fieldValue);
-				Compatibilizable compatibilizable = evaluatorTypes
-						.getCompatibilizableAdapter();
-				fieldValue = compatibilizable.adapt(fieldValue);
-				update.add(fieldValue);
+			try {
+				Iterator it = actualMap.iterator();
+				while (it.hasNext()) {
+					Object fieldValue = (Object) it.next();
+					GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(
+							fieldValue);
+					Compatibilizable compatibilizable = evaluatorTypes
+							.getCompatibilizableAdapter();
+					fieldValue = compatibilizable.adapt(fieldValue);
+					update.add(fieldValue);
+				}
+			} catch (Exception e){
+				
 			}
 			return update;
 		}
