@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +68,52 @@ public class Context {
 		}
 		throw new WindowNotRegisteredException();
 	}
+	
+	/**
+	 * Muestra una ventana
+	 * Si ya fue creada previamente muestra dicha ventana
+	 * Sino la crea
+	 * @param windowClass
+	 */
+	public void windowShow(Window window){
+		Window windowContextRegistered = window;
+		
+		try {
+			context.registerWindow(windowContextRegistered);
+		} catch (WindowPreviouslyRegisteredException e){
+			windowContextRegistered = Context.getInstance().getWindowInstance(window.getClass());
+		}
+		windowContextRegistered.show();
+
+	}
+	
+	/**
+	 * Retorna una referencia a la ventana de detalles de ejecucion
+	 * @return
+	 */
+	public ExecutionDetailWindow getExecutionDetailWindow(){
+		ExecutionDetailWindow detailWindow = new ExecutionDetailWindow();
+		try {
+			context.registerWindow(detailWindow);
+		} catch (WindowPreviouslyRegisteredException e){
+			detailWindow = (ExecutionDetailWindow) Context.getInstance().getWindowInstance(detailWindow.getClass());
+		}
+		return detailWindow;
+	}
+	
+
+	/**
+	 * Agrega un detalle de ejecucion a la ventana correspondiente
+	 * @param detail
+	 */
+	public void addDetailExecution(String detail){
+		ExecutionDetailWindow detailWindow = getExecutionDetailWindow();
+		detailWindow.addDetailExecution(new Date(), detail);
+	}
+	
+		
+	
+	
 	
 	
 }
