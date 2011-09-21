@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.client.utils.TreeGrid;
 import ar.com.AmberSoft.iEvenTask.client.validaciones.IntegerValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -37,6 +38,7 @@ import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
+import com.extjs.gxt.ui.client.widget.treegrid.TreeGridCellRenderer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
@@ -338,6 +340,11 @@ public class EventWindow extends Window {
 		fldControlType.setTriggerAction(TriggerAction.ALL); 
 		
 		vPanel.setVisible(Boolean.FALSE);
+		
+		TreeGrid treeGrid = new TreeGrid(ServiceNameConst.BROWSE_FILE, getTreeGridConfig());
+		bodyCaption.add(treeGrid);
+
+	    
 	}
 
 	private void initializeServiciosPanel() {
@@ -383,6 +390,21 @@ public class EventWindow extends Window {
 
 		return configs;
 	}
+	
+	/**
+	 * Retorna la configuracion de la grilla de archivos
+	 */
+	private List getTreeGridConfig() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+
+		// Se agrega esta columna para mantener el identificador de los perfiles
+		ColumnConfig clmncnfgPath = new ColumnConfig(ParamsConst.PATH, ParamsConst.PATH, 300);
+		clmncnfgPath.setRenderer(new TreeGridCellRenderer());
+		configs.add(clmncnfgPath);
+
+		return configs;
+	}
+
 
 	@Override
 	public void onDelete() {
