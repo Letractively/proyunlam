@@ -1,7 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.server;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -9,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
 import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
+import ar.com.AmberSoft.iEvenTask.events.BackgroundEventController;
 import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
 import ar.com.AmberSoft.iEvenTask.server.utils.GWTCompatibilityEvaluatorTypes;
 import ar.com.AmberSoft.iEvenTask.server.utils.Tools;
@@ -36,6 +35,11 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 	public Map execute(Map params) throws IllegalArgumentException {
 		
 		logger.debug("Inicio ServiceDispatcher");
+		
+		//FIXME: Solo de prueba, luego colocar en el login y en el save de relaciones (evaluar si hace falta en el save)
+		try{
+			BackgroundEventController.getInstance();
+		}catch(Exception e){e.printStackTrace();}
 		
 		if ((params==null)||(params.get(ServiceNameConst.SERVICIO)==null)){
 			throw new ServiceNameNotFoundException();
@@ -89,14 +93,8 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		try {
 			type = Class.forName(serviceName);
 		} catch (ClassNotFoundException e) {
-			// Si la clase no existe, es probable que se encuentre ejecutando el APP ENGINE
-			// Con lo cual se buscará un emulador del servicio
-			String onlyName = serviceName.substring(serviceName.lastIndexOf("."));
-			try {
-				type = Class.forName(EMULATE_PACKAGE + onlyName);
-			} catch (ClassNotFoundException e1) {
-				throw new ServiceClassNotFoundException();
-			}
+			logger.error(Tools.getStackTrace(e));
+			throw new ServiceClassNotFoundException();
 		}
 		return type;
 	}
