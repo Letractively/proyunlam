@@ -16,7 +16,7 @@ public abstract class ParamsConst {
 	public static final String OFFSET = "OFFSET";
 	public static final String TOTAL_COUNT = "TOTAL_COUNT";
 	public static final String LIST = "LIST";
-	public static final String USER = "USER";
+	public static final String USER = "user";
 	public static final String PASSWORD = "PASSWORD";
 	public static final String SELECT = "SELECT";
 	
@@ -42,6 +42,7 @@ public abstract class ParamsConst {
 	public static final String EXPIRATION = "expiration";
 	public static final String ITERATIONS = "iterations";
 	public static final String PATH = "path";
+	public static final String IS_DIRECTORY = "isDirectory";
 	public static final String PATERN = "patern";
 	public static final String CONTROL_TYPE = "controlType";
 	public static final String HOST = "host";
@@ -53,5 +54,8 @@ public abstract class ParamsConst {
 	public static final String TO_STATE = "toState";
 	
 	public static final String EVENT = "event";
+	
+	public static final String DATE = "date";
+	public static final String DETAIL = "detail";
 	
 }
