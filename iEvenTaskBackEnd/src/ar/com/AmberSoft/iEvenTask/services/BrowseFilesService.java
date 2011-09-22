@@ -12,37 +12,67 @@ import ar.com.AmberSoft.util.ParamsConst;
 
 public class BrowseFilesService extends Service {
 
+	public static final String COMPUTER = "COMPUTER";
+	
 	@Override
 	public Map onExecute(Map params) {
+
+		Collection<File> files = new ArrayList<File>();
 		
-		Collection<File> roots = Arrays.asList(File.listRoots());
+		String folder = (String) params.get(ParamsConst.FOLDER);
 		
-		Map map = new HashMap();
-		map.put(ParamsConst.DATA, null);
+		if (folder==null){
+			files.add(new File(COMPUTER));
+		} else {
+			if (COMPUTER.equals(folder)){
+				files = Arrays.asList(File.listRoots());
+			} else {
+				File directory = new File(folder);
+				files = Arrays.asList(directory.listFiles());
+			}
+		}
 	
-		/*map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
-		map.put(ParamsConst.OFFSET, (Integer) params.get(OFFSET));*/
-		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
+		Collection cFiles = transformFiles(files);
+
+		Map map = new HashMap();
+		map.put(ParamsConst.DATA, cFiles);
+	
+		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE); 
 
 		return map;
 	}
 
 	@Override
 	public Map onEmulate(Map params) {
-		Collection<File> roots = new ArrayList<File>();
+		Collection<File> files = new ArrayList<File>();
 		
-		roots.add(new File("C:\\"));
-		roots.add(new File("D:\\"));
-		roots.add(new File("E:\\"));
+		String folder = (String) params.get(ParamsConst.FOLDER);
+		
+		if (folder==null){
+			files.add(new File(COMPUTER));
+		} else {
+			files.add(new File("C:\\" ));
+			files.add(new File("D:\\"));
+			files.add(new File("E:\\"));	
+		}
 	
-		Collection files = transformFiles(roots);
+		Collection cFiles = transformFiles(files);
+		Iterator it = cFiles.iterator();
+		int index = 1;
+		while (it.hasNext()) {
+			Map dir = (Map) it.next();
+			if (index < 3){
+				dir.put(ParamsConst.IS_DIRECTORY, Boolean.TRUE);
+			} else {
+				dir.put(ParamsConst.IS_DIRECTORY, Boolean.FALSE);
+			}
+			index++;
+		}
 		
 		Map map = new HashMap();
-		map.put(ParamsConst.DATA, files);
+		map.put(ParamsConst.DATA, cFiles);
 	
-		/*map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
-		map.put(ParamsConst.OFFSET, (Integer) params.get(OFFSET));*/
-		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
+		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE); 
 
 		return map;
 	}
@@ -54,7 +84,11 @@ public class BrowseFilesService extends Service {
 			File file = (File) it.next();
 			Map actual = new HashMap();
 			actual.put(ParamsConst.PATH, file.getPath());
-			//actual.put(ParamsConst.IS_DIRECTORY, file.isDirectory());
+			if (!COMPUTER.equals(file.getPath())){
+				actual.put(ParamsConst.IS_DIRECTORY, file.isDirectory());
+			} else {
+				actual.put(ParamsConst.IS_DIRECTORY, Boolean.TRUE);
+			}
 			files.add(actual);
 		}
 		return files;
