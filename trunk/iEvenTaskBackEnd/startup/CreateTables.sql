@@ -107,7 +107,8 @@ ADD CONSTRAINT fk_evento_eventologs FOREIGN KEY (id_evento) REFERENCES iet_event
 create table iet_evento_archivos (
 	id_evento int primary key,
 	tipo int not null,
-	ruta varchar(255) not null
+	ruta varchar(255) not null,
+	modificacion datetime
 );
 
 ALTER TABLE iet_evento_archivos 
