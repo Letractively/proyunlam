@@ -5,8 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.extjs.gxt.ui.client.data.BaseModel;
+import ar.com.AmberSoft.iEvenTask.client.Context;
+import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
+
 import com.extjs.gxt.ui.client.data.BaseTreeLoader;
+import com.extjs.gxt.ui.client.data.BaseTreeModel;
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.data.TreeLoadEvent;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -16,14 +19,19 @@ public class TreeLoader extends BaseTreeLoader {
 
 	@Override
 	protected void onLoadSuccess(Object loadConfig, List result) {
-		//FIXME: Transformar result en objetos de tipo modeldata
-		
 		ArrayList list = new ArrayList();
 		Iterator itList = result.iterator();
 		while (itList.hasNext()) {
 			Map actual = (Map) itList.next();
 			ColumnModel model = ((TreeGridProxy)this.getProxy()).getCallback().getGrid().getColumnModel();
-			BaseModel baseModel = new BaseModel();
+			BaseTreeModel baseModel;
+			if (Boolean.TRUE.equals(actual.get(ParamsConst.IS_DIRECTORY))) {
+				Context.getInstance().addDetailExecution("Instanciando Folder");
+				baseModel = new Folder();
+			} else {
+				Context.getInstance().addDetailExecution("Instanciando Music");
+				baseModel = new Music();
+			}
 			List columns = model.getColumns();
 			Iterator it = columns.iterator();
 			while (it.hasNext()) {

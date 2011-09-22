@@ -2,9 +2,13 @@ package ar.com.AmberSoft.iEvenTask.client.utils;
 
 import java.util.List;
 
+import ar.com.AmberSoft.iEvenTask.client.Window;
 import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
+import com.extjs.gxt.ui.client.event.BaseEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 
@@ -15,7 +19,7 @@ public class TreeGrid extends
 		super(new TreeStore(new TreeLoader(serviceName, null)),  new ColumnModel(configs));
 		setBorders(true);  
 	    getStyle().setLeafIcon(Resources.ICONS.music());  
-	    setAutoExpandColumn(ParamsConst.PATH);  
+	    //setAutoExpandColumn(ParamsConst.PATH);  
 	    setTrackMouseOver(false);
 	    
 	    // Se obtiene el loader para indicarle cual es la grilla con la que
@@ -29,7 +33,8 @@ public class TreeGrid extends
 		// Habilitamos para que se muestre una mascara mientras se esta cargando
 		// la grilla
 		setLoadMask(Boolean.TRUE);
-	    
+		
 	}
+	
 
 }
