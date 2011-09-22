@@ -18,8 +18,10 @@ import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.data.ModelData;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
@@ -27,10 +29,13 @@ import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
+import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
+import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -44,10 +49,10 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 
 public class EventWindow extends Window {
 
-	public static final Integer WINDOW_WIDTH = 665;
+	public static final Integer WINDOW_WIDTH = 800;
 	public static final Integer WINDOW_HEIGTH = 470;
 
-	public static final Integer FIELD_WIDTH = 150;
+	public static final Integer FIELD_WIDTH = 200;
 	public static final Integer LABEL_WIDTH = 150;
 	
 	public static final Integer DETAILS_HEIGTH = 72;
@@ -58,6 +63,9 @@ public class EventWindow extends Window {
 	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
 	public static final Integer GRID_HEIGTH = 250;
 
+	public static final Integer TREE_GRID_WIDTH = 300;
+	public static final Integer TREE_GRID_HEIGTH = 100;
+	
 	// Campos
 	private final TextField fldName = new TextField();
 	private final TextField fldPeriodicity = new TextField();
@@ -78,7 +86,9 @@ public class EventWindow extends Window {
 	private final TextArea fldPatern = new TextArea();
 	// Campos para Archivos
 	private final ComboBox fldControlType = new ComboBox();
-	private final FileUploadField fldPathFields = new FileUploadField();
+	private final TextField fldPath = new TextField();
+	private final Button btnPath = new Button("Buscar...");
+	
 	// Campos para Servicios
 	private final TextField fldHost = new TextField();
 	private final TextField fldPort = new TextField();
@@ -89,7 +99,10 @@ public class EventWindow extends Window {
 	 */
 	private EventWindowOption eventWindowOption;
 	
-
+	public TextField getFldPath() {
+		return fldPath;
+	}
+	
 	public Grid getGrid() {
 		return grid;
 	}
@@ -144,10 +157,6 @@ public class EventWindow extends Window {
 
 	public ComboBox getFldControlType() {
 		return fldControlType;
-	}
-
-	public FileUploadField getFldPathFields() {
-		return fldPathFields;
 	}
 
 	public TextField getFldHost() {
@@ -325,11 +334,20 @@ public class EventWindow extends Window {
 
 		VerticalPanel bodyCaption = new VerticalPanel();
 		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", FIELD_WIDTH, LABEL_WIDTH));
-		bodyCaption.add(getFieldHorizontalLine(fldPathFields, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
+		bodyCaption.add(getFieldHorizontalLine(fldPath, btnPath, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 		
 		fldControlType.setAllowBlank(Boolean.FALSE);
-		fldPathFields.setAllowBlank(Boolean.FALSE);
+		fldPath.setAllowBlank(Boolean.FALSE);
+		
+		btnPath.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				BrowseFilesModalWindow modal = new BrowseFilesModalWindow(fldPath);
+				modal.show();
+			}
+		});
 		
 		ListStore listStore = new ListStore();
 		listStore.add(getModelData("1", "Creacion"));
@@ -341,11 +359,33 @@ public class EventWindow extends Window {
 		
 		vPanel.setVisible(Boolean.FALSE);
 		
-		TreeGrid treeGrid = new TreeGrid(ServiceNameConst.BROWSE_FILE, getTreeGridConfig());
-		bodyCaption.add(treeGrid);
-
-	    
+		//TreeGrid treeGrid = new TreeGrid(ServiceNameConst.BROWSE_FILE, getTreeGridConfig());
+		//bodyCaption.add(treeGrid);
 	}
+	
+	/**
+	 * Genera un panel horizontal con una etiqueta y el campo correspondiente
+	 * @param field
+	 * @param labelText
+	 * @param fieldWith
+	 * @param labelWidth
+	 * @return
+	 */
+	protected HorizontalPanel getFieldHorizontalLine(Field field, Button button, String labelText, Integer fieldWith, Integer labelWidth) {
+		HorizontalPanel fieldHorizontalLine = new HorizontalPanel();
+		fieldHorizontalLine.setWidth(new Integer(fieldWith + labelWidth + EXTRA_WIDTH));
+		LabelField labelField = new LabelField(labelText);
+		fieldHorizontalLine.add(labelField);
+		labelField.setWidth(labelWidth);
+		fieldHorizontalLine.add(field);
+		// Realiza la validacion del campo cuando pierde el foco
+		field.setAutoValidate(Boolean.TRUE);
+		field.setValidateOnBlur(Boolean.TRUE);
+		field.setWidth(fieldWith);
+		fieldHorizontalLine.add(button);
+		return fieldHorizontalLine;
+	}
+	 
 
 	private void initializeServiciosPanel() {
 		VerticalPanel vPanel = this.vPanelServicios;
@@ -500,5 +540,6 @@ public class EventWindow extends Window {
 			return super.isValid();
 		}
 	}
+	
 
 }

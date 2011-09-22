@@ -12,7 +12,7 @@ public class EventWindowOptionFiles extends EventWindowOption {
 	@Override
 	public void onSave(Map params) {
 		params.put(ParamsConst.CONTROL_TYPE, ((ModelData)eventWindow.getFldControlType().getValue()).get("key"));
-		params.put(ParamsConst.PATH, eventWindow.getFldPathFields().getValue());
+		params.put(ParamsConst.PATH, eventWindow.getFldPath().getValue());
 		if (eventWindow.getWindowState().equals(State.UPDATE_STATE)) {
 			setId(params);
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_EVENT_FILES);
@@ -32,7 +32,7 @@ public class EventWindowOptionFiles extends EventWindowOption {
 	@Override
 	public void beforeUpdate(Map actual) {
 		eventWindow.setCombo(eventWindow.getFldControlType(), actual.get(ParamsConst.CONTROL_TYPE).toString());
-		eventWindow.getFldPathFields().setValue((String) actual.get(ParamsConst.PATH));
+		eventWindow.getFldPath().setValue((String) actual.get(ParamsConst.PATH));
 		eventWindow.setCombo(eventWindow.getFldType(), (String)actual.get(ParamsConst.CLASS));
 		setVisiblePanel();
 	}
@@ -40,7 +40,7 @@ public class EventWindowOptionFiles extends EventWindowOption {
 	@Override
 	public Boolean isValid() {
 		Boolean valid1 = eventWindow.getFldControlType().isValid();
-		Boolean valid2 = eventWindow.getFldPathFields().isValid();
+		Boolean valid2 = eventWindow.getFldPath().isValid();
 		return valid1 && valid2;
 	}
 
