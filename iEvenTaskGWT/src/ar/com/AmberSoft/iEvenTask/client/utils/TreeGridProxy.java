@@ -57,11 +57,10 @@ public class TreeGridProxy extends RpcProxy {
 
 	
 	@Override
-	protected void load(Object loadConfig, AsyncCallback proxyCallback) {
+	protected void load(Object folder, AsyncCallback proxyCallback) {
 
-		if (loadConfig instanceof BaseFilterPagingLoadConfig) {
-			BaseFilterPagingLoadConfig config = (BaseFilterPagingLoadConfig) loadConfig;
-			params.putAll(config.getProperties());
+		if (folder!=null){
+			params.put(ParamsConst.FOLDER, ((Folder)folder).get(ParamsConst.PATH));
 		}
 		callback.setProxyCallback(proxyCallback);
 		DispatcherUtil.getDispatcher().execute(params, callback);
