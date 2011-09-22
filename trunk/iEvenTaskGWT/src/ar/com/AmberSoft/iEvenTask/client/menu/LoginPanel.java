@@ -28,6 +28,10 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.extjs.gxt.ui.client.Style.IconAlign;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.extjs.gxt.ui.client.Style.VerticalAlignment;
+import com.extjs.gxt.ui.client.Style.ButtonArrowAlign;
 
 public class LoginPanel extends LayoutContainer {
 	
@@ -47,7 +51,7 @@ public class LoginPanel extends LayoutContainer {
 	TextField textUsuario = new TextField();
 	@SuppressWarnings("rawtypes")
 	TextField textPassword = new TextField();
-	Timer timer;
+//	Timer timer;
 	
 	public LoginPanel() {
 		super();
@@ -74,11 +78,11 @@ public class LoginPanel extends LayoutContainer {
 		verticalPanel.setWidth(VERTICAL_PANEL_WIDTH);
 		horizontalPanelUsuario.add(verticalPanel);
 		
-		textUsuario.addKeyListener(new KeyListener() {
-			public void componentKeyPress(ComponentEvent event) {
-				presionoEnter(event);
-			}
-		});
+//		textUsuario.addKeyListener(new KeyListener() {
+//			public void componentKeyPress(ComponentEvent event) {
+//				presionoEnter(event);
+//			}
+//		});
 		textUsuario.setAllowBlank(Boolean.FALSE);
 		textUsuario.setWidth(TEXT_BOX_WIDTH);
 		verticalPanel_1.add(textUsuario);
@@ -104,11 +108,11 @@ public class LoginPanel extends LayoutContainer {
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
 		
 		textPassword = new TextField();
-		textPassword.addKeyListener(new KeyListener() {
-			public void componentKeyPress(ComponentEvent event) {
-				presionoEnter(event);
-			}
-		});
+//		textPassword.addKeyListener(new KeyListener() {
+//			public void componentKeyPress(ComponentEvent event) {
+//				presionoEnter(event);
+//			}
+//		});
 		textPassword.setAllowBlank(Boolean.FALSE);
 		textPassword.setPassword(true);
 
@@ -122,43 +126,15 @@ public class LoginPanel extends LayoutContainer {
 		horizontalPanelPassword.setHeight(HORIZONTAL_PANEL_HEIGTH);
 		mainLoginPanel.add(horizontalPanelPassword);
 		
-		HorizontalPanel horizontalPanelBotones = new HorizontalPanel();
-		
-		VerticalPanel verticalPanel_4 = new VerticalPanel();
-		
-		Button btnCancelar = new Button("Cancelar");
-		btnCancelar.addSelectionListener(new SelectionListener<ButtonEvent>(){
-			@Override
-			public void componentSelected(ButtonEvent ce)
-			{
-				accionCancelar();
-			}});
-		btnCancelar.setWidth(BUTTON_WIDTH);
-		TableData td_btnCancelar = new TableData();
-		td_btnCancelar.setHorizontalAlign(HorizontalAlignment.CENTER);
-		verticalPanel_4.add(btnCancelar, td_btnCancelar);
-		verticalPanel_4.setWidth(VERTICAL_PANEL_WIDTH);
-		TableData td_verticalPanel_4 = new TableData();
-		td_verticalPanel_4.setHorizontalAlign(HorizontalAlignment.CENTER);
-		horizontalPanelBotones.add(verticalPanel_4, td_verticalPanel_4);
-		
-		VerticalPanel verticalPanel_5 = new VerticalPanel();
-		
 		Button btnIngresar = new Button("Ingresar");
+		mainLoginPanel.add(btnIngresar, new FormData("100%"));
 		btnIngresar.addSelectionListener(new SelectionListener<ButtonEvent>(){
 			@Override
 			public void componentSelected(ButtonEvent ce)
 			{
-				accionIngresar(textUsuario.getValue().toString(),textPassword.getValue().toString());
+				presionoEnter(ce);
 			}});
 		btnIngresar.setWidth(BUTTON_WIDTH);
-		verticalPanel_5.add(btnIngresar);
-		verticalPanel_5.setWidth(VERTICAL_PANEL_WIDTH);
-		TableData td_verticalPanel_5 = new TableData();
-		td_verticalPanel_5.setHorizontalAlign(HorizontalAlignment.CENTER);
-		horizontalPanelBotones.add(verticalPanel_5, td_verticalPanel_5);
-		horizontalPanelBotones.setHeight(HORIZONTAL_PANEL_HEIGTH);
-		mainLoginPanel.add(horizontalPanelBotones);
 
 		setLayout(new CenterLayout());
 		this.add(mainLoginPanel);
@@ -167,63 +143,56 @@ public class LoginPanel extends LayoutContainer {
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private void presionoEnter(ComponentEvent event) {
 		
-		if (event.getKeyCode() == KeyCodes.KEY_ENTER){
-			
-			if (mainLoginPanel.isValid()) {
-			
-			Map params = new HashMap<String,String>();
-			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
-			params.put(ParamsConst.USER, textUsuario.getValue());
-			params.put(ParamsConst.PASSWORD, textPassword.getValue());
-			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+		if (mainLoginPanel.isValid()) {
+		
+		Map params = new HashMap<String,String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
+		params.put(ParamsConst.USER, textUsuario.getValue());
+		params.put(ParamsConst.PASSWORD, textPassword.getValue());
+		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
 
-				@Override
-				public void onFailure(Throwable caught) {
-					Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o contrase\u00f1a incorrectos.");
-					Info.display("Message: " + caught.getMessage(), "Cause" + caught.getCause());
-					//TODO: Se colocan las siguientes dos lineas para cuando esta caido el servidor de dominios
-					timer.cancel();
-				}
-
-				@Override
-				public void onSuccess(Object result) {
-					Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Bienvenido " + textUsuario.getValue());
-					timer.cancel();
-				}
-			});
-			} else {
-				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Faltan completar campos obligatorios.");
-			}
-		}
-	}
-	
-	private void crearTimer(final int periodicidad) {
-		timer = new Timer() {
 			@Override
-			public void run() {
-				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Debe colocar usuario y cotrase\u00f1a.\nLuego presione enter.");
-				crearTimer(periodicidad);
+			public void onFailure(Throwable caught) {
+				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o contrase\u00f1a incorrectos.");
+				//TODO: Se colocan las siguientes dos lineas para cuando esta caido el servidor de dominios
+//				timer.cancel();
 			}
-		};
-		timer.schedule(periodicidad);
-	}
-	
-	private void mostrarMensajeDemoraEnter() {
-		int periodicidad = 10000;
-		crearTimer(periodicidad);
-	}
-	
-	protected void accionCancelar()
-	{
-		Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Accion boton cancelar");
-	}
-	protected void accionIngresar(String user, String pass){
-		if (mainLoginPanel.isValid()){
-			if(user.equals("amber") && pass.equals("amber")){
-				IEvenTask.iniciarSesion(true);
-			}else{
-				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o clave incorrecta, intente nuevamente.");	
+
+			@Override
+			public void onSuccess(Object result) {
+				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Bienvenido " + textUsuario.getValue());
+				IEvenTask.iniciarSesion();
+//				timer.cancel();
 			}
+		});
+		} else {
+			Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Faltan completar campos obligatorios.");
 		}
 	}
+	
+//	private void crearTimer(final int periodicidad) {
+//		timer = new Timer() {
+//			@Override
+//			public void run() {
+//				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Debe colocar usuario y cotrase\u00f1a.\nLuego presione enter.");
+//				crearTimer(periodicidad);
+//			}
+//		};
+//		timer.schedule(periodicidad);
+//	}
+	
+//	private void mostrarMensajeDemoraEnter() {
+//		int periodicidad = 10000;
+//		crearTimer(periodicidad);
+//	}
+	
+//	protected void accionIngresar(String user, String pass){
+//		if (mainLoginPanel.isValid()){
+//			if(user.equals("amber") && pass.equals("amber")){
+//				IEvenTask.iniciarSesion();
+//			}else{
+//				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o clave incorrecta, intente nuevamente.");	
+//			}
+//		}
+//	}
 }
