@@ -28,15 +28,16 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.setStyleName("body");
 		rootPanel.setSize(APP_WINDOW_WIDTH.toString(), APP_WINDOW_HEIGTH.toString());
 		
-		iniciarLogin();
-
+//		iniciarLogin();
+		iniciarSesion();
+		
 //		LoginWindow loginWindow = new LoginWindow();
 //		loginWindow.show();
 	}
 	
 	public static void iniciarSesion() {
 		//elimino del panel de logins
-		rootPanel.remove(RootPanel.get("login_panel"));
+//		rootPanel.remove(RootPanel.get("login_panel"));
 		
 		//cargo el menu principal
 		MainMenu mainMenu = new MainMenu();
