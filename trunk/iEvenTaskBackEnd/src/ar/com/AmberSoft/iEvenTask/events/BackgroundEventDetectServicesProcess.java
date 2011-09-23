@@ -29,6 +29,7 @@ public class BackgroundEventDetectServicesProcess extends
 			telnet.connect(getEvent().getHost(), new Integer(getEvent().getPort()));
 		} catch (Exception e) {
 			// Se detecta el servicio caido
+			logger.debug("Se detecta la caida del servicio: " + getEvent().getHost() + ":" + getEvent().getPort());
 			detected = Boolean.TRUE;
 		}
 		
