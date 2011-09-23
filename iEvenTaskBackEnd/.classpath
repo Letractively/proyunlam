@@ -27,5 +27,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/gxt-2.2.4-gwt22.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/commons-net-3.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
