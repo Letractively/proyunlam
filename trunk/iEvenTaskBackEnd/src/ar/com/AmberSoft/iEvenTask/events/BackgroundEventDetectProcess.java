@@ -2,6 +2,7 @@ package ar.com.AmberSoft.iEvenTask.events;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,6 +10,7 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Relation;
 import ar.com.AmberSoft.iEvenTask.services.GetEventService;
 import ar.com.AmberSoft.iEvenTask.services.UpdateEntityService;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -47,8 +49,9 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	/**
 	 * Especifico para cada tipo de proceso de deteccion
 	 * Sera el encargado de la deteccion en si
+	 * retorna verdadero cuando se detecta la ocurrencia del evento
 	 */
-	public abstract void eventDetect();
+	public abstract Boolean eventDetect();
 	
 	@Override
 	public void run() {
@@ -65,7 +68,14 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 			executionCount++;
 			logger.debug("Ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 			
-			eventDetect();
+			if (eventDetect()){
+				Iterator<Relation> relations = event.getRelations().iterator();
+				while (relations.hasNext()) {
+					Relation relation = (Relation) relations.next();
+					//FIXME:Tomar la accion correspondiente para cada relacion ante la deteccion de cada evento
+					
+				}
+			}
 
 			realEvent.setExecutions(executionCount);
 			UpdateEntityService updateEntityService = new UpdateEntityService();

@@ -22,21 +22,22 @@ public class BackgroundEventDetectFilesProcess extends
 	}
 
 	@Override
-	public void eventDetect() {
+	public Boolean eventDetect() {
 		logger.debug("Iniciando deteccion de archivos");
+		Boolean detected = Boolean.FALSE;
 		File file = new File(getEvent().getPath());
 		// Se esta detectando una creacion
 		if (getEvent().getControlType() == 1){
 			if (file.exists()){
 				logger.debug("Se detecta la creacion del archivo:" + getEvent().getPath());
-				//FIXME: Aca se deberia crear la nueva tarea asociada
+				detected = Boolean.TRUE;
 			}
 		} else {
 			// Se esta detectando una modificacion
 			Date lastModified = new Date(file.lastModified());
 			if ((getEvent().getLastModification()!=null) && (!getEvent().getLastModification().equals(lastModified))){
 				logger.debug("Se detecta la modificacion del archivo:" + getEvent().getPath());
-				//FIXME: Aca se deberia crear la nueva tarea asociada
+				detected = Boolean.TRUE;
 			} 
 			getEvent().setLastModification(lastModified);
 			UpdateEntityService entityService = new UpdateEntityService();
@@ -46,6 +47,7 @@ public class BackgroundEventDetectFilesProcess extends
 		}
 		
 		logger.debug("Fin deteccion de archivos");
+		return detected;
 	}
 	
 	public EventFiles getEvent(){
