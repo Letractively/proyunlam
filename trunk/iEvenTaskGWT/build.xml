@@ -8,62 +8,105 @@
 	<property file="build.properties" />
 
 	<target name="default">
-		<echo message="Por default no realiza ninguna tarea" />
+		<antcall target="buildWAR" />
 	</target>
-	<target name="GWT.to.Web">
-		<echo message="Inicio GWT To WAR" />
-		<echo message="Se elimina ../iEvenTask/WebContent/" />
-		<delete includeEmptyDirs="true" failonerror="false">
-			<fileset dir="../iEvenTask/WebContent/" />
-		</delete>
-		<echo message="Fin, Se elimina ../iEvenTask/WebContent/" />
-		<echo message="Compilacion iEvenTaskGWT" />
-		
+	
+    <!-- COMPILE -->
+	
+    <target name="cleanBackend">
+    	<echo>Deleting ../${compile.backendname}${compile.destfolder} files ...</echo>
+        <delete>
+        	<fileset dir="../${compile.backendname}${compile.destfolder}" includes="**/*"/>
+        </delete>
+    </target>
+	
+    <target name="compileBackend" depends="cleanBackend">
+
+        <echo>Compiling ../${compile.backendname}${compile.srcfolder} files ...</echo>
+    	
+        <javac debug="on" executable="${jdk.path}bin/javac.exe" fork="yes"
+        	srcdir="../${compile.backendname}${compile.srcfolder}" 
+        	destdir="../${compile.backendname}${compile.destfolder}" includes="**/*">
+        	<classpath>
+    				<fileset dir="../${compile.backendname}${compile.libfolder}">
+    					<include name="**/*.jar" />
+    				</fileset>
+        	</classpath>
+        </javac>
+    </target>
+	
+	<target name="buildBackend" depends="compileBackend">
+		<echo>Building ${compile.gwtlibfolder}/${compile.backendname}.jar ...</echo>
+		<jar destfile="${compile.gwtlibfolder}/${compile.backendname}.jar" basedir="../${compile.backendname}${compile.destfolder}" />
+		<copy todir="${compile.gwtlibfolder}">
+			<fileset dir="../${compile.backendname}${compile.libfolder}" />
+		</copy>
+	</target>
+
+    <target name="cleanGWT">
+    	<echo>Deleting ../${compile.appname}${compile.webfolder} files ...</echo>
+        <delete>
+        	<fileset dir="../${compile.appname}${compile.webfolder}" includes="**/*"/>
+        </delete>
+    </target>
+	
+    <target name="compileGWT" depends="cleanGWT">
+
+        <echo>Compiling ./${compile.gwtname}${compile.srcfolder} files ...</echo>
+    	
 		<java classname="${gwt.compiler.class}" fork="true" failonerror="true">
 			
-			<arg value="${iet.gwt.module}" />
+			<arg value="${compile.gwtmodule}" />
 
-			<classpath>
-				<fileset dir="${java.home}/lib/">
+			<classpath >
+				<fileset dir="${jdk.path}/lib/">
 					<include name="**/*.jar" />
 				</fileset>
-				<fileset dir="${java.home}/lib/ext/">
-					<include name="**/*.jar" />
-				</fileset>
-				<pathelement path="${iet.gwt.src}" />
+				<pathelement path=".${compile.srcfolder}" />
 				<fileset dir="${gwt.sdk.path}">
 					<include name="**/*.jar" />
 				</fileset>
-				<fileset dir="${iet.gwt.lib}">
+				<fileset dir=".${compile.gwtwarfolder}">
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
 		</java>
-		<echo message="Fin Compilacion iEvenTaskGWT" />
-		<echo message="Se copia generado por GWT en ../iEvenTask/WebContent/" />
-		<copy todir="../iEvenTask/WebContent/">
-			<fileset dir="./war/">
+    </target>
+	
+	<target name="buildGWT" depends="compileGWT">
+		
+		<echo>Building ../${compile.appname}${compile.webfolder} files ...</echo>
+		
+		<copy todir="../${compile.appname}${compile.webfolder}">
+			<fileset dir=".${compile.gwtwarfolder}">
 				<exclude name="**/geronimo*.*"/>
 			</fileset>
 		</copy>
-		<echo message="Fin, Se copia generado por GWT en ../iEvenTask/WebContent/" />
-		<echo message="Se copian librerias de iEvenTaskBackEnd en ../iEvenTask/WebContent/" />
-		<copy todir="../iEvenTask/WebContent/WEB-INF/lib/">
-			<fileset dir="../iEvenTaskBackEnd/lib/">
+		<copy todir="../${compile.appname}${compile.webfolder}${compile.weblibfolder}">
+			<fileset dir="../${compile.backendname}${compile.libfolder}">
 				<exclude name="**/geronimo*.*"/>
 				<exclude name="**/iEvenTaskBackEnd.jar"/>
 			</fileset>
 		</copy>
-
-	</target>
-
-	<target name="Jar_iEvenTaskBackEnd">
-		<jar destfile="${iet.gwt.lib}/iEvenTaskBackEnd.jar" basedir="../iEvenTaskBackEnd/bin/" />
-		<copy todir="${iet.gwt.lib}/">
-			<fileset dir="../iEvenTaskBackEnd/lib/" />
-		</copy>
+		
 	</target>
 	
-	
+	<target name="buildWAR">
+		<antcall target="buildBackend" />
+		<antcall target="buildGWT" />
+		<echo>Deleting ../${compile.appname}${compile.targetfolder} ...</echo>
+       <delete>
+        	<fileset dir="../${compile.appname}${compile.targetfolder}" includes="**/*"/>
+        </delete>	
+		<echo>Building ../${compile.appname}${compile.targetfolder}iEvenTask.war ...</echo>
+      	<war 	destfile="../${compile.appname}${compile.targetfolder}iEvenTask.war" 
+      			webxml="../${compile.appname}${compile.webfolder}${compile.webinffolder}web.xml" 
+      			>
+        	<fileset dir="../${compile.appname}${compile.webfolder}"/>
+        	<lib dir="../${compile.appname}${compile.webfolder}${compile.weblibfolder}" />
+      		<lib file="${compile.gwtlibfolder}/${compile.backendname}.jar" />
+        	<classes dir="../${compile.appname}${compile.webfolder}${compile.webinffolder}${compile.classesfolder}" />
+      	</war>
+	</target>	
 
 </project>
