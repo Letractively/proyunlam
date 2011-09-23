@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -60,24 +61,26 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 		params.put(ParamsConst.ID, event.getId().toString());
 		GetEventService getEventService = new GetEventService();
 		Map result = getEventService.execute(params);
-		Event realEvent = (Event) result.get(ParamsConst.ENTITY); 
-		if(realEvent.getExecutions()!=null){
-			executionCount = realEvent.getExecutions(); 
+		Set<Relation> relations = event.getRelations();
+		event = (Event) result.get(ParamsConst.ENTITY);
+		event.setRelations(relations);
+		if(event.getExecutions()!=null){
+			executionCount = event.getExecutions(); 
 		}
-		if ((realEvent!=null) && (isAvaiable())){
+		if ((event!=null) && (isAvaiable())){
 			executionCount++;
 			logger.debug("Ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 			
 			if (eventDetect()){
-				Iterator<Relation> relations = event.getRelations().iterator();
-				while (relations.hasNext()) {
-					Relation relation = (Relation) relations.next();
+				Iterator<Relation> iRelations = relations.iterator();
+				while (iRelations.hasNext()) {
+					Relation relation = (Relation) iRelations.next();
 					//FIXME:Tomar la accion correspondiente para cada relacion ante la deteccion de cada evento
 					
 				}
 			}
 
-			realEvent.setExecutions(executionCount);
+			event.setExecutions(executionCount);
 			UpdateEntityService updateEntityService = new UpdateEntityService();
 			updateEntityService.execute(result);
 			BackgroundEventDetectProcess process = BackgroundEventController.getInstance().getFactory().getProcess(event);
