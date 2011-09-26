@@ -62,7 +62,7 @@
 		<java classname="${gwt.compiler.class}" fork="true" failonerror="true">
 			
 			<arg value="${compile.gwtmodule}" />
-
+			
 			<classpath >
 				<fileset dir="${jdk.path}/lib/">
 					<include name="**/*.jar" />
@@ -108,9 +108,7 @@
       			webxml="../${compile.appname}${compile.webfolder}${compile.webinffolder}web.xml" 
       			>
         	<fileset dir="../${compile.appname}${compile.webfolder}"/>
-        	<lib dir="../${compile.appname}${compile.webfolder}${compile.weblibfolder}" />
       		<lib file="${compile.gwtlibfolder}/${compile.backendname}.jar" />
-        	<classes dir="../${compile.appname}${compile.webfolder}${compile.webinffolder}${compile.classesfolder}" />
       	</war>
 	</target>	
 
