@@ -36,7 +36,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		
 		logger.debug("Inicio ServiceDispatcher");
 		
-		//FIXME: Solo de prueba, luego colocar en el login y en el save de relaciones (evaluar si hace falta en el save)
+		//FIXME: Solo de prueba, luego colocar en el login
 		try{
 			BackgroundEventController.getInstance();
 		}catch(Exception e){e.printStackTrace();}
