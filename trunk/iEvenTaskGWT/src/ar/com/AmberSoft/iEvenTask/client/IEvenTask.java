@@ -30,8 +30,14 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.setStyleName("body");
 		rootPanel.setSize(APP_WINDOW_WIDTH.toString(), APP_WINDOW_HEIGTH.toString());
 		
-//		iniciarLogin();
-		iniciarSesion();
+//		Info.display("Context.getInstance().setSesion(true)", String.valueOf(Context.getInstance().isSesion()));
+//		Info.display("Context.getInstance().getUsuario()", Context.getInstance().getUsuario());
+		
+		if(Context.getInstance().isSesion()){
+			iniciarSesion();
+		}else{
+			iniciarLogin();
+		}
 		
 //		LoginWindow loginWindow = new LoginWindow();
 //		loginWindow.show();
@@ -39,11 +45,12 @@ public class IEvenTask implements EntryPoint {
 	
 	public static void iniciarSesion() {
 		//elimino del panel de logins
-//		rootPanel.remove(RootPanel.get("login_panel"));
+		rootPanel.remove(RootPanel.get("login_panel"));
 		
 		//cargo el menu principal
 		MainMenu mainMenu = new MainMenu();
 		mainMenu.setId("main_menu");
+
 		rootPanel.add(mainMenu);
 		rootPanel.setWidgetPosition(mainMenu, 0, 0);
 		
@@ -117,5 +124,4 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.add(loginPanel);
 		rootPanel.setWidgetPosition(loginPanel, 0, 0);
 	}
-	
 }
