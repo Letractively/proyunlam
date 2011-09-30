@@ -1,5 +1,8 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,6 +104,25 @@ public abstract class Service {
 	public static Integer stringToInteger(String value){
 		if ((value!=null) && (!"".equals(value))){
 			return new Integer(value);
+		}
+		return null;
+	}
+	
+	/**
+	 * Transforma un String (con el formato "dd-MM-yyyy") en un Date
+	 * @param value
+	 * @return
+	 */
+	public static Date stringToDate(String strFecha) {
+		if ((strFecha != null) && (!"".equals(strFecha))) {
+			SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd-MM-yyyy");
+			Date fecha = null;
+			try {
+				fecha = formatoDelTexto.parse(strFecha);
+			} catch (ParseException ex) {
+				ex.printStackTrace();
+			}
+			return fecha;
 		}
 		return null;
 	}

@@ -31,16 +31,21 @@ ADD CONSTRAINT pk_perp PRIMARY KEY (id_permiso, id_perfil);
 
 create table iet_tarea (
 	id_tarea int primary key,
-	fecha_inicio datetime,
+	nombre_tarea varchar(255),
+	fecha_comienzo datetime,
 	fecha_fin datetime,
-	horas_asignadas int,
+	duracion varchar(255),
+    descripcion varchar(255),
 	id_usuario varchar(255),
+	horas_asignadas int,
 	fecha_creacion datetime,
 	fecha_modificacion datetime,
 	estado int,
 	cumplimiento int,
-	tipo_tarea int
+	tipo_tarea int,
+	eliminado datetime
 );
+
 create table iet_subtarea (
 	id_tarea int not null,
 	id_subtarea int not null
