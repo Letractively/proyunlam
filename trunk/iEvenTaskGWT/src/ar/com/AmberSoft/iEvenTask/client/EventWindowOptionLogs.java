@@ -23,9 +23,9 @@ public class EventWindowOptionLogs extends EventWindowOption {
 	@Override
 	public void setVisiblePanel() {
 		eventWindow.getvPanelLDAP().setVisible(Boolean.FALSE);
-		eventWindow.getvPanelPatron().show();
 		eventWindow.getvPanelArchivos().setVisible(Boolean.FALSE);
 		eventWindow.getvPanelServicios().setVisible(Boolean.FALSE);
+		eventWindow.getvPanelPatron().show();
 	}
 
 	@Override

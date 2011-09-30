@@ -2,13 +2,13 @@ package ar.com.AmberSoft.iEvenTask.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
-import ar.com.AmberSoft.iEvenTask.client.utils.TreeGrid;
 import ar.com.AmberSoft.iEvenTask.client.validaciones.IntegerValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -34,7 +34,6 @@ import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
-import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
@@ -81,9 +80,13 @@ public class EventWindow extends Window {
 
 	// Campos para Eventos LDAP
 	private final TextField fldCode = new TextField();
+
 	// Campos para Eventos Patrones en Logs
-	private final FileUploadField fldPathLogs = new FileUploadField();
 	private final TextArea fldPatern = new TextArea();
+	private final TextField fldPathLogs = new TextField();
+	private final Button btnPathLogs = new Button("Buscar...");
+
+	
 	// Campos para Archivos
 	private final ComboBox fldControlType = new ComboBox();
 	private final TextField fldPath = new TextField();
@@ -92,7 +95,6 @@ public class EventWindow extends Window {
 	// Campos para Servicios
 	private final TextField fldHost = new TextField();
 	private final TextField fldPort = new TextField();
-	//private final CheckBox fldCloseTask = new CheckBox();
 	
 	/**
 	 * Representa la opcion elegida en el combo de tipos de eventos
@@ -102,7 +104,11 @@ public class EventWindow extends Window {
 	public TextField getFldPath() {
 		return fldPath;
 	}
-	
+
+	public TextField getFldPathLogs() {
+		return fldPathLogs;
+	}
+
 	public Grid getGrid() {
 		return grid;
 	}
@@ -145,10 +151,6 @@ public class EventWindow extends Window {
 
 	public TextField getFldCode() {
 		return fldCode;
-	}
-
-	public FileUploadField getFldPathLogs() {
-		return fldPathLogs;
 	}
 
 	public TextArea getFldPatern() {
@@ -313,16 +315,25 @@ public class EventWindow extends Window {
 
 		CaptionPanel caption = new CaptionPanel("Patron en Logs");
 		vPanel.add(caption);
+		vPanel.setVisible(Boolean.FALSE);
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 		
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
-		fldPathLogs.setAllowBlank(Boolean.FALSE);
-		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", FIELD_WIDTH, LABEL_WIDTH));
-		fldPatern.setAllowBlank(Boolean.FALSE);
 		caption.add(bodyCaption);
 		
-		vPanel.setVisible(Boolean.FALSE);
+		bodyCaption.add(getFieldHorizontalLine(fldPathLogs, btnPathLogs, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
+		fldPath.setAllowBlank(Boolean.FALSE);
+		btnPathLogs.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				BrowseFilesModalWindow modal = new BrowseFilesModalWindow(fldPathLogs);
+				modal.show();
+			}
+		});
+		
+		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", FIELD_WIDTH, LABEL_WIDTH));
+		fldPatern.setAllowBlank(Boolean.FALSE);
+		
 	}
 
 	private void initializeArchivosPanel() {
@@ -333,22 +344,10 @@ public class EventWindow extends Window {
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 
 		VerticalPanel bodyCaption = new VerticalPanel();
-		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", FIELD_WIDTH, LABEL_WIDTH));
-		bodyCaption.add(getFieldHorizontalLine(fldPath, btnPath, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
 		caption.add(bodyCaption);
 		
+		bodyCaption.add(getFieldHorizontalLine(fldControlType, "Tipo de Control", FIELD_WIDTH, LABEL_WIDTH));
 		fldControlType.setAllowBlank(Boolean.FALSE);
-		fldPath.setAllowBlank(Boolean.FALSE);
-		
-		btnPath.addSelectionListener(new SelectionListener<ButtonEvent>() {
-			
-			@Override
-			public void componentSelected(ButtonEvent ce) {
-				BrowseFilesModalWindow modal = new BrowseFilesModalWindow(fldPath);
-				modal.show();
-			}
-		});
-		
 		ListStore listStore = new ListStore();
 		listStore.add(getModelData("1", "Creacion"));
 		listStore.add(getModelData("2", "Modificacion"));
@@ -356,11 +355,23 @@ public class EventWindow extends Window {
 		fldControlType.setEditable(Boolean.FALSE);
 		fldControlType.setTypeAhead(true);  
 		fldControlType.setTriggerAction(TriggerAction.ALL); 
-		
+
 		vPanel.setVisible(Boolean.FALSE);
 		
-		//TreeGrid treeGrid = new TreeGrid(ServiceNameConst.BROWSE_FILE, getTreeGridConfig());
-		//bodyCaption.add(treeGrid);
+		addFileSearch(bodyCaption);
+		
+	}
+
+	public void addFileSearch(VerticalPanel bodyCaption) {
+		bodyCaption.add(getFieldHorizontalLine(fldPath, btnPath, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
+		fldPath.setAllowBlank(Boolean.FALSE);
+		btnPath.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				BrowseFilesModalWindow modal = new BrowseFilesModalWindow(fldPath);
+				modal.show();
+			}
+		});
 	}
 	
 	/**
@@ -491,7 +502,10 @@ public class EventWindow extends Window {
 			
 			fldName.setValue(actual.get(ParamsConst.NAME));
 			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
-			//fldExpiration.setValue(actual.get(ParamsConst.EXPIRATION));
+			Long expiration = (Long)actual.get(ParamsConst.EXPIRATION);
+			if (expiration != null){
+				fldExpiration.setValue(new Date((Long)actual.get(ParamsConst.EXPIRATION)));
+			}
 			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
 			
 			eventWindowOption.beforeUpdate(actual);
@@ -506,7 +520,7 @@ public class EventWindow extends Window {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.NAME, fldName.getValue());
 			params.put(ParamsConst.PERIODICITY, fldPeriodicity.getValue());
-			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue());
+			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue().getTime());
 			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
 
 			eventWindowOption.onSave(params);
