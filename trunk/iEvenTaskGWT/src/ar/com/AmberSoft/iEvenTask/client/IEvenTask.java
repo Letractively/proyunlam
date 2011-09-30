@@ -20,6 +20,8 @@ public class IEvenTask implements EntryPoint {
 	public static final Integer DEFAULT_MENU_HEIGTH = 24;
 	public static final Integer MAIN_TAB_PANEL_HEIGTH = 400;
 	
+	public static final Integer DELAY = 1000;
+	
 	static RootPanel rootPanel;
 
 	public void onModuleLoad() {
@@ -57,6 +59,42 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.add(mainTabPanel);
 		rootPanel.setWidgetPosition(mainTabPanel, 0, new Integer(2*DEFAULT_MENU_HEIGTH));
 		
+		
+		/*final ToolBar toolBar = new ToolBar();
+		Timer timer = new Timer() {
+			
+			@Override
+			public void run() {
+				Map params = new HashMap();
+				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.BACKGROUND_PROCESS_CONSULTING);
+				
+				DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display("Error", "Ocurrio un error al intentar consultar los procesos activos");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						Map map = (Map) result;
+						Map processes = (Map) map.get(ParamsConst.PROCESS);
+						toolBar.setVisible(!processes.isEmpty());
+						
+						Iterator it = processes.keySet().iterator();
+						while (it.hasNext()) {
+							Integer key = (Integer) it.next();
+							Map actual = (Map) processes.get(key);
+							
+						}
+					}
+				});
+			}
+		};
+		timer.scheduleRepeating(DELAY);
+		rootPanel.add(toolBar);
+		rootPanel.setWidgetPosition(toolBar, 0, new Integer((2*DEFAULT_MENU_HEIGTH) + MAIN_TAB_PANEL_HEIGTH - 50));
+		*/
 		//cargo la barra de estado
 		MainStatusBar mainStatusBar = new MainStatusBar();
 		mainStatusBar.setId("main_status_bar");
