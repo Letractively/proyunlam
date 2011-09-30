@@ -1,21 +1,16 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,20 +18,25 @@ import ar.com.AmberSoft.util.PKGenerator;
 
 @Entity
 @Table (name="iet_tarea")
-@Inheritance(strategy=InheritanceType.JOINED)
-public class Tarea implements Serializable{
+//@Inheritance(strategy=InheritanceType.JOINED)
+public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private Date fechaInicio;
+	private String nombreTarea;
+	private Date fechaComienzo;
 	private Date fechaFin;
-	private int horasAsignadas;
+	private String duracion;
+	private String descripcion;
 	private String id_usuario;
+	
+	private int horasAsignadas;
 	private Date fechaCreacion;
 	private Date fechaModificacion;
 	private int estado;
 	private int cumplimiento;
 	private int tipo_tarea;
-	private Set<Comentario> comentarios;
+//	private Set<Comentario> comentarios;
 	
 	@Id @Column (name="id_tarea")
 	public Integer getId() {
@@ -49,13 +49,33 @@ public class Tarea implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	@Basic @Column (name="fecha_inicio")
-	public Date getFechaInicio() {
-		return fechaInicio;
+	@Basic @Column (name="nombre_tarea")
+	public String getNombreTarea() {
+		return nombreTarea;
 	}
-	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
+	public void setNombreTarea(String nombreTarea) {
+		this.nombreTarea = nombreTarea;
+	}
+	@Basic @Column (name="fecha_comienzo")
+	public Date getFechaComienzo() {
+		return fechaComienzo;
+	}
+	public void setFechaComienzo(Date fechaComienzo) {
+		this.fechaComienzo = fechaComienzo;
+	}
+	@Basic @Column (name="duracion")
+	public String getDuracion() {
+		return duracion;
+	}
+	public void setDuracion(String duracion) {
+		this.duracion = duracion;
+	}
+	@Basic @Column (name="descripcion")
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 	@Basic @Column (name="fecha_fin")
 	public Date getFechaFin() {
@@ -114,19 +134,19 @@ public class Tarea implements Serializable{
 		this.tipo_tarea = tipo_tarea;
 	}
 	
-	@OneToMany (mappedBy="task")
-	public Set<Comentario> getComentarios() {
-		return comentarios;
-	}
-
-	public void setComentarios(Set<Comentario> comentarios) {
-		this.comentarios = comentarios;
-	}
-	
-	public void addComentario(Comentario comentario){
-		if (comentarios==null){
-			comentarios = new HashSet<Comentario>();
-		}
-		comentarios.add(comentario);
-	}
+//	@OneToMany (mappedBy="task")
+//	public Set<Comentario> getComentarios() {
+//		return comentarios;
+//	}
+//
+//	public void setComentarios(Set<Comentario> comentarios) {
+//		this.comentarios = comentarios;
+//	}
+//	
+//	public void addComentario(Comentario comentario){
+//		if (comentarios==null){
+//			comentarios = new HashSet<Comentario>();
+//		}
+//		comentarios.add(comentario);
+//	}
 }

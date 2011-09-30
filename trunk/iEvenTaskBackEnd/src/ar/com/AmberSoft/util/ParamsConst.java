@@ -31,14 +31,18 @@ public abstract class ParamsConst {
 	public static final String CHECK_OBJECTIVE = "checkObjective";
 	public static final String CHECK_ADMIN = "checkAdmin";
 	
-	public static final String FECHACREACION = "fechaCreacion";
-	public static final String FECHAFIN = "fechaFin";
+	public static final String NOMBRE_TAREA = "nombreTarea";
+	public static final String FECHA_COMIENZO = "fechaComienzo";
+	public static final String FECHA_FIN = "fechaFin";
+	public static final String DURACION = "duracion";
+	public static final String DESCRIPCION = "descripcion";
+	public static final String ID_USUARIO = "id_usuario";
+	//constantes para tareas que no son utilizadas
 	public static final String HORASASIGNADAS = "horas";
-	public static final String ID_USUARIO = "idUsuario";
 	public static final String FECHAMODIFICACION = "fechaModificacion";
 	public static final String ESTADO = "estado";
 	public static final String CUMPLIMIENTO = "cumplimiento";
-	public static final String TIPO_TAREA = "tipoTarea";
+	public static final String TIPO_TAREA = "tipoTarea";;
 	
 	public static final String PERIODICITY = "periodicity";
 	public static final String EXPIRATION = "expiration";
