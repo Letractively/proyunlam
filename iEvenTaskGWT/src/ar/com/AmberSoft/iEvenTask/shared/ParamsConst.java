@@ -59,4 +59,6 @@ public abstract class ParamsConst {
 	public static final String DATE = "date";
 	public static final String DETAIL = "detail";
 	
+	public static final String PROCESS = "process";
+	
 }
