@@ -25,8 +25,8 @@ public class EventWindowOptionFiles extends EventWindowOption {
 	public void setVisiblePanel() {
 		eventWindow.getvPanelLDAP().setVisible(Boolean.FALSE);
 		eventWindow.getvPanelPatron().setVisible(Boolean.FALSE);
-		eventWindow.getvPanelArchivos().show();
 		eventWindow.getvPanelServicios().setVisible(Boolean.FALSE);
+		eventWindow.getvPanelArchivos().show();
 	}
 
 	@Override
