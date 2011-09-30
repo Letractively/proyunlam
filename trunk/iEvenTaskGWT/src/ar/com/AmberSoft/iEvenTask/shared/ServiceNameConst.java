@@ -50,5 +50,7 @@ public abstract class ServiceNameConst {
 	public static final String UPDATE_RELATION_CREATE_TASK = "ar.com.AmberSoft.iEvenTask.services.UpdateRelationCreateTaskService";
 	public static final String CREATE_RELATION_MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.services.CreateRelationModifyStateService";
 	public static final String UPDATE_RELATION_MODIFY_STATE = "ar.com.AmberSoft.iEvenTask.services.UpdateRelationModifyStateService";
+	
+	public static final String BACKGROUND_PROCESS_CONSULTING = "ar.com.AmberSoft.iEvenTask.services.BackgroundProcessService";
 
 }
