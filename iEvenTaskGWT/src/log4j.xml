@@ -5,7 +5,7 @@
         
 	
 	  <appender name="iEvenTaskLog" class="org.apache.log4j.RollingFileAppender">
-	    <param name="File" value="C:\\log\\iEvenTaskLog"/>
+	    <param name="File" value="C:\\log\\iEvenTaskLog.log"/>
 	    <param name="MaxFileSize" value="10000KB"/>
 	    <param name="MaxBackupIndex" value="5"/>    
 	    <param name="Append" value="true"/>
