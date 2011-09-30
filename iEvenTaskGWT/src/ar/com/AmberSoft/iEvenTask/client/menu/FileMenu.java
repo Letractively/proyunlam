@@ -3,7 +3,6 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 import ar.com.AmberSoft.iEvenTask.client.EventWindow;
 import ar.com.AmberSoft.iEvenTask.client.ProfilesWindow;
 import ar.com.AmberSoft.iEvenTask.client.RelationWindow;
-import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 
 import com.extjs.gxt.ui.client.widget.menu.Menu;
 
@@ -13,7 +12,6 @@ public class FileMenu extends Menu {
 	MenuItem eventItem;
 	MenuItem actionsItem;
 	MenuItem preferencesItem;
-	MenuItem taskItem;
 	
 	public FileMenu(){
 		profileItem = new MenuItem("Perfiles", new ProfilesWindow());
@@ -24,9 +22,6 @@ public class FileMenu extends Menu {
 		
 		eventItem = new MenuItem("Relaciones", new RelationWindow());
 		add(eventItem);
-		
-		taskItem = new MenuItem("Tarea", new TaskWindow());
-		add(taskItem);
 		
 		actionsItem = new MenuItem("Acciones", null);
 		add(actionsItem);

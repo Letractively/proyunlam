@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 import java.util.HashMap;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.Context;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -11,7 +12,6 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
-import com.extjs.gxt.ui.client.event.KeyListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
@@ -22,16 +22,9 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
-import com.extjs.gxt.ui.client.widget.layout.TableData;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.extjs.gxt.ui.client.Style.IconAlign;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
-import com.extjs.gxt.ui.client.Style.VerticalAlignment;
-import com.extjs.gxt.ui.client.Style.ButtonArrowAlign;
+import com.extjs.gxt.ui.client.widget.layout.TableData;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LoginPanel extends LayoutContainer {
 	
@@ -161,6 +154,10 @@ public class LoginPanel extends LayoutContainer {
 			@Override
 			public void onSuccess(Object result) {
 				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Bienvenido " + textUsuario.getValue());
+				Context.getInstance().setUsuario(textUsuario.getValue().toString()); 	
+				Info.display("Context.getInstance().getUsuario()", Context.getInstance().getUsuario());
+				Context.getInstance().setSesion(true); 	
+				Info.display("Context.getInstance().setSesion(true)", String.valueOf(Context.getInstance().isSesion()));
 				IEvenTask.iniciarSesion();
 //				timer.cancel();
 			}
