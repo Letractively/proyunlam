@@ -26,6 +26,34 @@ public class Context {
 	 * Ventanas que fueron registradas al momento de la instanciacion
 	 */
 	private Map<Class, Window> registeredWindows;
+	
+	private String usuario;
+	private String perfil;
+	private boolean sesion = false;
+	
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	public String getPerfil() {
+		return perfil;
+	}
+
+	public void setPerfil(String perfil) {
+		this.perfil = perfil;
+	}
+
+	public boolean isSesion() {
+		return sesion;
+	}
+
+	public void setSesion(boolean sesion) {
+		this.sesion = sesion;
+	}
 
 	/**
 	 * Privado para que no pueda ser instanciado 
