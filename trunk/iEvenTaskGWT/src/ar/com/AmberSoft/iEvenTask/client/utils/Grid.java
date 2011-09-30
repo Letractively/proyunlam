@@ -7,6 +7,7 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.State;
 import ar.com.AmberSoft.iEvenTask.client.Window;
+import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
@@ -219,10 +220,12 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				});		
 	}
 	
-	/* 
+	/***
 	 * se agrega este metodo ya que no lo invoco desde un componente windows
+	 * macioro
 	 */
-	public Grid(LayoutContainer layoutContainer, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {
+	@SuppressWarnings("null")
+	public Grid(LayoutContainer layoutContainer, String serviceName, List<ColumnConfig> configs, final Integer pageSize, String user) {
 		// Se invoca al constructor padre para que se inicialice todo
 		// convenientemente
 		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
@@ -236,6 +239,11 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
 		// Se establece que los filtros se trabajaran de forma remota
 		filters.setLocal(Boolean.FALSE);
+		
+		//seteo el filtro usuario
+//		Filter userFilter = null;
+//		userFilter.setValue(user);
+//		filters.addFilter(userFilter);
 		this.addPlugin(filters);
 
 		// Establecemos una barra de herramientas y la relacionamos con el

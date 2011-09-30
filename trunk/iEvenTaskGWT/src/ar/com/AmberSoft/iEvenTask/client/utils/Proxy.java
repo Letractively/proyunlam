@@ -8,6 +8,7 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.RpcProxy;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Proxy extends RpcProxy {
@@ -31,7 +32,6 @@ public class Proxy extends RpcProxy {
 	
 	@Override
 	protected void load(Object loadConfig, AsyncCallback proxyCallback) {
-
 		if (loadConfig instanceof BaseFilterPagingLoadConfig) {
 			BaseFilterPagingLoadConfig config = (BaseFilterPagingLoadConfig) loadConfig;
 			params.putAll(config.getProperties());
