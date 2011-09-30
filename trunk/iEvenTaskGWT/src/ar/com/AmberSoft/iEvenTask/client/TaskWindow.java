@@ -1,137 +1,150 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
-import com.extjs.gxt.ui.client.Style;
-import com.extjs.gxt.ui.client.data.BaseModel;
-import com.extjs.gxt.ui.client.util.Margins;
-import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.TabItem;
-import com.extjs.gxt.ui.client.widget.TabPanel;
-import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.Window;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.DateField;
+import com.extjs.gxt.ui.client.widget.form.Field;
+import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
+import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.SpinnerField;
+import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
-import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
-import com.extjs.gxt.ui.client.widget.layout.RowData;
-import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TaskWindow extends Window {
 	
-	public static final Integer WINDOW_WIDTH = 500;
-	public static final Integer WINDOW_HEIGTH = 436;
+	public static final Integer WINDOW_WIDTH = 400;
+	public static final Integer WINDOW__HEIGTH = 340;
+	public static final Integer TASK_PANEL_WIDTH = WINDOW_WIDTH;
 	
-	public static final Integer FIELD_WIDTH = 150;
-	public static final Integer LABEL_WIDTH = 100;
-	
-	public static final Integer DETAILS_HEIGTH = 72;
-	
-	public static final Integer ESPECIFIC_PANEL_WIDTH = LABEL_WIDTH + FIELD_WIDTH;
-	public static final Integer ESPECIFIC_PANEL_HEIGTH = 70;
-	
-	public static final Integer GRID_WIDTH = WINDOW_WIDTH - 15;
-	public static final Integer GRID_HEIGTH = 250;
-	
-
-	// Campos
+	FormPanel taskPanel = new FormPanel();
 	@SuppressWarnings("rawtypes")
-	private final TextField fldName = new TextField();			//nombre de la tarea
-	private final DateField fldComienzo = new DateField();		//fecha de comienzo
-	private final DateField fldFin = new DateField();			//fecha de fin
-	@SuppressWarnings("rawtypes")
-	private final TextField fldDuracion = new TextField(); 		//duracion
-	@SuppressWarnings("rawtypes")
-	private final TextField fldDescripcion = new TextField(); 	//descripcion
-	@SuppressWarnings("rawtypes")
-	private final TextField fldResponsable = new TextField(); 	//responsable
-	@SuppressWarnings("unchecked")
-
+	List<Field> toValidate = new ArrayList<Field>();
+	@SuppressWarnings("unused")
+	private Boolean editing = Boolean.FALSE;
+    TextField<String> taskName = new TextField<String>();
+    DateField fecha_com = new DateField();  
+    DateField fecha_fin = new DateField();  
+    SpinnerField duration = new SpinnerField();  
+    TextArea description = new TextArea();  
+    TextField<String> responsable = new TextField<String>();
+    Button btnGuardar = new Button("Guardar");
+    Button btnCancelar = new Button("Cancelar");  
 	
 	public TaskWindow() {
 		super();
-		initialize();
+		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
 		
+		taskPanel.setHeading("Nueva Tarea");
+		taskPanel.setFrame(true);
+		taskPanel.setWidth(TASK_PANEL_WIDTH);
 		
-		TabPanel tabPanel = new TabPanel();
-		tabPanel.setHeight(50);
-		TabItem tbtmDetalles = new TabItem("Detalles");
-		tbtmDetalles.setHeight(50);
-		
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		
-		tbtmDetalles.add(horizontalPanel);
-		tabPanel.add(tbtmDetalles);
-		tbtmDetalles.setSize("50", "50");
-		
+		taskName.setFieldLabel("Nombre");  
+		taskName.setAllowBlank(false);  
+		taskName.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
+		taskPanel.add(taskName);
 
-		horizontalPanel.add(getPanelFields());
-		
-		add(tabPanel);
-//		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));		
-		
-		addToolBar();
+		fecha_com.setFieldLabel("Fecha Comienzo");  
+		taskPanel.add(fecha_com);  
+		fecha_fin.setFieldLabel("Fecha Fin");  
+		taskPanel.add(fecha_fin);  
 
+		duration.setIncrement(1d);  
+		duration.getPropertyEditor().setType(Double.class);  
+		duration.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
+		duration.setFieldLabel("Duracion (hs)");
+		duration.setMinValue(-100d);  
+		duration.setMaxValue(100d);  
+		taskPanel.add(duration);  
+
+		description.setPreventScrollbars(true);  
+		description.setFieldLabel("Descripcion");  
+		taskPanel.add(description);
+		
+		responsable.setFieldLabel("Responsable");  
+		responsable.setAllowBlank(false);  
+		responsable.setValue(Context.getInstance().getUsuario());
+		responsable.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
+		taskPanel.add(responsable);
+		
+		btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent ce) {
+				guardarTarea();}});
+		taskPanel.addButton(btnGuardar);
+		 
+		taskPanel.addButton(btnCancelar);  
+	  
+	    FormButtonBinding binding = new FormButtonBinding(taskPanel);  
+	    binding.addButton(btnGuardar);  
+	    
+	    this.add(taskPanel);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public Boolean isValid(){
+		Boolean valid = Boolean.TRUE;
+		Iterator it = toValidate.iterator();
+		while (it.hasNext()) {
+			Field field = (Field) it.next();
+			if (!field.isValid()){
+				valid = Boolean.FALSE;
+			}
+		}
+		return valid;
+	}
+	
+	private void guardarTarea(){
+		if (isValid()){
+			Map<String,String> params = new HashMap<String,String>();
+			
+			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
+			params.put(ParamsConst.FECHA_COMIENZO, dateToString(fecha_com.getValue()));
+			params.put(ParamsConst.FECHA_FIN, dateToString(fecha_fin.getValue()));
+			params.put(ParamsConst.DURACION, duration.getValue().toString());
+			params.put(ParamsConst.DESCRIPCION, description.getValue());
+			params.put(ParamsConst.ID_USUARIO, responsable.getValue());
+			
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_TASK);
+			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display("iEvenTask", "No pudo guardarse la tarea. Aguarde un momento y vuelva a intentarlo.");
+			}
+
+			@Override
+			public void onSuccess(Object result) {
+				Info.display("iEvenTask", "Se guardo la tarea con exito.");
+				//resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
+				//FIXME: Invocar a la primer pagina
+				//refreshGrid(grid);
+			}
+			});
+		}
 	}
 	/**
-	 * Inicializa la ventana actual
+	 * 
+	 * @param fecha tipo Date
+	 * @return String formateado, el formato es el mismo con el que en el BackEnd se crea el Date.
 	 */
-	private void initialize() {
-		setInitialWidth(WINDOW_WIDTH);
-		setHeight(WINDOW_HEIGTH);
-		setMaximizable(true);
-		setTitleCollapse(true);
-		setHeading("Alta de Tareas");
-	}
-	
-	private void addToolBar() {
-		ToolBar toolBar = new ToolBar();
-		toolBar.setEnableOverflow(false);
-		toolBar.add(new SaveButton(this));
-		toolBar.add(new CancelButton(this));
-		add(toolBar);
-	}
-	
-	
-	private VerticalPanel getPanelFields() {
-		VerticalPanel verticalPanel = new VerticalPanel();
-		
-		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
-		fldName.setAllowBlank(Boolean.FALSE);
-		registerField(fldName);
-		
-		verticalPanel.add(getFieldHorizontalLine(fldComienzo, "Fecha de Comienzo", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
-		registerField(fldComienzo);
-
-		verticalPanel.add(getFieldHorizontalLine(fldFin, "Fecha de Fin", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
-		registerField(fldFin);
-		
-		verticalPanel.add(getFieldHorizontalLine(fldDuracion, "Duracion", FIELD_WIDTH, LABEL_WIDTH));
-		fldDuracion.setAllowBlank(Boolean.TRUE);
-		registerField(fldDuracion);
-
-		verticalPanel.add(getFieldHorizontalLine(fldDescripcion, "Descripcion", FIELD_WIDTH, LABEL_WIDTH));
-		fldDescripcion.setAllowBlank(Boolean.FALSE);
-		registerField(fldDescripcion);
-		
-		verticalPanel.add(getFieldHorizontalLine(fldResponsable, "Responsable", FIELD_WIDTH, LABEL_WIDTH));
-		fldResponsable.setAllowBlank(Boolean.FALSE);
-		registerField(fldResponsable);
-		
-		return verticalPanel;
-	}
-
-	public void beforeUpdate(BaseModel baseModel) {
-		
-	}
-	
-	public void onSave() {
-		
+	private String dateToString (Date fecha){
+		DateTimeFormat fmt = DateTimeFormat.getFormat("dd-MM-yyyy");
+		return fmt.format(fecha);
 	}
 }

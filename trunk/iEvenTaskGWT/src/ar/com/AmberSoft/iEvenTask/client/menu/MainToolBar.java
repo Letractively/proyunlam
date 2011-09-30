@@ -2,7 +2,7 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.ObjectiveWindow;
-import ar.com.AmberSoft.iEvenTask.client.TaskWindowOld;
+import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -18,7 +18,7 @@ public class MainToolBar extends ToolBar {
 		Button btnNuevaTarea = new Button("Nueva Tarea");
 		btnNuevaTarea.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent be) {
-				TaskWindowOld taskWindow = new TaskWindowOld();
+				TaskWindow taskWindow = new TaskWindow();
 				taskWindow.show();
 			}
 		});

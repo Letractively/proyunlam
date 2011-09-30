@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.com.AmberSoft.iEvenTask.client.Context;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -16,6 +17,7 @@ import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.TextArea;
 
 public class MainTabTareas extends TabItem {
@@ -37,7 +39,7 @@ public class MainTabTareas extends TabItem {
 		VerticalPanel verticalPanel_grilla = new VerticalPanel();
 		VerticalPanel verticalPanel_comentarios = new VerticalPanel();
 		@SuppressWarnings("unchecked")
-		Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
+		Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10, Context.getInstance().getUsuario());
 		
 		//seteo las propiedades al componente Grid
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
@@ -89,24 +91,35 @@ public class MainTabTareas extends TabItem {
 		return commentPanel;
 	}
 	
-	//para probar, uso la consulta de perfiles
 	@SuppressWarnings("rawtypes")
 	private List getGridConfig() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-
-		// Se agrega esta columna para mantener el identificador de los perfiles
+		DateTimeFormat dtf = DateTimeFormat.getFormat("dd-MM-yyyy");
+		
+		// Se agrega esta columna para mantener el identificador de las tareas
 		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
 		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
-		configs.add(clmncnfgNombre);
+		ColumnConfig clmncnfgNombreTarea = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 100);
+		configs.add(clmncnfgNombreTarea);
 
-		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONNECTION, "Conexion", 150);
-		configs.add(clmncnfgConexion);
+		ColumnConfig clmncnfgFechaComienzo = new ColumnConfig(ParamsConst.FECHA_COMIENZO, "Fecha de Comienzo", 150);
+		clmncnfgFechaComienzo.setDateTimeFormat(dtf);
+		configs.add(clmncnfgFechaComienzo);
 
-		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 150);
-		configs.add(clmncnfgGrupoLdap);
+		ColumnConfig clmncnfgFechaFin = new ColumnConfig(ParamsConst.FECHA_FIN, "Fecha de Fin", 150);
+		clmncnfgFechaFin.setDateTimeFormat(dtf);
+		configs.add(clmncnfgFechaFin);
+
+		ColumnConfig clmncnfgDuracion = new ColumnConfig(ParamsConst.DURACION, "Duracion (hs)", 20);
+		configs.add(clmncnfgDuracion);
+		
+		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 150);
+		configs.add(clmncnfgDescripcion);
+		
+		ColumnConfig clmncnfgResponsable = new ColumnConfig(ParamsConst.ID_USUARIO, "Responsable", 150);
+		configs.add(clmncnfgResponsable);
 
 		return configs;
 	}
