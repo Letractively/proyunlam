@@ -5,9 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ar.com.AmberSoft.iEvenTask.client.State;
-import ar.com.AmberSoft.iEvenTask.client.Window;
-import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
+import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
@@ -17,7 +15,6 @@ import com.extjs.gxt.ui.client.event.GridEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.MenuEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.filters.Filter;
@@ -34,7 +31,8 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	/**
 	 * Ventana actual con la que trabaja la grilla
 	 */
-	private Window window;
+	//private Window window;
+	private Seleccionable seleccionable;
 	/**
 	 * Filtros que se utilizaran en la grilla
 	 */
@@ -94,11 +92,11 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		return null;
 	}
 
-	public Grid(Window window, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {
+	public Grid(Seleccionable seleccionable, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {
 		// Se invoca al constructor padre para que se inicialice todo
 		// convenientemente
 		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
-		this.window = window;
+		this.seleccionable = seleccionable;
 
 		// Se obtiene el loader para indicarle cual es la grilla con la que
 		// trabaja y que el orden de las columnas se establece de forma remota
@@ -134,7 +132,7 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		setLoadMask(Boolean.TRUE);
 
 	}
-
+	
 	/**
 	 * Agrega un nuevo filtro
 	 * 
@@ -183,7 +181,7 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				new SelectionListener<MenuEvent>() {
 					@Override
 					public void componentSelected(MenuEvent ce) {
-						window.onDelete();
+						seleccionable.onDelete();
 					}
 				});
 	}
@@ -199,7 +197,8 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 					@Override
 					public void componentSelected(MenuEvent ce) {
 						getSelectionModel().selectAll();
-						window.setWindowState(State.UNKNOW_STATE);
+						//FIXME: Ver como solucionar este tema, ya que aparentemente es necesario setear el estado
+						//seleccionable.setWindowState(State.UNKNOW_STATE);
 					}
 				});
 	}
@@ -215,60 +214,10 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 					public void handleEvent(BaseEvent be) {
 						List seleccionados = getSelectionModel().getSelection();
 						itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
-						window.onSelect(seleccionados);
+						seleccionable.onSelect(seleccionados);
 					}
 				});		
 	}
 	
-	/***
-	 * se agrega este metodo ya que no lo invoco desde un componente windows
-	 * macioro
-	 */
-	@SuppressWarnings("null")
-	public Grid(LayoutContainer layoutContainer, String serviceName, List<ColumnConfig> configs, final Integer pageSize, String user) {
-		// Se invoca al constructor padre para que se inicialice todo
-		// convenientemente
-		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
-		this.window = window;
-
-		// Se obtiene el loader para indicarle cual es la grilla con la que
-		// trabaja y que el orden de las columnas se establece de forma remota
-		final Loader loader = (Loader) this.getStore().getLoader();
-		loader.setGrid(this);
-		loader.setRemoteSort(Boolean.TRUE);
-
-		// Se establece que los filtros se trabajaran de forma remota
-		filters.setLocal(Boolean.FALSE);
-		
-		//seteo el filtro usuario
-//		Filter userFilter = null;
-//		userFilter.setValue(user);
-//		filters.addFilter(userFilter);
-		this.addPlugin(filters);
-
-		// Establecemos una barra de herramientas y la relacionamos con el
-		// loader actual
-		toolBar = new PagingToolBar(pageSize);
-		toolBar.bind(loader);
-
-		setStateId("pagingGridExample");
-		setStateful(Boolean.TRUE);
-
-		// Se agrega un listener necesario para recargar la informacion de la
-		// grilla cuando se introduce algun filtro
-		addListener(Events.Attach, new Listener<GridEvent>() {
-			public void handleEvent(GridEvent be) {
-				PagingLoadConfig config = new BaseFilterPagingLoadConfig();
-				config.setOffset(0);
-				config.setLimit(pageSize);
-				loader.load(config);
-			}
-		});
-
-		// Habilitamos para que se muestre una mascara mientras se esta cargando
-		// la grilla
-		setLoadMask(Boolean.TRUE);
-
-	}
 	
 }
