@@ -21,7 +21,7 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
  * @author Leo
  *
  */
-public abstract class Window extends com.extjs.gxt.ui.client.widget.Window {
+public abstract class Window extends com.extjs.gxt.ui.client.widget.Window implements Seleccionable{
 
 	public static final Integer EXTRA_WIDTH = 20;
 	
