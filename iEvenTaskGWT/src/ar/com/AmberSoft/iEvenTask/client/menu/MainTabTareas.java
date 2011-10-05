@@ -3,8 +3,8 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-import ar.com.AmberSoft.iEvenTask.client.Context;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
+import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -20,7 +20,7 @@ import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.TextArea;
 
-public class MainTabTareas extends TabItem {
+public class MainTabTareas extends TabItem implements Seleccionable {
 
 	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH - (IEvenTask.APP_WINDOW_WIDTH/4);
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
@@ -39,7 +39,8 @@ public class MainTabTareas extends TabItem {
 		VerticalPanel verticalPanel_grilla = new VerticalPanel();
 		VerticalPanel verticalPanel_comentarios = new VerticalPanel();
 		@SuppressWarnings("unchecked")
-		Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10, Context.getInstance().getUsuario());
+		//Context.getInstance().getUsuario()
+		Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
 		
 		//seteo las propiedades al componente Grid
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
@@ -122,6 +123,18 @@ public class MainTabTareas extends TabItem {
 		configs.add(clmncnfgResponsable);
 
 		return configs;
+	}
+
+	@Override
+	public void onDelete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSelect(List selected) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
