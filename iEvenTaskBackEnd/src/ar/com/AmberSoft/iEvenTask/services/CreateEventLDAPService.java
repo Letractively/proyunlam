@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.util.Date;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
@@ -18,7 +19,7 @@ public class CreateEventLDAPService extends CreateService {
 		EventLDAP event = new EventLDAP();
 		event.setName((String) params.get(ParamsConst.NAME));
 		event.setPeriodicity(Service.stringToInteger((String)params.get(ParamsConst.PERIODICITY)));
-		//event.setExpiration(new Date());
+		event.setExpiration(new Date((Long)params.get(ParamsConst.EXPIRATION)));
 		event.setIterations(Service.stringToInteger((String)params.get(ParamsConst.ITERATIONS)));
 		event.setCode((String) params.get(ParamsConst.CODE));
 		return event;
