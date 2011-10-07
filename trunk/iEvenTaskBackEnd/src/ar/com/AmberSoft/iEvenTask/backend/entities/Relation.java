@@ -43,5 +43,6 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 		this.event = event;
 	}
 	
+	public abstract void execute();
 
 }
