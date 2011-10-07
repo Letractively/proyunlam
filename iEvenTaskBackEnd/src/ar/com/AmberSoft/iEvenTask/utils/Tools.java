@@ -2,8 +2,12 @@ package ar.com.AmberSoft.iEvenTask.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ResourceBundle;
 
 public class Tools {
+	
+	private ResourceBundle config = ResourceBundle.getBundle("config");
+	
 	/**
 	 * Retorna en un String la traza del error
 	 * 
@@ -17,4 +21,7 @@ public class Tools {
 		String stackTrace = sWriter.toString();
 		return stackTrace;
 	}
+	
+	
+	
 }
