@@ -46,6 +46,10 @@ public class BackgroundEventController extends TimerTask {
 	
 	private ResourceBundle config = ResourceBundle.getBundle("config");
 
+
+	public Map<Integer, BackgroundEventDetectProcess> getActiveProcesses() {
+		return activeProcesses;
+	}
 	
 	private BackgroundEventController(){
 		detectActivate = new Boolean(config.getString("event.detect"));
