@@ -39,5 +39,10 @@ public class RelationWithModifyStateTask extends Relation {
 	public void setToState(String toState) {
 		this.toState = toState;
 	}
+	@Override
+	public void execute() {
+		//FIXME: Invocar al servicio de modificacion de tareas
+		
+	}
 
 }
