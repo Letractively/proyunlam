@@ -1,6 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
-import java.util.Date;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
