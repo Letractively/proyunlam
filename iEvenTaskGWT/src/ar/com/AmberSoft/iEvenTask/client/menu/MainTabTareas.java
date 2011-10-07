@@ -47,8 +47,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		grid.defaultContextMenu();
 		grid.defaultActionOnSelectItem();
 		grid.setBorders(true);
-		//TODO agregar al pie de la grilla la paginacion
-//		verticalPanel_grilla.add(grid.getToolBar());
+		verticalPanel_grilla.add(grid.getToolBar());
 		verticalPanel_grilla.add(grid);
 		
 		
