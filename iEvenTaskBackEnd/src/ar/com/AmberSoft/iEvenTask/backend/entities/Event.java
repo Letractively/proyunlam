@@ -1,6 +1,8 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -12,6 +14,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.AmberSoft.util.PKGenerator;
 
@@ -27,6 +30,7 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 	private Integer iterations;
 	private Integer executions;
 	private Set<Relation> relations;
+	private Set<Relation> relationsAvaiables;
 
 	public Event (){
 		PKGenerator pkGenerator = new PKGenerator();
@@ -78,6 +82,24 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 		return relations;
 	}
 
+	public void filterRelationsAvaiables(){
+		Iterator<Relation> iRel = relations.iterator();
+		relationsAvaiables = new HashSet();
+		while (iRel.hasNext()) {
+			Relation relation = (Relation) iRel.next();
+			if (relation.getDelete()==null){
+				relationsAvaiables.add(relation);
+			}
+		}
+	}
+	
+
+	@Transient
+	public Set<Relation> getRelationsAvaiable() {
+		filterRelationsAvaiables();
+		return relationsAvaiables;
+	}
+	
 	public void setRelations(Set<Relation> relations) {
 		this.relations = relations;
 	}
