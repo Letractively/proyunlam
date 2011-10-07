@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.hibernate.Transaction;
-
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.util.ParamsConst;
 
@@ -24,7 +22,6 @@ public abstract class DeleteService extends Service {
 	
 	@Override
 	public Map onExecute(Map params) {
-		//Transaction transaction = getSession().beginTransaction();
 		Collection ids = (Collection) params.get(ParamsConst.IDS);
 		for (Iterator iterator = ids.iterator(); iterator.hasNext();) {
 			Integer id = (Integer) iterator.next();
@@ -32,7 +29,6 @@ public abstract class DeleteService extends Service {
 			entity.setDelete(new Date());
 			getSession().saveOrUpdate(entity);
 		}
-		//transaction.commit();
 		
 		return null;		
 	}
