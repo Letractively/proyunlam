@@ -2,6 +2,7 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,16 +42,18 @@ public class ListEventService extends ListService {
 	}
 
 	protected void addEventLDAP(Collection list) {
-		EventLDAP eventLDAP = new EventLDAP();
-		eventLDAP.setCode(eventLDAP.getId().toString());
-		eventLDAP.setIterations(eventLDAP.getId());
-		eventLDAP.setName("EventLDAP" + eventLDAP.getId().toString());
-		eventLDAP.setPeriodicity(eventLDAP.getId());
-		list.add(eventLDAP);
+		EventLDAP event = new EventLDAP();
+		event.setExpiration(new Date());
+		event.setCode(event.getId().toString());
+		event.setIterations(event.getId());
+		event.setName("EventLDAP" + event.getId().toString());
+		event.setPeriodicity(event.getId());
+		list.add(event);
 	}
 
 	protected void addEventFile(Collection list) {
 		EventFiles event = new EventFiles();
+		event.setExpiration(new Date());
 		event.setIterations(event.getId());
 		event.setName("EventFile" + event.getId().toString());
 		event.setPeriodicity(event.getId());
@@ -61,6 +64,7 @@ public class ListEventService extends ListService {
 
 	protected void addEventLogs(Collection list) {
 		EventLogs event = new EventLogs();
+		event.setExpiration(new Date());
 		event.setIterations(event.getId());
 		event.setName("EventLogs" + event.getId().toString());
 		event.setPeriodicity(event.getId());
@@ -71,6 +75,7 @@ public class ListEventService extends ListService {
 
 	protected void addEventService(Collection list) {
 		EventServices event = new EventServices();
+		event.setExpiration(new Date());
 		event.setIterations(event.getId());
 		event.setName("EventService" + event.getId().toString());
 		event.setPeriodicity(event.getId());
