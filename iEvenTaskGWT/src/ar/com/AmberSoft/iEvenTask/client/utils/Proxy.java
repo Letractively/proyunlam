@@ -8,7 +8,6 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.RpcProxy;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class Proxy extends RpcProxy {
