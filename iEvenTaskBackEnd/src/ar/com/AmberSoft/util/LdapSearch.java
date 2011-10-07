@@ -126,12 +126,12 @@ public class LdapSearch {
 				System.err.println("No se pudo parsear " + attribute + ":" + cDate);
 				e.printStackTrace();
 				
-				if (cDate.length() >= 18){
+				/*if (cDate.length() >= 18){
 					Integer high = new Integer(cDate.substring(0, 9));
 					Integer low = new Integer(cDate.substring(0, 9));
 					//return new Date ((((high * (2 ^ 32)) 
 	                 //       + low)/600000000 - lngBias)/1440);
-				}
+				}*/
 				
 			}
 		}
