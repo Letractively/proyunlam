@@ -388,7 +388,7 @@ public class RelationWindow extends Window {
 		}
 		Map params = new HashMap<String, String>();
 		params.put(ParamsConst.IDS, ids);
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_EVENT);
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_RELATION);
 		DispatcherUtil.getDispatcher().execute(params,
 				new AsyncCallback() {
 
