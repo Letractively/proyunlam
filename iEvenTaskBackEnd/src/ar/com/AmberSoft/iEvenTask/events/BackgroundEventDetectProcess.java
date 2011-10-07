@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Relation;
@@ -60,11 +61,13 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 		
 		Map params = new HashMap();
 		params.put(ParamsConst.ID, event.getId().toString());
+		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
+		
 		GetEventService getEventService = new GetEventService();
+		Transaction transaction = getEventService.getSession().beginTransaction();
 		Map result = getEventService.execute(params);
-		Set<Relation> relations = event.getRelations();
 		event = (Event) result.get(ParamsConst.ENTITY);
-		event.setRelations(relations);
+		
 		if(event.getExecutions()!=null){
 			executionCount = event.getExecutions(); 
 		}
@@ -73,7 +76,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 			logger.debug("Ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 			
 			if (eventDetect()){
-				Iterator<Relation> iRelations = relations.iterator();
+				Iterator<Relation> iRelations = event.getRelationsAvaiable().iterator();
 				while (iRelations.hasNext()) {
 					Relation relation = (Relation) iRelations.next();
 					relation.execute();
@@ -90,8 +93,10 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 		} else {
 			logger.debug("Se cancela el proceso de deteccion para el evento: " + event.getName());
 			timer.cancel();
+			BackgroundEventController.getInstance().getActiveProcesses().remove(event.getId());
 		}
 		
+		transaction.commit();
 	}
 	
 	/**
@@ -102,7 +107,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	 */
 	public Boolean isAvaiable(){
 		Date actual = new Date();
-		return ((event!=null) && (event.getDelete()==null) 
+		return ((event!=null) && (event.getDelete()==null) && (event.getRelationsAvaiable().size()>0)
 				&&((event.getIterations()==null) || (executionCount <= event.getIterations()))
 				&& ((event.getExpiration()==null) || (actual.before(event.getExpiration()))));
 	}

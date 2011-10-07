@@ -101,7 +101,7 @@ public class BackgroundEventController extends TimerTask {
 		// y que no se encuentren actualmente en ejecucion
 		for (Iterator iterator = events.iterator(); iterator.hasNext();) {
 			Event event = (Event) iterator.next();
-			Set relations = event.getRelations();
+			Set relations = event.getRelationsAvaiable();
 			if ((activeProcesses.get(event.getId())==null) && (relations!=null) && (relations.size()>0)){
 				activeProcesses.put(event.getId(), factory.getProcess(event));
 			}
