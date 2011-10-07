@@ -65,4 +65,6 @@ public abstract class ParamsConst {
 	public static final String EVENT = "event";
 	
 	public static final String TRANSACTION_CONTROL = "TRANSACTION_CONTROL";
+	
+	public static final String PROCESS = "process";
 }
