@@ -79,6 +79,7 @@ public class EventWindow extends Window {
 	private final VerticalPanel vPanelServicios = new VerticalPanel();
 
 	// Campos para Eventos LDAP
+	private final ComboBox fldUser = new ComboBox();
 	private final TextField fldCode = new TextField();
 
 	// Campos para Eventos Patrones en Logs
@@ -305,7 +306,44 @@ public class EventWindow extends Window {
 		CaptionPanel caption = new CaptionPanel("LDAP");
 		vPanel.add(caption);
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
-		caption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", FIELD_WIDTH, LABEL_WIDTH));
+		
+		VerticalPanel bodyCaption = new VerticalPanel();
+		caption.add(bodyCaption);
+		
+		Map params = new HashMap<String, String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display(
+								"iEvenTask",
+								"No se han podido consultar los usuarios LDAP.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+
+						Map map = (Map) result;
+						Collection users = (Collection) map.get(ParamsConst.DATA);
+						ListStore listStore = new ListStore();
+						Iterator it = users.iterator();
+						while (it.hasNext()) {
+							Map actual = (Map) it.next();
+							listStore.add(getModelData((String)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NAME)));
+						}
+						
+						fldUser.setStore(listStore);
+					}
+
+				});
+
+		bodyCaption.add(getFieldHorizontalLine(fldUser, "Usuario", FIELD_WIDTH, LABEL_WIDTH));
+		fldUser.setEditable(Boolean.FALSE);
+		fldUser.setTypeAhead(true);  
+		fldUser.setTriggerAction(TriggerAction.ALL); 
+		bodyCaption.add(getFieldHorizontalLine(fldCode, "Codigo de Evento", FIELD_WIDTH, LABEL_WIDTH));
 		fldCode.setAllowBlank(Boolean.FALSE);
 		vPanel.setVisible(Boolean.FALSE);
 	}
@@ -520,7 +558,9 @@ public class EventWindow extends Window {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.NAME, fldName.getValue());
 			params.put(ParamsConst.PERIODICITY, fldPeriodicity.getValue());
-			params.put(ParamsConst.EXPIRATION, fldExpiration.getValue().getTime());
+			if (fldExpiration.getValue()!=null){
+				params.put(ParamsConst.EXPIRATION, fldExpiration.getValue().getTime());
+			}
 			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
 
 			eventWindowOption.onSave(params);
