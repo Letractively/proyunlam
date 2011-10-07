@@ -31,7 +31,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	/**
 	 * Controlador del tiempo entre ejecuciones
 	 */
-	private Timer timer = new Timer();
+	private Timer timer;
 	
 	/**
 	 * Contador de ejecuciones
@@ -42,6 +42,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 		logger.debug("Inicializando BackgroundEventDetectProcess");
 		this.event = event;
 		if (isAvaiable()){
+			timer = new Timer();
 			timer.schedule(this, event.getPeriodicity());
 		}
 		logger.debug("Fin Inicializacion BackgroundEventDetectProcess");
@@ -75,8 +76,7 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 				Iterator<Relation> iRelations = relations.iterator();
 				while (iRelations.hasNext()) {
 					Relation relation = (Relation) iRelations.next();
-					//FIXME:Tomar la accion correspondiente para cada relacion ante la deteccion de cada evento
-					
+					relation.execute();
 				}
 			}
 
@@ -102,8 +102,9 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	 */
 	public Boolean isAvaiable(){
 		Date actual = new Date();
-		return (((event.getIterations()==null) || (executionCount <= event.getIterations()))
-				&& ((event.getExpiration()==null) || (actual.after(event.getExpiration()))));
+		return ((event!=null) && (event.getDelete()==null) 
+				&&((event.getIterations()==null) || (executionCount <= event.getIterations()))
+				&& ((event.getExpiration()==null) || (actual.before(event.getExpiration()))));
 	}
 	
 }
