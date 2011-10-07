@@ -26,6 +26,7 @@ public abstract class ServiceNameConst {
 	
 	public static final String CREATE_TASK = "ar.com.AmberSoft.iEvenTask.services.CreateTaskService";
 	public static final String UPDATE_TASK = "ar.com.AmberSoft.iEvenTask.services.UpdateTaskService";
+	public static final String DELETE_TASK = "ar.com.AmberSoft.iEvenTask.services.DeleteTaskService";
 	public static final String LIST_TASK = "ar.com.AmberSoft.iEvenTask.services.ListTaskService";
 
 	public static final String CREATE_EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.services.CreateEventLDAPService";
@@ -54,5 +55,4 @@ public abstract class ServiceNameConst {
 	
 	public static final String BACKGROUND_PROCESS_CONSULTING = "ar.com.AmberSoft.iEvenTask.services.BackgroundProcessService";
 	public static final String LIST_USERS = "ar.com.AmberSoft.iEvenTask.services.ListUserService";
-
 }
