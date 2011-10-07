@@ -39,8 +39,6 @@ public class IEvenTask implements EntryPoint {
 			iniciarLogin();
 		}
 		
-//		LoginWindow loginWindow = new LoginWindow();
-//		loginWindow.show();
 	}
 	
 	public static void iniciarSesion() {
