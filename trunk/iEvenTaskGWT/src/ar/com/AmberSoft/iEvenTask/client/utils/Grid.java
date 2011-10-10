@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
+import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
@@ -27,6 +28,7 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
 	public static final String SELECT_ALL = "Seleccionar Todos";
 	public static final String DELETE = "Elminar";
+	public static final String MODIFY = "Modificar";
 
 	/**
 	 * Ventana actual con la que trabaja la grilla
@@ -54,6 +56,12 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	 * la grilla
 	 */
 	private MenuItem itemDelete;
+
+	/**
+	 * Item del menu por default cuya funcionalidad es modificar un elemento de
+	 * la grilla
+	 */
+	private MenuItem itemModify;
 
 	/**
 	 * Barra de herramientas que se muestra debajo de la grilla
@@ -185,6 +193,26 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 					}
 				});
 	}
+	/**
+	 * Este metodo es igual al anterior, con la unica diferencia que se agrega el item "modificar"
+	 */
+	public void defaultContextMenuTask() {
+		addMenuItemSelectAll();
+		itemDelete = addContextMenuItem(DELETE, Boolean.FALSE,
+				new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				seleccionable.onDelete();
+			}
+		});
+		itemModify = addContextMenuItem(MODIFY, Boolean.FALSE,
+				new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				seleccionable.onModify();
+			}
+		});
+	}
 
 	/**
 	 * Agrega al menu contextual un item que permite seleccionar todos los elementos
@@ -219,5 +247,22 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				});		
 	}
 	
+	/**
+	 * Accion que realizará por defecto al seleccionar un registro de la grilla de Tareas
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void defaultActionOnSelectItemTask(){
+		// Acciones a realizar cuando selecciona algun registro de la grilla
+		getSelectionModel().addListener(Events.SelectionChange,
+				new Listener() {
+			@Override
+			public void handleEvent(BaseEvent be) {
+				List seleccionados = getSelectionModel().getSelection();
+				itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
+				itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
+				seleccionable.onSelect(seleccionados);
+			}
+		});		
+	}
 	
 }
