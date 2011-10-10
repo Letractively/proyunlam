@@ -310,6 +310,12 @@ public class ProfilesWindow extends Window {
 		
 	}
 
+	@Override
+	public void onModify() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

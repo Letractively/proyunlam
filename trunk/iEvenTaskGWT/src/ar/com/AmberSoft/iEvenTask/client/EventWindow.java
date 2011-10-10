@@ -594,6 +594,12 @@ public class EventWindow extends Window {
 			return super.isValid();
 		}
 	}
+
+	@Override
+	public void onModify() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }
