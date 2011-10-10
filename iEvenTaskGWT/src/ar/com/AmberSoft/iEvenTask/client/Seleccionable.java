@@ -12,4 +12,9 @@ public interface Seleccionable {
 	 * Se invoca cuando se realiza una accion de seleccion
 	 */
 	void onSelect(List selected);
+	
+	/**
+	 * Se invoca cuando se realiza una accion de modificacion
+	 */
+	void onModify();
 }

@@ -470,4 +470,10 @@ public class RelationWindow extends Window {
 		}
 	}
 
+	@Override
+	public void onModify() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -47,11 +47,11 @@ public class TaskWindow extends Window {
     Button btnGuardar = new Button("Guardar");
     Button btnCancelar = new Button("Cancelar");  
 	
-	public TaskWindow() {
+	public TaskWindow(String heading) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
 		
-		taskPanel.setHeading("Nueva Tarea");
+		taskPanel.setHeading(heading);
 		taskPanel.setFrame(true);
 		taskPanel.setWidth(TASK_PANEL_WIDTH);
 		
@@ -146,5 +146,32 @@ public class TaskWindow extends Window {
 	private String dateToString (Date fecha){
 		DateTimeFormat fmt = DateTimeFormat.getFormat("dd-MM-yyyy");
 		return fmt.format(fecha);
+	}
+	
+	/**
+	 * Setters para realizar la modificacion de una tarea
+	 */
+	public void setTaskName(String taskName) {
+		this.taskName.setValue(taskName);
+	}
+
+	public void setFecha_com(DateField fecha_com) {
+		this.fecha_com = fecha_com;
+	}
+
+	public void setFecha_fin(DateField fecha_fin) {
+		this.fecha_fin = fecha_fin;
+	}
+
+	public void setDuration(SpinnerField duration) {
+		this.duration = duration;
+	}
+
+	public void setDescription(String description) {
+		this.description.setValue(description);
+	}
+
+	public void setResponsable(String responsable) {
+		this.responsable.setValue(responsable);
 	}
 }

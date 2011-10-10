@@ -103,4 +103,10 @@ public class ExecutionDetailWindow extends Window {
 		store.add(baseModel);
 	}
 
+	@Override
+	public void onModify() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
