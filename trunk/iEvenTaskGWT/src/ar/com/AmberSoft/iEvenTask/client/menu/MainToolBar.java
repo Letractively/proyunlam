@@ -18,7 +18,7 @@ public class MainToolBar extends ToolBar {
 		Button btnNuevaTarea = new Button("Nueva Tarea");
 		btnNuevaTarea.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent be) {
-				TaskWindow taskWindow = new TaskWindow();
+				TaskWindow taskWindow = new TaskWindow("Nueva Tarea");
 				taskWindow.show();
 			}
 		});

@@ -2,21 +2,33 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
+import ar.com.AmberSoft.iEvenTask.client.State;
+import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
+import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.DateField;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.TextArea;
 
@@ -28,6 +40,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
 	public static final Integer COMMENT_BOX_HEIGTH = 80;
+	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
 	
 	public MainTabTareas(){
 		super("Tareas");
@@ -38,14 +51,12 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		VerticalPanel verticalPanel_grilla = new VerticalPanel();
 		VerticalPanel verticalPanel_comentarios = new VerticalPanel();
-		@SuppressWarnings("unchecked")
 		//Context.getInstance().getUsuario()
-		Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
 		
 		//seteo las propiedades al componente Grid
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
-		grid.defaultContextMenu();
-		grid.defaultActionOnSelectItem();
+		grid.defaultContextMenuTask();
+		grid.defaultActionOnSelectItemTask();
 		grid.setBorders(true);
 		verticalPanel_grilla.add(grid.getToolBar());
 		verticalPanel_grilla.add(grid);
@@ -126,14 +137,70 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 
 	@Override
 	public void onDelete() {
-		// TODO Auto-generated method stub
+
+		Collection ids = new ArrayList();
+		List seleccionados = grid.getSelectionModel().getSelectedItems();
+		Iterator it = seleccionados.iterator();
+		while (it.hasNext()) {
+			BaseModel model = (BaseModel) it.next();
+			ids.add(model.get(ParamsConst.ID));
+		}
+		Map params = new HashMap<String, String>();
+		params.put(ParamsConst.IDS, ids);
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_TASK);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display(
+								"iEvenTask",
+								"No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						Info.display("iEvenTask",
+								"Se eliminaron las tareas con exito.");
+						grid.getStore().getLoader().load();
+					}
+
+				});
+
+	}
+		
+	@Override
+	public void onSelect(List selected) {
+		if (selected.size() == 1) {
+			Iterator it = selected.iterator();
+			if (it.hasNext()) {
+				beforeUpdate((BaseModel) it.next());
+			}
+		}		
+	}
+
+
+	public void onModify(BaseModel baseModel) {
+		TaskWindow taskWindow = new TaskWindow("Modificar Tarea");
+		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+
+		if (actual != null) {
+			taskWindow.setTaskName(actual.get(ParamsConst.NOMBRE_TAREA).toString());
+			taskWindow.setDescription(actual.get(ParamsConst.DESCRIPCION).toString());
+			taskWindow.setResponsable(actual.get(ParamsConst.ID_USUARIO).toString());
+		}
+		
+		taskWindow.show();
+	}
+	
+	public void beforeUpdate(BaseModel baseModel) {
+
 		
 	}
 
 	@Override
-	public void onSelect(List selected) {
+	public void onModify() {
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
