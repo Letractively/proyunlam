@@ -16,6 +16,8 @@ public abstract class ServiceNameConst {
 	public static final String SERVICIO = "Servicio";
 	
 	public static final String LOGIN = "ar.com.AmberSoft.iEvenTask.services.LoginService";
+	public static final String CHECK_USER = "ar.com.AmberSoft.iEvenTask.services.CheckUserLogonService";
+	public static final String EXIT = "ar.com.AmberSoft.iEvenTask.services.ExitService";
 	
 	public static final String BROWSE_FILE = "ar.com.AmberSoft.iEvenTask.services.BrowseFilesService";
 	
@@ -55,4 +57,5 @@ public abstract class ServiceNameConst {
 	
 	public static final String BACKGROUND_PROCESS_CONSULTING = "ar.com.AmberSoft.iEvenTask.services.BackgroundProcessService";
 	public static final String LIST_USERS = "ar.com.AmberSoft.iEvenTask.services.ListUserService";
+	public static final String LIST_GROUPS = "ar.com.AmberSoft.iEvenTask.services.ListLDAPGroupsService";
 }

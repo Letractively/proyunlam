@@ -10,6 +10,10 @@ public abstract class ParamsConst {
 	public static final String EVENT_SERVICE = "ar.com.AmberSoft.iEvenTask.backend.entities.EventServices";
 	public static final String EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
 	
+	public static final String ERROR = "ERROR";
+	public static final String REQUEST = "REQUEST";
+	public static final String TRANSACTION_CONTROL = "TRANSACTION_CONTROL";
+	
 	public static final String PAGING_LOAD_RESULT = "PAGING_LOAD_RESULT";
 	
 	public static final String DATA = "DATA";
