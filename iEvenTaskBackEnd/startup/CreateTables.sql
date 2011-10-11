@@ -1,8 +1,6 @@
 create table iet_perfil (
 	id_perfil int primary key, 
-	nombre varchar(50) not null, 
-	ruta_conexion varchar(255) not null, 
-	grupo_ldap char(50) not null,
+	grupo_ldap char(150) unique,
 	eliminado datetime
 );
 
