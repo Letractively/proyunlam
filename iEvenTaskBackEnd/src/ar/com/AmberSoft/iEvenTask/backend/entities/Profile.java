@@ -20,8 +20,6 @@ import ar.com.AmberSoft.util.PKGenerator;
 public class Profile extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity  {
 	
 	private Integer id;
-	private String name;
-	private String connection;
 	private String groupLDAP;
 	private Set<Permission> permissions;
 	
@@ -35,20 +33,6 @@ public class Profile extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity 
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	@Basic @Column (name="nombre")
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	@Basic @Column (name="ruta_conexion")
-	public String getConnection() {
-		return connection;
-	}
-	public void setConnection(String connection) {
-		this.connection = connection;
 	}
 	@Basic @Column(name="grupo_ldap")
 	public String getGroupLDAP() {

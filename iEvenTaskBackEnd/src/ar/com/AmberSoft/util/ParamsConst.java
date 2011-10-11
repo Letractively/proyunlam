@@ -13,6 +13,9 @@ public abstract class ParamsConst {
 	private ParamsConst(){}
 	
 	public static final String PAGING_LOAD_RESULT = "PAGING_LOAD_RESULT";
+	public static final String ERROR = "ERROR";
+	public static final String REQUEST = "REQUEST";
+	
 	
 	public static final String DATA = "DATA";
 	public static final String OFFSET = "OFFSET";

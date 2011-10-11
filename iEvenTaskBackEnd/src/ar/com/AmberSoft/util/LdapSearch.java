@@ -7,10 +7,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
+import java.util.prefs.Preferences;
 
+import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.services.GetProfileService;
@@ -64,7 +68,60 @@ public class LdapSearch {
 	
 	
 	public static void main(String []args){
+		searchGroups();
 		search();
+	}
+	
+	
+	public static Collection<LDAPGroup> searchGroups(){
+		
+		Set<LDAPGroup> groups = new HashSet<LDAPGroup>();
+		
+		//Collection<LDAPGroup> groups = new ArrayList<LDAPGroup>();
+		
+		LDAPConnection connection = new LDAPConnection();
+		try {
+			// Se establece la conexion con el servidor LDAP
+			connection.connect("5.193.41.232", 389);
+			
+			// Se autentica el usuario
+			connection.bind(LDAPConnection.LDAP_V3, "Amber\\Leonel", "Amber2011".getBytes("UTF8"));
+			
+			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
+
+			while (ldapSearchResults.hasMore()){
+				User user = new User();
+				LDAPEntry ldapEntry = ldapSearchResults.next();
+				
+				LDAPAttribute ldapAttribute = ldapEntry.getAttribute("memberOf");
+				if (ldapAttribute!=null){
+					String memberOf = ldapAttribute.getStringValue();
+					String[] items = memberOf.split(",");
+					if (items!=null){
+						Collection<String> cItems = Arrays.asList(items);;
+						Iterator<String> it = cItems.iterator();
+						while (it.hasNext()) {
+							String actual = (String) it.next();
+							String [] subItems = actual.split("=");
+							if (subItems!=null){
+								Collection<String> cSubItems = Arrays.asList(subItems); 
+								Iterator<String> itSubs = cSubItems.iterator();
+								if ((itSubs.hasNext()) && ("CN".equals(itSubs.next()))){
+									String possibleProfile = itSubs.next();
+									LDAPGroup group = new LDAPGroup(possibleProfile);
+									groups.add(group);
+								}
+							}
+						}
+					}
+				}
+				
+			}
+			
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return groups;
 	}
 
 	public static Collection<User> search(){
@@ -84,12 +141,6 @@ public class LdapSearch {
 			while (ldapSearchResults.hasMore()){
 				User user = new User();
 				LDAPEntry ldapEntry = ldapSearchResults.next();
-				Set attr = ldapEntry.getAttributeSet();
-				Iterator it = attr.iterator();
-				while (it.hasNext()) {
-					LDAPAttribute ldapAttribute = (LDAPAttribute) it.next();
-					System.out.println("name:" + ldapAttribute.getName() + ", value:" + ldapAttribute.getStringValue());
-				}
 				
 				user.setId(getValue(ldapEntry, "sAMAccountName"));
 				user.setName(getValue(ldapEntry, "displayName"));
@@ -124,14 +175,10 @@ public class LdapSearch {
 				return format.parse(cDate);
 			} catch (ParseException e) {
 				System.err.println("No se pudo parsear " + attribute + ":" + cDate);
-				e.printStackTrace();
-				
-				/*if (cDate.length() >= 18){
-					Integer high = new Integer(cDate.substring(0, 9));
-					Integer low = new Integer(cDate.substring(0, 9));
-					//return new Date ((((high * (2 ^ 32)) 
-	                 //       + low)/600000000 - lngBias)/1440);
-				}*/
+				if (cDate.length() >= 18){
+					long llastLogonAdjust=11644473600000L;  // adjust factor for converting it to java    
+					return new Date(new Long(cDate)/10000-llastLogonAdjust);
+				}
 				
 			}
 		}
