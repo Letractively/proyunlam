@@ -40,8 +40,6 @@ public class ListProfileService extends ListService {
 
 	private void addPerfil(Collection list, Boolean permiso1, Boolean permiso2) {
 		Profile perfil = new Profile();
-		perfil.setName("Perfil" + perfil.getId().toString());
-		perfil.setConnection("Conexion" + perfil.getId().toString());
 		perfil.setGroupLDAP("Grupo" + perfil.getId().toString());
 		if (permiso1) {
 			addPermiso(perfil, CreateProfileService.ID_OBJECTIVE);

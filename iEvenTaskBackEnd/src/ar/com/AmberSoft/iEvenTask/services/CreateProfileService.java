@@ -21,8 +21,6 @@ public class CreateProfileService extends CreateService {
 	@Override
 	public Entity getEntity(Map params) {
 		Profile profile = new Profile();
-		profile.setName((String) params.get(ParamsConst.NAME));
-		profile.setConnection((String) params.get(ParamsConst.CONNECTION));
 		profile.setGroupLDAP((String) params.get(ParamsConst.GROUP));
 		
 		Boolean checkObjective = (Boolean) params.get(ParamsConst.CHECK_OBJECTIVE);
