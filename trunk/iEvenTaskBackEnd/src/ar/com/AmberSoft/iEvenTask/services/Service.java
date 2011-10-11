@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
@@ -61,7 +62,14 @@ public abstract class Service {
 		}
 		Map result = onExecute(params);
 		if (isTransactionControl(params)){
-			transaction.commit();
+			try{
+				transaction.commit();
+			} catch (ConstraintViolationException e){
+				transaction.rollback();
+				Map map = new HashMap();
+				map.put(ParamsConst.ERROR, "ConstraintViolationException");
+				return map;
+			}	
 		}
 		
 		return result;
