@@ -31,6 +31,9 @@
     				<fileset dir="../${compile.backendname}${compile.libfolder}">
     					<include name="**/*.jar" />
     				</fileset>
+        			<fileset dir="${compile.tomcatdir}/lib/">
+        		    	<include name="**/*.jar" />
+        		    </fileset>
         	</classpath>
         </javac>
 		<copy todir="../${compile.backendname}${compile.destfolder}">
