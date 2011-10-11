@@ -1,12 +1,20 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ar.com.AmberSoft.iEvenTask.client.menu.LoginPanel;
 import ar.com.AmberSoft.iEvenTask.client.menu.MainMenu;
 import ar.com.AmberSoft.iEvenTask.client.menu.MainStatusBar;
 import ar.com.AmberSoft.iEvenTask.client.menu.MainTabPanel;
 import ar.com.AmberSoft.iEvenTask.client.menu.MainToolBar;
+import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
+import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
+import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -23,27 +31,65 @@ public class IEvenTask implements EntryPoint {
 	public static final Integer DELAY = 1000;
 	
 	static RootPanel rootPanel;
+	
+	/*public static native void getUserLogon() /*-{
+		var objNet = CreateObject("WScript.NetWork") 
+		alert("Hola Mundo")
+		var strInfo
+		strInfo = "User Name is     " & objNet.UserName & vbCRLF & _
+		          "Computer Name is " & objNet.ComputerName & vbCRLF & _
+		          "Domain Name is   " & objNet.UserDomain
+		alert( strInfo)
+			
+	}-*/
+	//;
 
-	public void onModuleLoad() {
-		
+	public void onModuleLoad(){
+		/*try {
+			getUserLogon();
+		} catch (Exception e){
+			Context.getInstance().addDetailExecution(e.getMessage());
+		}¨*/
+	
 		rootPanel = RootPanel.get();
 		rootPanel.setStyleName("body");
 		rootPanel.setSize(APP_WINDOW_WIDTH.toString(), APP_WINDOW_HEIGTH.toString());
 		
-//		Info.display("Context.getInstance().setSesion(true)", String.valueOf(Context.getInstance().isSesion()));
-//		Info.display("Context.getInstance().getUsuario()", Context.getInstance().getUsuario());
+		Map params = new HashMap();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CHECK_USER);
+		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
 		
-		if(Context.getInstance().isSesion()){
-			iniciarSesion();
-		}else{
-			iniciarLogin();
-		}
+		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display("Error", "Ocurrio un error al intentar verificar si el usuario esta activo");
+			}
+
+			@Override
+			public void onSuccess(Object result) {
+				Map map = (Map) result;
+				if (map.get(ParamsConst.USER)!=null){
+					iniciarSesion();
+				} else {
+					iniciarLogin();
+				}
+			}
+		});
+		
+		//if(Context.getInstance().isSesion()){
+		//	iniciarSesion();
+		//}else{
+			//iniciarLogin();
+		//}
 		
 	}
 	
 	public static void iniciarSesion() {
 		//elimino del panel de logins
-		rootPanel.remove(RootPanel.get("login_panel"));
+		if (RootPanel.get("login_panel")!=null){
+			rootPanel.remove(RootPanel.get("login_panel"));
+		}
 		
 		//cargo el menu principal
 		MainMenu mainMenu = new MainMenu();
@@ -108,6 +154,21 @@ public class IEvenTask implements EntryPoint {
 	}
 	
 	public static void cerrarSesion(){
+		Map params = new HashMap();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.EXIT);
+		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
+		
+		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display("Error", "Ocurrio un error al intentar quitar de session el usuario actual");
+			}
+
+			@Override
+			public void onSuccess(Object result) {
+			}
+		});
         java.util.Iterator<Widget> itr = rootPanel.iterator();
         while(itr.hasNext()) {
                 itr.next();

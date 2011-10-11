@@ -16,15 +16,18 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
-import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
@@ -50,12 +53,13 @@ public class ProfilesWindow extends Window {
 	public static final Integer GRID_HEIGTH = 250;
 	
 	// Campos
-	final TextField fldName = new TextField();
-	final TextField fldConection = new TextField();
-	final TextField fldGroup = new TextField();
+	private final ComboBox fldGroup = new ComboBox();
 	final CheckBox fldObjective = new CheckBox();
 	final CheckBox fldAdmin = new CheckBox();
 	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
+	
+	final Button save = new SaveButton(this);
+	final Button cancel = new CancelButton(this);
 	
 	public ProfilesWindow() {
 		super();
@@ -98,8 +102,8 @@ public class ProfilesWindow extends Window {
 	 */
 	private void addToolBar() {
 		ToolBar toolBar = new ToolBar();
-		toolBar.add(new SaveButton(this));
-		toolBar.add(new CancelButton(this));
+		toolBar.add(save);
+		toolBar.add(cancel);
 		add(toolBar);
 	}
 
@@ -124,17 +128,42 @@ public class ProfilesWindow extends Window {
 	private VerticalPanel getPanelFields() {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		
-		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
-		fldName.setAllowBlank(Boolean.FALSE);
-		registerField(fldName);
-		
-		verticalPanel.add(getFieldHorizontalLine(fldConection, "Conexion", FIELD_WIDTH, LABEL_WIDTH));
-		fldConection.setAllowBlank(Boolean.FALSE);
-		registerField(fldConection);
-
 		verticalPanel.add(getFieldHorizontalLine(fldGroup, "Grupo LDAP", FIELD_WIDTH, LABEL_WIDTH));
 		fldGroup.setAllowBlank(Boolean.FALSE);
 		registerField(fldGroup);
+		
+		Map params = new HashMap<String, String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_GROUPS);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display(
+								"iEvenTask",
+								"No se han podido consultar los grupos LDAP.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+
+						Map map = (Map) result;
+						Collection groups = (Collection) map.get(ParamsConst.DATA);
+						ListStore listStore = new ListStore();
+						Iterator it = groups.iterator();
+						while (it.hasNext()) {
+							Map actual = (Map) it.next();
+							listStore.add(getModelData((String)actual.get(ParamsConst.NAME), (String)actual.get(ParamsConst.NAME)));
+						}
+						
+						fldGroup.setStore(listStore);
+					}
+
+				});
+
+		fldGroup.setEditable(Boolean.FALSE);
+		fldGroup.setTypeAhead(true);  
+		fldGroup.setTriggerAction(TriggerAction.ALL); 
 		
 		return verticalPanel;
 	}
@@ -184,13 +213,13 @@ public class ProfilesWindow extends Window {
 		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
+		/*ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
 		configs.add(clmncnfgNombre);
 
 		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONNECTION, "Conexion", 150);
-		configs.add(clmncnfgConexion);
+		configs.add(clmncnfgConexion);*/
 
-		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 150);
+		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 300);
 		configs.add(clmncnfgGrupoLdap);
 
 		return configs;
@@ -236,9 +265,7 @@ public class ProfilesWindow extends Window {
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 
 		if (actual != null) {
-			fldName.setValue(actual.get(ParamsConst.NAME));
-			fldConection.setValue(actual.get(ParamsConst.CONNECTION));
-			fldGroup.setValue(actual.get(ParamsConst.GROUP));
+			setCombo(fldGroup, (String)actual.get(ParamsConst.GROUP));
 			fldObjective.setValue(Boolean.FALSE);
 			fldAdmin.setValue(Boolean.FALSE);
 			Collection permisos = (Collection) actual.get(ParamsConst.PERMISSIONS);
@@ -261,11 +288,10 @@ public class ProfilesWindow extends Window {
 
 	@Override
 	public void onSave() {
+		componentsDisabled();
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
-			params.put(ParamsConst.NAME, fldName.getValue());
-			params.put(ParamsConst.CONNECTION, fldConection.getValue());
-			params.put(ParamsConst.GROUP, fldGroup.getValue());
+			params.put(ParamsConst.GROUP, fldGroup.getValue().get("key"));
 			params.put(ParamsConst.CHECK_OBJECTIVE,
 					fldObjective.getValue());
 			params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue());
@@ -293,20 +319,44 @@ public class ProfilesWindow extends Window {
 						public void onFailure(Throwable caught) {
 							Info.display("iEvenTask",
 									"No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
+							componentsEnabled();
 						}
 
 						@Override
 						public void onSuccess(Object result) {
-							Info.display("iEvenTask",
-									"Se almaceno el perfil con exito.");
-							clear();
-							grid.getStore().getLoader().load();						
+							if (result!=null){
+								Map response = (Map) result;
+								if (response.get(ParamsConst.ERROR).equals("ConstraintViolationException")){
+									Info.display("iEvenTask", 
+											"El Grupo LDAP ya existe como perfil, no es posible duplicarlos.");
+								} 
+							} else {
+								clear();
+								grid.getStore().getLoader().load();
+							}
+							componentsEnabled();
 						}
 
 					});
 
+		} else {
+			componentsEnabled();
 		}
 
+		
+	}
+
+	@Override
+	public void componentsEnabled() {
+		save.setEnabled(Boolean.TRUE);
+		cancel.setEnabled(Boolean.TRUE);
+		
+	}
+
+	@Override
+	public void componentsDisabled() {
+		save.setEnabled(Boolean.FALSE);
+		cancel.setEnabled(Boolean.FALSE);
 		
 	}
 
@@ -315,7 +365,6 @@ public class ProfilesWindow extends Window {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 
 }

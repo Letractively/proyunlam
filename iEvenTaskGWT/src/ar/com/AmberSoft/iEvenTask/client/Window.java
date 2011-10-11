@@ -130,6 +130,10 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 	 */
 	public abstract void onSave();
 	
+
+	public abstract void componentsEnabled();
+	public abstract void componentsDisabled();
+	
 	/**
 	 * Genera un panel horizontal con una etiqueta y el campo correspondiente
 	 * @param field
