@@ -596,6 +596,18 @@ public class EventWindow extends Window {
 	}
 
 	@Override
+	public void componentsEnabled() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentsDisabled() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
 	public void onModify() {
 		// TODO Auto-generated method stub
 		
