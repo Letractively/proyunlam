@@ -36,7 +36,7 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private int estado;
 	private int cumplimiento;
 	private int tipo_tarea;
-//	private Set<Comentario> comentarios;
+	private Set<Comentario> comentarios;
 	
 	@Id @Column (name="id_tarea")
 	public Integer getId() {
@@ -134,19 +134,19 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		this.tipo_tarea = tipo_tarea;
 	}
 	
-//	@OneToMany (mappedBy="task")
-//	public Set<Comentario> getComentarios() {
-//		return comentarios;
-//	}
-//
-//	public void setComentarios(Set<Comentario> comentarios) {
-//		this.comentarios = comentarios;
-//	}
-//	
-//	public void addComentario(Comentario comentario){
-//		if (comentarios==null){
-//			comentarios = new HashSet<Comentario>();
-//		}
-//		comentarios.add(comentario);
-//	}
+	@OneToMany (mappedBy="task")
+	public Set<Comentario> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(Set<Comentario> comentarios) {
+		this.comentarios = comentarios;
+	}
+	
+	public void addComentario(Comentario comentario){
+		if (comentarios==null){
+			comentarios = new HashSet<Comentario>();
+		}
+		comentarios.add(comentario);
+	}
 }

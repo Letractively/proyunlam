@@ -1,6 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +14,6 @@ import ar.com.AmberSoft.util.PKGenerator;
 
 @Entity
 @Table (name="iet_comentario")
-@Inheritance(strategy=InheritanceType.JOINED)
 public class Comentario {
 	private Integer id_comentario;
 	private Tarea task;
