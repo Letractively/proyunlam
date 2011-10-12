@@ -29,5 +29,11 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-3.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/jldap-4.3.jar"/>
+	<classpathentry kind="lib" path="lib/dsn.jar"/>
+	<classpathentry kind="lib" path="lib/imap.jar"/>
+	<classpathentry kind="lib" path="lib/mail.jar"/>
+	<classpathentry kind="lib" path="lib/mailapi.jar"/>
+	<classpathentry kind="lib" path="lib/pop3.jar"/>
+	<classpathentry kind="lib" path="lib/smtp.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
