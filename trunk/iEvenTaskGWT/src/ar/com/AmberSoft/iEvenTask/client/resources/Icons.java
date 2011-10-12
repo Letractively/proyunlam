@@ -5,6 +5,9 @@ import com.google.gwt.user.client.ui.ImageBundle;
 
 @SuppressWarnings("deprecation")
 public interface Icons extends ImageBundle {
+	  @Resource("comment_add.png")
+	  AbstractImagePrototype addComment();
+	
 	  @Resource("table.png")
 	  AbstractImagePrototype table();
 	  
