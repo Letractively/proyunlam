@@ -174,4 +174,29 @@ public class TaskWindow extends Window {
 	public void setResponsable(String responsable) {
 		this.responsable.setValue(responsable);
 	}
+	
+
+	public String getTaskName() {
+		return taskName.getValue();
+	}
+
+	public DateField getFecha_com() {
+		return fecha_com;
+	}
+
+	public DateField getFecha_fin() {
+		return fecha_fin;
+	}
+
+	public SpinnerField getDuration() {
+		return duration;
+	}
+
+	public String getDescription() {
+		return description.getValue();
+	}
+
+	public String getResponsable() {
+		return responsable.getValue();
+	}
 }
