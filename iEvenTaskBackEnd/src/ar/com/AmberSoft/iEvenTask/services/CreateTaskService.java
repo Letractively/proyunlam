@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.util.Date;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
@@ -18,8 +19,8 @@ public class CreateTaskService extends CreateService {
 	public Entity getEntity(Map params) {
 		Tarea tarea = new Tarea();
 		tarea.setNombreTarea((String)params.get(ParamsConst.NOMBRE_TAREA));
-		tarea.setFechaComienzo(Service.stringToDate((String)params.get(ParamsConst.FECHA_COMIENZO)));
-		tarea.setFechaFin(Service.stringToDate((String)params.get(ParamsConst.FECHA_FIN)));
+		tarea.setFechaComienzo((Date)params.get(ParamsConst.FECHA_COMIENZO));
+		tarea.setFechaFin((Date)params.get(ParamsConst.FECHA_FIN));
 		tarea.setDuracion((String)params.get(ParamsConst.DURACION));
 		tarea.setDescripcion((String)params.get(ParamsConst.DESCRIPCION));
 		tarea.setId_usuario((String) params.get(ParamsConst.ID_USUARIO));
