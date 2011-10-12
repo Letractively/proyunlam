@@ -111,11 +111,11 @@ public class TaskWindow extends Window {
 	
 	private void guardarTarea(){
 		if (isValid()){
-			Map<String,String> params = new HashMap<String,String>();
+			Map params = new HashMap();
 			
 			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
-			params.put(ParamsConst.FECHA_COMIENZO, dateToString(fecha_com.getValue()));
-			params.put(ParamsConst.FECHA_FIN, dateToString(fecha_fin.getValue()));
+			params.put(ParamsConst.FECHA_COMIENZO, fecha_com.getValue());
+			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.DURACION, duration.getValue().toString());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID_USUARIO, responsable.getValue());
