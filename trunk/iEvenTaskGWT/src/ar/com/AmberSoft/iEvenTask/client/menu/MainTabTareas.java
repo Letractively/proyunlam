@@ -7,20 +7,22 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
+import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Html;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -28,7 +30,6 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.TextArea;
 
 public class MainTabTareas extends TabItem implements Seleccionable {
 
@@ -37,7 +38,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
-	public static final Integer COMMENT_BOX_HEIGTH = 80;
+	public static final Integer COMMENT_BOX_HEIGTH = 240;
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
 	public TaskWindow taskWindowTemp;
 	
@@ -71,33 +72,33 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	private ContentPanel addComentarios(){
 		
 		final ContentPanel commentPanel = new ContentPanel();
+		commentPanel.setScrollMode(Scroll.AUTO);
 		commentPanel.setHeading("Comentarios");
-		
-		final TextArea newTextComment = new TextArea();
-		newTextComment.setCharacterWidth(35);
-		newTextComment.setVisibleLines(5);
-		commentPanel.add(newTextComment);
-		newTextComment.setSize(COMMENT_BOX_WIDTH.toString(), COMMENT_BOX_HEIGTH.toString());
-		
-		final TextArea otherTextComment = new TextArea();
-		otherTextComment.setCharacterWidth(35);
-		otherTextComment.setVisibleLines(5);
-		otherTextComment.setDirectionEstimator(true);
-		otherTextComment.setReadOnly(true);
-		otherTextComment.setVisible(false);
-		
-		Button btnAddComment = new Button("Add Comment");
-		btnAddComment.addSelectionListener(new SelectionListener<ButtonEvent>() {
-			public void componentSelected(ButtonEvent be) {
-				otherTextComment.setText(newTextComment.getText());
-				otherTextComment.setVisible(true);
-			}
-		});
-		commentPanel.setTopComponent(btnAddComment);
-		commentPanel.add(otherTextComment);
-		otherTextComment.setWidth(COMMENT_BOX_WIDTH.toString());
 		commentPanel.setSize(COMMENT_WIDTH.toString(), COMMENT_HEIGTH.toString());
 		
+		Button btnAddComment = new Button("Comentario");
+		commentPanel.add(btnAddComment);
+		btnAddComment.setIcon(Resources.ICONS.addComment());
+		btnAddComment.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent be) {
+				
+			}
+		});
+
+		Html html = new Html();
+		commentPanel.add(html);
+		html.setWidth(COMMENT_BOX_WIDTH);
+		html.setHeight(COMMENT_BOX_HEIGTH);
+		html.setBorders(Boolean.TRUE);
+		html.setHtml("<BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR>");
+
+		/*final HtmlEditor htmlEditor = new HtmlEditor();
+		commentPanel.add(htmlEditor);
+		htmlEditor.setWidth(COMMENT_BOX_WIDTH);
+		htmlEditor.setHeight(COMMENT_BOX_HEIGTH);
+		htmlEditor.setShowToolbar(Boolean.FALSE);
+		htmlEditor.setReadOnly(Boolean.TRUE);*/
+				
 		return commentPanel;
 	}
 	
