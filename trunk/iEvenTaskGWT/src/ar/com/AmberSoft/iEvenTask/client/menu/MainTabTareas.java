@@ -1,35 +1,33 @@
 package ar.com.AmberSoft.iEvenTask.client.menu;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
-import ar.com.AmberSoft.iEvenTask.client.State;
 import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
-import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.DateField;
-import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.TextArea;
 
 public class MainTabTareas extends TabItem implements Seleccionable {
@@ -41,6 +39,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
 	public static final Integer COMMENT_BOX_HEIGTH = 80;
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
+	public TaskWindow taskWindowTemp;
 	
 	public MainTabTareas(){
 		super("Tareas");
@@ -171,36 +170,29 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		
 	@Override
 	public void onSelect(List selected) {
-		if (selected.size() == 1) {
-			Iterator it = selected.iterator();
-			if (it.hasNext()) {
-				beforeUpdate((BaseModel) it.next());
-			}
-		}		
+
 	}
 
 
-	public void onModify(BaseModel baseModel) {
-		TaskWindow taskWindow = new TaskWindow("Modificar Tarea");
-		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+	public void onModify() {
 
-		if (actual != null) {
-			taskWindow.setTaskName(actual.get(ParamsConst.NOMBRE_TAREA).toString());
-			taskWindow.setDescription(actual.get(ParamsConst.DESCRIPCION).toString());
-			taskWindow.setResponsable(actual.get(ParamsConst.ID_USUARIO).toString());
-		}
-		
+		TaskWindow taskWindow = new TaskWindow("Modificar Tarea");
+		taskWindow.setTaskName(taskWindowTemp.getTaskName());
+		taskWindow.setDescription(taskWindowTemp.getDescription());
+		taskWindow.setResponsable(taskWindowTemp.getResponsable());
 		taskWindow.show();
 	}
 	
+
 	public void beforeUpdate(BaseModel baseModel) {
+		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 
-		
-	}
-
-	@Override
-	public void onModify() {
-		// TODO Auto-generated method stub
+		if (actual != null) {
+			taskWindowTemp.hide();
+			taskWindowTemp.setTaskName(actual.get(ParamsConst.NOMBRE_TAREA).toString());
+			taskWindowTemp.setDescription(actual.get(ParamsConst.DESCRIPCION).toString());
+			taskWindowTemp.setResponsable(actual.get(ParamsConst.ID_USUARIO).toString());
+		}
 		
 	}
 }
