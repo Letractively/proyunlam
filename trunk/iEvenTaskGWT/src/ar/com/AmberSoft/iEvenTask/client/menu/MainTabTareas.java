@@ -39,8 +39,8 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
 	public static final Integer COMMENT_BOX_HEIGTH = 240;
+	@SuppressWarnings("unchecked")
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
-	public TaskWindow taskWindowTemp;
 	
 	public MainTabTareas(){
 		super("Tareas");
@@ -135,9 +135,9 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		return configs;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void onDelete() {
-
 		Collection ids = new ArrayList();
 		List seleccionados = grid.getSelectionModel().getSelectedItems();
 		Iterator it = seleccionados.iterator();
@@ -153,15 +153,12 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display(
-								"iEvenTask",
-								"No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
+						Info.display("iEvenTask", "No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
 					}
 
 					@Override
 					public void onSuccess(Object result) {
-						Info.display("iEvenTask",
-								"Se eliminaron las tareas con exito.");
+						Info.display("iEvenTask", "Se eliminaron las tareas con exito.");
 						grid.getStore().getLoader().load();
 					}
 
@@ -169,31 +166,30 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 
 	}
 		
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void onSelect(List selected) {
 
 	}
 
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void onModify() {
-
-		TaskWindow taskWindow = new TaskWindow("Modificar Tarea");
-		taskWindow.setTaskName(taskWindowTemp.getTaskName());
-		taskWindow.setDescription(taskWindowTemp.getDescription());
-		taskWindow.setResponsable(taskWindowTemp.getResponsable());
+		List seleccionados = grid.getSelectionModel().getSelectedItems();
+		Map<Object,Object> actual = null;
+		if (seleccionados.size() == 1) {
+			Iterator it = seleccionados.iterator();
+			if (it.hasNext()) {
+				BaseModel model = (BaseModel) it.next();
+				actual = grid.search(ParamsConst.ID, model.get(ParamsConst.ID));
+			}
+		}
+		TaskWindow taskWindow = new TaskWindow(false);
+		taskWindow.setValuesToUpdate(actual);
 		taskWindow.show();
 	}
 	
-
-	public void beforeUpdate(BaseModel baseModel) {
-		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
-
-		if (actual != null) {
-			taskWindowTemp.hide();
-			taskWindowTemp.setTaskName(actual.get(ParamsConst.NOMBRE_TAREA).toString());
-			taskWindowTemp.setDescription(actual.get(ParamsConst.DESCRIPCION).toString());
-			taskWindowTemp.setResponsable(actual.get(ParamsConst.ID_USUARIO).toString());
-		}
-		
+	public static void reloadGrid(){
+//		grid.getStore().getLoader().load();
 	}
 }
