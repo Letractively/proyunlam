@@ -292,28 +292,22 @@ public class ProfilesWindow extends Window {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.GROUP, fldGroup.getValue().get("key"));
-			params.put(ParamsConst.CHECK_OBJECTIVE,
-					fldObjective.getValue());
+			params.put(ParamsConst.CHECK_OBJECTIVE,	fldObjective.getValue());
 			params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue());
 			if (windowState.equals(State.UPDATE_STATE)) {
-				List seleccionados = grid.getSelectionModel()
-						.getSelection();
+				List seleccionados = grid.getSelectionModel().getSelection();
 				if (seleccionados.size() == 1) {
 					Iterator it = seleccionados.iterator();
 					if (it.hasNext()) {
 						BaseModel baseModel = (BaseModel) it.next();
-						params.put(ParamsConst.ID,
-								baseModel.get(ParamsConst.ID));
+						params.put(ParamsConst.ID,baseModel.get(ParamsConst.ID));
 					}
 				}
-				params.put(ServiceNameConst.SERVICIO,
-						ServiceNameConst.UPDATE_PROFILE);
+				params.put(ServiceNameConst.SERVICIO,ServiceNameConst.UPDATE_PROFILE);
 			} else {
-				params.put(ServiceNameConst.SERVICIO,
-						ServiceNameConst.CREATE_PROFILE);
+				params.put(ServiceNameConst.SERVICIO,ServiceNameConst.CREATE_PROFILE);
 			}
-			DispatcherUtil.getDispatcher().execute(params,
-					new AsyncCallback() {
+			DispatcherUtil.getDispatcher().execute(params,new AsyncCallback() {
 
 						@Override
 						public void onFailure(Throwable caught) {

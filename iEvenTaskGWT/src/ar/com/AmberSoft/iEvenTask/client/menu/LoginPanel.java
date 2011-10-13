@@ -155,9 +155,7 @@ public class LoginPanel extends LayoutContainer {
 			public void onSuccess(Object result) {
 				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Bienvenido " + textUsuario.getValue());
 				Context.getInstance().setUsuario(textUsuario.getValue().toString()); 	
-				Info.display("Context.getInstance().getUsuario()", Context.getInstance().getUsuario());
 				Context.getInstance().setSesion(true); 	
-				Info.display("Context.getInstance().setSesion(true)", String.valueOf(Context.getInstance().isSesion()));
 				IEvenTask.iniciarSesion();
 //				timer.cancel();
 			}

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.menu.MainTabTareas;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -23,7 +24,6 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.SpinnerField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -45,13 +45,22 @@ public class TaskWindow extends Window {
     TextArea description = new TextArea();  
     TextField<String> responsable = new TextField<String>();
     Button btnGuardar = new Button("Guardar");
+    Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
+    Integer id_tarea;
 	
-	public TaskWindow(String heading) {
+    /**
+	 * @param guardar: boolean true para guardar / boolean false para modificar
+	 */
+	public TaskWindow(boolean guardar) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
 		
-		taskPanel.setHeading(heading);
+		if(guardar){
+			taskPanel.setHeading("Nueva Tarea");
+		}else{
+			taskPanel.setHeading("Modificar Tarea");
+		}
 		taskPanel.setFrame(true);
 		taskPanel.setWidth(TASK_PANEL_WIDTH);
 		
@@ -83,11 +92,21 @@ public class TaskWindow extends Window {
 		responsable.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
 		taskPanel.add(responsable);
 		
-		btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+		if(guardar){
+			btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+				public void componentSelected(ButtonEvent ce) {
+					guardarTarea();}});
+			taskPanel.addButton(btnGuardar);
+		}else{
+			btnModificar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+				public void componentSelected(ButtonEvent ce) {
+					modificarTarea();}});
+			taskPanel.addButton(btnModificar);
+		}
+		
+		btnCancelar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
-				guardarTarea();}});
-		taskPanel.addButton(btnGuardar);
-		 
+				cerrarVentana();}});
 		taskPanel.addButton(btnCancelar);  
 	  
 	    FormButtonBinding binding = new FormButtonBinding(taskPanel);  
@@ -111,7 +130,7 @@ public class TaskWindow extends Window {
 	
 	private void guardarTarea(){
 		if (isValid()){
-			Map params = new HashMap();
+			Map<Object,Object> params = new HashMap<Object,Object>();
 			
 			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
 			params.put(ParamsConst.FECHA_COMIENZO, fecha_com.getValue());
@@ -131,72 +150,65 @@ public class TaskWindow extends Window {
 			@Override
 			public void onSuccess(Object result) {
 				Info.display("iEvenTask", "Se guardo la tarea con exito.");
-				//resetFields(fldName, fldConection, fldGroup, fldObjective, fldAdmin);
 				//FIXME: Invocar a la primer pagina
 				//refreshGrid(grid);
+				cerrarVentana();
 			}
 			});
 		}
 	}
-	/**
-	 * 
-	 * @param fecha tipo Date
-	 * @return String formateado, el formato es el mismo con el que en el BackEnd se crea el Date.
-	 */
-	private String dateToString (Date fecha){
-		DateTimeFormat fmt = DateTimeFormat.getFormat("dd-MM-yyyy");
-		return fmt.format(fecha);
+	private void modificarTarea(){
+		if (isValid()){
+			Map<Object,Object> params = new HashMap<Object,Object>();
+			
+			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
+			params.put(ParamsConst.FECHA_COMIENZO, fecha_com.getValue());
+			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
+			params.put(ParamsConst.DURACION, duration.getValue().toString());
+			params.put(ParamsConst.DESCRIPCION, description.getValue());
+			params.put(ParamsConst.ID_USUARIO, responsable.getValue());
+			params.put(ParamsConst.ID, this.getId_tarea());
+			
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_TASK);
+			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Info.display("iEvenTask", "No pudo modificarse la tarea. Aguarde un momento y vuelva a intentarlo.");
+				}
+				
+				@Override
+				public void onSuccess(Object result) {
+					Info.display("iEvenTask", "Se modifico la tarea con exito.");
+					cerrarVentana();
+					MainTabTareas.reloadGrid();
+					
+				}
+			});
+		}
 	}
 	
-	/**
-	 * Setters para realizar la modificacion de una tarea
-	 */
-	public void setTaskName(String taskName) {
-		this.taskName.setValue(taskName);
-	}
-
-	public void setFecha_com(DateField fecha_com) {
-		this.fecha_com = fecha_com;
-	}
-
-	public void setFecha_fin(DateField fecha_fin) {
-		this.fecha_fin = fecha_fin;
-	}
-
-	public void setDuration(SpinnerField duration) {
-		this.duration = duration;
-	}
-
-	public void setDescription(String description) {
-		this.description.setValue(description);
-	}
-
-	public void setResponsable(String responsable) {
-		this.responsable.setValue(responsable);
+	@SuppressWarnings("deprecation")
+	private void cerrarVentana(){
+		this.close();
 	}
 	
-
-	public String getTaskName() {
-		return taskName.getValue();
+	public void setValuesToUpdate(Map<Object, Object> actual){
+		this.setId_tarea(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
+		taskName.setValue(actual.get(ParamsConst.NOMBRE_TAREA).toString());
+		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
+		responsable.setValue(actual.get(ParamsConst.ID_USUARIO).toString());
+		fecha_com.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_COMIENZO).toString())));
+		fecha_fin.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_FIN).toString())));
+		duration.setValue(Long.valueOf(actual.get(ParamsConst.DURACION).toString()));
 	}
 
-	public DateField getFecha_com() {
-		return fecha_com;
+	public Integer getId_tarea() {
+		return id_tarea;
 	}
 
-	public DateField getFecha_fin() {
-		return fecha_fin;
+	public void setId_tarea(Integer id_tarea) {
+		this.id_tarea = id_tarea;
 	}
-
-	public SpinnerField getDuration() {
-		return duration;
-	}
-
-	public String getDescription() {
-		return description.getValue();
-	}
-
-	public String getResponsable() {
-		return responsable.getValue();
-	}
+	
 }
