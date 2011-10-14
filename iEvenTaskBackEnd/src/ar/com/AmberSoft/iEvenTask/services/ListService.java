@@ -1,6 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,7 +57,7 @@ public abstract class ListService extends Service {
 		
 		setFiltersValuesInQuery(params, query);
 		setFiltersValuesInQuery(params, queryCount);
-		
+
 		Map map = new HashMap();
 		map.put(ParamsConst.DATA, query.list());
 		map.put(ParamsConst.TOTAL_COUNT, queryCount.uniqueResult());
