@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.extjs.gxt.ui.client.widget.Html;
+import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
+
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowNotRegisteredException;
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowPreviouslyRegisteredException;
 
@@ -30,7 +33,45 @@ public class Context {
 	private String usuario;
 	private String perfil;
 	private boolean sesion = false;
+	/**
+	 * HTML con los comentarios de las tareas
+	 * que se encuentra en la pantalla principal
+	 */
+	private HtmlEditor htmlEditor;
 	
+	//private Html html;
+	
+	/*public Html getHtml() {
+		return html;
+	}
+	
+	public void addHtml(String html){
+		this.html.setHtml(this.getHtml().getHtml() + html);
+		this.html.repaint();
+	}
+
+	public void setHtml(Html html) {
+		this.html = html;
+	}*/
+
+	public HtmlEditor getHtmlEditor() {
+		return htmlEditor;
+	}
+	
+	public void addHtml(String html){
+		String old = this.htmlEditor.getValue();
+		if (old != null){
+			this.htmlEditor.setValue(old + html);
+		} else {
+			this.htmlEditor.setValue(html);
+		}
+	}
+
+
+	public void setHtmlEditor(HtmlEditor htmlEditor) {
+		this.htmlEditor = htmlEditor;
+	}
+
 	public String getUsuario() {
 		return usuario;
 	}

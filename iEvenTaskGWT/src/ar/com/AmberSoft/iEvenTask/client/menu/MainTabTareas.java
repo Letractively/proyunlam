@@ -6,7 +6,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import ar.com.AmberSoft.iEvenTask.client.CommentWindows;
+import ar.com.AmberSoft.iEvenTask.client.Context;
+import ar.com.AmberSoft.iEvenTask.client.DialogInfo;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
@@ -22,11 +26,11 @@ import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Html;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -38,9 +42,10 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
-	public static final Integer COMMENT_BOX_HEIGTH = 240;
+	public static final Integer COMMENT_BOX_HEIGTH = 300;
 	@SuppressWarnings("unchecked")
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
+	
 	
 	public MainTabTareas(){
 		super("Tareas");
@@ -81,23 +86,41 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		btnAddComment.setIcon(Resources.ICONS.addComment());
 		btnAddComment.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent be) {
+				List seleccionados = grid.getSelectionModel().getSelectedItems();		
+				if (seleccionados.size()==1){
+					BaseModel baseModel = (BaseModel) seleccionados.iterator().next();
+					Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+					
+					Context.getInstance().windowShow(new CommentWindows((Integer)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NOMBRE_TAREA)));
+				} else {
+					if (seleccionados.size()==0){
+						DialogInfo dialogInfo = new DialogInfo( 
+								"Seleccione una tarea para agregar comentarios.");
+					} else {
+						DialogInfo dialogInfo = new DialogInfo( 
+							"Seleccione solo una tarea para agregar comentarios.");
+					}
+				}
+				
+				
 				
 			}
 		});
-
-		Html html = new Html();
+		
+		/*Html html = new Html();
 		commentPanel.add(html);
 		html.setWidth(COMMENT_BOX_WIDTH);
 		html.setHeight(COMMENT_BOX_HEIGTH);
 		html.setBorders(Boolean.TRUE);
-		html.setHtml("<BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR><BR>");
+		Context.getInstance().setHtml(html);*/
 
-		/*final HtmlEditor htmlEditor = new HtmlEditor();
+		final HtmlEditor htmlEditor = new HtmlEditor();
 		commentPanel.add(htmlEditor);
 		htmlEditor.setWidth(COMMENT_BOX_WIDTH);
 		htmlEditor.setHeight(COMMENT_BOX_HEIGTH);
 		htmlEditor.setShowToolbar(Boolean.FALSE);
-		htmlEditor.setReadOnly(Boolean.TRUE);*/
+		htmlEditor.setReadOnly(Boolean.TRUE);
+		Context.getInstance().setHtmlEditor(htmlEditor);
 				
 		return commentPanel;
 	}
@@ -167,9 +190,18 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	}
 		
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void onSelect(List selected) {
-
+	/**
+	 * Se invoca cuando se realiza una accion de seleccion
+	 */
+	public void onSelect(List selected){
+		if (selected.size() == 1) {
+			Iterator it = selected.iterator();
+			if (it.hasNext()) {
+				beforeUpdate((BaseModel) it.next());
+			}
+		} else {
+			Context.getInstance().getHtmlEditor().setValue("");
+		}
 	}
 
 
@@ -189,7 +221,27 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		taskWindow.show();
 	}
 	
-	public static void reloadGrid(){
-//		grid.getStore().getLoader().load();
+
+	public void beforeUpdate(BaseModel baseModel) {
+		
+		
+		
+		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+		
+		viewComment((Collection) actual.get(ParamsConst.COMENTARIOS));
+
+
+	}
+	
+	private void viewComment(Collection comentarios) {
+		Context.getInstance().getHtmlEditor().setValue("");
+		if (comentarios!=null){
+			Iterator it = comentarios.iterator();
+			while (it.hasNext()) {
+				Map actual= (Map) it.next();
+				String comentario = (String) actual.get(ParamsConst.COMENTARIO);
+				Context.getInstance().addHtml(comentario);
+			}
+		}
 	}
 }

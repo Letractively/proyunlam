@@ -59,7 +59,7 @@ public class IEvenTask implements EntryPoint {
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CHECK_USER);
 		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
 		
-		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+		/*DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -75,14 +75,8 @@ public class IEvenTask implements EntryPoint {
 					iniciarLogin();
 				}
 			}
-		});
-		
-		//if(Context.getInstance().isSesion()){
-		//	iniciarSesion();
-		//}else{
-			//iniciarLogin();
-		//}
-		
+		});*/
+		iniciarSesion();
 	}
 	
 	public static void iniciarSesion() {

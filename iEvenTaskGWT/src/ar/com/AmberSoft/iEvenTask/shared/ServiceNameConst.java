@@ -58,4 +58,6 @@ public abstract class ServiceNameConst {
 	public static final String BACKGROUND_PROCESS_CONSULTING = "ar.com.AmberSoft.iEvenTask.services.BackgroundProcessService";
 	public static final String LIST_USERS = "ar.com.AmberSoft.iEvenTask.services.ListUserService";
 	public static final String LIST_GROUPS = "ar.com.AmberSoft.iEvenTask.services.ListLDAPGroupsService";
+	
+	public static final String ADD_COMMENT = "ar.com.AmberSoft.iEvenTask.services.AddCommentService";
 }

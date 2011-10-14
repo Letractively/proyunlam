@@ -181,8 +181,7 @@ public class TaskWindow extends Window {
 				public void onSuccess(Object result) {
 					Info.display("iEvenTask", "Se modifico la tarea con exito.");
 					cerrarVentana();
-					MainTabTareas.reloadGrid();
-					
+				
 				}
 			});
 		}
