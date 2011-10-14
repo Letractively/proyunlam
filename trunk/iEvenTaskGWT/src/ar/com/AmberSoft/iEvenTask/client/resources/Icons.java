@@ -5,6 +5,13 @@ import com.google.gwt.user.client.ui.ImageBundle;
 
 @SuppressWarnings("deprecation")
 public interface Icons extends ImageBundle {
+	
+	@Resource("error.png")
+	  AbstractImagePrototype error();
+	
+	@Resource("info.png")
+	  AbstractImagePrototype info();
+	
 	  @Resource("comment_add.png")
 	  AbstractImagePrototype addComment();
 	

@@ -1,5 +1,8 @@
 package ar.com.AmberSoft.iEvenTask.client.utils;
 
+import ar.com.AmberSoft.iEvenTask.client.Context;
+import ar.com.AmberSoft.iEvenTask.client.DialogError;
+
 import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -26,7 +29,8 @@ public class GridDataCallback implements AsyncCallback {
 
 	@Override
 	public void onFailure(Throwable caught) {
-		Info.display("iEvenTask",
+		Context.getInstance().addDetailExecution(caught.getMessage());
+		DialogError dialogError = new DialogError(
 				"Fallo en la obtencion de la informacion para la grilla.");
 		if (proxyCallback != null) {
 			proxyCallback.onFailure(caught);
