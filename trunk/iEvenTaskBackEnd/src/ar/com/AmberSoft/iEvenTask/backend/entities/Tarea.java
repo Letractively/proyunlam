@@ -2,12 +2,12 @@ package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,7 +16,6 @@ import ar.com.AmberSoft.util.PKGenerator;
 
 @Entity
 @Table (name="iet_tarea")
-//@Inheritance(strategy=InheritanceType.JOINED)
 public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -132,7 +131,7 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		this.tipo_tarea = tipo_tarea;
 	}
 	
-	@OneToMany (mappedBy="task")
+	@OneToMany (mappedBy="tarea", fetch=FetchType.LAZY)
 	public Set<Comentario> getComentarios() {
 		return comentarios;
 	}
@@ -141,10 +140,4 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		this.comentarios = comentarios;
 	}
 	
-	public void addComentario(Comentario comentario){
-		if (comentarios==null){
-			comentarios = new HashSet<Comentario>();
-		}
-		comentarios.add(comentario);
-	}
 }

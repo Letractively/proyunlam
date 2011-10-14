@@ -45,7 +45,8 @@ public abstract class ParamsConst {
 	public static final String FECHAMODIFICACION = "fechaModificacion";
 	public static final String ESTADO = "estado";
 	public static final String CUMPLIMIENTO = "cumplimiento";
-	public static final String TIPO_TAREA = "tipoTarea";;
+	public static final String TIPO_TAREA = "tipoTarea";
+	public static final String COMMENT = "comment";
 	
 	public static final String PERIODICITY = "periodicity";
 	public static final String EXPIRATION = "expiration";

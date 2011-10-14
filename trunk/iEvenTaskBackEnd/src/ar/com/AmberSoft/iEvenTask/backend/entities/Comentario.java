@@ -1,11 +1,10 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -16,9 +15,19 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Table (name="iet_comentario")
 public class Comentario {
 	private Integer id_comentario;
-	private Tarea task;
 	private String comentario;
+	private Tarea tarea;
 	
+	@ManyToOne (fetch=FetchType.LAZY)
+	@JoinColumn (name="id_tarea")
+	public Tarea getTarea() {
+		return tarea;
+	}
+
+	public void setTarea(Tarea tarea) {
+		this.tarea = tarea;
+	}
+
 	public Comentario(){
 		PKGenerator pkGenerator = new PKGenerator();
 		id_comentario = new Integer(pkGenerator.getIntLastTime());
@@ -33,16 +42,7 @@ public class Comentario {
 		this.id_comentario = id_comentario;
 	}
 
-	@ManyToOne (fetch=FetchType.LAZY)
-	@JoinColumn (name="id_tarea")
-	public Tarea getTask() {
-		return task;
-	}
-
-	public void setTask(Tarea task) {
-		this.task = task;
-	}
-
+	@Basic @Column (name="comentario")
 	public String getComentario() {
 		return comentario;
 	}

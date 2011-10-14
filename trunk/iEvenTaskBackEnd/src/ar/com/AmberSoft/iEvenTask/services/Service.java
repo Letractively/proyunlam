@@ -74,7 +74,7 @@ public abstract class Service {
 		
 		return result;
 	}
-
+	
 	/**
 	 * Define si el mismo servicio maneja el control transaccional del acceso a BD
 	 * Por defecto lo maneja el mismo servicio
