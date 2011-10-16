@@ -52,6 +52,6 @@ DROP TABLE iet_relacion_nueva_tarea;
 DROP TABLE iet_relacion_modifica_estado;
 DROP TABLE iet_relacion;
 
-
+DROP TABLE iet_objetivo;
 
 
