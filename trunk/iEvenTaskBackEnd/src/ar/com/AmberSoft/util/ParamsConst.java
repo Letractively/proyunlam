@@ -48,6 +48,14 @@ public abstract class ParamsConst {
 	public static final String TIPO_TAREA = "tipoTarea";
 	public static final String COMMENT = "comment";
 	
+	//CONSTANTES PARA OBJETIVOS
+	public static final String  NOMBRE_OBJETIVO = "nombreObjetivo";
+	public static final String  TIPO_OBJETIVO = "tipoObjetivo";
+	public static final String  ESCALA_MEDICION = "escalaMedicion";
+	public static final String  FECHA_FINALIZACION = "fechaFinalizacion";
+	public static final String  PONDERACION = "ponderacion";
+	public static final String  ID_USUARIO_ASIGNADO = "idUsuarioAsignado";
+	
 	public static final String PERIODICITY = "periodicity";
 	public static final String EXPIRATION = "expiration";
 	public static final String ITERATIONS = "iterations";
