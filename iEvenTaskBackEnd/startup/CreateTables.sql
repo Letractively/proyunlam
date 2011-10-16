@@ -154,3 +154,15 @@ ADD CONSTRAINT fk_relacion_nueva_tarea_relacion FOREIGN KEY (id_relacion) REFERE
 ALTER TABLE iet_relacion_modifica_estado 
 ADD CONSTRAINT fk_relacion_modifica_estado_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
 
+create table iet_objetivo (
+	id_objetivo int primary key,
+	tipo_objetivo varchar(20),
+	nombre_objetivo varchar(255),
+	descripcion varchar(255),
+	escala_medicion varchar(20),
+	fecha_finalizacion datetime,
+	ponderacion int,
+	id_usuario_asignado varchar(255),
+	eliminado datetime
+);
+
