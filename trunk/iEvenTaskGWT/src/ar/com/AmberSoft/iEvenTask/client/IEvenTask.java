@@ -21,6 +21,8 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
+
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class IEvenTask implements EntryPoint {
 	
 	public static final Integer APP_WINDOW_WIDTH = 1024;
@@ -59,7 +61,7 @@ public class IEvenTask implements EntryPoint {
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CHECK_USER);
 		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
 		
-		/*DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -75,8 +77,14 @@ public class IEvenTask implements EntryPoint {
 					iniciarLogin();
 				}
 			}
-		});*/
-		iniciarSesion();
+		});
+		
+		//if(Context.getInstance().isSesion()){
+		//	iniciarSesion();
+		//}else{
+			//iniciarLogin();
+		//}
+		
 	}
 	
 	public static void iniciarSesion() {
