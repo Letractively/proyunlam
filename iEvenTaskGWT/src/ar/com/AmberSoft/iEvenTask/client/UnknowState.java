@@ -5,6 +5,7 @@ package ar.com.AmberSoft.iEvenTask.client;
  * @author Leo
  *
  */
+@SuppressWarnings("serial")
 public class UnknowState extends State {
 
 }

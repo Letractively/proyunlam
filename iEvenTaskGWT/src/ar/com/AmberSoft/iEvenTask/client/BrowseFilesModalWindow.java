@@ -19,8 +19,10 @@ import com.extjs.gxt.ui.client.widget.treegrid.TreeGridCellRenderer;
 
 public class BrowseFilesModalWindow extends Window {
 
+	@SuppressWarnings("rawtypes")
 	private final Field fieldValueReturn;
 	
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public BrowseFilesModalWindow(Field field) {
 		super();
 		this.fieldValueReturn = field;
@@ -33,6 +35,7 @@ public class BrowseFilesModalWindow extends Window {
 		// Acciones a realizar cuando selecciona algun registro de la grilla
 		treeGrid.getSelectionModel().addListener(Events.SelectionChange,
 				new Listener() {
+					@SuppressWarnings("deprecation")
 					@Override
 					public void handleEvent(BaseEvent be) {
 						List seleccionados = treeGrid.getSelectionModel().getSelection();
@@ -53,6 +56,7 @@ public class BrowseFilesModalWindow extends Window {
 	/**
 	 * Retorna la configuracion de la grilla de archivos
 	 */
+	@SuppressWarnings("rawtypes")
 	private List getTreeGridConfig() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 

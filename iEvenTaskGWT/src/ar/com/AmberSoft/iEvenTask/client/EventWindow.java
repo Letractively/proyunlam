@@ -46,6 +46,7 @@ import com.extjs.gxt.ui.client.widget.treegrid.TreeGridCellRenderer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
+@SuppressWarnings("rawtypes")
 public class EventWindow extends Window {
 
 	public static final Integer WINDOW_WIDTH = 800;
@@ -71,6 +72,7 @@ public class EventWindow extends Window {
 	private final DateField fldExpiration = new DateField();
 	private final TextField fldIterations = new TextField();
 	private final ComboBox fldType = new ComboBox();
+	@SuppressWarnings("unchecked")
 	private final Grid grid = new Grid(this, ServiceNameConst.LIST_EVENT, getGridConfig(), 10);
 	
 	private final VerticalPanel vPanelLDAP = new VerticalPanel();
@@ -244,6 +246,7 @@ public class EventWindow extends Window {
 	 * Agrega los campos 
 	 * @param verticalPanel
 	 */
+	@SuppressWarnings({"unchecked"})
 	private VerticalPanel getPanelFields() {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		
@@ -300,6 +303,7 @@ public class EventWindow extends Window {
 		eventWindowOption.setVisiblePanel();
 	}
 	
+	@SuppressWarnings({"unchecked"})
 	private void initializeLDAPPanel() {
 		VerticalPanel vPanel = this.vPanelLDAP;
 
@@ -374,6 +378,7 @@ public class EventWindow extends Window {
 		
 	}
 
+	@SuppressWarnings({"unchecked"})
 	private void initializeArchivosPanel() {
 		VerticalPanel vPanel = this.vPanelArchivos;
 
@@ -483,6 +488,7 @@ public class EventWindow extends Window {
 	/**
 	 * Retorna la configuracion de la grilla de archivos
 	 */
+	@SuppressWarnings({"unused"})
 	private List getTreeGridConfig() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
@@ -495,6 +501,7 @@ public class EventWindow extends Window {
 	}
 
 
+	@SuppressWarnings({"unchecked"})
 	@Override
 	public void onDelete() {
 		super.onDelete();
@@ -530,6 +537,7 @@ public class EventWindow extends Window {
 
 	}
 
+	@SuppressWarnings({"unchecked"})
 	@Override
 	public void beforeUpdate(BaseModel baseModel) {
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
@@ -552,6 +560,7 @@ public class EventWindow extends Window {
 		
 	}
 
+	@SuppressWarnings({"unchecked"})
 	@Override
 	public void onSave() {
 		if (isValid()) {

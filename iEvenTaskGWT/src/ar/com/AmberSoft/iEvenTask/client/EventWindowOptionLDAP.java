@@ -4,7 +4,7 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class EventWindowOptionLDAP extends EventWindowOption {
 
 	@Override

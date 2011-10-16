@@ -21,6 +21,8 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
  * @author Leo
  *
  */
+
+@SuppressWarnings("rawtypes")
 public abstract class Window extends com.extjs.gxt.ui.client.widget.Window implements Seleccionable{
 
 	public static final Integer EXTRA_WIDTH = 20;
@@ -67,6 +69,8 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 		return valid;
 	}
 	
+
+	@SuppressWarnings("unused")
 	protected void clear() {
 		Boolean valid = Boolean.TRUE;
 		Iterator it = fields.iterator();
@@ -175,6 +179,7 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 	 * @param comboBox
 	 * @param key
 	 */
+	@SuppressWarnings("unchecked")
 	protected void setCombo(ComboBox comboBox, String key) {
 		ListStore<ModelData> listStore = comboBox.getStore();
 		ModelData modelData = null;

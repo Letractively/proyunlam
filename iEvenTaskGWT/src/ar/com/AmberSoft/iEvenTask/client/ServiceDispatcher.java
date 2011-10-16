@@ -10,5 +10,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("serviceDispatcher")
 public interface ServiceDispatcher extends RemoteService {
+	@SuppressWarnings("rawtypes")
 	Map execute(Map params) throws IllegalArgumentException;
 }

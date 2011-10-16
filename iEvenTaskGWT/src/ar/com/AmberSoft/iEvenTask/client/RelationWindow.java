@@ -36,6 +36,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CaptionPanel;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RelationWindow extends Window {
 
 	public static final Integer WINDOW_WIDTH = 665;
