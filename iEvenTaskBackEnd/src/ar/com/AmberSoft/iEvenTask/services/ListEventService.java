@@ -13,6 +13,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventServices;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListEventService extends ListService {
 
 	@Override

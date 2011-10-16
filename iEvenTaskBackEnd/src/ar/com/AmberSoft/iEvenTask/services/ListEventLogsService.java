@@ -7,13 +7,14 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListEventLogsService extends ListEventService {
 	@Override
 	protected String getEntity() {
 		return EventLogs.class.getName();
 	}
 
+	
 	@Override
 	public Map onEmulate(Map params) {
 		Map map = new HashMap();

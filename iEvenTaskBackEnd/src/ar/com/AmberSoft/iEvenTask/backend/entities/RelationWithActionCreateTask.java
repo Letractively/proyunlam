@@ -15,6 +15,10 @@ import ar.com.AmberSoft.util.ParamsConst;
 @Table (name="iet_relacion_nueva_tarea")
 public class RelationWithActionCreateTask extends Relation {
 
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private String name;
 	private String user;
 	
@@ -33,6 +37,7 @@ public class RelationWithActionCreateTask extends Relation {
 	public void setUser(String user) {
 		this.user = user;
 	}
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public void execute() {
 	

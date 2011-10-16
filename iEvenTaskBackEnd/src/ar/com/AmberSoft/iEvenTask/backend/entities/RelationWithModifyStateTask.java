@@ -12,6 +12,10 @@ import javax.persistence.Table;
 @Table (name="iet_relacion_modifica_estado")
 public class RelationWithModifyStateTask extends Relation {
 	
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private String fromState;
 	private String toState;
 	private Tarea task;

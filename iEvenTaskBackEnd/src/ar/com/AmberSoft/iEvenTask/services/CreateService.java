@@ -3,7 +3,7 @@ package ar.com.AmberSoft.iEvenTask.services;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
-
+@SuppressWarnings("rawtypes")
 public abstract class CreateService extends Service {
 
 	@Override

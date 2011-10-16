@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes"})
 public class ExitService extends Service {
 
 	@Override

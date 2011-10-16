@@ -7,7 +7,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
 import ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class CreateRelationCreateTaskService extends CreateService {
 
 	@Override

@@ -6,7 +6,7 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventServices;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings("rawtypes")
 public class CreateEventServicesService extends CreateService {
 
 	@Override

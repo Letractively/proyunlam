@@ -19,6 +19,10 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Table (name="iet_perfil")
 public class Profile extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity  {
 	
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private Integer id;
 	private String groupLDAP;
 	private Set<Permission> permissions;

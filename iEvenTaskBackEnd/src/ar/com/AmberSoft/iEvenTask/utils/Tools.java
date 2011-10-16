@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 public class Tools {
 	
+	@SuppressWarnings("unused")
 	private ResourceBundle config = ResourceBundle.getBundle("config");
 	
 	/**

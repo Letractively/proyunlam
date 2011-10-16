@@ -10,6 +10,7 @@ import ar.com.AmberSoft.util.ParamsConst;
 
 public class DeleteProfileService extends DeleteService {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map onExecute(Map params) {
 		Collection ids = (Collection) params.get(ParamsConst.IDS);
@@ -24,6 +25,7 @@ public class DeleteProfileService extends DeleteService {
 	}
 
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class getEntity() {
 		return Profile.class;

@@ -9,7 +9,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Permission;
 import ar.com.AmberSoft.util.ParamsConst;
 
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListProfileService extends ListService {
 
 	@Override

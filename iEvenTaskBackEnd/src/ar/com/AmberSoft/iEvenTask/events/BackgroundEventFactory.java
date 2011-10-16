@@ -13,6 +13,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventServices;
 import ar.com.AmberSoft.iEvenTask.utils.Tools;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BackgroundEventFactory {
 	private static Logger logger = Logger.getLogger(BackgroundEventFactory.class);
 	

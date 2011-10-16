@@ -23,6 +23,10 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity {
 
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private Integer id;
 	private String name;
 	private Integer periodicity;
@@ -82,6 +86,7 @@ public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.
 		return relations;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void filterRelationsAvaiables(){
 		Iterator<Relation> iRel = relations.iterator();
 		relationsAvaiables = new HashSet();

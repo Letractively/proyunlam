@@ -9,6 +9,10 @@ import javax.persistence.Table;
 @Table (name="iet_evento_servicios")
 public class EventServices extends Event {
 
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private String host;
 	private String port;
 	

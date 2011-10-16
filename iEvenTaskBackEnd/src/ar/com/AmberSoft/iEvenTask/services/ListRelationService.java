@@ -15,6 +15,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Relation;
 import ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListRelationService extends ListService {
 
 	@Override

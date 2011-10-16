@@ -12,6 +12,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public class LDAPClient {
 	
 	public static final String DOMAIN = "java.naming.security.domain";
@@ -41,6 +42,7 @@ public class LDAPClient {
 		
 	}
 
+	@SuppressWarnings("unused")
 	public static void search(String user, String password){
 		NamingEnumeration results = null;
         DirContext ctx = null;

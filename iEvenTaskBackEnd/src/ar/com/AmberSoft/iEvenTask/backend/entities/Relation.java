@@ -17,6 +17,10 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity  {
 	
+	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
 	private Integer id;
 	private Event event;
 

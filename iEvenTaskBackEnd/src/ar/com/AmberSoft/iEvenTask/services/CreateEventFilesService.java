@@ -9,11 +9,13 @@ import ar.com.AmberSoft.util.ParamsConst;
 
 public class CreateEventFilesService extends CreateService {
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map onEmulate(Map params) {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Entity getEntity(Map params) {
 		EventFiles event = new EventFiles();

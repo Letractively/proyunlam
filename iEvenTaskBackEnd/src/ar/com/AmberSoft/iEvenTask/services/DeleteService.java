@@ -18,8 +18,10 @@ import ar.com.AmberSoft.util.ParamsConst;
  */
 public abstract class DeleteService extends Service {
 
+	@SuppressWarnings("rawtypes")
 	public abstract Class getEntity();
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map onExecute(Map params) {
 		Collection ids = (Collection) params.get(ParamsConst.IDS);
@@ -33,6 +35,7 @@ public abstract class DeleteService extends Service {
 		return null;		
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Map onEmulate(Map params) {
 		return null;

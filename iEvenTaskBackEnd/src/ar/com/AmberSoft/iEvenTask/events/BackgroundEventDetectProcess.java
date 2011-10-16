@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,6 +19,7 @@ import ar.com.AmberSoft.util.ParamsConst;
 /**
  * Proceso encargado de la deteccion de eventos en la aplicacion 
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public abstract class BackgroundEventDetectProcess extends TimerTask {
 
 	private static Logger logger = Logger.getLogger(BackgroundEventDetectProcess.class);

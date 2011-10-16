@@ -6,12 +6,13 @@ import java.util.HashSet;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
-import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.util.LdapSearch;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public final class ListLDAPGroupsService extends Service {
 
+	@SuppressWarnings("static-access")
 	@Override
 	public Map onExecute(Map params) {
 		LdapSearch ldapSearch = new LdapSearch();
@@ -25,6 +26,7 @@ public final class ListLDAPGroupsService extends Service {
 		return map;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public Map onEmulate(Map params) {
 		LdapSearch ldapSearch = new LdapSearch();

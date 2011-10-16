@@ -12,6 +12,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles;
 import ar.com.AmberSoft.iEvenTask.services.UpdateEntityService;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public class BackgroundEventDetectFilesProcess extends
 		BackgroundEventDetectProcess {
 	
