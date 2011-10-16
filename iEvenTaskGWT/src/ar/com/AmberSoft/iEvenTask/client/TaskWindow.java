@@ -92,25 +92,25 @@ public class TaskWindow extends Window {
 		responsable.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
 		taskPanel.add(responsable);
 		
+		FormButtonBinding binding = new FormButtonBinding(taskPanel);  
 		if(guardar){
 			btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 				public void componentSelected(ButtonEvent ce) {
 					guardarTarea();}});
 			taskPanel.addButton(btnGuardar);
+			binding.addButton(btnGuardar);  
 		}else{
 			btnModificar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 				public void componentSelected(ButtonEvent ce) {
 					modificarTarea();}});
 			taskPanel.addButton(btnModificar);
+			binding.addButton(btnModificar);  
 		}
 		
 		btnCancelar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
 				cerrarVentana();}});
 		taskPanel.addButton(btnCancelar);  
-	  
-	    FormButtonBinding binding = new FormButtonBinding(taskPanel);  
-	    binding.addButton(btnGuardar);  
 	    
 	    this.add(taskPanel);
 	}
@@ -181,7 +181,8 @@ public class TaskWindow extends Window {
 				public void onSuccess(Object result) {
 					Info.display("iEvenTask", "Se modifico la tarea con exito.");
 					cerrarVentana();
-				
+					MainTabTareas.reloadGrid();
+					
 				}
 			});
 		}
