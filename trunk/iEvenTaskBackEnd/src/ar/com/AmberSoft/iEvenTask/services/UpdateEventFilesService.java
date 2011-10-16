@@ -5,7 +5,7 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings({"rawtypes"})
 public class UpdateEventFilesService extends CreateEventFilesService {
 
 	@Override

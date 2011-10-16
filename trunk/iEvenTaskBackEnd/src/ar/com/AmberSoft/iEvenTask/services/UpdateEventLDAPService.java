@@ -5,7 +5,7 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings({"rawtypes"})
 public class UpdateEventLDAPService extends CreateEventLDAPService {
 
 	@Override

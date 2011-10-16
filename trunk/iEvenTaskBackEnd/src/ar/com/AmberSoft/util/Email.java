@@ -28,6 +28,7 @@ public class Email {
 	private String auth;
 	private String user;
 	private String password;
+	@SuppressWarnings("rawtypes")
 	private Collection destinatarios;
 	private String asunto;
 	private StringBuffer mensaje;
@@ -59,6 +60,7 @@ public class Email {
 	/**
 	 * Envia el email
 	 */
+	@SuppressWarnings("rawtypes")
 	public String enviar(){
 	    String    error = null;
 		 
@@ -118,10 +120,12 @@ public class Email {
 	    return error;		
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection getDestinatarios() {
 		return destinatarios;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setDestinatarios(Collection destinatarios) {
 		this.destinatarios = destinatarios;
 	}

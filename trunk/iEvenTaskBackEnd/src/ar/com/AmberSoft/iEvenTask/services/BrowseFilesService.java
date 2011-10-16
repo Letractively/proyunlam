@@ -14,6 +14,7 @@ public class BrowseFilesService extends Service {
 
 	public static final String COMPUTER = "COMPUTER";
 	
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Map onExecute(Map params) {
 
@@ -42,6 +43,7 @@ public class BrowseFilesService extends Service {
 		return map;
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public Map onEmulate(Map params) {
 		Collection<File> files = new ArrayList<File>();
@@ -77,6 +79,7 @@ public class BrowseFilesService extends Service {
 		return map;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Collection transformFiles(Collection<File> roots) {
 		Collection files = new ArrayList();
 		Iterator it = roots.iterator();
@@ -94,6 +97,7 @@ public class BrowseFilesService extends Service {
 		return files;
 	}
 	
+	@SuppressWarnings({"unused", "rawtypes"})
 	private Boolean isTransactionControl(Map params) {
 		return Boolean.FALSE;
 	}

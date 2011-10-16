@@ -82,6 +82,7 @@ public class BackgroundEventController extends TimerTask {
 		return instance;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	/**
 	 * El primer run debe ser forzado por la aplicacion

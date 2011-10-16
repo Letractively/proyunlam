@@ -11,8 +11,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
-import java.util.prefs.Preferences;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
@@ -59,7 +57,7 @@ name:badPwdCount, value:0
 name:cn, value:Analista 8
  *
  */
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class LdapSearch {
 	
 	public static final String DOMAIN = "java.naming.security.domain";
@@ -73,6 +71,7 @@ public class LdapSearch {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	public static Collection<LDAPGroup> searchGroups(){
 		
 		Set<LDAPGroup> groups = new HashSet<LDAPGroup>();

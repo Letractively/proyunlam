@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class CheckUserLogonService extends Service {
 
 	@Override

@@ -10,6 +10,7 @@ import ar.com.AmberSoft.util.Email;
 
 public class BackgroundSendMailAlert extends TimerTask{
 
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(BackgroundSendMailAlert.class);
 	
 	@Override

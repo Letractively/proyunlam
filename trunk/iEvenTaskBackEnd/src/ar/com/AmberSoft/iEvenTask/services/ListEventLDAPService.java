@@ -8,6 +8,7 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListEventLDAPService extends ListEventService {
 	@Override
 	protected String getEntity() {

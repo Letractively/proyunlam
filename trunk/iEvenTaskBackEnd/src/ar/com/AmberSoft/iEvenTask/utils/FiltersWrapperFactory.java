@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.extjs.gxt.ui.client.data.BaseFilterConfig;
 import com.extjs.gxt.ui.client.data.BaseStringFilterConfig;
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class FiltersWrapperFactory {
 	
 	private static FiltersWrapperFactory factory;

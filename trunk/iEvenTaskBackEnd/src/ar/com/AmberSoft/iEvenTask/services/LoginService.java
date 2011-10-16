@@ -8,6 +8,7 @@ import ar.com.AmberSoft.iEvenTask.shared.exceptions.LoginFailureException;
 import ar.com.AmberSoft.util.LDAPClient;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes"})
 public class LoginService extends Service {
 
 	@Override

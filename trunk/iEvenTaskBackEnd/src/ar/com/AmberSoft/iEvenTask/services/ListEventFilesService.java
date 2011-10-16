@@ -8,11 +8,13 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles;
 import ar.com.AmberSoft.util.ParamsConst;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListEventFilesService extends ListEventService {
 	@Override
 	protected String getEntity() {
 		return EventFiles.class.getName();
 	}
+
 
 	@Override
 	public Map onEmulate(Map params) {

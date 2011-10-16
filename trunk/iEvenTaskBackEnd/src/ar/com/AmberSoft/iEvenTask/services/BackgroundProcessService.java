@@ -7,7 +7,7 @@ import ar.com.AmberSoft.iEvenTask.events.BackgroundEventController;
 import ar.com.AmberSoft.iEvenTask.events.BackgroundEventDetectFilesProcess;
 import ar.com.AmberSoft.iEvenTask.events.BackgroundEventDetectProcess;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class BackgroundProcessService extends Service {
 
 	@Override

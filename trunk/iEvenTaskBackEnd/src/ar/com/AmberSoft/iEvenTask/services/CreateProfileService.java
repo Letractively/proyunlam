@@ -6,7 +6,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Permission;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.util.ParamsConst;
-
+@SuppressWarnings("rawtypes")
 public class CreateProfileService extends CreateService {
 
 	// Los siguientes IDs tienen que tener relacion con los ids que se encuentran en la tabla de permisos
