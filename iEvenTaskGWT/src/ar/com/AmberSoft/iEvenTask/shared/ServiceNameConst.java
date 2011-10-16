@@ -31,6 +31,11 @@ public abstract class ServiceNameConst {
 	public static final String DELETE_TASK = "ar.com.AmberSoft.iEvenTask.services.DeleteTaskService";
 	public static final String LIST_TASK = "ar.com.AmberSoft.iEvenTask.services.ListTaskService";
 
+	public static final String CREATE_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.CreateObjectiveService";
+	public static final String UPDATE_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.UpdateObjectiveService";
+	public static final String DELETE_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.DeleteObjectiveService";
+	public static final String LIST_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.ListObjectiveService";
+
 	public static final String CREATE_EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.services.CreateEventLDAPService";
 	public static final String CREATE_EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.services.CreateEventLogsService";
 	public static final String CREATE_EVENT_FILES = "ar.com.AmberSoft.iEvenTask.services.CreateEventFilesService";
