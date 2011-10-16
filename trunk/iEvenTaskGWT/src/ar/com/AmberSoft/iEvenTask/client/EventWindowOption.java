@@ -8,6 +8,7 @@ import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseModel;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public abstract class EventWindowOption {
 
 	public static final String LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";

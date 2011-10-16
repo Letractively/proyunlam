@@ -6,7 +6,7 @@ import com.extjs.gxt.ui.client.data.ModelData;
 
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
-
+@SuppressWarnings({"rawtypes","unchecked"})
 public class EventWindowOptionFiles extends EventWindowOption {
 
 	@Override

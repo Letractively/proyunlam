@@ -11,6 +11,7 @@ public interface Seleccionable {
 	/**
 	 * Se invoca cuando se realiza una accion de seleccion
 	 */
+	@SuppressWarnings("rawtypes")
 	void onSelect(List selected);
 	
 	/**

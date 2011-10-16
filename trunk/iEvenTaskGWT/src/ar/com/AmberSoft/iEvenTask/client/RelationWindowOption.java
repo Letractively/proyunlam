@@ -23,14 +23,17 @@ public abstract class RelationWindowOption {
 		this.relationWindow = relationWindow;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public abstract void onSave(Map params);
 
 	public abstract void setVisiblePanel();
 
+	@SuppressWarnings("rawtypes")
 	public abstract void beforeUpdate(Map actual);
 
 	public abstract Boolean isValid();
-
+	
+	@SuppressWarnings({"rawtypes","unchecked"})
 	protected void setId(Map params) {
 		List seleccionados = relationWindow.getGrid().getSelectionModel().getSelection();
 		if (seleccionados.size() == 1) {

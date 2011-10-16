@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LoginWindow extends Window {
 
 	private Timer timer;

@@ -6,6 +6,7 @@ import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 //TODO: PARA FINALIZAR ESTA PARTE ES NECESARIO QUE ESTE TERMINADA LA OPCION DE GESTION DE TAREAS
+@SuppressWarnings({"rawtypes","unchecked"})
 public class RelationWindowOptionModifyState extends RelationWindowOption {
 
 	@Override

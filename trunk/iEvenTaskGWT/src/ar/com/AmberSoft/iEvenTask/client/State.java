@@ -2,6 +2,7 @@ package ar.com.AmberSoft.iEvenTask.client;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class State implements Serializable {
 
 	/**

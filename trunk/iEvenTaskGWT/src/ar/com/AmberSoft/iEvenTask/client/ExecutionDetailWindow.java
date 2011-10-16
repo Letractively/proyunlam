@@ -17,6 +17,7 @@ import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public class ExecutionDetailWindow extends Window {
 
 	public static final Integer WINDOW_WIDTH = 950;
