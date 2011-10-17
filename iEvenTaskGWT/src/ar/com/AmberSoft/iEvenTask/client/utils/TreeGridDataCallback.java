@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.client.utils;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TreeGridDataCallback implements AsyncCallback {
 
 	private TreeGrid grid;
@@ -34,6 +35,7 @@ public class TreeGridDataCallback implements AsyncCallback {
 
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onSuccess(Object result) {
 		if (result instanceof PagingLoadResult) {

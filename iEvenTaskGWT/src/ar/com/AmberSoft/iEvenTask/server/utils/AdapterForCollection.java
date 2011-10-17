@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 public class AdapterForCollection implements Compatibilizable {
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object adapt(Object actual) {
 

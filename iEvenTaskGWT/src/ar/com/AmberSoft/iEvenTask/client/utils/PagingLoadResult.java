@@ -9,6 +9,7 @@ import java.util.Set;
 
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
+@SuppressWarnings({"rawtypes","unchecked", "serial"})
 public class PagingLoadResult implements
 		com.extjs.gxt.ui.client.data.PagingLoadResult, Map, Serializable {
 

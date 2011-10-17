@@ -2,16 +2,12 @@ package ar.com.AmberSoft.iEvenTask.client.utils;
 
 import java.util.List;
 
-import ar.com.AmberSoft.iEvenTask.client.Window;
 import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
-import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
-import com.extjs.gxt.ui.client.event.BaseEvent;
-import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 
+@SuppressWarnings("rawtypes")
 public class TreeGrid extends
 		com.extjs.gxt.ui.client.widget.treegrid.TreeGrid {
 

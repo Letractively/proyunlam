@@ -6,6 +6,7 @@ package ar.com.AmberSoft.iEvenTask.client.exceptions;
  * @author Leo
  *
  */
+@SuppressWarnings("serial")
 public class GWTException extends RuntimeException {
 
 }

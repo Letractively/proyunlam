@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.data.TreeLoadEvent;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TreeLoader extends BaseTreeLoader {
 
 	@Override

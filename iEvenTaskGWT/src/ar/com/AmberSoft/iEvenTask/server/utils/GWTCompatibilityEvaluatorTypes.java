@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+@SuppressWarnings({"rawtypes" ,"unchecked"})
 public class GWTCompatibilityEvaluatorTypes {
 
 	private static Collection typesGroups;
@@ -47,6 +48,8 @@ public class GWTCompatibilityEvaluatorTypes {
 	/**
 	 * Inicializa la coleccion de tipos compatibles con GWT
 	 */
+
+
 	private void initialize() {
 		if (typesGroups==null){
 			compatibleTypes1 = new ArrayList();

@@ -16,6 +16,7 @@ import com.extjs.gxt.ui.client.util.Util;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ListStore extends com.extjs.gxt.ui.client.store.ListStore {
 
 	public ListStore() {
@@ -26,7 +27,6 @@ public class ListStore extends com.extjs.gxt.ui.client.store.ListStore {
 		super(loader);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void onLoad(LoadEvent le) {
 		this.config = (ListLoadConfig) le.getConfig();
 

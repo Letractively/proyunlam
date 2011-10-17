@@ -8,11 +8,11 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
-import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.DataReader;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class TreeGridProxy extends RpcProxy {
 
 	private final TreeGridDataCallback callback;
@@ -27,7 +27,6 @@ public class TreeGridProxy extends RpcProxy {
 		        callback.onFailure(caught);
 		      }
 
-		      @SuppressWarnings("unchecked")
 		      public void onSuccess(Object result) {
 		        try {
 		          Object data = null;

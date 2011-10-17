@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.extjs.gxt.ui.client.data.BaseTreeModel;
 
+@SuppressWarnings("serial")
 public class Music extends BaseTreeModel implements Serializable {
 	  public Music() {
 
