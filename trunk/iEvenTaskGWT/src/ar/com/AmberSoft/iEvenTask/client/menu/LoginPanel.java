@@ -46,6 +46,7 @@ public class LoginPanel extends LayoutContainer {
 	TextField textPassword = new TextField();
 //	Timer timer;
 	
+	@SuppressWarnings("rawtypes")
 	public LoginPanel() {
 		super();
 		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.APP_WINDOW_HEIGTH.toString());
@@ -133,7 +134,7 @@ public class LoginPanel extends LayoutContainer {
 		this.add(mainLoginPanel);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void presionoEnter(ComponentEvent event) {
 		
 		if (mainLoginPanel.isValid()) {
