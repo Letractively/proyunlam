@@ -16,8 +16,8 @@ public class CreateObjectiveService extends CreateService {
 		objetivo.setNombreObjetivo((String)params.get(ParamsConst.NOMBRE_OBJETIVO));
 		objetivo.setTipoObjetivo((String)params.get(ParamsConst.TIPO_OBJETIVO));
 		objetivo.setEscalaMedicion((String)params.get(ParamsConst.ESCALA_MEDICION));
-//		objetivo.setFechaFinalizacion((Date)params.get(ParamsConst.FECHA_FINALIZACION));
-//		objetivo.setPonderacion((Integer)params.get(ParamsConst.PONDERACION));
+		objetivo.setFechaFinalizacion((Date)params.get(ParamsConst.FECHA_FINALIZACION));
+		objetivo.setPonderacion((Integer)params.get(ParamsConst.PONDERACION));
 		objetivo.setIdUsuarioAsignado((String) params.get(ParamsConst.ID_USUARIO_ASIGNADO));
 		objetivo.setDescripcion((String)params.get(ParamsConst.DESCRIPCION));
 		
