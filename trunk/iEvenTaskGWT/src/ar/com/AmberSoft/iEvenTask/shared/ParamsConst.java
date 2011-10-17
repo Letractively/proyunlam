@@ -80,4 +80,6 @@ public abstract class ParamsConst {
 	
 	public static final String PROCESS = "process";
 	
+	public static final String USUARIO = "usuario";
+	public static final String FECHA = "fecha";
 }
