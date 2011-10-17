@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
-import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
@@ -24,6 +23,7 @@ import com.extjs.gxt.ui.client.widget.menu.Menu;
 import com.extjs.gxt.ui.client.widget.menu.MenuItem;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 
+@SuppressWarnings({"rawtypes","unchecked"})
 public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 
 	public static final String SELECT_ALL = "Seleccionar Todos";
@@ -99,6 +99,7 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		}
 		return null;
 	}
+
 
 	public Grid(Seleccionable seleccionable, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {
 		// Se invoca al constructor padre para que se inicialice todo
@@ -250,7 +251,6 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	/**
 	 * Accion que realizará por defecto al seleccionar un registro de la grilla de Tareas
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void defaultActionOnSelectItemTask(){
 		// Acciones a realizar cuando selecciona algun registro de la grilla
 		getSelectionModel().addListener(Events.SelectionChange,

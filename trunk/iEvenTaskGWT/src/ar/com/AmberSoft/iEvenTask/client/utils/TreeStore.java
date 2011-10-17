@@ -4,6 +4,7 @@ import com.extjs.gxt.ui.client.data.LoadEvent;
 import com.extjs.gxt.ui.client.data.TreeLoadEvent;
 
 
+@SuppressWarnings("rawtypes")
 public class TreeStore extends com.extjs.gxt.ui.client.store.TreeStore {
 
 	@Override
@@ -20,6 +21,7 @@ public class TreeStore extends com.extjs.gxt.ui.client.store.TreeStore {
 		super();
 	}
 
+	@SuppressWarnings("unchecked")
 	public TreeStore(TreeLoader loader) {
 		super(loader);
 	}

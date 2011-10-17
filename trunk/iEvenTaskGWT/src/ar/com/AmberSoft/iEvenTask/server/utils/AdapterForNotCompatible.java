@@ -17,6 +17,7 @@ public class AdapterForNotCompatible implements Compatibilizable {
 	private static Logger logger = Logger
 			.getLogger(AdapterForNotCompatible.class);
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object adapt(Object actual) {
 		Map map = new HashMap();

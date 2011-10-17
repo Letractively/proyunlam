@@ -10,6 +10,7 @@ import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class Proxy extends RpcProxy {
 
 	private final GridDataCallback callback;

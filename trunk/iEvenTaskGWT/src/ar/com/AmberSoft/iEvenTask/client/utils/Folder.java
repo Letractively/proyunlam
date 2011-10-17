@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.extjs.gxt.ui.client.data.BaseTreeModel;
 
+@SuppressWarnings("serial")
 public class Folder extends BaseTreeModel implements Serializable {
 	@Override
 	public boolean isLeaf() {

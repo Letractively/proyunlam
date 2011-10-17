@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class AdapterForMap implements Compatibilizable {
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object adapt(Object actual) {
 		

@@ -2,6 +2,7 @@ package ar.com.AmberSoft.iEvenTask.client.utils;
 
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 
+@SuppressWarnings("rawtypes")
 public class Loader extends BasePagingLoader{
 
 	@Override
@@ -10,6 +11,7 @@ public class Loader extends BasePagingLoader{
 		return super.load();
 	}
 
+	@SuppressWarnings("unchecked")
 	public Loader(String service, Grid grid) {
 		super(null);
 		proxy = new Proxy(service, grid);

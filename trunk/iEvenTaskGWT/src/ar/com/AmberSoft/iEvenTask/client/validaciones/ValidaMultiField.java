@@ -17,6 +17,7 @@ public class ValidaMultiField implements Validator {
 		this.min = min;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public String validate(Field<?> field, String value) {
 		int select = 0;
