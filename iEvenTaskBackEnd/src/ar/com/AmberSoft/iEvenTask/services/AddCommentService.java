@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Comentario;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
+import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceExecuteException;
 import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -29,16 +30,14 @@ public class AddCommentService extends Service {
 			Tarea tarea = (Tarea) result.get(ParamsConst.ENTITY);
 
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
-			String user = (String) request.getSession().getAttribute(ParamsConst.USER);
+			User user = (User) request.getSession().getAttribute(ParamsConst.USER);
 			
 			String comment = (String) params.get(ParamsConst.COMMENT);
 			Comentario comentario = new Comentario();
 			comentario.setComentario(comment);
 			comentario.setTarea(tarea);
 			
-			// FIXME: Solo de prueba luego descomentar y quitar la linea que setea el usuario a la fuerza
-			//comentario.setUsuario(user);
-			comentario.setUsuario("USERTEST");
+			comentario.setUsuario(user.getId());
 			
 			comentario.setFecha(new Date());
 	

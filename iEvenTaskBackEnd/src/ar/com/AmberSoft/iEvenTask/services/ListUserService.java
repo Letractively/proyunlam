@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
-import ar.com.AmberSoft.util.LdapSearch;
+import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.PKGenerator;
 import ar.com.AmberSoft.util.ParamsConst;
 
@@ -18,8 +20,10 @@ public class ListUserService extends Service {
 	@Override
 	public Map onExecute(Map params) {
 		
-		LdapSearch ldapSearch = new LdapSearch();
-		Collection<User> users = ldapSearch.search();
+		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+		User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+
+		Collection<User> users = LDAPUtils.search(user.getId(), user.getPassword());
 		
 		Map map = new HashMap();
 		map.put(ParamsConst.DATA, users);

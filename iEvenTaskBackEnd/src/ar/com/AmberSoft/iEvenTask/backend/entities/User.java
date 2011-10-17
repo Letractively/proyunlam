@@ -11,8 +11,16 @@ public class User {
 	private Date changed;
 	private Date lastLogon;
 	private Date lastLogoff;
+	private byte[] password;
 	
 	
+
+	public byte[] getPassword() {
+		return password;
+	}
+	public void setPassword(byte[] password) {
+		this.password = password;
+	}
 	public Date getChanged() {
 		return changed;
 	}

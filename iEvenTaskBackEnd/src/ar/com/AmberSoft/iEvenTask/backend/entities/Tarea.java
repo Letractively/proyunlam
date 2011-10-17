@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.AmberSoft.util.PKGenerator;
 
@@ -26,6 +27,7 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private String duracion;
 	private String descripcion;
 	private String id_usuario;
+	private String asignado;
 	
 	private int horasAsignadas;
 	private Date fechaCreacion;
@@ -138,6 +140,14 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 
 	public void setComentarios(Set<Comentario> comentarios) {
 		this.comentarios = comentarios;
+	}
+
+	@Transient
+	public String getAsignado() {
+		return asignado;
+	}
+	public void setAsignado(String asignado) {
+		this.asignado = asignado;
 	}
 	
 }

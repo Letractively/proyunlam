@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -9,30 +10,52 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
 import ar.com.AmberSoft.iEvenTask.backend.entities.Comentario;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
+import ar.com.AmberSoft.iEvenTask.backend.entities.User;
+import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.PKGenerator;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class ListTaskService extends ListService {
 
+	private static Logger logger = Logger.getLogger(ListTaskService.class);
+	
 	@Override
 	public Map execute(Map params) {
+
 		Map result = super.execute(params);
 		
-		Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
-		Iterator<Tarea> it = tareas.iterator();
-		while (it.hasNext()) {
-			Tarea tarea = (Tarea) it.next();
-			Collection<Comentario> comentarios = tarea.getComentarios();
-			Iterator<Comentario> itComentarios = comentarios.iterator();
-			Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
-			while (itComentarios.hasNext()) {
-				Comentario comentario = (Comentario) itComentarios.next();
-				comentario.setTarea(null);
-				nuevosComentarios.add(comentario);
+		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+		User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+		
+		try {
+			Map<String, User> users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+		
+			Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
+			Iterator<Tarea> it = tareas.iterator();
+			while (it.hasNext()) {
+				Tarea tarea = (Tarea) it.next();
+				User actualUser = users.get(tarea.getId_usuario());
+				if (actualUser!=null){
+					tarea.setAsignado(actualUser.getName());	
+				}
+				Collection<Comentario> comentarios = tarea.getComentarios();
+				Iterator<Comentario> itComentarios = comentarios.iterator();
+				Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
+				while (itComentarios.hasNext()) {
+					Comentario comentario = (Comentario) itComentarios.next();
+					comentario.setTarea(null);
+					nuevosComentarios.add(comentario);
+				}
+				tarea.setComentarios(nuevosComentarios);
 			}
-			tarea.setComentarios(nuevosComentarios);
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
 		}
 		
 		
