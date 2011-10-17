@@ -48,8 +48,6 @@ public class GWTCompatibilityEvaluatorTypes {
 	/**
 	 * Inicializa la coleccion de tipos compatibles con GWT
 	 */
-
-
 	private void initialize() {
 		if (typesGroups==null){
 			compatibleTypes1 = new ArrayList();
@@ -64,19 +62,17 @@ public class GWTCompatibilityEvaluatorTypes {
 			compatibleTypes1.add(Long.class);
 			compatibleTypes1.add(Boolean.class);
 			compatibleTypes1.add(Double.class);
+			compatibleTypes1.add(Date.class);
 			compatibleTypes2.add(Collection.class);
 			compatibleTypes3.add(Map.class);
-			compatibleTypes4.add(Date.class);
 			
 			adapters.put(compatibleTypes1, new AdapterForCompatibleType());
 			adapters.put(compatibleTypes2, new AdapterForCollection());
 			adapters.put(compatibleTypes3, new AdapterForMap());
-			adapters.put(compatibleTypes4, new AdapterForDate());
 			
 			typesGroups.add(compatibleTypes1);
 			typesGroups.add(compatibleTypes2);
 			typesGroups.add(compatibleTypes3);
-			typesGroups.add(compatibleTypes4);
 		}
 	}
 	
