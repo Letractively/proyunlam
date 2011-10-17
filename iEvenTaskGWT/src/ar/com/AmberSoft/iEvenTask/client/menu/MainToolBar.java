@@ -27,7 +27,7 @@ public class MainToolBar extends ToolBar {
 		Button btnNuevoObjetivo = new Button("Nuevo Objetivo");
 		btnNuevoObjetivo.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent be) {
-				ObjectiveWindow objectiveWindow = new ObjectiveWindow();
+				ObjectiveWindow objectiveWindow = new ObjectiveWindow(true);
 				objectiveWindow.show();
 			}
 		});
