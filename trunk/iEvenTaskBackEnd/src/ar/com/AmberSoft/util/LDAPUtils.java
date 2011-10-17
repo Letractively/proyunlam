@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.util;
 
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
@@ -58,38 +60,67 @@ name:cn, value:Analista 8
  *
  */
 @SuppressWarnings({"rawtypes","unchecked"})
-public class LdapSearch {
-	
-	public static final String DOMAIN = "java.naming.security.domain";
+public class LDAPUtils {
+
+	private static final ResourceBundle config = ResourceBundle.getBundle("config");
+	public static final String DOMAIN = "ldap.domain";
+	public static final String IP = "ldap.ip";
+	public static final String PORT = "ldap.port";
+	public static final String DEFAULT_USER = "ldap.default.user";
+	public static final String DEFAULT_PASSWORD = "ldap.default.password";
 	public static final String DOUBLE_BAR = "\\";
+	public static final String UTF8 = "UTF8";
 	
 	
-	
-	public static void main(String []args){
-		searchGroups();
-		search();
+	/**
+	 * En caso de no poder autentificarse en el LDAP lanza una excepcion de tipo runtime
+	 * @param user
+	 * @param password
+	 */
+	public static User authenticate(String user, String password){
+
+		LDAPConnection connection = new LDAPConnection();
+		try {
+			// Se establece la conexion con el servidor LDAP
+			connection.connect(config.getString(IP), new Integer(config.getString(PORT)));
+			
+			// Se autentica el usuario
+			byte[] encryptPassword = password.getBytes(UTF8);
+			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, encryptPassword);
+			
+			Collection<User> users = search(user, encryptPassword);
+			Iterator it = users.iterator();
+			while (it.hasNext()) {
+				User actual = (User) it.next();
+				if (user.equals(actual.getId())){
+					actual.setPassword(encryptPassword);
+					return actual;
+				}
+			}
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+        }
+        
+        return null;
 	}
 	
-	
-	@SuppressWarnings("unused")
-	public static Collection<LDAPGroup> searchGroups(){
+	public static Collection<LDAPGroup> searchGroups(String user,  byte[] password){
 		
 		Set<LDAPGroup> groups = new HashSet<LDAPGroup>();
-		
-		//Collection<LDAPGroup> groups = new ArrayList<LDAPGroup>();
 		
 		LDAPConnection connection = new LDAPConnection();
 		try {
 			// Se establece la conexion con el servidor LDAP
-			connection.connect("5.193.41.232", 389);
+			connection.connect(config.getString(IP), new Integer(config.getString(PORT)));
 			
 			// Se autentica el usuario
-			connection.bind(LDAPConnection.LDAP_V3, "Amber\\Leonel", "Amber2011".getBytes("UTF8"));
+			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, password);
 			
-			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
+			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", 
+					LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
 
 			while (ldapSearchResults.hasMore()){
-				User user = new User();
 				LDAPEntry ldapEntry = ldapSearchResults.next();
 				
 				LDAPAttribute ldapAttribute = ldapEntry.getAttribute("memberOf");
@@ -123,38 +154,58 @@ public class LdapSearch {
 		return groups;
 	}
 
-	public static Collection<User> search(){
+	public static Map<String, User> getUsersMap(String user, byte[] password) throws UnsupportedEncodingException{
+		Map <String, User> map = new HashMap<String, User>();
+		Collection<User> users = search(user, password);
+		Iterator<User> it = users.iterator();
+		while (it.hasNext()) {
+			User actual = (User) it.next();
+			map.put(actual.getId(), actual);
+		}
+		return map;
+	}
+	
+	public static Collection<User> search(String user, String password) throws UnsupportedEncodingException{
+		return search(user, password.getBytes(UTF8));
+	}
+	
+	public static Collection<User> search(String user, byte[] password){
 		
 		Collection<User> users = new ArrayList<User>();
 		
 		LDAPConnection connection = new LDAPConnection();
 		try {
 			// Se establece la conexion con el servidor LDAP
-			connection.connect("5.193.41.232", 389);
+			connection.connect(config.getString(IP), new Integer(config.getString(PORT)));
 			
 			// Se autentica el usuario
-			connection.bind(LDAPConnection.LDAP_V3, "Amber\\Leonel", "Amber2011".getBytes("UTF8"));
+			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, password);
 			
 			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
 
 			while (ldapSearchResults.hasMore()){
-				User user = new User();
 				LDAPEntry ldapEntry = ldapSearchResults.next();
-				
-				user.setId(getValue(ldapEntry, "sAMAccountName"));
-				user.setName(getValue(ldapEntry, "displayName"));
-				//user.setProfile(getProfile(ldapEntry, "memberOf"));
-				user.setCreated(getDate(ldapEntry, "whenCreated"));
-				user.setChanged(getDate(ldapEntry, "whenChanged"));
-				user.setLastLogon(getDate(ldapEntry, "lastLogon"));
-				user.setLastLogoff(getDate(ldapEntry, "lastLogoff"));
-				users.add(user);
+
+				users.add(getUser(ldapEntry));
 			}
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		return users;
+	}
+
+
+	public static User getUser(LDAPEntry ldapEntry) {
+		User user = new User();
+		user.setId(getValue(ldapEntry, "sAMAccountName"));
+		user.setName(getValue(ldapEntry, "displayName"));
+		//user.setProfile(getProfile(ldapEntry, "memberOf"));
+		user.setCreated(getDate(ldapEntry, "whenCreated"));
+		user.setChanged(getDate(ldapEntry, "whenChanged"));
+		user.setLastLogon(getDate(ldapEntry, "lastLogon"));
+		user.setLastLogoff(getDate(ldapEntry, "lastLogoff"));
+		return user;
 	}
 
 	/**

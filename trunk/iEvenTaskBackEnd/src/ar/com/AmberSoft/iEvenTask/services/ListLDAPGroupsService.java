@@ -5,18 +5,23 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
-import ar.com.AmberSoft.util.LdapSearch;
+import ar.com.AmberSoft.iEvenTask.backend.entities.User;
+import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.ParamsConst;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public final class ListLDAPGroupsService extends Service {
 
-	@SuppressWarnings("static-access")
 	@Override
 	public Map onExecute(Map params) {
-		LdapSearch ldapSearch = new LdapSearch();
-		Collection<LDAPGroup> groups = ldapSearch.searchGroups();
+		
+		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+		User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+
+		Collection<LDAPGroup> groups = LDAPUtils.searchGroups(user.getId(), user.getPassword());
 		
 		Map map = new HashMap();
 		map.put(ParamsConst.DATA, groups);
@@ -29,7 +34,7 @@ public final class ListLDAPGroupsService extends Service {
 	@SuppressWarnings("unused")
 	@Override
 	public Map onEmulate(Map params) {
-		LdapSearch ldapSearch = new LdapSearch();
+		LDAPUtils ldapSearch = new LDAPUtils();
 		Collection<LDAPGroup> groups = new HashSet<LDAPGroup>();
 		
 		groups.add(new LDAPGroup("Prueba"));
