@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.menu.MainTabTareas;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -49,7 +50,8 @@ public class TaskWindow extends Window {
     SpinnerField duration = new SpinnerField();  
     TextArea description = new TextArea();  
     //TextField<String> responsable = new TextField<String>();
-    private final ComboBox fldUser = new ComboBox();
+    @SuppressWarnings("rawtypes")
+	private final ComboBox fldUser = new ComboBox();
     Button btnGuardar = new Button("Guardar");
     Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
@@ -59,6 +61,7 @@ public class TaskWindow extends Window {
     /**
 	 * @param guardar: boolean true para guardar / boolean false para modificar
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TaskWindow(boolean guardar) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
@@ -164,6 +167,7 @@ public class TaskWindow extends Window {
 	 * @param comboBox
 	 * @param key
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void setCombo(ComboBox comboBox, String key) {
 		ListStore<ModelData> listStore = comboBox.getStore();
 		ModelData modelData = null;
