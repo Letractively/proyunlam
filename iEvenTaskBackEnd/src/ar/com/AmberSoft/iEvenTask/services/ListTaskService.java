@@ -96,12 +96,14 @@ public class ListTaskService extends ListService {
 		tarea.setNombreTarea("Tarea" + generator.getPk());
 		tarea.setFechaComienzo(new Date());
 		tarea.setFechaFin(new Date());
-		tarea.setDuracion(generator.getPk());
+		tarea.setDuracion(String.valueOf(generator.getLastTime()));
 		tarea.setDescripcion("Descripcion" + generator.getPk());
 		tarea.setId_usuario(generator.getPk());
 		
 		Comentario comentario = new Comentario();
 		comentario.setComentario("Comentarios"  + generator.getPk());
+		comentario.setFecha(new Date());
+		comentario.setUsuario("USERTEST");
 		Set comentarios = new HashSet();
 		comentarios.add(comentario);
 		tarea.setComentarios(comentarios);

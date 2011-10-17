@@ -59,8 +59,10 @@ ADD CONSTRAINT pk_subtarea PRIMARY KEY (id_tarea, id_subtarea);
 
 create table iet_comentario (
 	id_comentario int not null,
-	id_tarea int,
-	comentario varchar(8000)
+	id_tarea int not null,
+	comentario varchar(8000) not null,
+	id_usuario varchar(255) not null,
+	fecha datetime not null
 );
 
 ALTER TABLE iet_comentario 
