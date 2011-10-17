@@ -19,6 +19,7 @@ import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -36,7 +37,8 @@ public class ObjectiveWindow extends Window  {
 	private Boolean editing = Boolean.FALSE;
     TextField<String> objName = new TextField<String>();
     TextField<String> objType = new TextField<String>();
-    TextField<Integer> objPond = new TextField<Integer>();
+    NumberField objPond = new NumberField();
+    
     TextField<String> objScale = new TextField<String>();
     DateField fecha_finalizacion = new DateField();  
     TextArea description = new TextArea();  
@@ -72,6 +74,7 @@ public class ObjectiveWindow extends Window  {
 		objType.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
 		objPanel.add(objType);
 		
+		objPond.setPropertyEditorType(Integer.class);
 		objPond.setFieldLabel("Ponderacion");  
 		objPond.setAllowBlank(false);  
 		objPond.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
@@ -139,7 +142,7 @@ public class ObjectiveWindow extends Window  {
 			params.put(ParamsConst.NOMBRE_OBJETIVO, objName.getValue());
 			params.put(ParamsConst.TIPO_OBJETIVO, objType.getValue());
 			params.put(ParamsConst.ESCALA_MEDICION, objScale.getValue());
-			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue().toString());
+			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue());
 			params.put(ParamsConst.PONDERACION, objPond.getValue());
 			params.put(ParamsConst.ID_USUARIO_ASIGNADO, usuario_asignado.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
@@ -201,7 +204,7 @@ public class ObjectiveWindow extends Window  {
 		objType.setValue(actual.get(ParamsConst.TIPO_OBJETIVO).toString());
 		objScale.setValue(actual.get(ParamsConst.ESCALA_MEDICION).toString());
 		fecha_finalizacion.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_FINALIZACION).toString())));
-		objPond.setValue(Integer.valueOf(actual.get(ParamsConst.PONDERACION).toString()));
+		objPond.setValue((Integer)(actual.get(ParamsConst.PONDERACION)));
 		usuario_asignado.setValue(actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
 	}
