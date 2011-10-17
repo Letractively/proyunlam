@@ -158,6 +158,10 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		
 		ColumnConfig clmncnfgResponsable = new ColumnConfig(ParamsConst.ID_USUARIO, "Responsable", 150);
 		configs.add(clmncnfgResponsable);
+		clmncnfgResponsable.setHidden(Boolean.TRUE);
+
+		ColumnConfig clmncnfgAsignado = new ColumnConfig(ParamsConst.ASIGNADO, "Responsable", 150);
+		configs.add(clmncnfgAsignado);
 
 		return configs;
 	}

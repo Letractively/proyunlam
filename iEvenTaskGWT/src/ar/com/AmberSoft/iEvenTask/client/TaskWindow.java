@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ar.com.AmberSoft.iEvenTask.client.menu.MainTabTareas;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -55,6 +54,7 @@ public class TaskWindow extends Window {
     Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
     Integer id_tarea;
+    Map<Object, Object> actual;
 	
     /**
 	 * @param guardar: boolean true para guardar / boolean false para modificar
@@ -93,6 +93,7 @@ public class TaskWindow extends Window {
 		description.setFieldLabel("Descripcion");  
 		taskPanel.add(description);
 		
+		fldUser.setStore(new ListStore<ModelData>());
 		Map params = new HashMap<String, String>();
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
 		DispatcherUtil.getDispatcher().execute(params,
@@ -117,7 +118,11 @@ public class TaskWindow extends Window {
 						}
 						
 						fldUser.setStore(listStore);
-						setCombo(fldUser, Context.getInstance().getUsuario());
+						String user = Context.getInstance().getUsuario();
+						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO)!=null)){
+							user = actual.get(ParamsConst.ID_USUARIO).toString();
+						}
+						setCombo(fldUser, user);
 					}
 
 				});
@@ -268,6 +273,7 @@ public class TaskWindow extends Window {
 	}
 	
 	public void setValuesToUpdate(Map<Object, Object> actual){
+		this.actual = actual;
 		this.setId_tarea(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
 		taskName.setValue(actual.get(ParamsConst.NOMBRE_TAREA).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
