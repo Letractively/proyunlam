@@ -1,5 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +19,27 @@ public class Comentario {
 	private Integer id_comentario;
 	private String comentario;
 	private Tarea tarea;
+	private String usuario;
+	private Date fecha;
 	
+	@Basic @Column(name="id_usuario")
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+	@Basic @Column(name="fecha")
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
 	@ManyToOne (fetch=FetchType.LAZY)
 	@JoinColumn (name="id_tarea")
 	public Tarea getTarea() {
