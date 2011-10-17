@@ -1,6 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,11 +13,16 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
@@ -43,7 +49,8 @@ public class TaskWindow extends Window {
     DateField fecha_fin = new DateField();  
     SpinnerField duration = new SpinnerField();  
     TextArea description = new TextArea();  
-    TextField<String> responsable = new TextField<String>();
+    //TextField<String> responsable = new TextField<String>();
+    private final ComboBox fldUser = new ComboBox();
     Button btnGuardar = new Button("Guardar");
     Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
@@ -86,11 +93,43 @@ public class TaskWindow extends Window {
 		description.setFieldLabel("Descripcion");  
 		taskPanel.add(description);
 		
-		responsable.setFieldLabel("Responsable");  
+		Map params = new HashMap<String, String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display(
+								"iEvenTask",
+								"No se han podido consultar los usuarios LDAP.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						Map map = (Map) result;
+						Collection users = (Collection) map.get(ParamsConst.DATA);
+						ListStore listStore = new ListStore();
+						Iterator it = users.iterator();
+						while (it.hasNext()) {
+							Map actual = (Map) it.next();
+							listStore.add(getModelData((String)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NAME)));
+						}
+						
+						fldUser.setStore(listStore);
+						setCombo(fldUser, Context.getInstance().getUsuario());
+					}
+
+				});
+		fldUser.setEditable(Boolean.FALSE);
+		fldUser.setTypeAhead(true);  
+		fldUser.setTriggerAction(TriggerAction.ALL); 
+		taskPanel.add(fldUser);
+		/*responsable.setFieldLabel("Responsable");  
 		responsable.setAllowBlank(false);  
 		responsable.setValue(Context.getInstance().getUsuario());
 		responsable.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
-		taskPanel.add(responsable);
+		taskPanel.add(responsable);*/
 		
 		FormButtonBinding binding = new FormButtonBinding(taskPanel);  
 		if(guardar){
@@ -113,6 +152,41 @@ public class TaskWindow extends Window {
 		taskPanel.addButton(btnCancelar);  
 	    
 	    this.add(taskPanel);
+	}
+	
+	/**
+	 * Setea el valor seleccionado de un combo
+	 * @param comboBox
+	 * @param key
+	 */
+	protected void setCombo(ComboBox comboBox, String key) {
+		ListStore<ModelData> listStore = comboBox.getStore();
+		ModelData modelData = null;
+		if (listStore!=null){
+			Iterator it = listStore.getModels().iterator();
+			while (it.hasNext()) {
+				ModelData mdAux = (ModelData) it.next();
+				Context.getInstance().addDetailExecution("Comparando " + key + " con " + mdAux.get("key"));
+				if (key.equals(mdAux.get("key"))){
+					modelData = mdAux;
+				}
+			}
+		}
+		comboBox.setValue(modelData);
+	}
+	 
+	/**
+	 * Retorna un Model Data Basico
+	 * Usualmente utilizado en los combos
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	protected BaseModel getModelData(String key, String value) {
+		BaseModel baseModel = new BaseModel();
+		baseModel.set("key", key);
+		baseModel.set("text", value);
+		return baseModel;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -137,7 +211,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.DURACION, duration.getValue().toString());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ID_USUARIO, responsable.getValue());
+			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_TASK);
 			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
@@ -166,7 +240,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.DURACION, duration.getValue().toString());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ID_USUARIO, responsable.getValue());
+			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.ID, this.getId_tarea());
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_TASK);
@@ -181,7 +255,7 @@ public class TaskWindow extends Window {
 				public void onSuccess(Object result) {
 					Info.display("iEvenTask", "Se modifico la tarea con exito.");
 					cerrarVentana();
-					MainTabTareas.reloadGrid();
+					//MainTabTareas.reloadGrid();
 					
 				}
 			});
@@ -197,9 +271,9 @@ public class TaskWindow extends Window {
 		this.setId_tarea(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
 		taskName.setValue(actual.get(ParamsConst.NOMBRE_TAREA).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
-		responsable.setValue(actual.get(ParamsConst.ID_USUARIO).toString());
-		fecha_com.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_COMIENZO).toString())));
-		fecha_fin.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_FIN).toString())));
+		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO).toString());
+		fecha_com.setValue((Date) actual.get(ParamsConst.FECHA_COMIENZO));
+		fecha_fin.setValue((Date) actual.get(ParamsConst.FECHA_FIN));
 		duration.setValue(Long.valueOf(actual.get(ParamsConst.DURACION).toString()));
 	}
 

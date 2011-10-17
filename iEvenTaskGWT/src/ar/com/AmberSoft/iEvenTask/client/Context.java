@@ -6,9 +6,12 @@ import java.util.Map;
 
 import com.extjs.gxt.ui.client.widget.Html;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowNotRegisteredException;
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowPreviouslyRegisteredException;
+import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 
 /**
@@ -20,6 +23,17 @@ import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowPreviouslyRegisteredEx
  *
  */
 public class Context {
+	
+	public static final String VACIO = "";
+	public static final String BARRA_R = "\r";
+	public static final String BARRA_N = "\n";
+	public static final String COMMENT_FORMAT_START = "<STRONG><EM><FONT size=2>";
+	public static final String COMMENT_FORMAT_END = "</FONT></EM></STRONG>"; 
+	public static final String DATE_FORMAT = "dd-MM-yyyy hh:mm:ss";
+	public static final String GUION_MEDIO = " - ";
+	public static final String DOS_PUNTOS = ":";
+	public static final String ABRE_P = "<P>";
+	public static final String CIERRA_P = "</P>";
 
 	/**
 	 * Instancia unica del contexto para la aplicacion en el cliente actual
@@ -61,12 +75,37 @@ public class Context {
 	public void addHtml(String html){
 		String old = this.htmlEditor.getValue();
 		if (old != null){
-			this.htmlEditor.setValue(old + html);
+			this.htmlEditor.setValue(old + "\r\n" + html);
 		} else {
 			this.htmlEditor.setValue(html);
 		}
 	}
 
+	public void addComment(String comment, Date date, String usuario){
+		StringBuffer textToAdd = new StringBuffer();
+		
+		textToAdd.append(ABRE_P);
+		textToAdd.append(COMMENT_FORMAT_START);
+		textToAdd.append(DateTimeFormat.getFormat(DATE_FORMAT).format(date));
+		textToAdd.append(GUION_MEDIO);
+		textToAdd.append(usuario);
+		textToAdd.append(DOS_PUNTOS);
+		textToAdd.append(COMMENT_FORMAT_END);
+		textToAdd.append(CIERRA_P);
+		textToAdd.append(BARRA_R);
+		textToAdd.append(BARRA_N);
+		textToAdd.append(ABRE_P);
+		textToAdd.append(comment);
+		textToAdd.append(CIERRA_P);
+		
+		if (htmlEditor.getValue()!=null){
+			textToAdd.append(BARRA_R);
+			textToAdd.append(BARRA_N);
+			textToAdd.append(htmlEditor.getValue());
+		}
+
+		htmlEditor.setValue(textToAdd.toString());
+	}
 
 	public void setHtmlEditor(HtmlEditor htmlEditor) {
 		this.htmlEditor = htmlEditor;

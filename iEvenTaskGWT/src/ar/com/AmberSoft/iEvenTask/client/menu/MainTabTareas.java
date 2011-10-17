@@ -2,11 +2,11 @@ package ar.com.AmberSoft.iEvenTask.client.menu;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import ar.com.AmberSoft.iEvenTask.client.CommentWindows;
 import ar.com.AmberSoft.iEvenTask.client.Context;
@@ -42,7 +42,11 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
-	public static final Integer COMMENT_BOX_HEIGTH = 300;
+	public static final Integer COMMENT_BOX_HEIGTH = 350;
+	
+	public static final String COMMENT_FORMAT_START = "<STRONG><EM><FONT size=2>";
+	public static final String COMMENT_FORMAT_END = "</FONT></EM></STRONG>";
+	
 	@SuppressWarnings("unchecked")
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
 	
@@ -224,12 +228,9 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 
 	public void beforeUpdate(BaseModel baseModel) {
 		
-		
-		
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 		
 		viewComment((Collection) actual.get(ParamsConst.COMENTARIOS));
-
 
 	}
 	
@@ -239,8 +240,10 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 			Iterator it = comentarios.iterator();
 			while (it.hasNext()) {
 				Map actual= (Map) it.next();
-				String comentario = (String) actual.get(ParamsConst.COMENTARIO);
-				Context.getInstance().addHtml(comentario);
+				Context.getInstance().addComment(
+						(String) actual.get(ParamsConst.COMENTARIO),
+						(Date) actual.get(ParamsConst.FECHA), 
+						(String) actual.get(ParamsConst.USUARIO));
 			}
 		}
 	}
