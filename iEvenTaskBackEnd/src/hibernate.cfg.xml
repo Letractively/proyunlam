@@ -6,7 +6,10 @@
 	<session-factory>
 		<!-- Database connection settings -->
 		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
-		<property name="connection.url">jdbc:jtds:sqlserver://5.183.8.31:1433/ieventask</property>
+		<!-- Conexion con Database Server 1 -->
+		 <property name="connection.url">jdbc:jtds:sqlserver://5.183.8.31:1433/ieventask</property>  
+		<!-- Conexion con Database Server 2 -->
+		<!--<property name="connection.url">jdbc:jtds:sqlserver://5.40.97.203:1433/ieventask</property>-->
 		<property name="connection.username">sa</property>
 		<property name="connection.password">Amber2011</property>
 		
