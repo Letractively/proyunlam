@@ -26,6 +26,13 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private Date fechaFin;
 	private String duracion;
 	private String descripcion;
+	/**
+	 * Usuario creador de la tarea
+	 */
+	private String creator;
+	/**
+	 * Usuario que tiene asignada la tarea actualmente
+	 */
 	private String id_usuario;
 	private String asignado;
 	
@@ -36,6 +43,8 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private int cumplimiento;
 	private int tipo_tarea;
 	private Set<Comentario> comentarios;
+	
+	
 	
 	@Id @Column (name="id_tarea")
 	public Integer getId() {
@@ -149,5 +158,12 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	public void setAsignado(String asignado) {
 		this.asignado = asignado;
 	}
-	
+
+	@Transient
+	public String getCreator() {
+		return creator;
+	}
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
 }
