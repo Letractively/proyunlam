@@ -168,3 +168,11 @@ create table iet_objetivo (
 	eliminado datetime
 );
 
+create table iet_visible (
+	id_visible varchar(1000) primary key,
+	id_tarea int not null,
+	id_usuario varchar(255)
+);
+
+ALTER TABLE iet_visible 
+ADD CONSTRAINT fk_relacion_tarea_visible FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id_tarea);

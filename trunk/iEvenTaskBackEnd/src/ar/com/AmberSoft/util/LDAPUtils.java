@@ -14,10 +14,15 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
+import ar.com.AmberSoft.iEvenTask.services.GetProfileByGroupService;
 import ar.com.AmberSoft.iEvenTask.services.GetProfileService;
+import ar.com.AmberSoft.iEvenTask.services.ListTaskService;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
 
 import com.novell.ldap.LDAPAttribute;
 import com.novell.ldap.LDAPConnection;
@@ -70,6 +75,8 @@ public class LDAPUtils {
 	public static final String DEFAULT_PASSWORD = "ldap.default.password";
 	public static final String DOUBLE_BAR = "\\";
 	public static final String UTF8 = "UTF8";
+	
+	private static Logger logger = Logger.getLogger(LDAPUtils.class);
 	
 	
 	/**
@@ -264,14 +271,20 @@ public class LDAPUtils {
 						Collection<String> cSubItems = Arrays.asList(subItems); 
 						Iterator<String> itSubs = cSubItems.iterator();
 						if ((itSubs.hasNext()) && ("CN".equals(itSubs.next()))){
-							String possibleProfile = itSubs.next();
-							Map params = new HashMap();
-							params.put(ParamsConst.ID, possibleProfile);
-							GetProfileService service = new GetProfileService();
-							Map resp = service.execute(params);
-							Profile profile = (Profile) resp.get(ParamsConst.ENTITY);
-							if (profile!=null){
-								return profile;
+							try {
+								String possibleProfile = itSubs.next();
+								if ((possibleProfile!=null) && (!"".equals(possibleProfile.trim()))){
+									Map params = new HashMap();
+									params.put(ParamsConst.GROUP, possibleProfile);
+									GetProfileByGroupService service = new GetProfileByGroupService();
+									Map resp = service.execute(params);
+									Profile profile = (Profile) resp.get(ParamsConst.ENTITY);
+									if (profile!=null){
+										return profile;
+									}
+								}
+							} catch(Exception e){
+								logger.error(Tools.getStackTrace(e));
 							}
 						}
 					}
