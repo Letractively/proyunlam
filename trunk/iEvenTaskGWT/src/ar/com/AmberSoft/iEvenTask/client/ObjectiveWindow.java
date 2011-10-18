@@ -173,7 +173,7 @@ public class ObjectiveWindow extends Window  {
 			params.put(ParamsConst.NOMBRE_OBJETIVO, objName.getValue());
 			params.put(ParamsConst.TIPO_OBJETIVO, objType.getValue());
 			params.put(ParamsConst.ESCALA_MEDICION, objScale.getValue());
-			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue().toString());
+			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue());
 			params.put(ParamsConst.PONDERACION, objPond.getValue());
 			params.put(ParamsConst.ID_USUARIO_ASIGNADO, usuario_asignado.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
@@ -204,7 +204,8 @@ public class ObjectiveWindow extends Window  {
 		objType.setValue(actual.get(ParamsConst.TIPO_OBJETIVO).toString());
 		objScale.setValue(actual.get(ParamsConst.ESCALA_MEDICION).toString());
 		fecha_finalizacion.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_FINALIZACION).toString())));
-		objPond.setValue((Integer)(actual.get(ParamsConst.PONDERACION)));
+		objPond.setValue(99L);
+//		objPond.setValue((Integer)(actual.get(ParamsConst.PONDERACION)));
 		usuario_asignado.setValue(actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
 	}
