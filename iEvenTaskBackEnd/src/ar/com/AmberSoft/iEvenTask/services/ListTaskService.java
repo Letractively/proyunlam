@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Comentario;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Visible;
 import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.PKGenerator;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -44,7 +45,7 @@ public class ListTaskService extends ListService {
 				if (actualUser!=null){
 					tarea.setAsignado(actualUser.getName());	
 				}
-				Collection<Comentario> comentarios = tarea.getComentarios();
+				Collection <Comentario> comentarios = tarea.getComentarios();
 				Iterator<Comentario> itComentarios = comentarios.iterator();
 				Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
 				while (itComentarios.hasNext()) {
@@ -53,6 +54,17 @@ public class ListTaskService extends ListService {
 					nuevosComentarios.add(comentario);
 				}
 				tarea.setComentarios(nuevosComentarios);
+				
+				Collection <Visible> visibles = tarea.getVisibles();
+				Iterator<Visible> itVisibles = visibles.iterator();
+				Set<Visible> nuevosVisibles = new HashSet<Visible>();
+				while (itVisibles.hasNext()) {
+					Visible visible = (Visible) itVisibles.next();
+					visible.setTarea(null);
+					nuevosVisibles.add(visible);
+				}
+				tarea.setVisibles(nuevosVisibles);
+				
 			}
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
@@ -68,22 +80,25 @@ public class ListTaskService extends ListService {
 	public Map onExecute(Map params) {
 		Map result = super.onExecute(params);
 		
+		// Esto es necesario realizar para que estas colecciones no den Lazy initialization exception
+		
 		Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
 		Iterator<Tarea> it = tareas.iterator();
 		while (it.hasNext()) {
 			Tarea tarea = (Tarea) it.next();
-			Collection<Comentario> comentarios = tarea.getComentarios();
-			Iterator<Comentario> itComentarios = comentarios.iterator();
-			Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
-			while (itComentarios.hasNext()) {
-				Comentario comentario = (Comentario) itComentarios.next();
-				nuevosComentarios.add(comentario);
-			}
-			tarea.setComentarios(nuevosComentarios);
+			preventLazy(tarea.getComentarios());
+			preventLazy(tarea.getVisibles());
 		}
 		
 		
 		return result;
+	}
+
+
+	public void preventLazy(Collection collection) {
+		if (collection!=null){
+			collection.iterator();
+		}
 	}
 
 

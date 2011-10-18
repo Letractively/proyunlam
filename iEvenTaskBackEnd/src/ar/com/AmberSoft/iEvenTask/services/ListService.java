@@ -25,6 +25,7 @@ public abstract class ListService extends Service {
 	protected Query query;
 	protected Query queryCount;
 	protected StringBuffer queryText;
+	protected StringBuffer queryTextWithoutOrder;
 	
 	
 	@Override
@@ -35,9 +36,11 @@ public abstract class ListService extends Service {
 		queryText.append(FROM);
 		queryText.append(getEntity());
 		
+		afterFrom(params);
+		
 		setFiltersInQueryText(params);
 
-		StringBuffer queryTextWithoutOrder = new StringBuffer();
+		queryTextWithoutOrder = new StringBuffer();
 		queryTextWithoutOrder.append(queryText);
 		setOrder(params);
 		
@@ -67,6 +70,9 @@ public abstract class ListService extends Service {
 		previousReturnMap(params, map);
 		
 		return map;
+	}
+
+	protected void afterFrom(Map params) {
 	}
 
 

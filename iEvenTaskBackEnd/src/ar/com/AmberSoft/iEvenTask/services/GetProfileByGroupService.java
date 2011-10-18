@@ -20,7 +20,7 @@ public class GetProfileByGroupService extends GetProfileService {
 	@Override
 	public Map onExecute(Map params) {
 
-		Object group = (Object) params.get(ParamsConst.GROUP);
+		String group = (String) params.get(ParamsConst.GROUP);
 		
 		StringBuffer queryText = new StringBuffer();
 		queryText.append(FROM);
@@ -31,9 +31,10 @@ public class GetProfileByGroupService extends GetProfileService {
 		queryText.append(AND);
 		queryText.append(" groupLDAP ");
 		queryText.append(EQUAL);
-		queryText.append(group);
+		queryText.append(QUESTION_SYMBOL);
 		
 		Query query = getSession().createQuery(queryText.toString());
+		query.setString(0, group);
 		
 		Map map = new HashMap();
 		map.put(ParamsConst.ENTITY, query.uniqueResult());

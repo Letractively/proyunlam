@@ -19,9 +19,6 @@ import org.apache.log4j.Logger;
 import ar.com.AmberSoft.iEvenTask.backend.entities.LDAPGroup;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
-import ar.com.AmberSoft.iEvenTask.services.GetProfileByGroupService;
-import ar.com.AmberSoft.iEvenTask.services.GetProfileService;
-import ar.com.AmberSoft.iEvenTask.services.ListTaskService;
 import ar.com.AmberSoft.iEvenTask.utils.Tools;
 
 import com.novell.ldap.LDAPAttribute;
@@ -95,21 +92,12 @@ public class LDAPUtils {
 			byte[] encryptPassword = password.getBytes(UTF8);
 			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, encryptPassword);
 			
-			Collection<User> users = search(user, encryptPassword);
-			Iterator it = users.iterator();
-			while (it.hasNext()) {
-				User actual = (User) it.next();
-				if (user.equals(actual.getId())){
-					actual.setPassword(encryptPassword);
-					return actual;
-				}
-			}
+			return searchUser(user, encryptPassword);
         } catch (Exception e) {
+        	logger.error(Tools.getStackTrace(e));
             throw new RuntimeException(e);
         } finally {
         }
-        
-        return null;
 	}
 	
 	public static Collection<LDAPGroup> searchGroups(String user,  byte[] password){
@@ -155,8 +143,8 @@ public class LDAPUtils {
 				
 			}
 			
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			logger.error(Tools.getStackTrace(e));
 		}
 		return groups;
 	}
@@ -175,6 +163,36 @@ public class LDAPUtils {
 	public static Collection<User> search(String user, String password) throws UnsupportedEncodingException{
 		return search(user, password.getBytes(UTF8));
 	}
+	
+	public static User searchUser(String user, byte[] password){
+		
+		Collection<User> users = new ArrayList<User>();
+		
+		LDAPConnection connection = new LDAPConnection();
+		try {
+			// Se establece la conexion con el servidor LDAP
+			connection.connect(config.getString(IP), new Integer(config.getString(PORT)));
+			
+			// Se autentica el usuario
+			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, password);
+			
+			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
+
+			while (ldapSearchResults.hasMore()){
+				LDAPEntry ldapEntry = ldapSearchResults.next();
+				if (user.equals(getValue(ldapEntry, "sAMAccountName"))){
+					User searched = getUser(ldapEntry);
+					searched.setPassword(password);
+					return searched;
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error(Tools.getStackTrace(e));
+		}
+		return null;
+	}
+	
 	
 	public static Collection<User> search(String user, byte[] password){
 		
@@ -196,8 +214,8 @@ public class LDAPUtils {
 				users.add(getUser(ldapEntry));
 			}
 			
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			logger.error(Tools.getStackTrace(e));
 		}
 		return users;
 	}
@@ -207,7 +225,7 @@ public class LDAPUtils {
 		User user = new User();
 		user.setId(getValue(ldapEntry, "sAMAccountName"));
 		user.setName(getValue(ldapEntry, "displayName"));
-		//user.setProfile(getProfile(ldapEntry, "memberOf"));
+		user.setProfile(getProfile(ldapEntry, "memberOf"));
 		user.setCreated(getDate(ldapEntry, "whenCreated"));
 		user.setChanged(getDate(ldapEntry, "whenChanged"));
 		user.setLastLogon(getDate(ldapEntry, "lastLogon"));
@@ -231,7 +249,7 @@ public class LDAPUtils {
 				format.setLenient(Boolean.FALSE);
 				return format.parse(cDate);
 			} catch (ParseException e) {
-				System.err.println("No se pudo parsear " + attribute + ":" + cDate);
+				//System.err.println("No se pudo parsear " + attribute + ":" + cDate);
 				if (cDate.length() >= 18){
 					long llastLogonAdjust=11644473600000L;  // adjust factor for converting it to java    
 					return new Date(new Long(cDate)/10000-llastLogonAdjust);
@@ -274,11 +292,7 @@ public class LDAPUtils {
 							try {
 								String possibleProfile = itSubs.next();
 								if ((possibleProfile!=null) && (!"".equals(possibleProfile.trim()))){
-									Map params = new HashMap();
-									params.put(ParamsConst.GROUP, possibleProfile);
-									GetProfileByGroupService service = new GetProfileByGroupService();
-									Map resp = service.execute(params);
-									Profile profile = (Profile) resp.get(ParamsConst.ENTITY);
+									Profile profile = ProfileManager.getInstance().getProfile(possibleProfile);
 									if (profile!=null){
 										return profile;
 									}

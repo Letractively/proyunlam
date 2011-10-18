@@ -17,9 +17,21 @@ public class Visible {
 	private String usuario;
 	private Tarea tarea;
 	
+	public Visible(){}
+	
+	
+	public Visible(Tarea tarea, String usuario){
+		this.tarea = tarea;
+		this.usuario = usuario;
+		if ((tarea!=null) && (tarea.getId())!=null && (usuario!=null)){
+			this.id = usuario + tarea.getId().toString();
+		}
+	}
+	
+	
 	@Id @Column (name="id_visible")
 	public String getId() {
-		return usuario + tarea.getId().toString();
+		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
@@ -42,5 +54,16 @@ public class Visible {
 		this.usuario = usuario;
 	}
 	
+	@Override
+	public boolean equals(Object actual) {
+		if (actual instanceof Visible) {
+			return ((Visible)actual).getId().equals(this.getId());
+		}
+		return Boolean.FALSE;
+	}
+	@Override
+	public int hashCode() {
+		return this.getId().hashCode();
+	}
 	
 }

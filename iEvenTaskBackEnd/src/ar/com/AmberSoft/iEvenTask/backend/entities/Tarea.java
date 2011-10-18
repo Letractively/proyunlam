@@ -2,9 +2,11 @@ package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -43,9 +45,12 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private int cumplimiento;
 	private int tipo_tarea;
 	private Set<Comentario> comentarios;
+	private Set<Visible> visibles;
 	
-	
-	
+	public Tarea() {
+		super();
+	}
+
 	@Id @Column (name="id_tarea")
 	public Integer getId() {
 		if (id==null){
@@ -166,4 +171,35 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	public void setCreator(String creator) {
 		this.creator = creator;
 	}
+	
+	@OneToMany (mappedBy="tarea", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	public Set<Visible> getVisibles() {
+		//defaultVisibles();
+		return visibles;
+	}
+	public void setVisibles(Set<Visible> visibles) {
+		this.visibles = visibles;
+		//defaultVisibles();
+	}
+	
+	@Transient
+	public void defaultVisibles() {
+		if (visibles==null){
+			visibles = new HashSet<Visible>();
+		}
+		obligatoryVisibles();
+	}
+	
+	private void obligatoryVisibles(){
+		if (this.creator!=null){
+			visibles.add(new Visible(this, this.creator));
+		}
+		if (this.id_usuario!=null){
+			visibles.add(new Visible(this, this.id_usuario));
+		}
+	}
+	
+	
+	
+	
 }

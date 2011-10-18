@@ -21,6 +21,10 @@ public class LoginService extends Service {
 		try {
 			User user = LDAPUtils.authenticate((String) params.get(ParamsConst.USER), (String) params.get(ParamsConst.PASSWORD));
 			
+			if (user.getProfile()==null){
+				//FIXME: Lanzar excepcion ya que el usuario no tiene asociado un perfil valido dentro de la aplicacion
+			}
+			
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
 			request.getSession().setAttribute(ParamsConst.USER, user);
 			
@@ -31,6 +35,10 @@ public class LoginService extends Service {
 
 		return null;	}
 
+	private Boolean isTransactionControl(Map params) {
+		return Boolean.FALSE;
+	}
+	
 	@Override
 	public Map onEmulate(Map params) {
 		
