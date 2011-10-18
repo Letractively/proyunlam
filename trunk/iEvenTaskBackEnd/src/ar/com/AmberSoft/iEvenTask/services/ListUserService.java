@@ -16,7 +16,6 @@ import ar.com.AmberSoft.util.ParamsConst;
 @SuppressWarnings({"rawtypes","unchecked"})
 public class ListUserService extends Service {
 
-	@SuppressWarnings("static-access")
 	@Override
 	public Map onExecute(Map params) {
 		

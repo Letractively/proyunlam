@@ -1,8 +1,5 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,7 +60,9 @@ public abstract class Service {
 		Map result = onExecute(params);
 		if (isTransactionControl(params)){
 			try{
-				transaction.commit();
+				if (transaction.isActive()) {
+					transaction.commit();
+				}
 			} catch (ConstraintViolationException e){
 				transaction.rollback();
 				Map map = new HashMap();
