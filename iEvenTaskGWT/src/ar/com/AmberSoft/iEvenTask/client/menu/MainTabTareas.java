@@ -48,7 +48,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final String COMMENT_FORMAT_END = "</FONT></EM></STRONG>";
 	
 	@SuppressWarnings("unchecked")
-	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK, getGridConfig(), 10);
+	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK_WITH_VISIBLE_FILTER, getGridConfig(), 10);
 	
 	
 	public MainTabTareas(){
