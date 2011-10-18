@@ -5,8 +5,19 @@
         
 	
 	  <appender name="iEvenTaskLog" class="org.apache.log4j.RollingFileAppender">
-	    <param name="File" value="C:\\log\\iEvenTaskLog.log"/>
-	    <param name="MaxFileSize" value="10000KB"/>
+	    <param name="File" value="C:\\log\\iEvenTask.log"/>
+	    <param name="MaxFileSize" value="1000KB"/>
+	    <param name="MaxBackupIndex" value="5"/>    
+	    <param name="Append" value="true"/>
+	    <layout class="org.apache.log4j.PatternLayout">
+	       <param name="ConversionPattern"
+		              value="[%d] [%c] [%p]%m%n" />
+	    </layout>
+	  </appender>
+
+	  <appender name="iEvenTaskBackgroundLog" class="org.apache.log4j.RollingFileAppender">
+	    <param name="File" value="C:\\log\\iEvenTaskBackground.log"/>
+	    <param name="MaxFileSize" value="1000KB"/>
 	    <param name="MaxBackupIndex" value="5"/>    
 	    <param name="Append" value="true"/>
 	    <layout class="org.apache.log4j.PatternLayout">
@@ -22,7 +33,12 @@
 	    </layout> 
 	  </appender> 
 
-  <logger name="ar.com.AmberSoft.iEvenTask">
+	<logger name="ar.com.AmberSoft.iEvenTask.events">
+	      <level value="all"></level>
+	      <appender-ref ref="iEvenTaskBackgroundLog"/>
+	  </logger>
+
+  <logger name="ar.com.AmberSoft.iEvenTask" >
       <level value="all"></level>
       <appender-ref ref="iEvenTaskLog"/>
   </logger>
