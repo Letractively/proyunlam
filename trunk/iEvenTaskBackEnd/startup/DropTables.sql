@@ -54,4 +54,8 @@ DROP TABLE iet_relacion;
 
 DROP TABLE iet_objetivo;
 
+ALTER TABLE iet_visible
+DROP CONSTRAINT fk_relacion_tarea_visible;
+
+DROP TABLE iet_visible;
 
