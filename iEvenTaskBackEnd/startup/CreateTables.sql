@@ -176,3 +176,12 @@ create table iet_visible (
 
 ALTER TABLE iet_visible 
 ADD CONSTRAINT fk_relacion_tarea_visible FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id_tarea);
+
+create table iet_obj_visible (
+	id_obj_visible varchar(1000) primary key,
+	id_objetivo int not null,
+	id_usuario varchar(255)
+);
+
+ALTER TABLE iet_obj_visible 
+ADD CONSTRAINT fk_relacion_objetivo_visible FOREIGN KEY (id_objetivo) REFERENCES iet_objetivo(id_objetivo);

@@ -2,12 +2,18 @@ package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.AmberSoft.util.PKGenerator;
 
@@ -22,10 +28,19 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 	private String escalaMedicion;
 	private Date fechaFinalizacion;
 	private int ponderacion;
+	/**
+	 * Usuario que tiene asignada la tarea actualmente
+	 */
 	private String idUsuarioAsignado;
 	private String descripcion;
+	/**
+	 * Usuario creador de la tarea
+	 */
+	private String creator;
+	private String asignado;
+	private Set<VisibleObjetivo> visibles;
 	
-	//GETTERS
+	
 	@Id @Column (name="id_objetivo")
 	public Integer getId() {
 		if (id==null){
@@ -62,7 +77,7 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 	public String getDescripcion() {
 		return descripcion;
 	}
-	//SETTERS
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -88,4 +103,45 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 		this.descripcion = descripcion;
 	}
 	
+	@Transient
+	public String getCreator() {
+		return creator;
+	}
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+	
+	@OneToMany (mappedBy="objetivo", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	public Set<VisibleObjetivo> getVisibles() {
+		//defaultVisibles();
+		return visibles;
+	}
+	public void setVisibles(Set<VisibleObjetivo> visibles) {
+		this.visibles = visibles;
+		//defaultVisibles();
+	}
+	
+	@Transient
+	public void defaultVisibles() {
+		if (visibles==null){
+			visibles = new HashSet<VisibleObjetivo>();
+		}
+		obligatoryVisibles();
+	}
+	
+	private void obligatoryVisibles(){
+		if (this.creator!=null){
+			visibles.add(new VisibleObjetivo(this, this.creator));
+		}
+		if (this.idUsuarioAsignado!=null){
+			visibles.add(new VisibleObjetivo(this, this.idUsuarioAsignado));
+		}
+	}
+	@Transient
+	public String getAsignado() {
+		return asignado;
+	}
+	public void setAsignado(String asignado) {
+		this.asignado = asignado;
+	}
 }

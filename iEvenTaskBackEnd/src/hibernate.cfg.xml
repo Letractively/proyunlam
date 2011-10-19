@@ -8,8 +8,8 @@
 		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
 		<!-- Conexion con Database Server 1 -->
 		 <property name="connection.url">jdbc:jtds:sqlserver://5.183.8.31:1433/ieventask</property>  
-		<!-- Conexion con Database Server 2 -->
-		<!--<property name="connection.url">jdbc:jtds:sqlserver://5.40.97.203:1433/ieventask</property>-->
+		<!-- Conexion con Database Server 2 
+		<property name="connection.url">jdbc:jtds:sqlserver://5.40.97.203:1433/ieventask</property>-->
 		<property name="connection.username">sa</property>
 		<property name="connection.password">Amber2011</property>
 		
@@ -49,5 +49,6 @@
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Comentario"/>
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo"/>
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Visible"/>
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.VisibleObjetivo"/>
 	</session-factory>
 </hibernate-configuration>
