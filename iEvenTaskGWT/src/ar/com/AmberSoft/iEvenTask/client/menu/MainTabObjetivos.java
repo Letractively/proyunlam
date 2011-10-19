@@ -31,7 +31,7 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	
 	@SuppressWarnings("unchecked")
-	public final Grid grid = new Grid(this, ServiceNameConst.LIST_OBJECTIVE, getGridConfig(), 10);
+	public final Grid grid = new Grid(this, ServiceNameConst.LIST_OBJECTIVE_WITH_VISIBLE_FILTER, getGridConfig(), 10);
 
 	public MainTabObjetivos() {
 		super("Objetivos");
@@ -64,24 +64,27 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		ColumnConfig clmncnfgNombreObjetivo = new ColumnConfig(ParamsConst.NOMBRE_OBJETIVO, "Nombre", 100);
+		ColumnConfig clmncnfgNombreObjetivo = new ColumnConfig(ParamsConst.NOMBRE_OBJETIVO, "Nombre", 200);
 		configs.add(clmncnfgNombreObjetivo);
 
 		ColumnConfig clmncnfgTipoObjetivo = new ColumnConfig(ParamsConst.TIPO_OBJETIVO, "Tipo", 100);
 		configs.add(clmncnfgTipoObjetivo);
 
-		ColumnConfig clmncnfgFechaFinalizacion = new ColumnConfig(ParamsConst.FECHA_FINALIZACION, "Fecha de Finalizacion", 150);
+		ColumnConfig clmncnfgFechaFinalizacion = new ColumnConfig(ParamsConst.FECHA_FINALIZACION, "Fecha de Finalizacion", 120);
 		clmncnfgFechaFinalizacion.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaFinalizacion);
 
-		ColumnConfig clmncnfgEscalaMedicion = new ColumnConfig(ParamsConst.ESCALA_MEDICION, "Escala de Medicion", 150);
+		ColumnConfig clmncnfgEscalaMedicion = new ColumnConfig(ParamsConst.ESCALA_MEDICION, "Escala de Medicion", 100);
 		configs.add(clmncnfgEscalaMedicion);
 		
-		ColumnConfig clmncnfgPonderacion = new ColumnConfig(ParamsConst.PONDERACION, "Ponderacion", 20);
+		ColumnConfig clmncnfgPonderacion = new ColumnConfig(ParamsConst.PONDERACION, "Ponderacion", 80);
 		configs.add(clmncnfgPonderacion);
 
-		ColumnConfig clmncnfgUsuarioAsignado = new ColumnConfig(ParamsConst.ID_USUARIO_ASIGNADO, "Asignado a", 150);
+		ColumnConfig clmncnfgUsuarioAsignado = new ColumnConfig(ParamsConst.ID_USUARIO_ASIGNADO, "Asignado a", 100);
 		configs.add(clmncnfgUsuarioAsignado);
+
+		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 344);
+		configs.add(clmncnfgDescripcion);
 
 		return configs;
 	}
