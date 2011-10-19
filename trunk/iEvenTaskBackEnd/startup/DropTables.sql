@@ -59,3 +59,7 @@ DROP CONSTRAINT fk_relacion_tarea_visible;
 
 DROP TABLE iet_visible;
 
+ALTER TABLE iet_obj_visible
+DROP CONSTRAINT fk_relacion_objetivo_visible;
+
+DROP TABLE iet_obj_visible;
