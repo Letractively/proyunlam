@@ -203,9 +203,8 @@ public class ObjectiveWindow extends Window  {
 		objName.setValue(actual.get(ParamsConst.NOMBRE_OBJETIVO).toString());
 		objType.setValue(actual.get(ParamsConst.TIPO_OBJETIVO).toString());
 		objScale.setValue(actual.get(ParamsConst.ESCALA_MEDICION).toString());
-		fecha_finalizacion.setValue(new Date(Long.valueOf(actual.get(ParamsConst.FECHA_FINALIZACION).toString())));
-		objPond.setValue(99L);
-//		objPond.setValue((Integer)(actual.get(ParamsConst.PONDERACION)));
+		fecha_finalizacion.setValue((Date)actual.get(ParamsConst.FECHA_FINALIZACION));
+		objPond.setValue((Number) actual.get(ParamsConst.PONDERACION));
 		usuario_asignado.setValue(actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
 	}
