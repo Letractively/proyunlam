@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ public class LoginService extends Service {
 	private static Logger logger = Logger.getLogger(LoginService.class);
 	@Override
 	public Map onExecute(Map params) {
+		Map map = new HashMap();
 		try {
 			User user = LDAPUtils.authenticate((String) params.get(ParamsConst.USER), (String) params.get(ParamsConst.PASSWORD));
 			
@@ -28,12 +30,15 @@ public class LoginService extends Service {
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
 			request.getSession().setAttribute(ParamsConst.USER, user);
 			
+			map.put(ParamsConst.USER, user);
+			
 		} catch (Exception e) {
 			logger.error(Tools.getStackTrace(e));
 			throw new LoginFailureException();
 		}
 
-		return null;	}
+		return map;	
+	}
 
 	private Boolean isTransactionControl(Map params) {
 		return Boolean.FALSE;
@@ -41,9 +46,12 @@ public class LoginService extends Service {
 	
 	@Override
 	public Map onEmulate(Map params) {
-		
-		
-		return null;
+		Map map = new HashMap();
+		User user = new User();
+		user.setId("USEREMULE");
+		user.setName("Usuario Emulado");
+		map.put(ParamsConst.USER, user);
+		return map;
 	}
 
 }
