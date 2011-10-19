@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.client;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,11 +11,16 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormButtonBinding;
@@ -42,15 +48,21 @@ public class ObjectiveWindow extends Window  {
     TextField<String> objScale = new TextField<String>();
     DateField fecha_finalizacion = new DateField();  
     TextArea description = new TextArea();  
-    TextField<String> usuario_asignado = new TextField<String>();
+    
+    @SuppressWarnings("rawtypes")
+	private final ComboBox fldUser = new ComboBox();
+    
+//    TextField<String> usuario_asignado = new TextField<String>();
     Button btnGuardar = new Button("Guardar");
     Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
     Integer id_obj;
+    Map<Object, Object> actual;
 	
     /**
 	 * @param guardar: boolean true para guardar / boolean false para modificar
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ObjectiveWindow(boolean guardar) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
@@ -92,11 +104,44 @@ public class ObjectiveWindow extends Window  {
 		description.setFieldLabel("Descripcion");  
 		objPanel.add(description);
 		
-		usuario_asignado.setFieldLabel("Asignado a");  
-		usuario_asignado.setAllowBlank(false);  
-		usuario_asignado.setValue(Context.getInstance().getUsuario());
-		usuario_asignado.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
-		objPanel.add(usuario_asignado);
+		fldUser.setStore(new ListStore<ModelData>());
+		Map params = new HashMap<String, String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Info.display(
+								"iEvenTask",
+								"No se han podido consultar los usuarios LDAP.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						Map map = (Map) result;
+						Collection users = (Collection) map.get(ParamsConst.DATA);
+						ListStore listStore = new ListStore();
+						Iterator it = users.iterator();
+						while (it.hasNext()) {
+							Map actual = (Map) it.next();
+							listStore.add(getModelData((String)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NAME)));
+						}
+						
+						fldUser.setStore(listStore);
+						String user = Context.getInstance().getUsuario();
+						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO)!=null)){
+							user = actual.get(ParamsConst.ID_USUARIO).toString();
+						}
+						setCombo(fldUser, user);
+					}
+
+				});
+		fldUser.setEditable(Boolean.FALSE);
+		fldUser.setTypeAhead(true);  
+		fldUser.setTriggerAction(TriggerAction.ALL); 
+		objPanel.add(fldUser);
+		
 		
 		FormButtonBinding binding = new FormButtonBinding(objPanel);  
 		if(guardar){
@@ -120,7 +165,42 @@ public class ObjectiveWindow extends Window  {
 		
 	    
 	    this.add(objPanel);
-	}  
+	}
+	/**
+	 * Setea el valor seleccionado de un combo
+	 * @param comboBox
+	 * @param key
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected void setCombo(ComboBox comboBox, String key) {
+		ListStore<ModelData> listStore = comboBox.getStore();
+		ModelData modelData = null;
+		if (listStore!=null){
+			Iterator it = listStore.getModels().iterator();
+			while (it.hasNext()) {
+				ModelData mdAux = (ModelData) it.next();
+				Context.getInstance().addDetailExecution("Comparando " + key + " con " + mdAux.get("key"));
+				if (key.equals(mdAux.get("key"))){
+					modelData = mdAux;
+				}
+			}
+		}
+		comboBox.setValue(modelData);
+	}
+	
+	/**
+	 * Retorna un Model Data Basico
+	 * Usualmente utilizado en los combos
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	protected BaseModel getModelData(String key, String value) {
+		BaseModel baseModel = new BaseModel();
+		baseModel.set("key", key);
+		baseModel.set("text", value);
+		return baseModel;
+	}
 	
 	@SuppressWarnings("rawtypes")
 	public Boolean isValid(){
@@ -145,7 +225,7 @@ public class ObjectiveWindow extends Window  {
 			params.put(ParamsConst.ESCALA_MEDICION, objScale.getValue());
 			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue());
 			params.put(ParamsConst.PONDERACION, objPond.getValue());
-			params.put(ParamsConst.ID_USUARIO_ASIGNADO, usuario_asignado.getValue());
+			params.put(ParamsConst.ID_USUARIO_ASIGNADO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_OBJECTIVE);
@@ -181,7 +261,7 @@ public class ObjectiveWindow extends Window  {
 			params.put(ParamsConst.ESCALA_MEDICION, objScale.getValue());
 			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue());
 			params.put(ParamsConst.PONDERACION, objPond.getValue());
-			params.put(ParamsConst.ID_USUARIO_ASIGNADO, usuario_asignado.getValue());
+			params.put(ParamsConst.ID_USUARIO_ASIGNADO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID, this.getId_obj());
 			
@@ -215,7 +295,7 @@ public class ObjectiveWindow extends Window  {
 		objScale.setValue(actual.get(ParamsConst.ESCALA_MEDICION).toString());
 		fecha_finalizacion.setValue((Date)actual.get(ParamsConst.FECHA_FINALIZACION));
 		objPond.setValue((Number) actual.get(ParamsConst.PONDERACION));
-		usuario_asignado.setValue(actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
+		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
 	}
 	
