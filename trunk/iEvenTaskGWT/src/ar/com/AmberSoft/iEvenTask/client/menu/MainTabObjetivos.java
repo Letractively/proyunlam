@@ -27,7 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class MainTabObjetivos extends TabItem implements Seleccionable{
 	
-	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH - (IEvenTask.APP_WINDOW_WIDTH/4);
+	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH;
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	
 	@SuppressWarnings("unchecked")
