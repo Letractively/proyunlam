@@ -10,6 +10,7 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.CommentWindows;
 import ar.com.AmberSoft.iEvenTask.client.Context;
+import ar.com.AmberSoft.iEvenTask.client.DialogFactory;
 import ar.com.AmberSoft.iEvenTask.client.DialogInfo;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
@@ -184,12 +185,12 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display("iEvenTask", "No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
+						DialogFactory.error("No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
 					}
 
 					@Override
 					public void onSuccess(Object result) {
-						Info.display("iEvenTask", "Se eliminaron las tareas con exito.");
+						DialogFactory.info("Se eliminaron las tareas con exito.");
 						grid.getStore().getLoader().load();
 					}
 

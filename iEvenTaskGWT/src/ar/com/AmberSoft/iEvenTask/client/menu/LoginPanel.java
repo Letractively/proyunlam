@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.Context;
+import ar.com.AmberSoft.iEvenTask.client.DialogError;
+import ar.com.AmberSoft.iEvenTask.client.DialogFactory;
+import ar.com.AmberSoft.iEvenTask.client.DialogInfo;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -14,7 +17,6 @@ import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -44,13 +46,14 @@ public class LoginPanel extends LayoutContainer {
 	TextField textUsuario = new TextField();
 	@SuppressWarnings("rawtypes")
 	TextField textPassword = new TextField();
-//	Timer timer;
+
 	
 	@SuppressWarnings("rawtypes")
 	public LoginPanel() {
 		super();
 		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.APP_WINDOW_HEIGTH.toString());
 		
+		unmask();
 		
 		mainLoginPanel.setHeading("iEvenTask - Autenticaci\u00F3n de Usuarios");
 		mainLoginPanel.setCollapsible(false);
@@ -143,52 +146,39 @@ public class LoginPanel extends LayoutContainer {
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
 		params.put(ParamsConst.USER, textUsuario.getValue());
 		params.put(ParamsConst.PASSWORD, textPassword.getValue());
+		maskAvaiable();
 		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o contrase\u00f1a incorrectos.");
-				//TODO: Se colocan las siguientes dos lineas para cuando esta caido el servidor de dominios
-//				timer.cancel();
+				DialogFactory.error("Usuario o contrase\u00f1a incorrectos.");
+				unmask();
 			}
 
 			@Override
 			public void onSuccess(Object result) {
-				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Bienvenido " + textUsuario.getValue());
+				Map map = (Map) result;
+				Map user = (Map) map.get(ParamsConst.USER);
+				
+				DialogFactory.info("Bienvenido " + user.get(ParamsConst.NAME));
+				
 				Context.getInstance().setUsuario(textUsuario.getValue().toString()); 	
 				Context.getInstance().setSesion(true); 	
 				IEvenTask.iniciarSesion();
-//				timer.cancel();
 			}
 		});
 		} else {
-			Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Faltan completar campos obligatorios.");
+			DialogFactory.error("Faltan completar campos obligatorios.");
 		}
 	}
 	
-//	private void crearTimer(final int periodicidad) {
-//		timer = new Timer() {
-//			@Override
-//			public void run() {
-//				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Debe colocar usuario y cotrase\u00f1a.\nLuego presione enter.");
-//				crearTimer(periodicidad);
-//			}
-//		};
-//		timer.schedule(periodicidad);
-//	}
+	public void maskAvaiable(){
+		this.mask("Aguarde un momento...");
+	}
 	
-//	private void mostrarMensajeDemoraEnter() {
-//		int periodicidad = 10000;
-//		crearTimer(periodicidad);
-//	}
+	public void maskDisable(){
+		this.unmask();
+	}
 	
-//	protected void accionIngresar(String user, String pass){
-//		if (mainLoginPanel.isValid()){
-//			if(user.equals("amber") && pass.equals("amber")){
-//				IEvenTask.iniciarSesion();
-//			}else{
-//				Info.display("iEvenTask - Autenticaci\u00F3n de Usuarios", "Usuario o clave incorrecta, intente nuevamente.");	
-//			}
-//		}
-//	}
+	
 }

@@ -119,7 +119,7 @@ public class CommentWindows extends Window {
 
 	@Override
 	public void onSave() {
-		componentsDisabled();
+		maskAvaiable();
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.ID, id);
@@ -132,7 +132,7 @@ public class CommentWindows extends Window {
 						@Override
 						public void onFailure(Throwable caught) {
 							DialogError dialogError = new DialogError("No fue posible guardar el comentario.");
-							componentsEnabled();
+							maskDisable();
 						}
 
 						@Override
@@ -147,33 +147,19 @@ public class CommentWindows extends Window {
 							
 							Context.getInstance().getWindowInstance(CommentWindows.class).setVisible(Boolean.FALSE);
 							clear();
-							componentsEnabled();
+							maskDisable();
 						}
 
 					});
 
 		} else {
 			DialogError dialogError = new DialogError("El comentario no puede estar vacio.");
-			componentsEnabled();
+			maskDisable();
 		}
 	}
 	
 	protected Boolean isValid() {
 		return (htmlEditor.getValue()!=null) && !"".equals(htmlEditor.getValue().trim());
-	}
-
-	@Override
-	public void componentsEnabled() {
-		save.setEnabled(Boolean.TRUE);
-		cancel.setEnabled(Boolean.TRUE);
-		
-	}
-
-	@Override
-	public void componentsDisabled() {
-		save.setEnabled(Boolean.FALSE);
-		cancel.setEnabled(Boolean.FALSE);
-		
 	}
 
 	@Override

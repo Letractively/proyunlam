@@ -136,6 +136,7 @@ public class ObjectiveWindow extends Window  {
 	}
 	
 	private void guardarObjetivo(){
+		maskAvaiable();
 		if (isValid()){
 			Map<Object,Object> params = new HashMap<Object,Object>();
 			
@@ -152,21 +153,26 @@ public class ObjectiveWindow extends Window  {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("iEvenTask", "No pudo guardarse el objetivo. Aguarde un momento y vuelva a intentarlo.");
+				maskDisable();
+				DialogFactory.error("No pudo guardarse el objetivo. Aguarde un momento y vuelva a intentarlo.");
 			}
 
 			@Override
 			public void onSuccess(Object result) {
-				Info.display("iEvenTask", "Se guardo el objetivo con exito.");
+				maskDisable();
+				DialogFactory.info("Se guardo el objetivo con exito.");
 				//FIXME: Invocar a la primer pagina
 				//refreshGrid(grid);
 				cerrarVentana();
 			}
 			});
+		} else {
+			maskDisable();
 		}
 	}
 	
 	private void modificarObjetivo(){
+		maskAvaiable();
 		if (isValid()){
 			Map<Object,Object> params = new HashMap<Object,Object>();
 			
@@ -184,17 +190,21 @@ public class ObjectiveWindow extends Window  {
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					Info.display("iEvenTask", "No pudo modificarse el objetivo. Aguarde un momento y vuelva a intentarlo.");
+					maskDisable();
+					DialogFactory.error("No pudo modificarse el objetivo. Aguarde un momento y vuelva a intentarlo.");
 				}
 				
 				@Override
 				public void onSuccess(Object result) {
-					Info.display("iEvenTask", "Se modifico el objetivo con exito.");
+					maskDisable();
+					DialogFactory.info("Se modifico el objetivo con exito.");
 					cerrarVentana();
 //					MainTabTareas.reloadGrid();
 					
 				}
 			});
+		} else {
+			maskDisable();
 		}
 	}
 	
@@ -222,4 +232,12 @@ public class ObjectiveWindow extends Window  {
 		this.id_obj = id_obj;
 	}
 	
+	public void maskAvaiable(){
+		this.mask("Aguarde un momento...");
+	}
+	
+	public void maskDisable(){
+		this.unmask();
+	}
+
 }

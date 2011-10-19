@@ -7,6 +7,7 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 
+import com.extjs.gxt.ui.client.core.El;
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.event.BaseEvent;
@@ -263,6 +264,11 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				seleccionable.onSelect(seleccionados);
 			}
 		});		
+	}
+
+	@Override
+	public El mask(String message) {
+		return super.mask("Cargando...");
 	}
 	
 }

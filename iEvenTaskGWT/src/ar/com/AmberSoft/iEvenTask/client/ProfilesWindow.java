@@ -19,7 +19,6 @@ import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -140,9 +139,7 @@ public class ProfilesWindow extends Window {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display(
-								"iEvenTask",
-								"No se han podido consultar los grupos LDAP.");
+						DialogFactory.error("No se han podido consultar los grupos LDAP.");
 					}
 
 					@Override
@@ -228,6 +225,7 @@ public class ProfilesWindow extends Window {
 
 	@Override
 	public void onDelete() {
+		maskAvaiable();
 		super.onDelete();
 		Collection ids = new ArrayList();
 		List seleccionados = grid.getSelectionModel()
@@ -245,16 +243,15 @@ public class ProfilesWindow extends Window {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display(
-								"iEvenTask",
-								"No se han podido eliminar los perfiles. Aguarde un momento y vuelva a intentarlo.");
+						DialogFactory.error("No se han podido eliminar los perfiles. Aguarde un momento y vuelva a intentarlo.");
+						maskDisable();
 					}
 
 					@Override
 					public void onSuccess(Object result) {
-						Info.display("iEvenTask",
-								"Se eliminaron los perfiles con exito.");
+						DialogFactory.info("Se eliminaron los perfiles con exito.");
 						grid.getStore().getLoader().load();
+						maskDisable();
 					}
 
 				});
@@ -289,7 +286,7 @@ public class ProfilesWindow extends Window {
 
 	@Override
 	public void onSave() {
-		componentsDisabled();
+		maskAvaiable();
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.GROUP, fldGroup.getValue().get("key"));
@@ -312,9 +309,8 @@ public class ProfilesWindow extends Window {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Info.display("iEvenTask",
-									"No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
-							componentsEnabled();
+							DialogFactory.error("No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
+							maskDisable();
 						}
 
 						@Override
@@ -322,43 +318,26 @@ public class ProfilesWindow extends Window {
 							if (result!=null){
 								Map response = (Map) result;
 								if (response.get(ParamsConst.ERROR).equals("ConstraintViolationException")){
-									Info.display("iEvenTask", 
-											"El Grupo LDAP ya existe como perfil, no es posible duplicarlos.");
+									DialogFactory.info("El Grupo ya existe como perfil, no es posible duplicarlos.");
 								} 
 							} else {
 								clear();
 								grid.getStore().getLoader().load();
 							}
-							componentsEnabled();
+							maskDisable();
 						}
 
 					});
 
 		} else {
-			componentsEnabled();
+			maskDisable();
 		}
 
 		
 	}
 
 	@Override
-	public void componentsEnabled() {
-		save.setEnabled(Boolean.TRUE);
-		cancel.setEnabled(Boolean.TRUE);
-		
-	}
-
-	@Override
-	public void componentsDisabled() {
-		save.setEnabled(Boolean.FALSE);
-		cancel.setEnabled(Boolean.FALSE);
-		
-	}
-
-	@Override
 	public void onModify() {
-		// TODO Auto-generated method stub
-		
 	}
 
 

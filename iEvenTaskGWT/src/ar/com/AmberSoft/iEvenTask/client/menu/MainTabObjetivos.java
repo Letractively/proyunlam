@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.DialogFactory;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.ObjectiveWindow;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
@@ -17,7 +18,6 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -104,12 +104,12 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display("iEvenTask", "No se han podido eliminar los objetivos. Aguarde un momento y vuelva a intentarlo.");
+						DialogFactory.error("No se han podido eliminar los objetivos. Aguarde un momento y vuelva a intentarlo.");
 					}
 
 					@Override
 					public void onSuccess(Object result) {
-						Info.display("iEvenTask", "Se eliminaron los objetivos con exito.");
+						DialogFactory.info("Se eliminaron los objetivos con exito.");
 						grid.getStore().getLoader().load();
 					}
 
