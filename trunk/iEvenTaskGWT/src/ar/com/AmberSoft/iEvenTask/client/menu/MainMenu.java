@@ -54,7 +54,6 @@ public class MainMenu extends LayoutContainer {
 	}
 	
 	protected void cerrarSesion() {
-		Info.display("entre a cerrarSesion", "");
 		IEvenTask.cerrarSesion();
 	}
 	

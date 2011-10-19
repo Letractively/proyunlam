@@ -12,7 +12,6 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
-import com.extjs.gxt.ui.client.widget.Info;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -65,7 +64,7 @@ public class IEvenTask implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Error", "Ocurrio un error al intentar verificar si el usuario esta activo");
+				DialogFactory.error("Ocurrio un error al intentar verificar el usuario.");
 			}
 
 			@Override
@@ -78,13 +77,8 @@ public class IEvenTask implements EntryPoint {
 				}
 			}
 		});
-		
-		//if(Context.getInstance().isSesion()){
-		//	iniciarSesion();
-		//}else{
-			//iniciarLogin();
-		//}
-		
+		//FIXME: Ojo!!! quitar esta linea
+		//iniciarSesion();
 	}
 	
 	public static void iniciarSesion() {
@@ -125,7 +119,7 @@ public class IEvenTask implements EntryPoint {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display("Error", "Ocurrio un error al intentar consultar los procesos activos");
+						DialogFactory.error("Ocurrio un error al intentar consultar los procesos activos");
 					}
 
 					@Override
@@ -164,7 +158,7 @@ public class IEvenTask implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Error", "Ocurrio un error al intentar quitar de session el usuario actual");
+				DialogFactory.error("Ocurrio un error al intentar quitar de session el usuario actual");
 			}
 
 			@Override

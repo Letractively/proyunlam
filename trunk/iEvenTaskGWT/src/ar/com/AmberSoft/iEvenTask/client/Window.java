@@ -135,9 +135,6 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 	public abstract void onSave();
 	
 
-	public abstract void componentsEnabled();
-	public abstract void componentsDisabled();
-	
 	/**
 	 * Genera un panel horizontal con una etiqueta y el campo correspondiente
 	 * @param field
@@ -187,11 +184,20 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 		while (it.hasNext()) {
 			ModelData mdAux = (ModelData) it.next();
 			Context.getInstance().addDetailExecution("Comparando " + key + " con " + mdAux.get("key"));
-			if (key.equals(mdAux.get("key"))){
+			if (key.trim().equals(mdAux.get("key").toString().trim())){
 				modelData = mdAux;
+				break;
 			}
 		}
 		comboBox.setValue(modelData);
+	}
+	
+	public void maskAvaiable(){
+		this.mask("Aguarde un momento...");
+	}
+	
+	public void maskDisable(){
+		this.unmask();
 	}
 	
 }

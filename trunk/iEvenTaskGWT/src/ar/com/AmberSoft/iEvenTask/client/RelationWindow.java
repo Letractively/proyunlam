@@ -278,9 +278,7 @@ public class RelationWindow extends Window {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Info.display(
-									"iEvenTask",
-									"No se han podido consultar el listado de eventos.");
+							DialogFactory.error("No se han podido consultar el listado de eventos.");
 						}
 
 						@Override
@@ -395,15 +393,12 @@ public class RelationWindow extends Window {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display(
-								"iEvenTask",
-								"No se han podido eliminar los eventos. Aguarde un momento y vuelva a intentarlo.");
+						DialogFactory.error("No se han podido eliminar los eventos. Aguarde un momento y vuelva a intentarlo.");
 					}
 
 					@Override
 					public void onSuccess(Object result) {
-						Info.display("iEvenTask",
-								"Se eliminaron los eventos con exito.");
+						DialogFactory.info("Se eliminaron los eventos con exito.");
 						grid.getStore().getLoader().load();	
 					}
 
@@ -435,6 +430,7 @@ public class RelationWindow extends Window {
 
 	@Override
 	public void onSave() {
+		maskAvaiable();
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.EVENT,	((ModelData)fldEvent.getValue()).get("key"));
@@ -446,17 +442,19 @@ public class RelationWindow extends Window {
 
 						@Override
 						public void onFailure(Throwable caught) {
-							Info.display("iEvenTask",
-									"No pudo almacenarse el evento. Aguarde un momento y vuelva a intentarlo.");
+							maskDisable();
+							DialogFactory.error("No pudo almacenarse el evento. Aguarde un momento y vuelva a intentarlo.");
 						}
 
 						@Override
 						public void onSuccess(Object result) {
-							Info.display("iEvenTask",
-									"Se almaceno el evento con exito.");
+							maskDisable();
+							DialogFactory.info("Se almaceno el evento con exito.");
 							clear();
 							grid.getStore().getLoader().load();						}
 					});
+		} else {
+			maskDisable();
 		}
 	}
 
@@ -472,21 +470,7 @@ public class RelationWindow extends Window {
 	}
 
 	@Override
-	public void componentsEnabled() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentsDisabled() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
 	public void onModify() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

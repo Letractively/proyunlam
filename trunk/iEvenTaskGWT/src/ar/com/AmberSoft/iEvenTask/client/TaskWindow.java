@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ar.com.AmberSoft.iEvenTask.client.menu.MainTabTareas;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -18,7 +17,6 @@ import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
@@ -104,9 +102,7 @@ public class TaskWindow extends Window {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						Info.display(
-								"iEvenTask",
-								"No se han podido consultar los usuarios LDAP.");
+						DialogFactory.error("No se han podido consultar los usuarios LDAP.");
 					}
 
 					@Override
@@ -212,6 +208,7 @@ public class TaskWindow extends Window {
 	}
 	
 	private void guardarTarea(){
+		maskAvaiable();
 		if (isValid()){
 			Map<Object,Object> params = new HashMap<Object,Object>();
 			
@@ -227,20 +224,25 @@ public class TaskWindow extends Window {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("iEvenTask", "No pudo guardarse la tarea. Aguarde un momento y vuelva a intentarlo.");
+				maskDisable();
+				DialogFactory.error("No pudo guardarse la tarea. Aguarde un momento y vuelva a intentarlo.");
 			}
 
 			@Override
 			public void onSuccess(Object result) {
-				Info.display("iEvenTask", "Se guardo la tarea con exito.");
+				maskDisable();
+				DialogFactory.info("Se guardo la tarea con exito.");
 				//FIXME: Invocar a la primer pagina
 				//refreshGrid(grid);
 				cerrarVentana();
 			}
 			});
+		} else {
+			maskDisable();
 		}
 	}
 	private void modificarTarea(){
+		maskAvaiable();
 		if (isValid()){
 			Map<Object,Object> params = new HashMap<Object,Object>();
 			
@@ -257,17 +259,21 @@ public class TaskWindow extends Window {
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					Info.display("iEvenTask", "No pudo modificarse la tarea. Aguarde un momento y vuelva a intentarlo.");
+					maskDisable();
+					DialogFactory.error("No pudo modificarse la tarea. Aguarde un momento y vuelva a intentarlo.");
 				}
 				
 				@Override
 				public void onSuccess(Object result) {
-					Info.display("iEvenTask", "Se modifico la tarea con exito.");
+					maskDisable();
+					DialogFactory.info("Se modifico la tarea con exito.");
 					cerrarVentana();
 					//MainTabTareas.reloadGrid();
 					
 				}
 			});
+		} else {
+			maskDisable();
 		}
 	}
 	
@@ -293,6 +299,14 @@ public class TaskWindow extends Window {
 
 	public void setId_tarea(Integer id_tarea) {
 		this.id_tarea = id_tarea;
+	}
+	
+	public void maskAvaiable(){
+		this.mask("Aguarde un momento...");
+	}
+	
+	public void maskDisable(){
+		this.unmask();
 	}
 	
 }
