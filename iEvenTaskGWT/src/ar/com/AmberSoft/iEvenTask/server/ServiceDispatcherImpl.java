@@ -36,11 +36,6 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		
 		//logger.debug("Inicio ServiceDispatcher");
 		
-		//FIXME: Solo de prueba, luego colocar en el login
-		try{
-			BackgroundEventController.getInstance();
-		}catch(Exception e){logger.error(Tools.getStackTrace(e));}
-		
 		if ((params==null)||(params.get(ServiceNameConst.SERVICIO)==null)){
 			throw new ServiceNameNotFoundException();
 		}

@@ -22,6 +22,10 @@ public class Loader extends BasePagingLoader{
 		((Proxy)proxy).setGrid(grid);
 	}
 	
+	public Proxy getProxy(){
+		return ((Proxy)proxy);
+	}
+	
 	
 
 	

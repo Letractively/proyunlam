@@ -9,6 +9,7 @@ import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 
 import com.extjs.gxt.ui.client.core.El;
 import com.extjs.gxt.ui.client.data.BaseFilterPagingLoadConfig;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.Events;
@@ -94,6 +95,26 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		Iterator it = list.iterator();
 		while (it.hasNext()) {
 			Map actual = (Map) it.next();
+			if (actual.get(field).equals(value)) {
+				return actual;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Busca en la lista de datos que muestra la grilla actualmente un modelData
+	 * a partir del valor que pueda contener un campo en particular Retorna el
+	 * primero modelData que coincide con la busqueda
+	 * 
+	 * @param field
+	 * @param value
+	 * @return
+	 */
+	public ModelData searchModel(String field, Object value) {
+		Iterator it = getStore().getModels().iterator();
+		while (it.hasNext()) {
+			ModelData actual = (ModelData) it.next();
 			if (actual.get(field).equals(value)) {
 				return actual;
 			}
@@ -270,5 +291,6 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	public El mask(String message) {
 		return super.mask("Cargando...");
 	}
+	
 	
 }
