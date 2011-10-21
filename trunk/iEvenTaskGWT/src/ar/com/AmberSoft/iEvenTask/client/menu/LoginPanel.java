@@ -162,7 +162,7 @@ public class LoginPanel extends LayoutContainer {
 				
 				DialogFactory.info("Bienvenido " + user.get(ParamsConst.NAME));
 				
-				Context.getInstance().setUsuario(textUsuario.getValue().toString()); 	
+				Context.getInstance().setUsuario(user); 	
 				Context.getInstance().setSesion(true); 	
 				IEvenTask.iniciarSesion();
 			}

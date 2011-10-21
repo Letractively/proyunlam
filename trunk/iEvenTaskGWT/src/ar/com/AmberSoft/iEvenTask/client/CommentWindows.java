@@ -143,7 +143,7 @@ public class CommentWindows extends Window {
 							Context.getInstance().addComment(
 									htmlEditor.getValue(),
 									new Date(), 
-									Context.getInstance().getUsuario());
+									Context.getInstance().getUserName());
 							
 							Context.getInstance().getWindowInstance(CommentWindows.class).setVisible(Boolean.FALSE);
 							clear();

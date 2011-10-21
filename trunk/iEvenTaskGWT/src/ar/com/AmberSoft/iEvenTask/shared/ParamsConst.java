@@ -30,8 +30,6 @@ public abstract class ParamsConst {
 	public static final String CONNECTION = "connection";
 	public static final String GROUP = "groupLDAP";
 	public static final String PERMISSIONS = "permissions";
-	public static final String CHECK_OBJECTIVE = "checkObjective";
-	public static final String CHECK_ADMIN = "checkAdmin";
 	
 	public static final String NOMBRE_TAREA = "nombreTarea";
 	public static final String FECHA_COMIENZO = "fechaComienzo";
@@ -82,6 +80,7 @@ public abstract class ParamsConst {
 	public static final String DETAIL = "detail";
 	
 	public static final String PROCESS = "process";
+	public static final String PROFILE = "profile";
 	
 	public static final String USUARIO = "usuario";
 	public static final String FECHA = "fecha";

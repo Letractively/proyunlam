@@ -129,7 +129,7 @@ public class ObjectiveWindow extends Window  {
 						}
 						
 						fldUser.setStore(listStore);
-						String user = Context.getInstance().getUsuario();
+						String user = Context.getInstance().getUserName();
 						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO)!=null)){
 							user = actual.get(ParamsConst.ID_USUARIO).toString();
 						}

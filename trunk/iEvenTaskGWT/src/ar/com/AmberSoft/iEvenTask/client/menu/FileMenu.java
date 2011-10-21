@@ -1,6 +1,8 @@
 package ar.com.AmberSoft.iEvenTask.client.menu;
 
+import ar.com.AmberSoft.iEvenTask.client.Context;
 import ar.com.AmberSoft.iEvenTask.client.EventWindow;
+import ar.com.AmberSoft.iEvenTask.client.PermissionsConst;
 import ar.com.AmberSoft.iEvenTask.client.ProfilesWindow;
 import ar.com.AmberSoft.iEvenTask.client.RelationWindow;
 
@@ -14,14 +16,19 @@ public class FileMenu extends Menu {
 	MenuItem preferencesItem;
 	
 	public FileMenu(){
-		profileItem = new MenuItem("Perfiles", new ProfilesWindow());
-		add(profileItem);
-
-		eventItem = new MenuItem("Eventos", new EventWindow());
-		add(eventItem);
 		
-		eventItem = new MenuItem("Relaciones", new RelationWindow());
-		add(eventItem);
+		if (Context.getInstance().isAvaiable(PermissionsConst.GESTIONAR_PERFILES)){
+			profileItem = new MenuItem("Perfiles", new ProfilesWindow());
+			add(profileItem);
+		}
+
+		if (Context.getInstance().isAvaiable(PermissionsConst.GESTIONAR_EVENTOS)){
+			eventItem = new MenuItem("Eventos", new EventWindow());
+			add(eventItem);
+			
+			eventItem = new MenuItem("Relaciones", new RelationWindow());
+			add(eventItem);
+		}
 		
 		actionsItem = new MenuItem("Acciones", null);
 		add(actionsItem);
