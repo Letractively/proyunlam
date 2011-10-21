@@ -41,12 +41,13 @@ public class ListProfileService extends ListService {
 	private void addPerfil(Collection list, Boolean permiso1, Boolean permiso2) {
 		Profile perfil = new Profile();
 		perfil.setGroupLDAP("Grupo" + perfil.getId().toString());
-		if (permiso1) {
+		// FIXME: Pasarle una collection
+		/*if (permiso1) {
 			addPermiso(perfil, CreateProfileService.ID_OBJECTIVE);
 		}
 		if (permiso2) {
 			addPermiso(perfil, CreateProfileService.ID_ADMIN);
-		}
+		}*/
 		list.add(perfil);
 	}
 

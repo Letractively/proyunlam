@@ -9,8 +9,17 @@ create table iet_permiso (
 	descripcion varchar(255) not null
 );
 
-insert into iet_permiso values (1, 'Gestion de objetivos');
-insert into iet_permiso values (2, 'Herramientas de administracion');
+insert into iet_permiso values (1, 'Gestionar perfiles');
+insert into iet_permiso values (2, 'Gestionar eventos');
+insert into iet_permiso values (3, 'Crear y modificar tareas');
+insert into iet_permiso values (4, 'Crear y modificar tareas no asignadas');
+insert into iet_permiso values (5, 'Crear y modificar objetivos');
+insert into iet_permiso values (6, 'Crear y modificar objetivos no asignadas');
+insert into iet_permiso values (7, 'Agregar comentarios');
+insert into iet_permiso values (8, 'Agregar comentarios no asignadas');
+insert into iet_permiso values (9, 'Asignar Tareas');
+insert into iet_permiso values (10, 'Reasignar Tareas');
+insert into iet_permiso values (11, 'Subdividir Tareas');
 
 create table iet_permiso_perfil (
 	id_permiso int not null, 

@@ -19,7 +19,7 @@ public class ProfileManager {
 
 
 	public Profile getProfile(String group){
-		return profiles.get(group);
+		return profiles.get(group.trim());
 	}
 	
 	public void load() {
@@ -31,7 +31,7 @@ public class ProfileManager {
 		Iterator itData = datas.iterator();
 		while (itData.hasNext()) {
 			Profile actual = (Profile) itData.next();
-			profiles.put(actual.getGroupLDAP(), actual);
+			profiles.put(actual.getGroupLDAP().trim(), actual);
 		}
 	}
 
