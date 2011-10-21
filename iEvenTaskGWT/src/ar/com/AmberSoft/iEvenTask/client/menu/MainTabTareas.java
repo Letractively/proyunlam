@@ -13,6 +13,7 @@ import ar.com.AmberSoft.iEvenTask.client.Context;
 import ar.com.AmberSoft.iEvenTask.client.DialogFactory;
 import ar.com.AmberSoft.iEvenTask.client.DialogInfo;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
+import ar.com.AmberSoft.iEvenTask.client.PermissionsConst;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 import ar.com.AmberSoft.iEvenTask.client.resources.Resources;
@@ -27,7 +28,6 @@ import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -85,32 +85,39 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		commentPanel.setScrollMode(Scroll.AUTO);
 		commentPanel.setHeading("Comentarios");
 		commentPanel.setSize(COMMENT_WIDTH.toString(), COMMENT_HEIGTH.toString());
-		
-		Button btnAddComment = new Button("Comentario");
-		commentPanel.add(btnAddComment);
-		btnAddComment.setIcon(Resources.ICONS.addComment());
-		btnAddComment.addSelectionListener(new SelectionListener<ButtonEvent>() {
-			public void componentSelected(ButtonEvent be) {
-				List seleccionados = grid.getSelectionModel().getSelectedItems();		
-				if (seleccionados.size()==1){
-					BaseModel baseModel = (BaseModel) seleccionados.iterator().next();
-					Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
-					
-					Context.getInstance().windowShow(new CommentWindows((Integer)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NOMBRE_TAREA)));
-				} else {
-					if (seleccionados.size()==0){
-						DialogInfo dialogInfo = new DialogInfo( 
-								"Seleccione una tarea para agregar comentarios.");
+
+		if ((Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS)) 
+			|| (Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS_NO_ASIGNADOS))){
+			Button btnAddComment = new Button("Comentario");
+			commentPanel.add(btnAddComment);
+			
+			btnAddComment.setIcon(Resources.ICONS.addComment());
+			btnAddComment.addSelectionListener(new SelectionListener<ButtonEvent>() {
+				public void componentSelected(ButtonEvent be) {
+					List seleccionados = grid.getSelectionModel().getSelectedItems();		
+					if (seleccionados.size()==1){
+						BaseModel baseModel = (BaseModel) seleccionados.iterator().next();
+						Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+						
+						if ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) || 
+								(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
+										&& Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS_NO_ASIGNADOS))){
+							Context.getInstance().windowShow(new CommentWindows((Integer)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NOMBRE_TAREA)));
+						} else {
+							DialogFactory.info("No tiene permisos para agregar comentarios en tareas no asignadas");
+						}
 					} else {
-						DialogInfo dialogInfo = new DialogInfo( 
-							"Seleccione solo una tarea para agregar comentarios.");
+						if (seleccionados.size()==0){
+							DialogInfo dialogInfo = new DialogInfo( 
+									"Seleccione una tarea para agregar comentarios.");
+						} else {
+							DialogInfo dialogInfo = new DialogInfo( 
+								"Seleccione solo una tarea para agregar comentarios.");
+						}
 					}
 				}
-				
-				
-				
-			}
-		});
+			});
+		}
 		
 		/*Html html = new Html();
 		commentPanel.add(html);
@@ -172,30 +179,41 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public void onDelete() {
 		Collection ids = new ArrayList();
 		List seleccionados = grid.getSelectionModel().getSelectedItems();
+		Boolean validNoAsignada = Boolean.TRUE;
 		Iterator it = seleccionados.iterator();
 		while (it.hasNext()) {
 			BaseModel model = (BaseModel) it.next();
 			ids.add(model.get(ParamsConst.ID));
+			if (validNoAsignada){
+				validNoAsignada = ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(model.get(ParamsConst.ID_USUARIO))) || 
+						(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(model.get(ParamsConst.ID_USUARIO))) 
+								&& Context.getInstance().isAvaiable(PermissionsConst.TAREAS_NO_ASIGNADAS)));
+			} else {
+				break;
+			}
 		}
-		Map params = new HashMap<String, String>();
-		params.put(ParamsConst.IDS, ids);
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_TASK);
-		DispatcherUtil.getDispatcher().execute(params,
-				new AsyncCallback() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						DialogFactory.error("No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
-					}
-
-					@Override
-					public void onSuccess(Object result) {
-						DialogFactory.info("Se eliminaron las tareas con exito.");
-						grid.getStore().getLoader().load();
-					}
-
-				});
-
+		if (validNoAsignada){
+			Map params = new HashMap<String, String>();
+			params.put(ParamsConst.IDS, ids);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_TASK);
+			DispatcherUtil.getDispatcher().execute(params,
+					new AsyncCallback() {
+	
+						@Override
+						public void onFailure(Throwable caught) {
+							DialogFactory.error("No se han podido eliminar las tareas. Aguarde un momento y vuelva a intentarlo.");
+						}
+	
+						@Override
+						public void onSuccess(Object result) {
+							DialogFactory.info("Se eliminaron las tareas con exito.");
+							grid.getStore().getLoader().load();
+						}
+	
+					});
+		} else {
+			DialogFactory.info("No tiene permisos para borrar tareas no asignadas.");
+		}
 	}
 		
 	@SuppressWarnings("rawtypes")
@@ -225,9 +243,15 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 				actual = grid.search(ParamsConst.ID, model.get(ParamsConst.ID));
 			}
 		}
-		TaskWindow taskWindow = new TaskWindow(false);
-		taskWindow.setValuesToUpdate(actual);
-		taskWindow.show();
+		if ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) || 
+			(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
+					&& Context.getInstance().isAvaiable(PermissionsConst.TAREAS_NO_ASIGNADAS))){
+			TaskWindow taskWindow = new TaskWindow(false);
+			taskWindow.setValuesToUpdate(actual);
+			taskWindow.show();
+		} else {
+			DialogFactory.info("No tiene permisos para modificar tareas no asignadas.");
+		}
 	}
 	
 

@@ -18,7 +18,6 @@ import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
-import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -27,19 +26,20 @@ import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
+import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.CaptionPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ProfilesWindow extends Window {
 
-	public static final Integer WINDOW_WIDTH = 500;
-	public static final Integer WINDOW_HEIGTH = 436;
+	public static final Integer WINDOW_WIDTH = 310;
+	public static final Integer WINDOW_HEIGTH = 570;
 	
 	public static final Integer FIELD_WIDTH = 150;
 	public static final Integer LABEL_WIDTH = 100;
@@ -54,12 +54,25 @@ public class ProfilesWindow extends Window {
 	
 	// Campos
 	private final ComboBox fldGroup = new ComboBox();
-	final CheckBox fldObjective = new CheckBox();
-	final CheckBox fldAdmin = new CheckBox();
+	
+	final CheckBox fldGestionarPerfiles = new CheckBox();
+	final CheckBox fldGestionarEventos = new CheckBox();
+	final CheckBox fldTareas = new CheckBox();
+	final CheckBox fldTareasNoAsignadas = new CheckBox();
+	final CheckBox fldObjetivos = new CheckBox();
+	final CheckBox fldObjetivosNoAsignadas = new CheckBox();
+	final CheckBox fldComentarios = new CheckBox();
+	final CheckBox fldComentariosNoAsignadas = new CheckBox();
+	final CheckBox fldAsignarTareas = new CheckBox();
+	final CheckBox fldReasignarTareas = new CheckBox();
+	final CheckBox fldSubdividirTareas = new CheckBox();
+
 	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
 	
 	final Button save = new SaveButton(this);
 	final Button cancel = new CancelButton(this);
+	final CheckBoxGroup grupoChecks = new CheckBoxGroup();
+	
 	
 	public ProfilesWindow() {
 		super();
@@ -70,13 +83,13 @@ public class ProfilesWindow extends Window {
 		
 		TabPanel tabPanel = new TabPanel();
 		TabItem tbtmDetalles = new TabItem("Detalles");
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		VerticalPanel panel = new VerticalPanel();
 		tabPanel.add(tbtmDetalles);
-		tbtmDetalles.add(horizontalPanel);
+		tbtmDetalles.add(panel);
 		tbtmDetalles.setHeight(DETAILS_HEIGTH.toString());
 
-		horizontalPanel.add(getPanelFields());
-		horizontalPanel.add(getPermissions());
+		panel.add(getPanelFields());
+		panel.add(getPermissions());
 
 		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
 		
@@ -175,29 +188,44 @@ public class ProfilesWindow extends Window {
 	private VerticalPanel getPermissions() {
 		VerticalPanel verticalPanel_1 = new VerticalPanel();
 
-		CaptionPanel cptnpnlPermisos = new CaptionPanel("Permisos");
-		verticalPanel_1.add(cptnpnlPermisos);
-		cptnpnlPermisos.setSize("182px", "66px");
-
-		CheckBoxGroup chckbxgrpPermisos = new CheckBoxGroup();
-		chckbxgrpPermisos.setOrientation(Orientation.VERTICAL);
-
-		chckbxgrpPermisos.add(fldObjective);
-		fldObjective.setBoxLabel("Gesti\u00F3n de Objetivos");
-		fldObjective.setHideLabel(true);
-
-		chckbxgrpPermisos.add(fldAdmin);
-		fldAdmin.setBoxLabel("Herramientas de Administraci\u00F3n");
-		fldAdmin.setHideLabel(true);
-		cptnpnlPermisos.setContentWidget(chckbxgrpPermisos);
-		registerField(chckbxgrpPermisos);
-		chckbxgrpPermisos.setAutoValidate(true);
-		chckbxgrpPermisos.setValidator(new ValidaMultiField());
-		chckbxgrpPermisos.setSize("172px", "50px");
-		chckbxgrpPermisos.setFieldLabel("Permisos");
-		verticalPanel_1.setSize("188px", "67px");
+		LabelField labelField = new LabelField("Permisos");
+		verticalPanel_1.add(labelField);
 		
+		ScrollPanel cptnpnlPermisos = new ScrollPanel();
+		verticalPanel_1.add(cptnpnlPermisos);
+		cptnpnlPermisos.setSize("295px", "150px");
+
+		
+		grupoChecks.setOrientation(Orientation.VERTICAL);
+		cptnpnlPermisos.add(grupoChecks);
+		cptnpnlPermisos.setTitle("Permisos");
+		//cptnpnlPermisos.setContentWidget(grupoChecks);
+		registerField(grupoChecks);
+		grupoChecks.setAutoValidate(true);
+		grupoChecks.setValidator(new ValidaMultiField());
+		grupoChecks.setSize("180px", "150px");
+		grupoChecks.setFieldLabel("Permisos");
+		verticalPanel_1.setSize("290px", "150px");
+		
+		addCheck(fldGestionarPerfiles, "Gestionar perfiles");
+		addCheck(fldGestionarEventos, "Gestionar eventos");
+		addCheck(fldTareas, "Crear y modificar tareas");
+		addCheck(fldTareasNoAsignadas, "Crear y modificar tareas no asignadas");
+		addCheck(fldObjetivos, "Crear y modificar objetivos");
+		addCheck(fldObjetivosNoAsignadas, "Crear y modificar objetivos no asignadas");
+		addCheck(fldComentarios, "Agregar comentarios");
+		addCheck(fldComentariosNoAsignadas, "Agregar comentarios no asignadas");
+		addCheck(fldAsignarTareas, "Asignar Tareas");
+		addCheck(fldReasignarTareas, "Reasignar Tareas");
+		addCheck(fldSubdividirTareas, "Subdividir Tareas");
+
 		return verticalPanel_1;
+	}
+
+	public void addCheck(CheckBox field, String label) {
+		grupoChecks.add(field);
+		field.setBoxLabel(label);
+		field.setHideLabel(true);
 	}
 	
 	/**
@@ -211,13 +239,7 @@ public class ProfilesWindow extends Window {
 		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		/*ColumnConfig clmncnfgNombre = new ColumnConfig(ParamsConst.NAME, "Nombre", 150);
-		configs.add(clmncnfgNombre);
-
-		ColumnConfig clmncnfgConexion = new ColumnConfig(ParamsConst.CONNECTION, "Conexion", 150);
-		configs.add(clmncnfgConexion);*/
-
-		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 300);
+		ColumnConfig clmncnfgGrupoLdap = new ColumnConfig(ParamsConst.GROUP, "Grupo LDAP", 287);
 		configs.add(clmncnfgGrupoLdap);
 
 		return configs;
@@ -264,24 +286,45 @@ public class ProfilesWindow extends Window {
 
 		if (actual != null) {
 			setCombo(fldGroup, (String)actual.get(ParamsConst.GROUP));
-			fldObjective.setValue(Boolean.FALSE);
-			fldAdmin.setValue(Boolean.FALSE);
+			 fldGestionarPerfiles.setValue(Boolean.FALSE);
+			 fldGestionarEventos.setValue(Boolean.FALSE);
+			 fldTareas.setValue(Boolean.FALSE);
+			 fldTareasNoAsignadas.setValue(Boolean.FALSE);
+			 fldObjetivos.setValue(Boolean.FALSE);
+			 fldObjetivosNoAsignadas.setValue(Boolean.FALSE);
+			 fldComentarios.setValue(Boolean.FALSE);
+			 fldComentariosNoAsignadas.setValue(Boolean.FALSE);
+			 fldAsignarTareas.setValue(Boolean.FALSE);
+			 fldReasignarTareas.setValue(Boolean.FALSE);
+			 fldSubdividirTareas.setValue(Boolean.FALSE);
 			Collection permisos = (Collection) actual.get(ParamsConst.PERMISSIONS);
 			if (permisos!=null){
 				Iterator itPermisos = permisos.iterator();
 				while (itPermisos.hasNext()) {
 					Map permiso = (Map) itPermisos.next();
-					if (permiso.get(ParamsConst.ID)=="1"){
-						fldObjective.setValue(Boolean.TRUE);
-					}
-					if (permiso.get(ParamsConst.ID)=="2"){
-						fldAdmin.setValue(Boolean.TRUE);
-					}
+					
+					evaluarPermiso(permiso, fldGestionarPerfiles, 		"1");
+					evaluarPermiso(permiso, fldGestionarEventos, 		"2");
+					evaluarPermiso(permiso, fldTareas, 					"3");
+					evaluarPermiso(permiso, fldTareasNoAsignadas, 		"4");
+					evaluarPermiso(permiso, fldObjetivos, 				"5");
+					evaluarPermiso(permiso, fldObjetivosNoAsignadas,	"6");
+					evaluarPermiso(permiso, fldComentarios, 			"7");
+					evaluarPermiso(permiso, fldComentariosNoAsignadas, 	"8");
+					evaluarPermiso(permiso, fldAsignarTareas, 			"9");
+					evaluarPermiso(permiso, fldReasignarTareas, 		"10");
+					evaluarPermiso(permiso, fldSubdividirTareas, 		"11");
 					
 				}
 			}
 		}
 		
+	}
+
+	public void evaluarPermiso(Map permiso, CheckBox field, String id) {
+		if (id.equals(permiso.get(ParamsConst.ID))){
+			field.setValue(Boolean.TRUE);
+		}
 	}
 
 	@Override
@@ -290,8 +333,22 @@ public class ProfilesWindow extends Window {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.GROUP, fldGroup.getValue().get("key"));
-			params.put(ParamsConst.CHECK_OBJECTIVE,	fldObjective.getValue());
-			params.put(ParamsConst.CHECK_ADMIN, fldAdmin.getValue());
+			Collection permisos = new ArrayList();
+			
+			asignarPermiso(permisos, fldGestionarPerfiles, 		1);
+			asignarPermiso(permisos, fldGestionarEventos, 		2);
+			asignarPermiso(permisos, fldTareas, 				3);
+			asignarPermiso(permisos, fldTareasNoAsignadas, 		4);
+			asignarPermiso(permisos, fldObjetivos, 				5);
+			asignarPermiso(permisos, fldObjetivosNoAsignadas, 	6);
+			asignarPermiso(permisos, fldComentarios, 			7);
+			asignarPermiso(permisos, fldComentariosNoAsignadas, 8);
+			asignarPermiso(permisos, fldAsignarTareas, 			9);
+			asignarPermiso(permisos, fldReasignarTareas, 		10);
+			asignarPermiso(permisos, fldSubdividirTareas, 		11);
+			
+			params.put(ParamsConst.PERMISSIONS,	permisos);
+
 			if (windowState.equals(State.UPDATE_STATE)) {
 				List seleccionados = grid.getSelectionModel().getSelection();
 				if (seleccionados.size() == 1) {
@@ -334,6 +391,13 @@ public class ProfilesWindow extends Window {
 		}
 
 		
+	}
+
+	public void asignarPermiso(Collection permisos, CheckBox field,
+			Integer value) {
+		if (field.getValue()){
+			permisos.add(value);
+		}
 	}
 
 	@Override

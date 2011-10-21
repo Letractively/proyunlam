@@ -7,9 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.Context;
 import ar.com.AmberSoft.iEvenTask.client.DialogFactory;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.ObjectiveWindow;
+import ar.com.AmberSoft.iEvenTask.client.PermissionsConst;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
@@ -94,30 +96,41 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 	public void onDelete() {
 		Collection ids = new ArrayList();
 		List seleccionados = grid.getSelectionModel().getSelectedItems();
+		Boolean validNoAsignada = Boolean.TRUE;
 		Iterator it = seleccionados.iterator();
 		while (it.hasNext()) {
 			BaseModel model = (BaseModel) it.next();
 			ids.add(model.get(ParamsConst.ID));
+			if (validNoAsignada){
+				validNoAsignada = ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(model.get(ParamsConst.ID_USUARIO))) || 
+						(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(model.get(ParamsConst.ID_USUARIO))) 
+								&& Context.getInstance().isAvaiable(PermissionsConst.OBJETIVOS_NO_ASIGNADOS)));
+			} else {
+				break;
+			}
 		}
-		Map params = new HashMap<String, String>();
-		params.put(ParamsConst.IDS, ids);
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_OBJECTIVE);
-		DispatcherUtil.getDispatcher().execute(params,
-				new AsyncCallback() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						DialogFactory.error("No se han podido eliminar los objetivos. Aguarde un momento y vuelva a intentarlo.");
-					}
-
-					@Override
-					public void onSuccess(Object result) {
-						DialogFactory.info("Se eliminaron los objetivos con exito.");
-						grid.getStore().getLoader().load();
-					}
-
-				});
-		
+		if (validNoAsignada){
+			Map params = new HashMap<String, String>();
+			params.put(ParamsConst.IDS, ids);
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.DELETE_OBJECTIVE);
+			DispatcherUtil.getDispatcher().execute(params,
+					new AsyncCallback() {
+	
+						@Override
+						public void onFailure(Throwable caught) {
+							DialogFactory.error("No se han podido eliminar los objetivos. Aguarde un momento y vuelva a intentarlo.");
+						}
+	
+						@Override
+						public void onSuccess(Object result) {
+							DialogFactory.info("Se eliminaron los objetivos con exito.");
+							grid.getStore().getLoader().load();
+						}
+	
+					});
+		} else {
+			DialogFactory.info("No tiene permisos para borrar objetivos no asignados.");
+		}
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -139,9 +152,16 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 				actual = grid.search(ParamsConst.ID, model.get(ParamsConst.ID));
 			}
 		}
-		ObjectiveWindow objectiveWindow = new ObjectiveWindow(false);
-		objectiveWindow.setValuesToUpdate(actual);
-		objectiveWindow.show();
+		if ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) || 
+				(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
+						&& Context.getInstance().isAvaiable(PermissionsConst.TAREAS_NO_ASIGNADAS))){
+
+			ObjectiveWindow objectiveWindow = new ObjectiveWindow(false);
+			objectiveWindow.setValuesToUpdate(actual);
+			objectiveWindow.show();
+		} else {
+			DialogFactory.info("No tiene permisos para modificar objetivos no asignadas.");
+		}
 	}
 		
 }

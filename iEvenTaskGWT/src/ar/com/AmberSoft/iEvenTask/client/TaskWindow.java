@@ -121,7 +121,7 @@ public class TaskWindow extends Window {
 						}
 						
 						fldUser.setStore(listStore);
-						String user = Context.getInstance().getUsuario();
+						String user = Context.getInstance().getUserName();
 						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO)!=null)){
 							user = actual.get(ParamsConst.ID_USUARIO).toString();
 						}
@@ -132,6 +132,12 @@ public class TaskWindow extends Window {
 		fldUser.setEditable(Boolean.FALSE);
 		fldUser.setTypeAhead(true);  
 		fldUser.setTriggerAction(TriggerAction.ALL); 
+		
+		if (((guardar) && (!Context.getInstance().isAvaiable(PermissionsConst.ASIGNAR_TAREAS))) ||
+			((!guardar) && (!Context.getInstance().isAvaiable(PermissionsConst.REASIGNAR_TAREAS)))){
+			fldUser.setEnabled(Boolean.FALSE);
+		}
+		
 		taskPanel.add(fldUser);
 		
 		taskPanel.add(btnView);

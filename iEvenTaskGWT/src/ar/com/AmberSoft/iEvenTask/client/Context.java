@@ -1,17 +1,17 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-
-import com.extjs.gxt.ui.client.widget.Html;
-import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowNotRegisteredException;
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowPreviouslyRegisteredException;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
+
+import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 
 /**
@@ -44,7 +44,8 @@ public class Context {
 	 */
 	private Map<Class, Window> registeredWindows;
 	
-	private String usuario;
+	private Map usuario;
+	private Map avaiable;
 	private String perfil;
 	private boolean sesion = false;
 	/**
@@ -53,21 +54,6 @@ public class Context {
 	 */
 	private HtmlEditor htmlEditor;
 	
-	//private Html html;
-	
-	/*public Html getHtml() {
-		return html;
-	}
-	
-	public void addHtml(String html){
-		this.html.setHtml(this.getHtml().getHtml() + html);
-		this.html.repaint();
-	}
-
-	public void setHtml(Html html) {
-		this.html = html;
-	}*/
-
 	public HtmlEditor getHtmlEditor() {
 		return htmlEditor;
 	}
@@ -111,12 +97,28 @@ public class Context {
 		this.htmlEditor = htmlEditor;
 	}
 
-	public String getUsuario() {
+	public String getUserName(){
+		return (String) usuario.get(ParamsConst.NAME);
+	}
+	
+	public Map getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(String usuario) {
+	public void setUsuario(Map usuario) {
 		this.usuario = usuario;
+		avaiable = new HashMap();
+		Map profile = (Map) usuario.get(ParamsConst.PROFILE);
+		if (profile!=null){
+			Collection permisos = (Collection) profile.get(ParamsConst.PERMISSIONS);
+			Iterator<Map> itPermisos = permisos.iterator();
+			while (itPermisos.hasNext()) {
+				Map actual = (Map) itPermisos.next();
+				avaiable.put(actual.get(ParamsConst.ID), actual);
+			}
+		} else {
+			DialogFactory.error("Atencion!!! El usuario no tiene perfil asignado.");
+		}
 	}
 
 	public String getPerfil() {
@@ -126,9 +128,16 @@ public class Context {
 	public void setPerfil(String perfil) {
 		this.perfil = perfil;
 	}
-
+ 
 	public boolean isSesion() {
 		return sesion;
+	}
+	
+	public Boolean isAvaiable(String code){
+		if (avaiable.get(code)!=null){
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 
 	public void setSesion(boolean sesion) {
