@@ -8,6 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table (name="iet_visible")
@@ -23,6 +27,12 @@ public class Visible {
 	public Visible(Tarea tarea, String usuario){
 		this.tarea = tarea;
 		this.usuario = usuario;
+		changeTask(tarea);
+	}
+
+	@Transient
+	public void changeTask(Tarea tarea) {
+		this.tarea = tarea;
 		if ((tarea!=null) && (tarea.getId())!=null && (usuario!=null)){
 			this.id = usuario + tarea.getId().toString();
 		}
@@ -39,6 +49,7 @@ public class Visible {
 	
 	@ManyToOne (fetch=FetchType.LAZY)
 	@JoinColumn (name="id_tarea")
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	public Tarea getTarea() {
 		return tarea;
 	}

@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.backend.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -14,6 +15,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import ar.com.AmberSoft.util.PKGenerator;
 
@@ -59,8 +63,16 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		}
 		return id;
 	}
+	
 	public void setId(Integer id) {
 		this.id = id;
+		if (visibles!=null){
+			Iterator<Visible> it = visibles.iterator();
+			while (it.hasNext()) {
+				Visible visible = (Visible) it.next();
+				visible.changeTask(this);
+			}
+		}
 	}
 	@Basic @Column (name="nombre_tarea")
 	public String getNombreTarea() {
@@ -172,22 +184,25 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		this.creator = creator;
 	}
 	
-	@OneToMany (mappedBy="tarea", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany (mappedBy="tarea", fetch=FetchType.LAZY, cascade=CascadeType.ALL )
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	public Set<Visible> getVisibles() {
-		//defaultVisibles();
 		return visibles;
 	}
 	public void setVisibles(Set<Visible> visibles) {
 		this.visibles = visibles;
-		//defaultVisibles();
 	}
 	
 	@Transient
 	public void defaultVisibles() {
-		if (visibles==null){
-			visibles = new HashSet<Visible>();
-		}
+		visibles = new HashSet<Visible>();
 		obligatoryVisibles();
+	}
+	
+	@Transient
+	public void addVisible(String usuario){
+		Visible visible = new Visible(this, usuario);
+		visibles.add(visible);
 	}
 	
 	private void obligatoryVisibles(){

@@ -16,6 +16,8 @@ import ar.com.AmberSoft.util.ParamsConst;
 @SuppressWarnings({"rawtypes","unchecked"})
 public class ListUserService extends Service {
 
+	private static int i = 0;
+	
 	@Override
 	public Map onExecute(Map params) {
 		
@@ -35,8 +37,16 @@ public class ListUserService extends Service {
 	@Override
 	public Map onEmulate(Map params) {
 
+		i=0;
 		Collection<User> users = new ArrayList<User>();
 		
+		users.add(generateNewUser());
+		users.add(generateNewUser());
+		users.add(generateNewUser());
+		users.add(generateNewUser());
+		users.add(generateNewUser());
+		users.add(generateNewUser());
+		users.add(generateNewUser());
 		users.add(generateNewUser());
 		users.add(generateNewUser());
 		users.add(generateNewUser());
@@ -55,10 +65,10 @@ public class ListUserService extends Service {
 
 	public User generateNewUser() {
 		User user = new User();
-		PKGenerator pkGenerator = new PKGenerator();
-		user.setId(pkGenerator.getPk());
-		user.setName("Usuario" + pkGenerator.getPk());
+		user.setId(new Integer(i).toString());
+		user.setName("Usuario" + user.getId());
 		user.setLastLogon(new Date());
+		i++;
 		return user;
 	}
 
