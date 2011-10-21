@@ -40,6 +40,8 @@ public abstract class ParamsConst {
 	public static final String DESCRIPCION = "descripcion";
 	public static final String ID_USUARIO = "id_usuario";
 	public static final String ASIGNADO = "asignado";
+	public static final String USERS_VIEW = "usersView";
+	public static final String VISIBLES = "visibles";
 	//constantes para tareas que no son utilizadas
 	public static final String HORASASIGNADAS = "horas";
 	public static final String FECHAMODIFICACION = "fechaModificacion";

@@ -37,6 +37,10 @@ public class TaskWindow extends Window {
 	public static final Integer WINDOW__HEIGTH = 340;
 	public static final Integer TASK_PANEL_WIDTH = WINDOW_WIDTH;
 	
+	
+	private final Button btnView = new Button("Opciones de visibilidad");
+	private Collection usersView = new ArrayList();
+	
 	FormPanel taskPanel = new FormPanel();
 	@SuppressWarnings("rawtypes")
 	List<Field> toValidate = new ArrayList<Field>();
@@ -129,11 +133,15 @@ public class TaskWindow extends Window {
 		fldUser.setTypeAhead(true);  
 		fldUser.setTriggerAction(TriggerAction.ALL); 
 		taskPanel.add(fldUser);
-		/*responsable.setFieldLabel("Responsable");  
-		responsable.setAllowBlank(false);  
-		responsable.setValue(Context.getInstance().getUsuario());
-		responsable.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
-		taskPanel.add(responsable);*/
+		
+		taskPanel.add(btnView);
+		btnView.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				UserViewWindow modal = new UserViewWindow(usersView);
+				modal.show();
+			}
+		});
 		
 		FormButtonBinding binding = new FormButtonBinding(taskPanel);  
 		if(guardar){
@@ -219,6 +227,8 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			
+			setUsersVisibles(params);
+			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_TASK);
 			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
 
@@ -241,6 +251,16 @@ public class TaskWindow extends Window {
 			maskDisable();
 		}
 	}
+
+	public void setUsersVisibles(Map<Object, Object> params) {
+		Collection toSend = new ArrayList<String>();
+		Iterator<ModelData> users = usersView.iterator();
+		while (users.hasNext()) {
+			ModelData modelData = (ModelData) users.next();
+			toSend.add(modelData.get("id"));
+		}
+		params.put(ParamsConst.USERS_VIEW, toSend);
+	}
 	private void modificarTarea(){
 		maskAvaiable();
 		if (isValid()){
@@ -253,6 +273,8 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.ID, this.getId_tarea());
+			
+			setUsersVisibles(params);
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_TASK);
 			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
@@ -291,6 +313,19 @@ public class TaskWindow extends Window {
 		fecha_com.setValue((Date) actual.get(ParamsConst.FECHA_COMIENZO));
 		fecha_fin.setValue((Date) actual.get(ParamsConst.FECHA_FIN));
 		duration.setValue(Long.valueOf(actual.get(ParamsConst.DURACION).toString()));
+		
+		Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
+		if (visibles!=null){
+			Iterator<Map> itVisibles = visibles.iterator();
+			while (itVisibles.hasNext()) {
+				Map map = (Map) itVisibles.next();
+				Context.getInstance().addDetailExecution("Agregando a usersView:"+map.get(ParamsConst.USUARIO));
+				usersView.add(map.get(ParamsConst.USUARIO));
+			}
+		} else {
+			Context.getInstance().addDetailExecution("Visibles es nulo");
+		}
+		
 	}
 
 	public Integer getId_tarea() {

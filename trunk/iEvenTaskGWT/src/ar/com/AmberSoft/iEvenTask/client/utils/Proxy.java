@@ -13,7 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Proxy extends RpcProxy {
 
-	private final GridDataCallback callback;
+	private GridDataCallback callback;
 	private Map params = new HashMap<String, String>();
 
 	public Proxy(String service, Grid grid){
@@ -29,6 +29,9 @@ public class Proxy extends RpcProxy {
 		return callback;
 	}
 
+	public void setCallback(GridDataCallback callback) {
+		this.callback = callback;
+	}
 	
 	@Override
 	protected void load(Object loadConfig, AsyncCallback proxyCallback) {
