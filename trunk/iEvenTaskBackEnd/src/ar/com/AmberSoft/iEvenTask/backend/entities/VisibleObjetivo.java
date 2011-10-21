@@ -27,7 +27,7 @@ public class VisibleObjetivo {
 		}
 	}
 	
-	@Id @Column (name="id_visible")
+	@Id @Column (name="id_obj_visible")
 	public String getId() {
 		return id;
 	}

@@ -129,6 +129,12 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 		obligatoryVisibles();
 	}
 	
+	@Transient
+	public void addVisible(String usuario){
+		VisibleObjetivo visible = new VisibleObjetivo(this, usuario);
+		visibles.add(visible);
+	}
+	
 	private void obligatoryVisibles(){
 		if (this.creator!=null){
 			visibles.add(new VisibleObjetivo(this, this.creator));
