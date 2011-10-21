@@ -1,13 +1,18 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.PeriodicEventListener;
 
+import ar.com.AmberSoft.iEvenTask.backend.entities.Permission;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Profile;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.LoginFailureException;
 import ar.com.AmberSoft.iEvenTask.utils.Tools;
@@ -58,6 +63,17 @@ public class LoginService extends Service {
 		User user = new User();
 		user.setId("USEREMULE");
 		user.setName("Usuario Emulado");
+		Profile profile = new Profile();
+		profile.setId(-1);
+		Set<Permission> permissions = new HashSet<Permission>();
+		profile.setPermissions(permissions);
+		Permission permission = new Permission();
+		permission.setId("permiso");
+		permission.setDescription("Permiso de prueba");
+		permissions.add(permission);
+		profile.setPermissions(permissions);
+		user.setProfile(profile);		
+		
 		map.put(ParamsConst.USER, user);
 		return map;
 	}
