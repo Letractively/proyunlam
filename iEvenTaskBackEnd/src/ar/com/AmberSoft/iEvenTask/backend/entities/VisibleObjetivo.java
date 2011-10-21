@@ -54,8 +54,8 @@ public class VisibleObjetivo {
 	
 	@Override
 	public boolean equals(Object actual) {
-		if (actual instanceof Visible) {
-			return ((Visible)actual).getId().equals(this.getId());
+		if (actual instanceof VisibleObjetivo) {
+			return ((VisibleObjetivo)actual).getId().equals(this.getId());
 		}
 		return Boolean.FALSE;
 	}
