@@ -5,13 +5,24 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
+import ar.com.AmberSoft.iEvenTask.events.BackgroundEventController;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
 @SuppressWarnings({"rawtypes","unchecked"})
 public class CheckUserLogonService extends Service {
 
+	private static Logger logger = Logger.getLogger(CheckUserLogonService.class);
+	
 	@Override
 	public Map onExecute(Map params) {
 		
+		// Instancia de ser necesario el controlador de procesos
+		try{
+			BackgroundEventController.getInstance();
+		}catch(Exception e){logger.error(Tools.getStackTrace(e));}
+
 		
 		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
 		Map map = new HashMap();

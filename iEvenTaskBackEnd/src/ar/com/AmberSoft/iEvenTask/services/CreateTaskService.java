@@ -1,6 +1,8 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +23,6 @@ public class CreateTaskService extends CreateService {
 	@Override
 	public Entity getEntity(Map params) {
 		
-		
-		
 		Tarea tarea = new Tarea();
 		tarea.setNombreTarea((String)params.get(ParamsConst.NOMBRE_TAREA));
 		tarea.setFechaComienzo((Date)params.get(ParamsConst.FECHA_COMIENZO));
@@ -37,6 +37,15 @@ public class CreateTaskService extends CreateService {
 		tarea.setCreator(user.getId());
 		
 		tarea.defaultVisibles();
+		
+		Collection usersView = (Collection) params.get(ParamsConst.USERS_VIEW);
+		if (usersView!=null){
+			Iterator<String> itUsers = usersView.iterator();
+			while (itUsers.hasNext()) {
+				String actual = (String) itUsers.next();
+				tarea.addVisible(actual);	
+			}
+		}
 		
 //		tarea.setHorasAsignadas((Integer) params.get(ParamsConst.HORASASIGNADAS));
 //		tarea.setFechaModificacion((Date) params.get(ParamsConst.FECHAMODIFICACION));

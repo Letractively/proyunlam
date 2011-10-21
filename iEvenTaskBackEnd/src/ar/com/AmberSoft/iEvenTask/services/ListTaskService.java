@@ -32,19 +32,28 @@ public class ListTaskService extends ListService {
 		Map result = super.execute(params);
 		
 		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
-		User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+		User user = null;
+		if (request!=null){
+			user = (User) request.getSession().getAttribute(ParamsConst.USER);
+		}
 		
 		try {
-			Map<String, User> users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+			Map<String, User> users = null;
+			if (user!=null){
+				users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+			}
 		
 			Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
 			Iterator<Tarea> it = tareas.iterator();
 			while (it.hasNext()) {
 				Tarea tarea = (Tarea) it.next();
-				User actualUser = users.get(tarea.getId_usuario());
-				if (actualUser!=null){
-					tarea.setAsignado(actualUser.getName());	
+				if (users!=null){
+					User actualUser = users.get(tarea.getId_usuario());
+					if (actualUser!=null){
+						tarea.setAsignado(actualUser.getName());	
+					}
 				}
+				
 				Collection <Comentario> comentarios = tarea.getComentarios();
 				Iterator<Comentario> itComentarios = comentarios.iterator();
 				Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
@@ -145,7 +154,19 @@ public class ListTaskService extends ListService {
 		Set comentarios = new HashSet();
 		comentarios.add(comentario);
 		tarea.setComentarios(comentarios);
-		
+
+		Set<Visible> visibles = new HashSet<Visible>();
+		setVisible(tarea, visibles, "1");
+		setVisible(tarea, visibles, "3");
+		setVisible(tarea, visibles, "5");
+		tarea.setVisibles(visibles);
 		list.add(tarea);
+	}
+
+
+	public void setVisible(Tarea tarea, Set<Visible> visibles, String id) {
+		Visible visible = new Visible(tarea, id);
+		visibles.add(visible);
+		
 	}
 }

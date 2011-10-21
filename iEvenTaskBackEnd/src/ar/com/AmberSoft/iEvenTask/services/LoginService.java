@@ -2,6 +2,7 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,6 +18,9 @@ import ar.com.AmberSoft.util.ParamsConst;
 public class LoginService extends Service {
 
 	private static Logger logger = Logger.getLogger(LoginService.class);
+	private ResourceBundle config = ResourceBundle.getBundle("config");
+	public static Integer SEG_X_MIN = 60;
+	
 	@Override
 	public Map onExecute(Map params) {
 		Map map = new HashMap();
@@ -29,6 +33,10 @@ public class LoginService extends Service {
 			
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
 			request.getSession().setAttribute(ParamsConst.USER, user);
+			String interval = config.getString("max.inactive.interval");
+			if (interval!=null){
+				request.getSession().setMaxInactiveInterval(new Integer(SEG_X_MIN * Integer.parseInt(interval)));
+			}
 			
 			map.put(ParamsConst.USER, user);
 			
