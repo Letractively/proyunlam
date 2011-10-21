@@ -64,8 +64,4 @@ public class User {
 		this.lastLogon = lastLogon;
 	}
 
-	
-	
-	
-	
 }

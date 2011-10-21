@@ -49,7 +49,6 @@ public class Visible {
 	
 	@ManyToOne (fetch=FetchType.LAZY)
 	@JoinColumn (name="id_tarea")
-	@OnDelete(action=OnDeleteAction.CASCADE)
 	public Tarea getTarea() {
 		return tarea;
 	}

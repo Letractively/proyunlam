@@ -185,7 +185,6 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	}
 	
 	@OneToMany (mappedBy="tarea", fetch=FetchType.LAZY, cascade=CascadeType.ALL )
-	@OnDelete(action=OnDeleteAction.CASCADE)
 	public Set<Visible> getVisibles() {
 		return visibles;
 	}
