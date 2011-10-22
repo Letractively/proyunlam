@@ -34,7 +34,7 @@ public class MainMenu extends LayoutContainer {
 		mnuBar = new MenuBar();
 		verticalPanel.add(mnuBar);
 		FileMenu fileMenu = new FileMenu();
-		mnuFile = new MenuBarItem("Archivo", fileMenu);
+		mnuFile = new MenuBarItem("Preferencias", fileMenu);
 		mnuBar.add(mnuFile);
 		horizontalPanel.add(verticalPanel);
 		
