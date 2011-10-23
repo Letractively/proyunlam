@@ -36,6 +36,9 @@ public class ObjectiveWindow extends Window  {
 	public static final Integer WINDOW__HEIGTH = 365;
 	public static final Integer OBJECTIVE_PANEL_WIDTH = WINDOW_WIDTH;
 	
+	private final Button btnView = new Button("Opciones de visibilidad");
+	private Collection usersView = new ArrayList();
+	
 	FormPanel objPanel = new FormPanel();
 	@SuppressWarnings("rawtypes")
 	List<Field> toValidate = new ArrayList<Field>();
@@ -142,6 +145,14 @@ public class ObjectiveWindow extends Window  {
 		fldUser.setTriggerAction(TriggerAction.ALL); 
 		objPanel.add(fldUser);
 		
+		objPanel.add(btnView);
+		btnView.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				UserViewWindow modal = new UserViewWindow(usersView);
+				modal.show();
+			}
+		});
 		
 		FormButtonBinding binding = new FormButtonBinding(objPanel);  
 		if(guardar){
@@ -251,6 +262,17 @@ public class ObjectiveWindow extends Window  {
 		}
 	}
 	
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public void setUsersVisibles(Map<Object, Object> params) {
+		Collection toSend = new ArrayList<String>();
+		Iterator<ModelData> users = usersView.iterator();
+		while (users.hasNext()) {
+			ModelData modelData = (ModelData) users.next();
+			toSend.add(modelData.get("id"));
+		}
+		params.put(ParamsConst.USERS_VIEW, toSend);
+	}
+	
 	private void modificarObjetivo(){
 		maskAvaiable();
 		if (isValid()){
@@ -288,6 +310,7 @@ public class ObjectiveWindow extends Window  {
 		}
 	}
 	
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void setValuesToUpdate(Map<Object, Object> actual){
 		this.setId_obj(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
 		objName.setValue(actual.get(ParamsConst.NOMBRE_OBJETIVO).toString());
@@ -297,6 +320,18 @@ public class ObjectiveWindow extends Window  {
 		objPond.setValue((Number) actual.get(ParamsConst.PONDERACION));
 		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
+		
+		Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
+		if (visibles!=null){
+			Iterator<Map> itVisibles = visibles.iterator();
+			while (itVisibles.hasNext()) {
+				Map map = (Map) itVisibles.next();
+				Context.getInstance().addDetailExecution("Agregando a usersView:"+map.get(ParamsConst.USUARIO));
+				usersView.add(map.get(ParamsConst.USUARIO));
+			}
+		} else {
+			Context.getInstance().addDetailExecution("Visibles es nulo");
+		}
 	}
 	
 	@SuppressWarnings("deprecation")

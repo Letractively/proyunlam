@@ -136,7 +136,12 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void onSelect(List selected) {
-		// TODO Auto-generated method stub
+		if (selected.size() == 1) {
+			Iterator it = selected.iterator();
+			if (it.hasNext()) {
+				beforeUpdate((BaseModel) it.next());
+			}
+		} 
 		
 	}
 
@@ -154,7 +159,7 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		}
 		if ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) || 
 				(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
-						&& Context.getInstance().isAvaiable(PermissionsConst.TAREAS_NO_ASIGNADAS))){
+						&& Context.getInstance().isAvaiable(PermissionsConst.OBJETIVOS_NO_ASIGNADOS))){
 
 			ObjectiveWindow objectiveWindow = new ObjectiveWindow(false);
 			objectiveWindow.setValuesToUpdate(actual);
@@ -163,5 +168,9 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 			DialogFactory.info("No tiene permisos para modificar objetivos no asignadas.");
 		}
 	}
-		
+	
+	@SuppressWarnings({"unused", "rawtypes"})
+	public void beforeUpdate(BaseModel baseModel) {
+		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+	}
 }
