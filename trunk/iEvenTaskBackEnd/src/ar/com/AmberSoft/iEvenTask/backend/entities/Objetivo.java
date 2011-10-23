@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.backend.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -80,7 +81,15 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 
 	public void setId(Integer id) {
 		this.id = id;
+		if (visibles!=null){
+			Iterator<VisibleObjetivo> it = visibles.iterator();
+			while (it.hasNext()) {
+				VisibleObjetivo visible = (VisibleObjetivo) it.next();
+				visible.changeObjective(this);
+			}
+		}
 	}
+	
 	public void setNombreObjetivo(String nombreObjetivo) {
 		this.nombreObjetivo = nombreObjetivo;
 	}
