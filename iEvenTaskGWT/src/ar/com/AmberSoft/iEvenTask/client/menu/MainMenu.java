@@ -18,7 +18,8 @@ public class MainMenu extends LayoutContainer {
 	public static final Integer VERTICAL_PANEL_MENU_WIDTH = IEvenTask.APP_WINDOW_WIDTH-BUTTON_WIDTH;
 	
 	MenuBar mnuBar;
-	MenuBarItem mnuFile; 
+	MenuBarItem mnuFile;
+	MenuBarItem mnuReport; 
 	private HorizontalPanel horizontalPanel;
 	private VerticalPanel verticalPanel;
 	private VerticalPanel verticalPanel_1;
@@ -33,9 +34,15 @@ public class MainMenu extends LayoutContainer {
 		verticalPanel.setWidth(VERTICAL_PANEL_MENU_WIDTH);
 		mnuBar = new MenuBar();
 		verticalPanel.add(mnuBar);
+		
 		FileMenu fileMenu = new FileMenu();
 		mnuFile = new MenuBarItem("Preferencias", fileMenu);
 		mnuBar.add(mnuFile);
+		
+		ReportMenu reportMenu = new ReportMenu();
+		mnuReport = new MenuBarItem("Reportes", reportMenu);
+		mnuBar.add(mnuReport);
+		
 		horizontalPanel.add(verticalPanel);
 		
 		verticalPanel_1 = new VerticalPanel();
