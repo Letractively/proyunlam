@@ -10,11 +10,22 @@
     <servlet-name>serviceDispatcher</servlet-name>
     <servlet-class>ar.com.AmberSoft.iEvenTask.server.ServiceDispatcherImpl</servlet-class>
   </servlet>
+
+  <servlet>
+    <servlet-name>report</servlet-name>
+    <servlet-class>ar.com.AmberSoft.iEvenTask.server.reports.ReportDispatcher</servlet-class>
+  </servlet>
   
   <servlet-mapping>
     <servlet-name>serviceDispatcher</servlet-name>
     <url-pattern>/ieventask/serviceDispatcher</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>report</servlet-name>
+    <url-pattern>/report</url-pattern>
+  </servlet-mapping>
+  
   
   <!-- Default page to serve -->
   <welcome-file-list>

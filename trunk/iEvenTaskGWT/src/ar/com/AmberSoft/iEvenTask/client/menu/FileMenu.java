@@ -30,11 +30,6 @@ public class FileMenu extends Menu {
 			add(eventItem);
 		}
 		
-		/*actionsItem = new MenuItem("Acciones", null);
-		add(actionsItem);
-		
-		preferencesItem = new MenuItem("Preferencias", null);
-		add(preferencesItem);*/
 	}
 	
 	

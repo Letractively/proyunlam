@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
 import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
-import ar.com.AmberSoft.iEvenTask.events.BackgroundEventController;
 import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
 import ar.com.AmberSoft.iEvenTask.server.utils.GWTCompatibilityEvaluatorTypes;
 import ar.com.AmberSoft.iEvenTask.server.utils.Tools;
