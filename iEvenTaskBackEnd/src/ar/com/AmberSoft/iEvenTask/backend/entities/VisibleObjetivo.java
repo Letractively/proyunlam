@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table (name="iet_obj_visible")
@@ -22,6 +23,12 @@ public class VisibleObjetivo {
 	public VisibleObjetivo(Objetivo objetivo, String usuario){
 		this.objetivo = objetivo;
 		this.usuario = usuario;
+		changeObjective(objetivo);
+	}
+
+	@Transient
+	public void changeObjective(Objetivo objetivo) {
+		this.objetivo = objetivo;
 		if ((objetivo!=null) && (objetivo.getId())!=null && (usuario!=null)){
 			this.id = usuario + objetivo.getId().toString();
 		}
