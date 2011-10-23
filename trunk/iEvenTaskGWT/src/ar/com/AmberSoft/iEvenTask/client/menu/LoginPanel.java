@@ -142,31 +142,32 @@ public class LoginPanel extends LayoutContainer {
 		
 		if (mainLoginPanel.isValid()) {
 		
-		Map params = new HashMap<String,String>();
-		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
-		params.put(ParamsConst.USER, textUsuario.getValue());
-		params.put(ParamsConst.PASSWORD, textPassword.getValue());
-		maskAvaiable();
-		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				DialogFactory.error("Usuario o contrase\u00f1a incorrectos.");
-				unmask();
-			}
-
-			@Override
-			public void onSuccess(Object result) {
-				Map map = (Map) result;
-				Map user = (Map) map.get(ParamsConst.USER);
-				
-				DialogFactory.info("Bienvenido " + user.get(ParamsConst.NAME));
-				
-				Context.getInstance().setUsuario(user); 	
-				Context.getInstance().setSesion(true); 	
-				IEvenTask.iniciarSesion();
-			}
-		});
+			Map params = new HashMap<String,String>();
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOGIN);
+			params.put(ParamsConst.USER, textUsuario.getValue());
+			params.put(ParamsConst.PASSWORD, textPassword.getValue());
+			maskAvaiable();
+			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+	
+				@Override
+				public void onFailure(Throwable caught) {
+					DialogFactory.error("Usuario o contrase\u00f1a incorrectos.");
+					unmask();
+				}
+	
+				@Override
+				public void onSuccess(Object result) {
+					unmask();
+					Map map = (Map) result;
+					Map user = (Map) map.get(ParamsConst.USER);
+					
+					DialogFactory.info("Bienvenido " + user.get(ParamsConst.NAME));
+					
+					Context.getInstance().setUsuario(user); 	
+					Context.getInstance().setSesion(true); 	
+					IEvenTask.iniciarSesion();
+				}
+			});
 		} else {
 			DialogFactory.error("Faltan completar campos obligatorios.");
 		}
