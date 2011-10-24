@@ -32,6 +32,9 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private Date fechaFin;
 	private String duracion;
 	private String descripcion;
+
+	private String estado; //estado de la tarea "pendiente", "en curso", "suspendida"
+	private int cumplimiento; //porcentaje de completitud de la tarea
 	/**
 	 * Usuario creador de la tarea
 	 */
@@ -45,8 +48,6 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private int horasAsignadas;
 	private Date fechaCreacion;
 	private Date fechaModificacion;
-	private int estado;
-	private int cumplimiento;
 	private int tipo_tarea;
 	private Set<Comentario> comentarios;
 	private Set<Visible> visibles;
@@ -138,10 +139,10 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		this.fechaModificacion = fechaModificacion;
 	}
 	@Basic @Column (name="estado")
-	public int getEstado() {
+	public String getEstado() {
 		return estado;
 	}
-	public void setEstado(int estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 	@Basic @Column (name="cumplimiento")
