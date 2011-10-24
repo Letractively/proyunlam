@@ -34,17 +34,17 @@ public abstract class ParamsConst {
 	public static final String NOMBRE_TAREA = "nombreTarea";
 	public static final String FECHA_COMIENZO = "fechaComienzo";
 	public static final String FECHA_FIN = "fechaFin";
-	public static final String DURACION = "duracion";
-	public static final String DESCRIPCION = "descripcion";
 	public static final String ID_USUARIO = "id_usuario";
 	public static final String ASIGNADO = "asignado";
+	public static final String DESCRIPCION = "descripcion";
 	public static final String USERS_VIEW = "usersView";
 	public static final String VISIBLES = "visibles";
+	public static final String CUMPLIMIENTO = "cumplimiento";
 	//constantes para tareas que no son utilizadas
+	public static final String DURACION = "duracion";
 	public static final String HORASASIGNADAS = "horas";
 	public static final String FECHAMODIFICACION = "fechaModificacion";
 	public static final String ESTADO = "estado";
-	public static final String CUMPLIMIENTO = "cumplimiento";
 	public static final String TIPO_TAREA = "tipoTarea";
 	public static final String COMMENT = "comment";
 	public static final String COMENTARIOS = "comentarios";
