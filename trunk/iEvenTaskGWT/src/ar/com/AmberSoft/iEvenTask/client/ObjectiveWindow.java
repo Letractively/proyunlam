@@ -239,6 +239,8 @@ public class ObjectiveWindow extends Window  {
 			params.put(ParamsConst.ID_USUARIO_ASIGNADO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			
+			setUsersVisibles(params);
+			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_OBJECTIVE);
 			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
 
@@ -286,6 +288,8 @@ public class ObjectiveWindow extends Window  {
 			params.put(ParamsConst.ID_USUARIO_ASIGNADO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID, this.getId_obj());
+			
+			setUsersVisibles(params);
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_OBJECTIVE);
 			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
