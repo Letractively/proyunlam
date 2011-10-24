@@ -49,7 +49,7 @@ public class TaskWindow extends Window {
     TextField<String> taskName = new TextField<String>();
     DateField fecha_com = new DateField();  
     DateField fecha_fin = new DateField();  
-    SpinnerField duration = new SpinnerField();  
+    SpinnerField completed = new SpinnerField();  
     TextArea description = new TextArea();  
     //TextField<String> responsable = new TextField<String>();
     @SuppressWarnings("rawtypes")
@@ -86,13 +86,13 @@ public class TaskWindow extends Window {
 		fecha_fin.setFieldLabel("Fecha Fin");  
 		taskPanel.add(fecha_fin);  
 
-		duration.setIncrement(1d);  
-		duration.getPropertyEditor().setType(Double.class);  
-		duration.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
-		duration.setFieldLabel("Duracion (hs)");
-		duration.setMinValue(-100d);  
-		duration.setMaxValue(100d);  
-		taskPanel.add(duration);  
+		completed.setIncrement(1d);  
+		completed.getPropertyEditor().setType(Integer.class);  
+		completed.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
+		completed.setFieldLabel("Completado (%)");
+		completed.setMinValue(0);  
+		completed.setMaxValue(100);  
+		taskPanel.add(completed);  
 
 		description.setPreventScrollbars(true);  
 		description.setFieldLabel("Descripcion");  
@@ -229,7 +229,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
 			params.put(ParamsConst.FECHA_COMIENZO, fecha_com.getValue());
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
-			params.put(ParamsConst.DURACION, duration.getValue().toString());
+			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			
@@ -275,7 +275,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
 			params.put(ParamsConst.FECHA_COMIENZO, fecha_com.getValue());
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
-			params.put(ParamsConst.DURACION, duration.getValue().toString());
+			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue().toString());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			params.put(ParamsConst.ID, this.getId_tarea());
@@ -318,7 +318,7 @@ public class TaskWindow extends Window {
 		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO).toString());
 		fecha_com.setValue((Date) actual.get(ParamsConst.FECHA_COMIENZO));
 		fecha_fin.setValue((Date) actual.get(ParamsConst.FECHA_FIN));
-		duration.setValue(Long.valueOf(actual.get(ParamsConst.DURACION).toString()));
+		completed.setValue(Long.valueOf(actual.get(ParamsConst.DURACION).toString()));
 		
 		Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
 		if (visibles!=null){
