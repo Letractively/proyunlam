@@ -14,14 +14,13 @@ import com.extjs.gxt.ui.client.widget.toolbar.FillToolItem;
 
 public class MainStatusBar extends ToolBar  {
 	
-	Status status; 
+	Status status = new Status(); 
 	
 	public MainStatusBar(){
 		super();
 		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.DEFAULT_MENU_HEIGTH.toString());
 		
-		status = new Status();
-	    status.setText("Not writing");  
+	    status.setText("Usuario:" + Context.getInstance().getUserName() + ", Perfil:" + Context.getInstance().getPerfil());  
 	    this.add(status);  
 	    this.add(new FillToolItem());
 	    

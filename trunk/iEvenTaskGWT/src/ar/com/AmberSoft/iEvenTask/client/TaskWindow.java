@@ -64,7 +64,7 @@ public class TaskWindow extends Window {
 	 * @param guardar: boolean true para guardar / boolean false para modificar
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public TaskWindow(boolean guardar) {
+	public TaskWindow(final boolean guardar) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
 		
@@ -98,6 +98,8 @@ public class TaskWindow extends Window {
 		description.setFieldLabel("Descripcion");  
 		taskPanel.add(description);
 		
+		fldUser.setFieldLabel("Responsable");
+		fldUser.setEnabled(Boolean.FALSE);
 		fldUser.setStore(new ListStore<ModelData>());
 		Map params = new HashMap<String, String>();
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
@@ -106,11 +108,16 @@ public class TaskWindow extends Window {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						Context.getInstance().validateUserExpired(caught);
 						DialogFactory.error("No se han podido consultar los usuarios LDAP.");
 					}
 
 					@Override
 					public void onSuccess(Object result) {
+						if (!(((guardar) && (!Context.getInstance().isAvaiable(PermissionsConst.ASIGNAR_TAREAS))) ||
+								((!guardar) && (!Context.getInstance().isAvaiable(PermissionsConst.REASIGNAR_TAREAS))))){
+							fldUser.setEnabled(Boolean.TRUE);
+						}
 						Map map = (Map) result;
 						Collection users = (Collection) map.get(ParamsConst.DATA);
 						ListStore listStore = new ListStore();
@@ -121,7 +128,7 @@ public class TaskWindow extends Window {
 						}
 						
 						fldUser.setStore(listStore);
-						String user = Context.getInstance().getUserName();
+						String user = Context.getInstance().getUserID();
 						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO)!=null)){
 							user = actual.get(ParamsConst.ID_USUARIO).toString();
 						}
@@ -248,8 +255,7 @@ public class TaskWindow extends Window {
 			public void onSuccess(Object result) {
 				maskDisable();
 				DialogFactory.info("Se guardo la tarea con exito.");
-				//FIXME: Invocar a la primer pagina
-				//refreshGrid(grid);
+				Context.getInstance().getTaskGrid().getStore().getLoader().load();
 				cerrarVentana();
 			}
 			});
@@ -260,12 +266,21 @@ public class TaskWindow extends Window {
 
 	public void setUsersVisibles(Map<Object, Object> params) {
 		Collection toSend = new ArrayList<String>();
-		Iterator<ModelData> users = usersView.iterator();
-		while (users.hasNext()) {
-			ModelData modelData = (ModelData) users.next();
-			toSend.add(modelData.get("id"));
+		if (usersView!=null){
+			Iterator<ModelData> users = usersView.iterator();
+			while (users.hasNext()) {
+				String id = "";
+				Object actualUser = users.next();
+				if (actualUser instanceof ModelData) {
+					ModelData modelData = (ModelData) actualUser;
+					id = modelData.get("id");
+				} else {
+					id = (String) actualUser;
+				}
+				toSend.add(id);
+			}
+			params.put(ParamsConst.USERS_VIEW, toSend);
 		}
-		params.put(ParamsConst.USERS_VIEW, toSend);
 	}
 	private void modificarTarea(){
 		maskAvaiable();
@@ -295,9 +310,8 @@ public class TaskWindow extends Window {
 				public void onSuccess(Object result) {
 					maskDisable();
 					DialogFactory.info("Se modifico la tarea con exito.");
+					Context.getInstance().getTaskGrid().getStore().getLoader().load();
 					cerrarVentana();
-					//MainTabTareas.reloadGrid();
-					
 				}
 			});
 		} else {

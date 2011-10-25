@@ -51,7 +51,6 @@ public class IEvenTask implements EntryPoint {
 		} catch (Exception e){
 			Context.getInstance().addDetailExecution(e.getMessage());
 		}¨*/
-	
 		rootPanel = RootPanel.get();
 		rootPanel.setStyleName("body");
 		rootPanel.setSize(APP_WINDOW_WIDTH.toString(), APP_WINDOW_HEIGTH.toString());

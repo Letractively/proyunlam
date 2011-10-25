@@ -37,6 +37,9 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 
 	public MainTabObjetivos() {
 		super("Objetivos");
+		
+		Context.getInstance().setObjectiveGrid(grid);
+		
 		// TODO acomodar posicion
 		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.DEFAULT_MENU_HEIGTH.toString());
 		

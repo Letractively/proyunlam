@@ -54,6 +54,9 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	
 	public MainTabTareas(){
 		super("Tareas");
+		
+		Context.getInstance().setTaskGrid(grid);
+		
 		// TODO acomodar posicion
 		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.DEFAULT_MENU_HEIGTH.toString());
 		

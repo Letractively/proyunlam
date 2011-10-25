@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowNotRegisteredException;
 import ar.com.AmberSoft.iEvenTask.client.exceptions.WindowPreviouslyRegisteredException;
+import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
@@ -54,6 +55,31 @@ public class Context {
 	 */
 	private HtmlEditor htmlEditor;
 	
+	/**
+	 * Grilla de tareas de la pantalla principal
+	 */
+	private Grid taskGrid;
+	/**
+	 * Grilla de objetivos de la pantalla principal
+	 */
+	private Grid objectiveGrid;
+	
+	public Grid getTaskGrid() {
+		return taskGrid;
+	}
+
+	public void setTaskGrid(Grid taskGrid) {
+		this.taskGrid = taskGrid;
+	}
+
+	public Grid getObjectiveGrid() {
+		return objectiveGrid;
+	}
+
+	public void setObjectiveGrid(Grid objectiveGrid) {
+		this.objectiveGrid = objectiveGrid;
+	}
+
 	public HtmlEditor getHtmlEditor() {
 		return htmlEditor;
 	}
@@ -97,6 +123,10 @@ public class Context {
 		this.htmlEditor = htmlEditor;
 	}
 
+	public String getUserID(){
+		return (String) usuario.get(ParamsConst.ID);
+	}
+	
 	public String getUserName(){
 		return (String) usuario.get(ParamsConst.NAME);
 	}
@@ -116,25 +146,24 @@ public class Context {
 				Map actual = (Map) itPermisos.next();
 				avaiable.put(actual.get(ParamsConst.ID), actual);
 			}
+			perfil = (String) profile.get(ParamsConst.GROUP);
 		} else {
 			DialogFactory.error("Atencion!!! El usuario no tiene perfil asignado.");
 		}
+		
+		
 	}
 
 	public String getPerfil() {
 		return perfil;
 	}
 
-	public void setPerfil(String perfil) {
-		this.perfil = perfil;
-	}
- 
 	public boolean isSesion() {
 		return sesion;
 	}
 	
 	public Boolean isAvaiable(String code){
-		if (avaiable.get(code)!=null){
+		if ((avaiable!=null) && (avaiable.get(code)!=null)){
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
@@ -229,7 +258,12 @@ public class Context {
 	}
 	
 		
-	
+	public void validateUserExpired(Throwable e){
+		if ((e.getMessage()!=null) && (e.getMessage().contains("UserExpiredException"))){
+			DialogFactory.info("Su session a expirado.");
+			IEvenTask.iniciarLogin();
+		}
+	}
 	
 	
 	

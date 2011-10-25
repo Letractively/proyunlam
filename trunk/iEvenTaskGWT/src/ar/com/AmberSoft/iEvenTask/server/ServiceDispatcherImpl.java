@@ -1,10 +1,15 @@
 package ar.com.AmberSoft.iEvenTask.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 
+import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
 import ar.com.AmberSoft.iEvenTask.client.utils.PagingLoadResult;
 import ar.com.AmberSoft.iEvenTask.server.utils.Compatibilizable;
@@ -15,6 +20,7 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceClassNotFoundException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceInstantationException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceNameNotFoundException;
+import ar.com.AmberSoft.iEvenTask.shared.exceptions.UserExpiredException;
 import ar.com.AmberSoft.util.ParamsConst;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -40,6 +46,8 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		}
 
 		params.put(ParamsConst.REQUEST, this.getThreadLocalRequest());
+		
+		validateActiveSession(params);
 		
 		try {
 			logger.debug("Invocando " + params.get(ServiceNameConst.SERVICIO));
@@ -72,6 +80,38 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			throw new ServiceInstantationException();
 		} finally {
 			//logger.debug("Fin ServiceDispatcher");
+		}
+	}
+
+	public void validateActiveSession(Map params) {
+		Collection excludes = new ArrayList<String>();
+		excludes.add("ar.com.AmberSoft.iEvenTask.services.LoginService");
+		excludes.add("ar.com.AmberSoft.iEvenTask.services.CheckUserLogonService");
+		excludes.add("ar.com.AmberSoft.iEvenTask.services.ExitService");
+		
+		//Validamos que el usuario se encuentre activo
+		Boolean validar = Boolean.TRUE;
+		String servicio = (String) params.get(ServiceNameConst.SERVICIO);
+		
+		Iterator itExcludes = excludes.iterator();
+		while (itExcludes.hasNext()) {
+			String exc = (String ) itExcludes.next();
+			if (servicio.equals(exc)){
+				validar = Boolean.FALSE;
+				break;
+			}
+		}
+		
+		if (validar){
+			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+			User user = null;
+			if (request!=null){
+				user = (User) request.getSession().getAttribute(ParamsConst.USER);
+				if (user==null){
+					// Se inactivo la session, lanzar excepcion
+					throw new UserExpiredException();
+				}
+			}
 		}
 	}
 
