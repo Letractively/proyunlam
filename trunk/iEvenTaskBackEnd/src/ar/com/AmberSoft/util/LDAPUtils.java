@@ -61,7 +61,6 @@ name:badPwdCount, value:0
 name:cn, value:Analista 8
  *
  */
-@SuppressWarnings({"rawtypes","unchecked"})
 public class LDAPUtils {
 
 	private static final ResourceBundle config = ResourceBundle.getBundle("config");
@@ -210,8 +209,11 @@ public class LDAPUtils {
 
 			while (ldapSearchResults.hasMore()){
 				LDAPEntry ldapEntry = ldapSearchResults.next();
-
-				users.add(getUser(ldapEntry));
+				User userActual = getUser(ldapEntry);
+				// Solamente lista los usuarios que tienen un perfil asignado valido en iEvenTask
+				if ((userActual.getProfile()!=null) && (userActual.getName()!=null) && (!"".equals(userActual.getName().trim()))){
+					users.add(getUser(ldapEntry));
+				}
 			}
 			
 		} catch (Exception e) {

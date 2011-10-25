@@ -18,6 +18,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Comentario;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Visible;
+import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
 import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.PKGenerator;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -25,36 +26,41 @@ import ar.com.AmberSoft.util.ParamsConst;
 public class ListTaskService extends ListService {
 
 	private static Logger logger = Logger.getLogger(ListTaskService.class);
-	
+
 	@Override
 	public Map execute(Map params) {
 
 		Map result = super.execute(params);
-		
-		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+
+		HttpServletRequest request = (HttpServletRequest) params
+				.get(ParamsConst.REQUEST);
 		User user = null;
-		if (request!=null){
+		if (request != null) {
 			user = (User) request.getSession().getAttribute(ParamsConst.USER);
 		}
-		
+
 		try {
+
 			Map<String, User> users = null;
-			if (user!=null){
-				users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+			if (user != null) {
+				if (!AppAdmin.getInstance().getConfig().isEmulate()){
+					users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+				}
 			}
-		
-			Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
+
+			Collection<Tarea> tareas = (Collection<Tarea>) result
+					.get(ParamsConst.DATA);
 			Iterator<Tarea> it = tareas.iterator();
 			while (it.hasNext()) {
 				Tarea tarea = (Tarea) it.next();
-				if (users!=null){
+				if (users != null) {
 					User actualUser = users.get(tarea.getId_usuario());
-					if (actualUser!=null){
-						tarea.setAsignado(actualUser.getName());	
+					if (actualUser != null) {
+						tarea.setAsignado(actualUser.getName());
 					}
 				}
-				
-				Collection <Comentario> comentarios = tarea.getComentarios();
+
+				Collection<Comentario> comentarios = tarea.getComentarios();
 				Iterator<Comentario> itComentarios = comentarios.iterator();
 				Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
 				while (itComentarios.hasNext()) {
@@ -63,8 +69,8 @@ public class ListTaskService extends ListService {
 					nuevosComentarios.add(comentario);
 				}
 				tarea.setComentarios(nuevosComentarios);
-				
-				Collection <Visible> visibles = tarea.getVisibles();
+
+				Collection<Visible> visibles = tarea.getVisibles();
 				Iterator<Visible> itVisibles = visibles.iterator();
 				Set<Visible> nuevosVisibles = new HashSet<Visible>();
 				while (itVisibles.hasNext()) {
@@ -73,50 +79,46 @@ public class ListTaskService extends ListService {
 					nuevosVisibles.add(visible);
 				}
 				tarea.setVisibles(nuevosVisibles);
-				
+
 			}
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
-		
-		
+
 		return result;
 
 	}
 
-
 	@Override
 	public Map onExecute(Map params) {
 		Map result = super.onExecute(params);
-		
-		// Esto es necesario realizar para que estas colecciones no den Lazy initialization exception
-		
-		Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
+
+		// Esto es necesario realizar para que estas colecciones no den Lazy
+		// initialization exception
+
+		Collection<Tarea> tareas = (Collection<Tarea>) result
+				.get(ParamsConst.DATA);
 		Iterator<Tarea> it = tareas.iterator();
 		while (it.hasNext()) {
 			Tarea tarea = (Tarea) it.next();
 			preventLazy(tarea.getComentarios());
 			preventLazy(tarea.getVisibles());
 		}
-		
-		
+
 		return result;
 	}
 
-
 	public void preventLazy(Collection collection) {
-		if (collection!=null){
+		if (collection != null) {
 			collection.iterator();
 		}
 	}
-
 
 	@Override
 	protected String getEntity() {
 		return Tarea.class.getName();
 	}
 
-	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map onEmulate(Map params) {
@@ -135,7 +137,7 @@ public class ListTaskService extends ListService {
 		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
 		return map;
 	}
-	
+
 	private void addTarea(Collection<Tarea> list) {
 		PKGenerator generator = new PKGenerator();
 		Tarea tarea = new Tarea();
@@ -146,9 +148,9 @@ public class ListTaskService extends ListService {
 		tarea.setDuracion(String.valueOf(generator.getLastTime()));
 		tarea.setDescripcion("Descripcion" + generator.getPk());
 		tarea.setId_usuario(generator.getPk());
-		
+
 		Comentario comentario = new Comentario();
-		comentario.setComentario("Comentarios"  + generator.getPk());
+		comentario.setComentario("Comentarios" + generator.getPk());
 		comentario.setFecha(new Date());
 		comentario.setUsuario("USERTEST");
 		Set comentarios = new HashSet();
@@ -163,10 +165,9 @@ public class ListTaskService extends ListService {
 		list.add(tarea);
 	}
 
-
 	public void setVisible(Tarea tarea, Set<Visible> visibles, String id) {
 		Visible visible = new Visible(tarea, id);
 		visibles.add(visible);
-		
+
 	}
 }

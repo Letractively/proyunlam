@@ -34,7 +34,6 @@ public final class ListLDAPGroupsService extends Service {
 	@SuppressWarnings("unused")
 	@Override
 	public Map onEmulate(Map params) {
-		LDAPUtils ldapSearch = new LDAPUtils();
 		Collection<LDAPGroup> groups = new HashSet<LDAPGroup>();
 		
 		groups.add(new LDAPGroup("Prueba"));

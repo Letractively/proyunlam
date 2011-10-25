@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.util.LDAPUtils;
-import ar.com.AmberSoft.util.PKGenerator;
 import ar.com.AmberSoft.util.ParamsConst;
 
 @SuppressWarnings({"rawtypes","unchecked"})
