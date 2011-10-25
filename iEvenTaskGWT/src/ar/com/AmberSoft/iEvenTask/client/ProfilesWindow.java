@@ -44,7 +44,7 @@ public class ProfilesWindow extends Window {
 	public static final Integer FIELD_WIDTH = 150;
 	public static final Integer LABEL_WIDTH = 100;
 	
-	public static final Integer DETAILS_HEIGTH = 72;
+	public static final Integer DETAILS_HEIGTH = 200;
 	
 	public static final Integer ESPECIFIC_PANEL_WIDTH = LABEL_WIDTH + FIELD_WIDTH;
 	public static final Integer ESPECIFIC_PANEL_HEIGTH = 70;

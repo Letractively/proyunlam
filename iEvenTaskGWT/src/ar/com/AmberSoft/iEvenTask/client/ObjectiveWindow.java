@@ -254,8 +254,7 @@ public class ObjectiveWindow extends Window  {
 			public void onSuccess(Object result) {
 				maskDisable();
 				DialogFactory.info("Se guardo el objetivo con exito.");
-				//FIXME: Invocar a la primer pagina
-				//refreshGrid(grid);
+				Context.getInstance().getObjectiveGrid().getStore().getLoader().load();
 				cerrarVentana();
 			}
 			});
@@ -304,9 +303,8 @@ public class ObjectiveWindow extends Window  {
 				public void onSuccess(Object result) {
 					maskDisable();
 					DialogFactory.info("Se modifico el objetivo con exito.");
+					Context.getInstance().getObjectiveGrid().getStore().getLoader().load();
 					cerrarVentana();
-//					MainTabTareas.reloadGrid();
-					
 				}
 			});
 		} else {

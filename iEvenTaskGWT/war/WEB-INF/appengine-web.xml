@@ -3,6 +3,9 @@
   <application>iEvenTask</application>
   <version>0.1</version>
 
+
+<sessions-enabled>true</sessions-enabled>
+
   <!-- Configure serving/caching of GWT files -->
   <static-files>
     <include path="**" />
