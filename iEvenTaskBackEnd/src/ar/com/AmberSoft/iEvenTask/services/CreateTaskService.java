@@ -23,7 +23,13 @@ public class CreateTaskService extends CreateService {
 	@Override
 	public Entity getEntity(Map params) {
 		
-		Tarea tarea = new Tarea();
+		Tarea tarea = null;
+		if (params.get(ParamsConst.ENTITY)!=null){
+			tarea = (Tarea) params.get(ParamsConst.ENTITY);
+		} else {
+			tarea = new Tarea();
+		}
+		
 		tarea.setNombreTarea((String)params.get(ParamsConst.NOMBRE_TAREA));
 		tarea.setFechaComienzo((Date)params.get(ParamsConst.FECHA_COMIENZO));
 		tarea.setFechaFin((Date)params.get(ParamsConst.FECHA_FIN));
@@ -31,11 +37,25 @@ public class CreateTaskService extends CreateService {
 		tarea.setDescripcion((String)params.get(ParamsConst.DESCRIPCION));
 		tarea.setId_usuario((String) params.get(ParamsConst.ID_USUARIO));
 
-		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
-		User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+		if (params.get(ParamsConst.ENTITY)==null){
+			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+			User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+			tarea.setCreator(user.getId());
+		}
 		
-		tarea.setCreator(user.getId());
+		setVisibles(params, tarea);
 		
+//		tarea.setHorasAsignadas((Integer) params.get(ParamsConst.HORASASIGNADAS));
+//		tarea.setFechaModificacion((Date) params.get(ParamsConst.FECHAMODIFICACION));
+//		tarea.setEstado((Integer) params.get(ParamsConst.ESTADO));
+//		tarea.setCumplimiento((Integer) params.get(ParamsConst.CUMPLIMIENTO));
+//		tarea.setTipo_tarea((Integer) params.get(ParamsConst.TIPO_TAREA));
+		
+		//private Set<Comentario> comentarios;
+		return tarea;
+	}
+
+	public void setVisibles(Map params, Tarea tarea) {
 		tarea.defaultVisibles();
 		
 		Collection usersView = (Collection) params.get(ParamsConst.USERS_VIEW);
@@ -46,14 +66,5 @@ public class CreateTaskService extends CreateService {
 				tarea.addVisible(actual);	
 			}
 		}
-		
-//		tarea.setHorasAsignadas((Integer) params.get(ParamsConst.HORASASIGNADAS));
-//		tarea.setFechaModificacion((Date) params.get(ParamsConst.FECHAMODIFICACION));
-//		tarea.setEstado((Integer) params.get(ParamsConst.ESTADO));
-//		tarea.setCumplimiento((Integer) params.get(ParamsConst.CUMPLIMIENTO));
-//		tarea.setTipo_tarea((Integer) params.get(ParamsConst.TIPO_TAREA));
-		
-		//private Set<Comentario> comentarios;
-		return tarea;
 	}
 }

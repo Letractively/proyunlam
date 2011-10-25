@@ -22,20 +22,27 @@ public class UpdateTaskService extends CreateTaskService {
 	@Override
 	public Map onExecute(Map params) {
 		
-		Tarea tarea = (Tarea) getEntity(params);
+		deleteOldVisible((Integer) params.get(ParamsConst.ID));
 		
+		GetTaskService getTaskService = new GetTaskService();
+		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
+		params.putAll(getTaskService.execute(params));
+		
+		Tarea tarea = (Tarea) getEntity(params);
+
+		getSession().saveOrUpdate(tarea);
+		return null;
+	}
+	public void deleteOldVisible(Integer id) {
 		StringBuffer queryText = new StringBuffer();
 		queryText.append("DELETE ");
 		queryText.append(Visible.class.getName());
 		queryText.append(" WHERE  tarea.id = ?");
 		
 		Query query = getSession().createQuery(queryText.toString());
-		query.setInteger(0, tarea.getId());
+		query.setInteger(0, id);
 		
 		query.executeUpdate();
-		
-		getSession().saveOrUpdate(tarea);
-		return null;
 	}
 
 }

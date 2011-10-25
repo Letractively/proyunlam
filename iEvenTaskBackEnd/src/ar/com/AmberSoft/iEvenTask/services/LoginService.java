@@ -36,12 +36,7 @@ public class LoginService extends Service {
 				//FIXME: Lanzar excepcion ya que el usuario no tiene asociado un perfil valido dentro de la aplicacion
 			}
 			
-			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
-			request.getSession().setAttribute(ParamsConst.USER, user);
-			String interval = config.getString("max.inactive.interval");
-			if (interval!=null){
-				request.getSession().setMaxInactiveInterval(new Integer(SEG_X_MIN * Integer.parseInt(interval)));
-			}
+			setUserInSession(params, user);
 			
 			map.put(ParamsConst.USER, user);
 			
@@ -51,6 +46,15 @@ public class LoginService extends Service {
 		}
 
 		return map;	
+	}
+
+	public void setUserInSession(Map params, User user) {
+		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
+		request.getSession().setAttribute(ParamsConst.USER, user);
+		String interval = config.getString("max.inactive.interval");
+		if (interval!=null){
+			request.getSession().setMaxInactiveInterval(new Integer(SEG_X_MIN * Integer.parseInt(interval)));
+		}
 	}
 
 	private Boolean isTransactionControl(Map params) {
@@ -63,19 +67,39 @@ public class LoginService extends Service {
 		User user = new User();
 		user.setId("USEREMULE");
 		user.setName("Usuario Emulado");
+		user.setPassword("pass".getBytes());
 		Profile profile = new Profile();
 		profile.setId(-1);
 		Set<Permission> permissions = new HashSet<Permission>();
 		profile.setPermissions(permissions);
-		Permission permission = new Permission();
-		permission.setId("permiso");
-		permission.setDescription("Permiso de prueba");
-		permissions.add(permission);
+
+		addPermission(permissions, "1", "");
+		addPermission(permissions, "2", "");
+		addPermission(permissions, "3", "");
+		addPermission(permissions, "4", "");
+		addPermission(permissions, "5", "");
+		addPermission(permissions, "6", "");
+		addPermission(permissions, "7", "");
+		addPermission(permissions, "8", "");
+		addPermission(permissions, "9", "");
+		addPermission(permissions, "10", "");
+		addPermission(permissions, "11", "");
+		
 		profile.setPermissions(permissions);
 		user.setProfile(profile);		
 		
+		setUserInSession(params, user);
+		
 		map.put(ParamsConst.USER, user);
 		return map;
+	}
+
+	public void addPermission(Set<Permission> permissions, String id,
+			String description) {
+		Permission permission = new Permission();
+		permission.setId(id);
+		permission.setDescription(description);
+		permissions.add(permission);
 	}
 
 }
