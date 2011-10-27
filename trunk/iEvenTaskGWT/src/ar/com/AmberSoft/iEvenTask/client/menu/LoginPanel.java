@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.Context;
-import ar.com.AmberSoft.iEvenTask.client.DialogError;
 import ar.com.AmberSoft.iEvenTask.client.DialogFactory;
-import ar.com.AmberSoft.iEvenTask.client.DialogInfo;
 import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;

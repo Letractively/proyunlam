@@ -17,6 +17,7 @@ public final class PermissionsConst {
 	public static final String REASIGNAR_TAREAS 			= "10";
 	// FIXME: Todavia no manejado, ya que aun no esta la funcionalidad
 	public static final String DIVIDIR_TAREAS	 			= "11";
+	public static final String RELACIONAR_CON_OBJETIVO		= "12";
 	
 	
 }

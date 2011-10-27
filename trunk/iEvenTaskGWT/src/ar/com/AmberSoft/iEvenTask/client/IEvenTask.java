@@ -3,6 +3,7 @@ package ar.com.AmberSoft.iEvenTask.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.menu.InitializePanel;
 import ar.com.AmberSoft.iEvenTask.client.menu.LoginPanel;
 import ar.com.AmberSoft.iEvenTask.client.menu.MainMenu;
 import ar.com.AmberSoft.iEvenTask.client.menu.MainStatusBar;
@@ -33,6 +34,8 @@ public class IEvenTask implements EntryPoint {
 	
 	static RootPanel rootPanel;
 	
+	private InitializePanel initializePanel;
+	
 	/*public static native void getUserLogon() /*-{
 		var objNet = CreateObject("WScript.NetWork") 
 		alert("Hola Mundo")
@@ -46,11 +49,6 @@ public class IEvenTask implements EntryPoint {
 	//;
 
 	public void onModuleLoad(){
-		/*try {
-			getUserLogon();
-		} catch (Exception e){
-			Context.getInstance().addDetailExecution(e.getMessage());
-		}¨*/
 		rootPanel = RootPanel.get();
 		rootPanel.setStyleName("body");
 		rootPanel.setSize(APP_WINDOW_WIDTH.toString(), APP_WINDOW_HEIGTH.toString());
@@ -59,6 +57,7 @@ public class IEvenTask implements EntryPoint {
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CHECK_USER);
 		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
 		
+		mask();
 		DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
 
 			@Override
@@ -68,6 +67,7 @@ public class IEvenTask implements EntryPoint {
 
 			@Override
 			public void onSuccess(Object result) {
+				unmask();
 				Map map = (Map) result;
 				if (map.get(ParamsConst.USER)!=null){
 					iniciarSesion();
@@ -76,8 +76,6 @@ public class IEvenTask implements EntryPoint {
 				}
 			}
 		});
-		//FIXME: Ojo!!! quitar esta linea
-		//iniciarSesion();
 	}
 	
 	public static void iniciarSesion() {
@@ -178,4 +176,19 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.add(loginPanel);
 		rootPanel.setWidgetPosition(loginPanel, 0, 0);
 	}
+
+	public void mask(){
+		initializePanel = new InitializePanel();
+		initializePanel.setId("login_panel");
+		rootPanel.add(initializePanel);
+		rootPanel.setWidgetPosition(initializePanel, 0, 0);
+	}
+	
+	public void unmask(){
+		initializePanel.removeFromParent();
+	}
+
+
+	
+	
 }

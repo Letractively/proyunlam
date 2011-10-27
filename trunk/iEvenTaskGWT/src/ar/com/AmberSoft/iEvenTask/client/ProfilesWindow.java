@@ -66,6 +66,7 @@ public class ProfilesWindow extends Window {
 	final CheckBox fldAsignarTareas = new CheckBox();
 	final CheckBox fldReasignarTareas = new CheckBox();
 	final CheckBox fldSubdividirTareas = new CheckBox();
+	final CheckBox fldRelacionarObjetivo = new CheckBox();
 
 	final Grid grid = new Grid(this, ServiceNameConst.LIST_PROFILE, getGridConfig(), 10);
 	
@@ -218,6 +219,7 @@ public class ProfilesWindow extends Window {
 		addCheck(fldAsignarTareas, "Asignar Tareas");
 		addCheck(fldReasignarTareas, "Reasignar Tareas");
 		addCheck(fldSubdividirTareas, "Subdividir Tareas");
+		addCheck(fldRelacionarObjetivo, "Relacionar Tarea con Objetivo");
 
 		return verticalPanel_1;
 	}
@@ -346,6 +348,7 @@ public class ProfilesWindow extends Window {
 			asignarPermiso(permisos, fldAsignarTareas, 			9);
 			asignarPermiso(permisos, fldReasignarTareas, 		10);
 			asignarPermiso(permisos, fldSubdividirTareas, 		11);
+			asignarPermiso(permisos, fldRelacionarObjetivo,		12);
 			
 			params.put(ParamsConst.PERMISSIONS,	permisos);
 

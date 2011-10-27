@@ -35,6 +35,8 @@ public abstract class ParamsConst {
 	public static final String FECHA_COMIENZO = "fechaComienzo";
 	public static final String FECHA_FIN = "fechaFin";
 	public static final String ID_USUARIO = "id_usuario";
+	public static final String ID_OBJETIVO = "id_objetivo";
+	public static final String OBJETIVO = "objetivo";
 	public static final String ASIGNADO = "asignado";
 	public static final String DESCRIPCION = "descripcion";
 	public static final String USERS_VIEW = "usersView";
@@ -49,6 +51,7 @@ public abstract class ParamsConst {
 	public static final String COMMENT = "comment";
 	public static final String COMENTARIOS = "comentarios";
 	public static final String COMENTARIO = "comentario";
+	public static final String TAREAS = "tareas";
 	
 	//CONSTANTES PARA OBJETIVOS
 	public static final String  NOMBRE_OBJETIVO = "nombreObjetivo";
