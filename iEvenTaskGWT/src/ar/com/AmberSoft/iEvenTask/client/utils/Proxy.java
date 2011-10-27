@@ -16,6 +16,10 @@ public class Proxy extends RpcProxy {
 	private GridDataCallback callback;
 	private Map params = new HashMap<String, String>();
 
+	public Map getParams() {
+		return params;
+	}
+
 	public Proxy(String service, Grid grid){
 		callback = new GridDataCallback(grid);
 		params.put(ServiceNameConst.SERVICIO, service);

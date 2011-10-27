@@ -250,6 +250,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 			(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
 					&& Context.getInstance().isAvaiable(PermissionsConst.TAREAS_NO_ASIGNADAS))){
 			TaskWindow taskWindow = new TaskWindow(false);
+			Context.getInstance().addDetailExecution("TaskWindow llamada a setear valores");
 			taskWindow.setValuesToUpdate(actual);
 			taskWindow.show();
 		} else {

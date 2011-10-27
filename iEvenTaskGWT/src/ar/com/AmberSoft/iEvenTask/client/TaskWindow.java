@@ -34,7 +34,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class TaskWindow extends Window {
 	
 	public static final Integer WINDOW_WIDTH = 400;
-	public static final Integer WINDOW__HEIGTH = 340;
+	public static final Integer WINDOW_HEIGTH = 400;
 	public static final Integer TASK_PANEL_WIDTH = WINDOW_WIDTH;
 	
 	
@@ -60,32 +60,40 @@ public class TaskWindow extends Window {
     Integer id_tarea;
     Map<Object, Object> actual;
 	
+    private final ComboBox fldObjective = new ComboBox();
+    
+    
+    
+    
+    
     /**
 	 * @param guardar: boolean true para guardar / boolean false para modificar
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TaskWindow(final boolean guardar) {
 		super();
-		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
+		setSize(WINDOW_WIDTH, WINDOW_HEIGTH);
 		
+		Context.getInstance().addDetailExecution("TaskWindows 1");
 		if(guardar){
 			taskPanel.setHeading("Nueva Tarea");
 		}else{
 			taskPanel.setHeading("Modificar Tarea");
 		}
+		Context.getInstance().addDetailExecution("TaskWindows 2");
 		taskPanel.setFrame(true);
 		taskPanel.setWidth(TASK_PANEL_WIDTH);
-		
+		Context.getInstance().addDetailExecution("TaskWindows 3");
 		taskName.setFieldLabel("Nombre");  
 		taskName.setAllowBlank(false);  
 		taskName.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
 		taskPanel.add(taskName);
-
+		Context.getInstance().addDetailExecution("TaskWindows 4");
 		fecha_com.setFieldLabel("Fecha Comienzo");  
 		taskPanel.add(fecha_com);  
 		fecha_fin.setFieldLabel("Fecha Fin");  
 		taskPanel.add(fecha_fin);  
-
+		Context.getInstance().addDetailExecution("TaskWindows 5");
 		completed.setIncrement(1d);  
 		completed.getPropertyEditor().setType(Integer.class);  
 		completed.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
@@ -93,11 +101,49 @@ public class TaskWindow extends Window {
 		completed.setMinValue(0);  
 		completed.setMaxValue(100);  
 		taskPanel.add(completed);  
-
+		Context.getInstance().addDetailExecution("TaskWindows 6");
 		description.setPreventScrollbars(true);  
 		description.setFieldLabel("Descripcion");  
 		taskPanel.add(description);
-		
+		Context.getInstance().addDetailExecution("TaskWindows 7");
+		addResponsable(guardar);
+		Context.getInstance().addDetailExecution("TaskWindows 8");
+		addObjectives(guardar);
+		Context.getInstance().addDetailExecution("TaskWindows 9");
+		taskPanel.add(btnView);
+		btnView.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				UserViewWindow modal = new UserViewWindow(usersView);
+				modal.show();
+			}
+		});
+		Context.getInstance().addDetailExecution("TaskWindows 10");
+		FormButtonBinding binding = new FormButtonBinding(taskPanel);  
+		if(guardar){
+			btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+				public void componentSelected(ButtonEvent ce) {
+					guardarTarea();}});
+			taskPanel.addButton(btnGuardar);
+			binding.addButton(btnGuardar);  
+		}else{
+			btnModificar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+				public void componentSelected(ButtonEvent ce) {
+					modificarTarea();}});
+			taskPanel.addButton(btnModificar);
+			binding.addButton(btnModificar);  
+		}
+		Context.getInstance().addDetailExecution("TaskWindows 11");
+		btnCancelar.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent ce) {
+				cerrarVentana();}});
+		taskPanel.addButton(btnCancelar);  
+		Context.getInstance().addDetailExecution("TaskWindows 12");
+	    this.add(taskPanel);
+	    Context.getInstance().addDetailExecution("TaskWindows 13");
+	}
+
+	public void addResponsable(final boolean guardar) {
 		fldUser.setFieldLabel("Responsable");
 		fldUser.setEnabled(Boolean.FALSE);
 		fldUser.setStore(new ListStore<ModelData>());
@@ -144,40 +190,68 @@ public class TaskWindow extends Window {
 			((!guardar) && (!Context.getInstance().isAvaiable(PermissionsConst.REASIGNAR_TAREAS)))){
 			fldUser.setEnabled(Boolean.FALSE);
 		}
-		
 		taskPanel.add(fldUser);
-		
-		taskPanel.add(btnView);
-		btnView.addSelectionListener(new SelectionListener<ButtonEvent>() {
-			@Override
-			public void componentSelected(ButtonEvent ce) {
-				UserViewWindow modal = new UserViewWindow(usersView);
-				modal.show();
-			}
-		});
-		
-		FormButtonBinding binding = new FormButtonBinding(taskPanel);  
-		if(guardar){
-			btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
-				public void componentSelected(ButtonEvent ce) {
-					guardarTarea();}});
-			taskPanel.addButton(btnGuardar);
-			binding.addButton(btnGuardar);  
-		}else{
-			btnModificar.addSelectionListener(new SelectionListener<ButtonEvent>() {
-				public void componentSelected(ButtonEvent ce) {
-					modificarTarea();}});
-			taskPanel.addButton(btnModificar);
-			binding.addButton(btnModificar);  
-		}
-		
-		btnCancelar.addSelectionListener(new SelectionListener<ButtonEvent>() {
-			public void componentSelected(ButtonEvent ce) {
-				cerrarVentana();}});
-		taskPanel.addButton(btnCancelar);  
-	    
-	    this.add(taskPanel);
 	}
+
+	public void addObjectives(final boolean guardar) {
+		fldObjective.setFieldLabel("Objetivo relacionado");
+		fldObjective.setEnabled(Boolean.FALSE);
+		fldObjective.setStore(new ListStore<ModelData>());
+		Map params = new HashMap<String, String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_OBJECTIVE_WITH_VISIBLE_FILTER);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Context.getInstance().validateUserExpired(caught);
+						DialogFactory.error("No se han podido consultar los objetivos relacionados.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						if (Context.getInstance().isAvaiable(PermissionsConst.RELACIONAR_CON_OBJETIVO)){
+							fldObjective.setEnabled(Boolean.TRUE);
+						}
+						Map map = (Map) result;
+						Collection objectives = (Collection) map.get(ParamsConst.DATA);
+						ListStore listStore = new ListStore();
+						Iterator it = objectives.iterator();
+						while (it.hasNext()) {
+							Map actual = (Map) it.next();
+							Context.getInstance().addDetailExecution("Agregando " + actual.get(ParamsConst.ID).toString()+ "-" + actual.get(ParamsConst.NOMBRE_OBJETIVO));
+							listStore.add(getModelData(actual.get(ParamsConst.ID).toString(), (String)actual.get(ParamsConst.NOMBRE_OBJETIVO)));
+						}
+						
+						fldObjective.setStore(listStore);
+						
+						if (actual != null){
+							Map objetivo = (Map) actual.get(ParamsConst.OBJETIVO);
+							Context.getInstance().addDetailExecution("TaskWindow seteando objetivo");
+							if (objetivo!=null){
+								Context.getInstance().addDetailExecution("TaskWindow seteando el objetivo " + objetivo.get(ParamsConst.ID).toString());
+								setCombo(fldObjective, objetivo.get(ParamsConst.ID).toString());
+							} else {
+								Context.getInstance().addDetailExecution("TaskWindow el objetivo es nulo");
+							}
+						}
+
+					}
+
+				});
+		fldObjective.setEditable(Boolean.FALSE);
+		fldObjective.setTypeAhead(true);  
+		fldObjective.setTriggerAction(TriggerAction.ALL); 
+		
+		if (!(Context.getInstance().isAvaiable(PermissionsConst.RELACIONAR_CON_OBJETIVO))){			
+			fldObjective.setEnabled(Boolean.FALSE);
+		}
+		taskPanel.add(fldObjective);
+	}
+
+	
+	
+	
 	
 	/**
 	 * Setea el valor seleccionado de un combo
@@ -205,7 +279,7 @@ public class TaskWindow extends Window {
 	 * Retorna un Model Data Basico
 	 * Usualmente utilizado en los combos
 	 * @param key
-	 * @param value
+	 * @param valu
 	 * @return
 	 */
 	protected BaseModel getModelData(String key, String value) {
@@ -238,8 +312,12 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
-			
+			if (fldUser.getValue()!=null){
+				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
+			}
+			if (fldObjective.getValue()!=null){
+				params.put(ParamsConst.ID_OBJETIVO, fldObjective.getValue().get("key"));
+			}
 			setUsersVisibles(params);
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_TASK);
@@ -292,7 +370,12 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue().toString());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
+			if (fldUser.getValue()!=null){
+				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
+			}
+			if (fldObjective.getValue()!=null){
+				params.put(ParamsConst.ID_OBJETIVO, fldObjective.getValue().get("key"));
+			}
 			params.put(ParamsConst.ID, this.getId_tarea());
 			
 			setUsersVisibles(params);
@@ -325,15 +408,29 @@ public class TaskWindow extends Window {
 	}
 	
 	public void setValuesToUpdate(Map<Object, Object> actual){
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate inicio");
 		this.actual = actual;
 		this.setId_tarea(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.1");
 		taskName.setValue(actual.get(ParamsConst.NOMBRE_TAREA).toString());
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.2");
 		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.3");
 		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO).toString());
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.4");
 		fecha_com.setValue((Date) actual.get(ParamsConst.FECHA_COMIENZO));
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.5");
 		fecha_fin.setValue((Date) actual.get(ParamsConst.FECHA_FIN));
-		completed.setValue(Long.valueOf(actual.get(ParamsConst.DURACION).toString()));
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.6");
+		if (actual.get(ParamsConst.CUMPLIMIENTO)!=null){
+			try {
+				completed.setValue(Long.valueOf(actual.get(ParamsConst.CUMPLIMIENTO).toString()));
+			} catch (Exception e){
+				Context.getInstance().addDetailExecution("TaskWindow cumplimiento debe ser Long (" + actual.get(ParamsConst.DURACION).toString() + ")");
+			}
+		}
 		
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 3");
 		Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
 		if (visibles!=null){
 			Iterator<Map> itVisibles = visibles.iterator();
@@ -345,7 +442,7 @@ public class TaskWindow extends Window {
 		} else {
 			Context.getInstance().addDetailExecution("Visibles es nulo");
 		}
-		
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 4");
 	}
 
 	public Integer getId_tarea() {

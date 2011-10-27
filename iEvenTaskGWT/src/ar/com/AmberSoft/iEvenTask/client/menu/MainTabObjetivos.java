@@ -18,22 +18,32 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseModel;
+import com.extjs.gxt.ui.client.data.ModelData;
+import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 public class MainTabObjetivos extends TabItem implements Seleccionable{
 	
-	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH;
+	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH - 300;
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
+	
+	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
+	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	
 	@SuppressWarnings("unchecked")
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_OBJECTIVE_WITH_VISIBLE_FILTER, getGridConfig(), 10);
+	private final ListStore<ModelData> storeTareas = new ListStore<ModelData>();
+	private final com.extjs.gxt.ui.client.widget.grid.Grid<ModelData> gridTareas = new com.extjs.gxt.ui.client.widget.grid.Grid<ModelData>(storeTareas, new ColumnModel(getGridConfig()));
 
 	public MainTabObjetivos() {
 		super("Objetivos");
@@ -46,6 +56,7 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		//componentes del panel de objetivos
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		VerticalPanel verticalPanel_grilla = new VerticalPanel();
+		VerticalPanel verticalPanel_tareas = new VerticalPanel();
 		
 		//seteo las propiedades al componente Grid
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
@@ -55,9 +66,27 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		verticalPanel_grilla.add(grid.getToolBar());
 		verticalPanel_grilla.add(grid);
 		horizontalPanel.add(verticalPanel_grilla);
+		
+		verticalPanel_tareas.add(addTasks());
+		horizontalPanel.add(verticalPanel_tareas);
 
 		this.add(horizontalPanel);
 	}
+	
+	private ContentPanel addTasks(){
+		
+		final ContentPanel commentPanel = new ContentPanel();
+		commentPanel.setScrollMode(Scroll.AUTO);
+		commentPanel.setHeading("Tareas relacionadas");
+		commentPanel.setSize(COMMENT_WIDTH.toString(), COMMENT_HEIGTH.toString());
+		
+		// FIXME: Agregar grilla de tarea 
+
+				
+		return commentPanel;
+	}
+	
+	
 	
 	@SuppressWarnings("rawtypes")
 	private List getGridConfig() {
@@ -175,5 +204,17 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 	@SuppressWarnings({"unused", "rawtypes"})
 	public void beforeUpdate(BaseModel baseModel) {
 		Map actual = grid.search(ParamsConst.ID, baseModel.get(ParamsConst.ID));
+		gridTareas.getStore().removeAll();
+		Collection tareas = (Collection) actual.get(ParamsConst.TAREAS);
+		if (tareas != null) {
+			
+			Iterator<Map> itTareas = tareas.iterator();
+			
+			while (itTareas.hasNext()) {
+				Map tarea = (Map) itTareas.next();
+				
+			}
+		}
+		
 	}
 }
