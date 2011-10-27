@@ -84,6 +84,7 @@ public class LoginService extends Service {
 		addPermission(permissions, "9", "");
 		addPermission(permissions, "10", "");
 		addPermission(permissions, "11", "");
+		addPermission(permissions, "12", "");
 		
 		profile.setPermissions(permissions);
 		user.setProfile(profile);		

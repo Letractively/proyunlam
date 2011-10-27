@@ -11,6 +11,9 @@ DROP CONSTRAINT fk_perp_perfil;
 ALTER TABLE iet_permiso_perfil 
 DROP CONSTRAINT pk_perp;
 
+ALTER TABLE iet_tarea 
+DROP CONSTRAINT fk_tarea_objetivo 
+
 ALTER TABLE iet_subtarea 
 DROP CONSTRAINT fk_subtarea_tarea;
 

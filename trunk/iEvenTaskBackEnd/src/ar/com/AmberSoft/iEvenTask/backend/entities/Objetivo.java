@@ -40,7 +40,7 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 	private String creator;
 	private String asignado;
 	private Set<VisibleObjetivo> visibles;
-	
+	private Set<Tarea> tareas;
 	
 	@Id @Column (name="id_objetivo")
 	public Integer getId() {
@@ -122,12 +122,10 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 	
 	@OneToMany (mappedBy="objetivo", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	public Set<VisibleObjetivo> getVisibles() {
-		//defaultVisibles();
 		return visibles;
 	}
 	public void setVisibles(Set<VisibleObjetivo> visibles) {
 		this.visibles = visibles;
-		//defaultVisibles();
 	}
 	
 	@Transient
@@ -152,11 +150,20 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 			visibles.add(new VisibleObjetivo(this, this.idUsuarioAsignado));
 		}
 	}
+	
 	@Transient
 	public String getAsignado() {
 		return asignado;
 	}
 	public void setAsignado(String asignado) {
 		this.asignado = asignado;
+	}
+	
+	@OneToMany (mappedBy="objetivo", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	public Set<Tarea> getTareas() {
+		return tareas;
+	}
+	public void setTareas(Set<Tarea> tareas) {
+		this.tareas = tareas;
 	}
 }

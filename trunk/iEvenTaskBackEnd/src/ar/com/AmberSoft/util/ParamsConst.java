@@ -38,6 +38,7 @@ public abstract class ParamsConst {
 	public static final String DURACION = "duracion";
 	public static final String DESCRIPCION = "descripcion";
 	public static final String ID_USUARIO = "id_usuario";
+	public static final String ID_OBJETIVO = "id_objetivo";
 	public static final String USERS_VIEW = "usersView";
 	//constantes para tareas que no son utilizadas
 	public static final String HORASASIGNADAS = "horas";

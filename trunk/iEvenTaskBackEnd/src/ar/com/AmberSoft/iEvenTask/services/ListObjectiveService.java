@@ -15,6 +15,7 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.backend.entities.VisibleObjetivo;
+import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
 import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.ParamsConst;
 
@@ -27,29 +28,42 @@ public class ListObjectiveService extends ListService {
 		Map result = super.execute(params);
 		
 		HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
-		User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+		User user = null;
+		if (request != null) {
+			user = (User) request.getSession().getAttribute(ParamsConst.USER);
+		}
 		
 		try {
-			Map<String, User> users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+			
+			Map<String, User> users = null;
+			if (user != null) {
+				if (!AppAdmin.getInstance().getConfig().isEmulate()){
+					users = LDAPUtils.getUsersMap(user.getId(), user.getPassword());
+				}
+			}
 		
 			Collection<Objetivo> objetivos = (Collection<Objetivo>) result.get(ParamsConst.DATA);
 			Iterator<Objetivo> it = objetivos.iterator();
 			while (it.hasNext()) {
 				Objetivo objetivo = (Objetivo) it.next();
-				User actualUser = users.get(objetivo.getIdUsuarioAsignado());
-				if (actualUser!=null){
-					objetivo.setAsignado(actualUser.getName());	
+				if (users != null){ 
+					User actualUser = users.get(objetivo.getIdUsuarioAsignado());
+					if (actualUser!=null){
+						objetivo.setAsignado(actualUser.getName());	
+					}
 				}
 				
 				Collection <VisibleObjetivo> visibles = objetivo.getVisibles();
-				Iterator<VisibleObjetivo> itVisibles = visibles.iterator();
-				Set<VisibleObjetivo> nuevosVisibles = new HashSet<VisibleObjetivo>();
-				while (itVisibles.hasNext()) {
-					VisibleObjetivo visible = (VisibleObjetivo) itVisibles.next();
-					visible.setObjetivo(null);
-					nuevosVisibles.add(visible);
+				if (visibles!=null){
+					Iterator<VisibleObjetivo> itVisibles = visibles.iterator();
+					Set<VisibleObjetivo> nuevosVisibles = new HashSet<VisibleObjetivo>();
+					while (itVisibles.hasNext()) {
+						VisibleObjetivo visible = (VisibleObjetivo) itVisibles.next();
+						visible.setObjetivo(null);
+						nuevosVisibles.add(visible);
+					}
+					objetivo.setVisibles(nuevosVisibles);
 				}
-				objetivo.setVisibles(nuevosVisibles);
 				
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -91,11 +105,13 @@ public class ListObjectiveService extends ListService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		Collection<Objetivo> list = new ArrayList<Objetivo>();
 		addObjetivo(list);
+		addObjetivo(list);
+		addObjetivo(list);
 		map.put(ParamsConst.DATA, list);
 		map.put(ParamsConst.TOTAL_COUNT, new Long(list.size()));
 		map.put(ParamsConst.OFFSET, (Integer) params.get("offset"));
 		map.put(ParamsConst.PAGING_LOAD_RESULT, Boolean.TRUE);
-		return null;
+		return map;
 	}
 	
 	private void addObjetivo(Collection<Objetivo> list) {
