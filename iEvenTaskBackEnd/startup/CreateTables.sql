@@ -22,7 +22,7 @@ create table iet_tarea (
 	nombre_tarea varchar(255),
 	fecha_comienzo datetime,
 	fecha_fin datetime,
-	duracion varchar(255),
+	--duracion varchar(255),
     descripcion varchar(255),
 	id_usuario varchar(255),
 	horas_asignadas int,
@@ -31,6 +31,8 @@ create table iet_tarea (
 	estado int,
 	cumplimiento int,
 	tipo_tarea int,
+	id_objetivo int,
+	peso int,
 	eliminado datetime
 );
 
@@ -142,6 +144,9 @@ ADD CONSTRAINT fk_perp_perfil FOREIGN KEY (id_perfil) REFERENCES iet_perfil(id_p
 ALTER TABLE iet_permiso_perfil 
 ADD CONSTRAINT pk_perp PRIMARY KEY (id_permiso, id_perfil);
 
+ALTER TABLE iet_tarea 
+ADD CONSTRAINT fk_tarea_objetivo FOREIGN KEY (id_objetivo) REFERENCES iet_objetivo(id_objetivo);
+
 ALTER TABLE iet_subtarea 
 ADD CONSTRAINT fk_subtarea_tarea FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id_tarea);
 
@@ -207,6 +212,7 @@ insert into iet_permiso values (8, 'Agregar comentarios no asignadas');
 insert into iet_permiso values (9, 'Asignar Tareas');
 insert into iet_permiso values (10, 'Reasignar Tareas');
 insert into iet_permiso values (11, 'Subdividir Tareas');
+insert into iet_permiso values (12, 'Relacionar con objetivo');
 
 insert into iet_permiso_perfil values (1,1);
 insert into iet_permiso_perfil values (2,1);
@@ -219,3 +225,4 @@ insert into iet_permiso_perfil values (8,1);
 insert into iet_permiso_perfil values (9,1);
 insert into iet_permiso_perfil values (10,1);
 insert into iet_permiso_perfil values (11,1);
+insert into iet_permiso_perfil values (12,1);

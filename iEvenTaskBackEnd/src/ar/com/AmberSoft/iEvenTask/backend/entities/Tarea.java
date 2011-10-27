@@ -12,6 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -27,7 +29,7 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private String nombreTarea;
 	private Date fechaComienzo;
 	private Date fechaFin;
-	private String duracion;
+	//private String duracion;
 	private String descripcion;
 
 	private String estado; //estado de la tarea "pendiente", "en curso", "suspendida"
@@ -48,6 +50,9 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private int tipo_tarea;
 	private Set<Comentario> comentarios;
 	private Set<Visible> visibles;
+	
+	private Objetivo objetivo;
+	private Integer peso;
 	
 	public Tarea() {
 		super();
@@ -86,13 +91,13 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	public void setFechaComienzo(Date fechaComienzo) {
 		this.fechaComienzo = fechaComienzo;
 	}
-	@Basic @Column (name="duracion")
+	/*@Basic @Column (name="duracion")
 	public String getDuracion() {
 		return duracion;
 	}
 	public void setDuracion(String duracion) {
 		this.duracion = duracion;
-	}
+	}*/
 	@Basic @Column (name="descripcion")
 	public String getDescripcion() {
 		return descripcion;
@@ -211,7 +216,22 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 		}
 	}
 	
-	
-	
-	
+	@ManyToOne (fetch=FetchType.LAZY)
+	@JoinColumn (name="id_objetivo")	
+	public Objetivo getObjetivo() {
+		return objetivo;
+	}
+
+	public void setObjetivo(Objetivo objetivo) {
+		this.objetivo = objetivo;
+	}	
+
+	@Basic @Column (name="peso")
+	public Integer getPeso() {
+		return peso;
+	}
+
+	public void setPeso(Integer peso) {
+		this.peso = peso;
+	}
 }

@@ -2,12 +2,14 @@ package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -16,7 +18,6 @@ public class CreateTaskService extends CreateService {
 
 	@Override
 	public Map onEmulate(Map params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -33,10 +34,26 @@ public class CreateTaskService extends CreateService {
 		tarea.setNombreTarea((String)params.get(ParamsConst.NOMBRE_TAREA));
 		tarea.setFechaComienzo((Date)params.get(ParamsConst.FECHA_COMIENZO));
 		tarea.setFechaFin((Date)params.get(ParamsConst.FECHA_FIN));
-		tarea.setDuracion((String)params.get(ParamsConst.DURACION));
+		//tarea.setDuracion((String)params.get(ParamsConst.DURACION));
+		Object cumplimiento = params.get(ParamsConst.CUMPLIMIENTO);
+		if (cumplimiento != null){
+			if (cumplimiento instanceof Integer) {
+				tarea.setCumplimiento((Integer) cumplimiento);			
+			} else {
+				tarea.setCumplimiento(new Integer((String)cumplimiento));
+			}
+		}
 		tarea.setDescripcion((String)params.get(ParamsConst.DESCRIPCION));
 		tarea.setId_usuario((String) params.get(ParamsConst.ID_USUARIO));
 
+		String id_objetivo = (String) params.get(ParamsConst.ID_OBJETIVO);
+		GetObjectiveService getObjectiveService = new GetObjectiveService();
+		Map paramsObj = new HashMap();
+		paramsObj.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
+		paramsObj.put(ParamsConst.ID, id_objetivo);
+		Map result = getObjectiveService.execute(paramsObj);
+		tarea.setObjetivo((Objetivo) result.get(ParamsConst.ENTITY));
+		
 		if (params.get(ParamsConst.ENTITY)==null){
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
 			User user = (User) request.getSession().getAttribute(ParamsConst.USER);
