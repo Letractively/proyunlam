@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- Database connection settings -->
+		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
+		<!-- SQL dialect -->
+		<property name="dialect">org.hibernate.dialect.SQLServer2005Dialect</property>
+		<!-- Echo all executed SQL to stdout -->
+		<property name="show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<!-- Disable the second-level cache -->
+		<!-- property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property -->
+		<property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+		<!-- JDBC connection pool (use the built-in) -->
+		<property name="connection.pool_size">5</property>
+		<!-- Enable Hibernate's automatic session context management -->
+		<property name="current_session_context_class">thread</property>
+
+		<!-- Basic Config -->
+		<property name="hibernate.cglib.use_reflection_optimizer">true</property>
+		<property name="hibernate.cache.use_query_cache">true</property>
+		<property name="hibernate.generate_statistics">true</property>
+		<property name="hibernate.connection.isolation">2</property>
+		<property name="hibernate.transaction.flush_before_completion">true</property>
+		<property name="hibernate.connection.release_mode">after_transaction</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.connection.autocommit">false</property>
+		<property name="hibernate.jdbc.use_scrollable_resultset">true</property>
+		<property name="hibernate.jdbc.batch_size">30</property>
+
+
+		<!-- Conexion con Database Server 1 -->
+		<property name="connection.url">jdbc:jtds:sqlserver://5.183.8.31:1433/ieventask</property>
+		<!-- Conexion con Database Server 2 -->
+		<!-- property name="connection.url">jdbc:jtds:sqlserver://5.40.97.203:1433/ieventask</property -->
+		<property name="connection.username">sa</property>
+		<property name="connection.password">Amber2011</property>
+
+		<!-- property name="connection.driver_class">com.mysql.jdbc.Driver</property> 
+			<property name="connection.url">jdbc:mysql://5.183.8.31:3306/ieventtaskdb</property> 
+			<property name="connection.username">root</property> <property name="connection.password">Amber2011</property -->
+
+		<!-- property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property> 
+			<property name="connection.url">jdbc:sqlserver://5.183.8.31;instanceName=SQLEXPRESS;databaseName=ieventask</property> 
+			<property name="connection.username">sa</property> <property name="connection.password">Amber2011</property -->
+
+		<!-- Drop and re-create the database schema on startup -->
+		<!-- property name="hbm2ddl.auto">update</property -->
+		<!-- mapping resource="org/hibernate/tutorial/domain/Event.hbm.xml" / -->
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Permission" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Profile" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Event" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventServices" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Relation" />
+		<mapping
+			class="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Tarea" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Comentario" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Visible" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.VisibleObjetivo" />
+	</session-factory>
+</hibernate-configuration>
