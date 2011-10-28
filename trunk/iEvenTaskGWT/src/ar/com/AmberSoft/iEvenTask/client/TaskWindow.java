@@ -368,7 +368,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.NOMBRE_TAREA, taskName.getValue());
 			params.put(ParamsConst.FECHA_COMIENZO, fecha_com.getValue());
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
-			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue().toString());
+			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
