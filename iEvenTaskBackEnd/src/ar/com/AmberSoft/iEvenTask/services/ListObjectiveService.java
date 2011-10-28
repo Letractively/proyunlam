@@ -67,7 +67,7 @@ public class ListObjectiveService extends ListService {
 					objetivo.setVisibles(nuevosVisibles);
 				} 
 				
-				Set<Tarea> tareas = objetivo.getTareas();
+				/*Set<Tarea> tareas = objetivo.getTareas();
 				if (tareas!=null){
 					Set<Tarea> nuevasTareas = new HashSet<Tarea>();
 					Iterator<Tarea> itTareas = tareas.iterator();
@@ -79,7 +79,7 @@ public class ListObjectiveService extends ListService {
 						nuevasTareas.add(tarea);
 					}
 					objetivo.setTareas(nuevasTareas);
-				}
+				}*/
 				
 				
 				
