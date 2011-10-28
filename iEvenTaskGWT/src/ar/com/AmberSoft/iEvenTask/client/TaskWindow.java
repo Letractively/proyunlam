@@ -34,7 +34,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class TaskWindow extends Window {
 	
 	public static final Integer WINDOW_WIDTH = 400;
-	public static final Integer WINDOW_HEIGTH = 400;
+	public static final Integer WINDOW_HEIGTH = 490;
 	public static final Integer TASK_PANEL_WIDTH = WINDOW_WIDTH;
 	
 	
@@ -61,6 +61,7 @@ public class TaskWindow extends Window {
     Map<Object, Object> actual;
 	
     private final ComboBox fldObjective = new ComboBox();
+    private final SpinnerField fldPeso = new SpinnerField();  
     
     private final ComboBox fldStatus = new ComboBox();
     
@@ -258,6 +259,17 @@ public class TaskWindow extends Window {
 			fldObjective.setEnabled(Boolean.FALSE);
 		}
 		taskPanel.add(fldObjective);
+		
+		fldPeso.setIncrement(1d);  
+		fldPeso.getPropertyEditor().setType(Integer.class);  
+		fldPeso.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
+		fldPeso.setFieldLabel("Peso sobre Objetivo (%)");
+		fldPeso.setMinValue(0);  
+		fldPeso.setMaxValue(100);  
+		taskPanel.add(fldPeso);  
+		
+		
+		
 	}
 
 	
@@ -329,6 +341,7 @@ public class TaskWindow extends Window {
 			if (fldObjective.getValue()!=null){
 				params.put(ParamsConst.ID_OBJETIVO, fldObjective.getValue().get("key"));
 			}
+			params.put(ParamsConst.PESO, fldPeso.getValue());
 			setUsersVisibles(params);
 			
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CREATE_TASK);
@@ -387,6 +400,7 @@ public class TaskWindow extends Window {
 			if (fldObjective.getValue()!=null){
 				params.put(ParamsConst.ID_OBJETIVO, fldObjective.getValue().get("key"));
 			}
+			params.put(ParamsConst.PESO, fldPeso.getValue());
 			params.put(ParamsConst.ID, this.getId_tarea());
 			
 			setUsersVisibles(params);
@@ -453,7 +467,9 @@ public class TaskWindow extends Window {
 		} else {
 			Context.getInstance().addDetailExecution("Visibles es nulo");
 		}
+	
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 4");
+		fldPeso.setValue((Number) actual.get(ParamsConst.PESO));
 	}
 
 	public Integer getId_tarea() {
