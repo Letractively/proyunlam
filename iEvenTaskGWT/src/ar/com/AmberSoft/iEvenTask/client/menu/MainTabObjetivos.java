@@ -18,11 +18,9 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
-import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.store.ListStore;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -34,7 +32,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class MainTabObjetivos extends TabItem implements Seleccionable{
 	
-	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH - 300;
+	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH;
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	
 	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
@@ -56,7 +54,6 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		//componentes del panel de objetivos
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		VerticalPanel verticalPanel_grilla = new VerticalPanel();
-		VerticalPanel verticalPanel_tareas = new VerticalPanel();
 		
 		//seteo las propiedades al componente Grid
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
@@ -67,25 +64,8 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		verticalPanel_grilla.add(grid);
 		horizontalPanel.add(verticalPanel_grilla);
 		
-		verticalPanel_tareas.add(addTasks());
-		horizontalPanel.add(verticalPanel_tareas);
-
 		this.add(horizontalPanel);
 	}
-	
-	private ContentPanel addTasks(){
-		
-		final ContentPanel commentPanel = new ContentPanel();
-		commentPanel.setScrollMode(Scroll.AUTO);
-		commentPanel.setHeading("Tareas relacionadas");
-		commentPanel.setSize(COMMENT_WIDTH.toString(), COMMENT_HEIGTH.toString());
-		
-		// FIXME: Agregar grilla de tarea 
-
-				
-		return commentPanel;
-	}
-	
 	
 	
 	@SuppressWarnings("rawtypes")

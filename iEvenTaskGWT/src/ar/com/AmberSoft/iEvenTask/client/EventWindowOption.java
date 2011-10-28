@@ -45,5 +45,7 @@ public abstract class EventWindowOption {
 		}
 
 	}
+	
+	public abstract void clear();
 
 }

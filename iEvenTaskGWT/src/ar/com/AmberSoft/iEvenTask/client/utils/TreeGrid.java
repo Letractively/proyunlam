@@ -14,7 +14,9 @@ public class TreeGrid extends
 	public TreeGrid(String serviceName, List<ColumnConfig> configs) {
 		super(new TreeStore(new TreeLoader(serviceName, null)),  new ColumnModel(configs));
 		setBorders(true);  
-	    getStyle().setLeafIcon(Resources.ICONS.music());  
+		getStyle().setNodeCloseIcon(Resources.ICONS.folder());
+		getStyle().setNodeOpenIcon(Resources.ICONS.folderExplorer());
+	    getStyle().setLeafIcon(Resources.ICONS.page());  
 	    //setAutoExpandColumn(ParamsConst.PATH);  
 	    setTrackMouseOver(false);
 	    

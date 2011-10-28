@@ -11,7 +11,7 @@ public class DialogInfo extends Dialog {
 		 setHeading("iEvenTask - Info");
 		 addText(text);
 		 setBodyStyle("fontWeight:bold;padding:13px;");
-		 setSize(350, 100);
+		 setSize(350, 150);
 		 setHideOnButtonClick(true);
 		 setButtons(Dialog.OK);
 		 setIcon(Resources.ICONS.info());

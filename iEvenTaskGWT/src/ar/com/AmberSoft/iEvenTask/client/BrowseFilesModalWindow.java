@@ -28,8 +28,8 @@ public class BrowseFilesModalWindow extends Window {
 		this.fieldValueReturn = field;
 		this.setModal(Boolean.TRUE);
 		final TreeGrid treeGrid = new TreeGrid(ServiceNameConst.BROWSE_FILE, getTreeGridConfig());
-		treeGrid.setSize(255, 300);
-		setSize(260, 330);
+		treeGrid.setSize(400, 300);
+		setSize(380, 330);
 		add(treeGrid);
 		
 		// Acciones a realizar cuando selecciona algun registro de la grilla
@@ -60,7 +60,7 @@ public class BrowseFilesModalWindow extends Window {
 	private List getTreeGridConfig() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
-		ColumnConfig clmncnfgPath = new ColumnConfig(ParamsConst.PATH, "Buscar...", 250);
+		ColumnConfig clmncnfgPath = new ColumnConfig(ParamsConst.PATH, "Buscar...", 380);
 		clmncnfgPath.setRenderer(new TreeGridCellRenderer());
 		configs.add(clmncnfgPath);
 

@@ -21,7 +21,6 @@ import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -40,7 +39,7 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 public class RelationWindow extends Window {
 
 	public static final Integer WINDOW_WIDTH = 665;
-	public static final Integer WINDOW_HEIGTH = 470;
+	public static final Integer WINDOW_HEIGTH = 500;
 
 	public static final Integer FIELD_WIDTH = 150;
 	public static final Integer LABEL_WIDTH = 150;
@@ -70,7 +69,7 @@ public class RelationWindow extends Window {
 
 	// Campos para Creacion de Tareas
 	private final TextField fldName = new TextField();
-	private final TextField fldUser = new TextField();
+	private final ComboBox fldUser = new ComboBox();
 	
 	// Campos para Modificacion de Estados
 	private final ComboBox fldFromState = new ComboBox();
@@ -271,6 +270,7 @@ public class RelationWindow extends Window {
 		if (modelData!=null){
 			String serviceKey = modelData.get("key");
 
+			fldEvent.setEnabled(Boolean.FALSE);
 			Map params = new HashMap<String, String>();
 			params.put(ServiceNameConst.SERVICIO, serviceKey);
 			DispatcherUtil.getDispatcher().execute(params,
@@ -278,6 +278,7 @@ public class RelationWindow extends Window {
 
 						@Override
 						public void onFailure(Throwable caught) {
+							fldEvent.setEnabled(Boolean.TRUE);
 							DialogFactory.error("No se han podido consultar el listado de eventos.");
 						}
 
@@ -295,7 +296,7 @@ public class RelationWindow extends Window {
 							if (eventListener!=null){
 								eventListener.execute();
 							}
-							
+							fldEvent.setEnabled(Boolean.TRUE);
 						}
 					}
 			);
@@ -319,6 +320,7 @@ public class RelationWindow extends Window {
 		fldName.setAllowBlank(Boolean.FALSE);
 		bodyCaption.add(getFieldHorizontalLine(fldUser, "Usuario responsable", FIELD_WIDTH, LABEL_WIDTH));
 		fldUser.setAllowBlank(Boolean.FALSE);
+		addResponsable();
 		caption.add(bodyCaption);
 		
 		vPanel.setVisible(Boolean.FALSE);
@@ -473,4 +475,42 @@ public class RelationWindow extends Window {
 	public void onModify() {
 	}
 
+	public void addResponsable() {
+		//fldUser.setFieldLabel("Responsable");
+		fldUser.setEnabled(Boolean.FALSE);
+		fldUser.setStore(new ListStore<ModelData>());
+		Map params = new HashMap<String, String>();
+		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
+		DispatcherUtil.getDispatcher().execute(params,
+				new AsyncCallback() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Context.getInstance().validateUserExpired(caught);
+						DialogFactory.error("No se han podido consultar los usuarios LDAP.");
+					}
+
+					@Override
+					public void onSuccess(Object result) {
+						fldUser.setEnabled(Boolean.TRUE);
+						Map map = (Map) result;
+						Collection users = (Collection) map.get(ParamsConst.DATA);
+						ListStore listStore = new ListStore();
+						Iterator it = users.iterator();
+						while (it.hasNext()) {
+							Map actual = (Map) it.next();
+							listStore.add(getModelData((String)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NAME)));
+						}
+						
+						fldUser.setStore(listStore);
+						String user = Context.getInstance().getUserID();
+						setCombo(fldUser, user);
+					}
+
+				});
+		fldUser.setEditable(Boolean.FALSE);
+		fldUser.setTypeAhead(true);  
+		fldUser.setTriggerAction(TriggerAction.ALL); 
+		
+	}
 }

@@ -44,5 +44,11 @@ public class EventWindowOptionFiles extends EventWindowOption {
 		return valid1 && valid2;
 	}
 
+	@Override
+	public void clear() {
+		eventWindow.getFldControlType().clear();
+		eventWindow.getFldPath().clear();
+	}
+
 
 }

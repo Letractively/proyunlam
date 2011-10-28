@@ -71,5 +71,15 @@ public interface Icons extends ImageBundle {
 	    
 	  @Resource("music.png")
 	  AbstractImagePrototype music();
-		
+
+	  @Resource("folder.png")
+	  AbstractImagePrototype folder();
+	  
+	  @Resource("folder_explore.png")
+	  AbstractImagePrototype folderExplorer();
+
+	  @Resource("page.png")
+	  AbstractImagePrototype page();
+
+	  
 }
