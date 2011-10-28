@@ -62,6 +62,8 @@ public class TaskWindow extends Window {
 	
     private final ComboBox fldObjective = new ComboBox();
     
+    private final ComboBox fldStatus = new ComboBox();
+    
     
     
     
@@ -105,6 +107,15 @@ public class TaskWindow extends Window {
 		description.setPreventScrollbars(true);  
 		description.setFieldLabel("Descripcion");  
 		taskPanel.add(description);
+		
+		fldStatus.setFieldLabel("Estado");
+		fldStatus.setEnabled(Boolean.TRUE);
+		fldStatus.setEditable(Boolean.FALSE);
+		fldStatus.setValueField("Pendiente");
+		fldStatus.setValueField("En Curso");
+		fldStatus.setValueField("Finalizada");
+		taskPanel.add(fldStatus);
+		
 		Context.getInstance().addDetailExecution("TaskWindows 7");
 		addResponsable(guardar);
 		Context.getInstance().addDetailExecution("TaskWindows 8");
