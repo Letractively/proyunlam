@@ -153,25 +153,25 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		ColumnConfig clmncnfgNombreTarea = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 100);
 		configs.add(clmncnfgNombreTarea);
 
-		ColumnConfig clmncnfgFechaComienzo = new ColumnConfig(ParamsConst.FECHA_COMIENZO, "Fecha de Comienzo", 150);
+		ColumnConfig clmncnfgFechaComienzo = new ColumnConfig(ParamsConst.FECHA_COMIENZO, "Fecha de Comienzo", 130);
 		clmncnfgFechaComienzo.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaComienzo);
 
-		ColumnConfig clmncnfgFechaFin = new ColumnConfig(ParamsConst.FECHA_FIN, "Fecha de Fin", 150);
+		ColumnConfig clmncnfgFechaFin = new ColumnConfig(ParamsConst.FECHA_FIN, "Fecha de Fin", 130);
 		clmncnfgFechaFin.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaFin);
 
-		ColumnConfig clmncnfgDuracion = new ColumnConfig(ParamsConst.DURACION, "Duracion (hs)", 20);
-		configs.add(clmncnfgDuracion);
+		ColumnConfig clmncnfgCumplimiento = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento (%)", 100);
+		configs.add(clmncnfgCumplimiento);
 		
-		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 150);
+		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 140);
 		configs.add(clmncnfgDescripcion);
 		
-		ColumnConfig clmncnfgResponsable = new ColumnConfig(ParamsConst.ID_USUARIO, "Responsable", 150);
+		ColumnConfig clmncnfgResponsable = new ColumnConfig(ParamsConst.ID_USUARIO, "Responsable", 140);
 		configs.add(clmncnfgResponsable);
 		clmncnfgResponsable.setHidden(Boolean.TRUE);
 
-		ColumnConfig clmncnfgAsignado = new ColumnConfig(ParamsConst.ASIGNADO, "Responsable", 150);
+		ColumnConfig clmncnfgAsignado = new ColumnConfig(ParamsConst.ASIGNADO, "Responsable", 140);
 		configs.add(clmncnfgAsignado);
 
 		return configs;
