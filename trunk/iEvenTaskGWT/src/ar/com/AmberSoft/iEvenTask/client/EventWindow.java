@@ -25,7 +25,6 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -50,12 +49,12 @@ import com.google.gwt.user.client.ui.CaptionPanel;
 public class EventWindow extends Window {
 
 	public static final Integer WINDOW_WIDTH = 800;
-	public static final Integer WINDOW_HEIGTH = 470;
+	public static final Integer WINDOW_HEIGTH = 500;
 
 	public static final Integer FIELD_WIDTH = 200;
 	public static final Integer LABEL_WIDTH = 150;
 	
-	public static final Integer DETAILS_HEIGTH = 72;
+	public static final Integer DETAILS_HEIGTH = 130;
 	
 	public static final Integer ESPECIFIC_PANEL_WIDTH = LABEL_WIDTH + FIELD_WIDTH;
 	public static final Integer ESPECIFIC_PANEL_HEIGTH = 70;
@@ -546,10 +545,7 @@ public class EventWindow extends Window {
 			
 			fldName.setValue(actual.get(ParamsConst.NAME));
 			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
-			Long expiration = (Long)actual.get(ParamsConst.EXPIRATION);
-			if (expiration != null){
-				fldExpiration.setValue(new Date((Long)actual.get(ParamsConst.EXPIRATION)));
-			}
+			fldExpiration.setValue((Date)actual.get(ParamsConst.EXPIRATION));
 			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
 			
 			eventWindowOption.beforeUpdate(actual);
@@ -610,5 +606,11 @@ public class EventWindow extends Window {
 	public void onModify() {
 	}
 	
+	protected void clear() {
+		super.clear();
+		if (eventWindowOption!=null){
+			eventWindowOption.clear();
+		}
+	}
 
 }

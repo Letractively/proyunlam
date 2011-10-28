@@ -39,5 +39,11 @@ public class EventWindowOptionLDAP extends EventWindowOption {
 		return eventWindow.getFldCode().isValid();
 	}
 
+	@Override
+	public void clear() {
+		eventWindow.getFldCode().clear();
+		eventWindow.getFldType().clear();
+	}
+
 
 }

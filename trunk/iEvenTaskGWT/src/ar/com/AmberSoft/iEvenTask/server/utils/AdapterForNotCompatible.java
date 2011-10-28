@@ -39,7 +39,7 @@ public class AdapterForNotCompatible implements Compatibilizable {
 						try {
 							propertyValue = PropertyUtils.getProperty(actual, descriptor.getName());
 						} catch (Exception e){
-							logger.info("La propiedad " + descriptor.getName() + " se encuentra Lazy o existe un error al tratar de obtenerla y será ignorada");
+							//logger.info("La propiedad " + descriptor.getName() + " se encuentra Lazy o existe un error al tratar de obtenerla y será ignorada");
 						}
 						GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(propertyValue);
 						Compatibilizable compatibilizable = evaluatorTypes.getCompatibilizableAdapter();

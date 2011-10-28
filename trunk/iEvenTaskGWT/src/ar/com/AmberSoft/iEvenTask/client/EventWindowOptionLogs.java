@@ -44,5 +44,11 @@ public class EventWindowOptionLogs extends EventWindowOption {
 		return valid1 && valid2;
 	}
 
+	@Override
+	public void clear() {
+		eventWindow.getFldPathLogs().clear();
+		eventWindow.getFldPatern().clear();
+	}
+
 
 }
