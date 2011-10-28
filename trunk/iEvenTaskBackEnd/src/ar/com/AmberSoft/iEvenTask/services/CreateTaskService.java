@@ -54,6 +54,8 @@ public class CreateTaskService extends CreateService {
 		Map result = getObjectiveService.execute(paramsObj);
 		tarea.setObjetivo((Objetivo) result.get(ParamsConst.ENTITY));
 		
+		tarea.setPeso((Integer) params.get(ParamsConst.PESO));
+		
 		if (params.get(ParamsConst.ENTITY)==null){
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
 			if (request != null){
