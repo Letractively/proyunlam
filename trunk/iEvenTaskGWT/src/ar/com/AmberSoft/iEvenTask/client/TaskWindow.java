@@ -412,9 +412,9 @@ public class TaskWindow extends Window {
 		this.actual = actual;
 		this.setId_tarea(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.1");
-		taskName.setValue(actual.get(ParamsConst.NOMBRE_TAREA).toString());
+		taskName.setValue((String) actual.get(ParamsConst.NOMBRE_TAREA));
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.2");
-		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
+		description.setValue((String) actual.get(ParamsConst.DESCRIPCION));
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.3");
 		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO).toString());
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.4");
