@@ -19,7 +19,7 @@ public class CreateEventServicesService extends CreateService {
 		EventServices event = new EventServices();
 		event.setName((String) params.get(ParamsConst.NAME));
 		event.setPeriodicity(Service.stringToInteger((String)params.get(ParamsConst.PERIODICITY)));
-		event.setExpiration(new Date((Long)params.get(ParamsConst.EXPIRATION)));
+		event.setExpiration((Date) params.get(ParamsConst.EXPIRATION));
 		event.setIterations(Service.stringToInteger((String)params.get(ParamsConst.ITERATIONS)));
 		event.setHost((String) params.get(ParamsConst.HOST));
 		event.setPort((String) params.get(ParamsConst.PORT));
