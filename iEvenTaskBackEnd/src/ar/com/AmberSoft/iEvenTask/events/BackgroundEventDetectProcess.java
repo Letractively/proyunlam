@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,7 +43,8 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	public BackgroundEventDetectProcess(Event event){
 		logger.debug("Inicializando BackgroundEventDetectProcess");
 		this.event = event;
-		if (isAvaiable()){
+		//if (isAvaiable()){
+		if ((event!=null) && (event.getDelete()==null)){
 			timer = new Timer();
 			timer.schedule(this, event.getPeriodicity());
 		}
@@ -65,18 +67,21 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 		
 		GetEventService getEventService = new GetEventService();
 		Transaction transaction = getEventService.getSession().beginTransaction();
+		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
 		Map result = getEventService.execute(params);
 		event = (Event) result.get(ParamsConst.ENTITY);
-		
-		if(event.getExecutions()!=null){
-			executionCount = event.getExecutions(); 
-		}
+	
 		if ((event!=null) && (isAvaiable())){
+			Set relations = event.getRelationsAvaiable();
+			transaction.commit();
+			if(event.getExecutions()!=null){
+				executionCount = event.getExecutions(); 
+			}
 			executionCount++;
 			logger.debug("Ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 			
 			if (eventDetect()){
-				Iterator<Relation> iRelations = event.getRelationsAvaiable().iterator();
+				Iterator<Relation> iRelations = relations.iterator();
 				while (iRelations.hasNext()) {
 					Relation relation = (Relation) iRelations.next();
 					relation.execute();
@@ -92,11 +97,14 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 			logger.debug("Finaliza la ejecucion " + executionCount.toString() + " , deteccion evento: " + event.getName());
 		} else {
 			logger.debug("Se cancela el proceso de deteccion para el evento: " + event.getName());
-			timer.cancel();
+			transaction.rollback();
+			if ((event!=null) && (event.getDelete()!=null)){
+				timer.cancel();
+			}
 			BackgroundEventController.getInstance().getActiveProcesses().remove(event.getId());
 		}
 		
-		transaction.commit();
+		
 	}
 	
 	/**
@@ -108,8 +116,9 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 	public Boolean isAvaiable(){
 		Date actual = new Date();
 		return ((event!=null) && (event.getDelete()==null) && (event.getRelationsAvaiable().size()>0)
-				&&((event.getIterations()==null) || (executionCount <= event.getIterations()))
-				&& ((event.getExpiration()==null) || (actual.before(event.getExpiration()))));
+				&&((event.getIterations()==null) || (event.getExecutions()==null) || (event.getExecutions() < event.getIterations()))
+				&& ((event.getExpiration()==null) || (actual.before(event.getExpiration())))
+				&& (event.getDelete()==null));
 	}
 	
 }

@@ -56,8 +56,13 @@ public class CreateTaskService extends CreateService {
 		
 		if (params.get(ParamsConst.ENTITY)==null){
 			HttpServletRequest request = (HttpServletRequest) params.get(ParamsConst.REQUEST);
-			User user = (User) request.getSession().getAttribute(ParamsConst.USER);
-			tarea.setCreator(user.getId());
+			if (request != null){
+				User user = (User) request.getSession().getAttribute(ParamsConst.USER);
+				tarea.setCreator(user.getId());
+			} else {
+				tarea.setCreator("DETECT_PROCESS");
+			}
+			
 		}
 		
 		setVisibles(params, tarea);

@@ -3,17 +3,21 @@ package ar.com.AmberSoft.iEvenTask.services;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.exception.ConstraintViolationException;
 
 import ar.com.AmberSoft.iEvenTask.hibernate.HibernateUtil;
 import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseStringFilterConfig;
 
 public abstract class Service {
+	
+	private static Logger logger = Logger.getLogger(Service.class);
 	
 	public static String FROM = " FROM ";
 	public static String WHERE = " WHERE ";
@@ -64,11 +68,15 @@ public abstract class Service {
 					transaction.commit();
 				}
 			} catch (ConstraintViolationException e){
+				logger.error(Tools.getStackTrace(e));
 				transaction.rollback();
 				Map map = new HashMap();
 				map.put(ParamsConst.ERROR, "ConstraintViolationException");
 				return map;
-			}	
+			} catch (Throwable e){
+				//FIXME: Ver si conviene hacer un sleep y reintentar
+				logger.error(Tools.getStackTrace(e));
+			}
 		}
 		
 		return result;
