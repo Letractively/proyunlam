@@ -71,6 +71,7 @@ public abstract class ParamsConst {
 	public static final String HOST = "host";
 	public static final String PORT = "port";
 	public static final String FOLDER = "folder";
+	public static final String PESO = "peso";
 	
 	public static final String CODE = "code";
 	
