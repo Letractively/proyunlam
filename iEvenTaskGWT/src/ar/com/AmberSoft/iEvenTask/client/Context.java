@@ -128,7 +128,10 @@ public class Context {
 	}
 	
 	public String getUserName(){
-		return (String) usuario.get(ParamsConst.NAME);
+		if (usuario!=null){
+			return (String) usuario.get(ParamsConst.NAME);
+		}
+		return "";
 	}
 	
 	public Map getUsuario() {
