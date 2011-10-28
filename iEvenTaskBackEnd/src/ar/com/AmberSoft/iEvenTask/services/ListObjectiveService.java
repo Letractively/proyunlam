@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,6 +44,7 @@ public class ListObjectiveService extends ListService {
 			}
 		
 			Collection<Objetivo> objetivos = (Collection<Objetivo>) result.get(ParamsConst.DATA);
+			
 			Iterator<Objetivo> it = objetivos.iterator();
 			while (it.hasNext()) {
 				Objetivo objetivo = (Objetivo) it.next();
@@ -63,7 +65,23 @@ public class ListObjectiveService extends ListService {
 						nuevosVisibles.add(visible);
 					}
 					objetivo.setVisibles(nuevosVisibles);
+				} 
+				
+				Set<Tarea> tareas = objetivo.getTareas();
+				if (tareas!=null){
+					Set<Tarea> nuevasTareas = new HashSet<Tarea>();
+					Iterator<Tarea> itTareas = tareas.iterator();
+					while (itTareas.hasNext()) {
+						Tarea tarea = (Tarea) itTareas.next();
+						tarea.setComentarios(null);
+						tarea.setObjetivo(null);
+						tarea.setVisibles(null);
+						nuevasTareas.add(tarea);
+					}
+					objetivo.setTareas(nuevasTareas);
 				}
+				
+				
 				
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -123,6 +141,15 @@ public class ListObjectiveService extends ListService {
 		objetivo.setPonderacion(objetivo.getPonderacion());
 		objetivo.setIdUsuarioAsignado(objetivo.getIdUsuarioAsignado());
 		objetivo.setDescripcion(objetivo.getDescripcion());
+	
+		List<Tarea> tareas = new ArrayList<Tarea>();
+		ListTaskService.addTarea(tareas);
+		ListTaskService.addTarea(tareas);
+		ListTaskService.addTarea(tareas);
+		ListTaskService.addTarea(tareas);
+		ListTaskService.addTarea(tareas);
+		objetivo.setTareas(new HashSet<Tarea>(tareas));
+		
 		list.add(objetivo);
 	}
 

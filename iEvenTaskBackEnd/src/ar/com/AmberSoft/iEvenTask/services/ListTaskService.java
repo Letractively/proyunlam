@@ -138,7 +138,7 @@ public class ListTaskService extends ListService {
 		return map;
 	}
 
-	private void addTarea(Collection<Tarea> list) {
+	public static void addTarea(Collection<Tarea> list) {
 		PKGenerator generator = new PKGenerator();
 		Tarea tarea = new Tarea();
 		tarea.setId(generator.getIntLastTime());
@@ -165,7 +165,7 @@ public class ListTaskService extends ListService {
 		list.add(tarea);
 	}
 
-	public void setVisible(Tarea tarea, Set<Visible> visibles, String id) {
+	public static void setVisible(Tarea tarea, Set<Visible> visibles, String id) {
 		Visible visible = new Visible(tarea, id);
 		visibles.add(visible);
 
