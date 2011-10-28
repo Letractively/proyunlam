@@ -70,6 +70,7 @@ public class IEvenTask implements EntryPoint {
 				unmask();
 				Map map = (Map) result;
 				if (map.get(ParamsConst.USER)!=null){
+					Context.getInstance().setUsuario((Map) map.get(ParamsConst.USER));
 					iniciarSesion();
 				} else {
 					iniciarLogin();
