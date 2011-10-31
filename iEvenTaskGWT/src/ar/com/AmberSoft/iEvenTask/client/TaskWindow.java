@@ -109,13 +109,7 @@ public class TaskWindow extends Window {
 		description.setFieldLabel("Descripcion");  
 		taskPanel.add(description);
 		
-		fldStatus.setFieldLabel("Estado");
-		fldStatus.setEnabled(Boolean.TRUE);
-		fldStatus.setEditable(Boolean.FALSE);
-		fldStatus.setValueField("Pendiente");
-		fldStatus.setValueField("En Curso");
-		fldStatus.setValueField("Finalizada");
-		taskPanel.add(fldStatus);
+		addStatus();
 		
 		Context.getInstance().addDetailExecution("TaskWindows 7");
 		addResponsable(guardar);
@@ -154,7 +148,26 @@ public class TaskWindow extends Window {
 	    this.add(taskPanel);
 	    Context.getInstance().addDetailExecution("TaskWindows 13");
 	}
+	
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public void addStatus(){
 
+		fldStatus.setFieldLabel("Estado");
+		fldStatus.setEnabled(Boolean.TRUE);
+		
+		ListStore listStore = new ListStore();
+		listStore.add(getModelData("Pendiente", "Pendiente"));
+		listStore.add(getModelData("En Curso", "En Curso"));
+		listStore.add(getModelData("Finalizada", "Finalizada"));
+		listStore.add(getModelData("Suspendida", "Suspendida"));
+		
+		fldStatus.setStore(listStore);
+		fldStatus.setEditable(Boolean.FALSE);
+		fldUser.setTypeAhead(true);  
+
+		taskPanel.add(fldStatus);
+		
+	}
 	public void addResponsable(final boolean guardar) {
 		fldUser.setFieldLabel("Responsable");
 		fldUser.setEnabled(Boolean.FALSE);
@@ -335,6 +348,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
+			params.put(ParamsConst.ESTADO, fldStatus.getValue());
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			}
@@ -394,6 +408,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
+			params.put(ParamsConst.ESTADO, fldStatus.getValue());
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			}
