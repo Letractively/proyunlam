@@ -28,7 +28,7 @@ create table iet_tarea (
 	horas_asignadas int,
 	fecha_creacion datetime,
 	fecha_modificacion datetime,
-	estado int,
+	estado varchar(10),
 	cumplimiento int,
 	tipo_tarea int,
 	id_objetivo int,

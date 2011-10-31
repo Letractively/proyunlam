@@ -35,6 +35,8 @@ public class CreateTaskService extends CreateService {
 		tarea.setFechaComienzo((Date)params.get(ParamsConst.FECHA_COMIENZO));
 		tarea.setFechaFin((Date)params.get(ParamsConst.FECHA_FIN));
 		//tarea.setDuracion((String)params.get(ParamsConst.DURACION));
+		tarea.setEstado((String) params.get(ParamsConst.ESTADO));
+
 		Object cumplimiento = params.get(ParamsConst.CUMPLIMIENTO);
 		if (cumplimiento != null){
 			if (cumplimiento instanceof Integer) {
@@ -71,7 +73,6 @@ public class CreateTaskService extends CreateService {
 		
 //		tarea.setHorasAsignadas((Integer) params.get(ParamsConst.HORASASIGNADAS));
 //		tarea.setFechaModificacion((Date) params.get(ParamsConst.FECHAMODIFICACION));
-//		tarea.setEstado((Integer) params.get(ParamsConst.ESTADO));
 //		tarea.setCumplimiento((Integer) params.get(ParamsConst.CUMPLIMIENTO));
 //		tarea.setTipo_tarea((Integer) params.get(ParamsConst.TIPO_TAREA));
 		
