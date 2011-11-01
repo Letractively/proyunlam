@@ -65,5 +65,6 @@
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Visible" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.VisibleObjetivo" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.VisibleRelation" />
 	</session-factory>
 </hibernate-configuration>
