@@ -131,6 +131,12 @@ create table iet_obj_visible (
 	id_usuario varchar(255)
 );
 
+create table iet_rel_visible (
+	id_rel_visible varchar(1000) primary key,
+	id_relacion int not null,
+	id_usuario varchar(255)
+);
+
 ------------------------------------------------------------
 ---                  Restrictions                        ---
 ------------------------------------------------------------
@@ -194,6 +200,9 @@ ADD CONSTRAINT fk_relacion_tarea_visible FOREIGN KEY (id_tarea) REFERENCES iet_t
 
 ALTER TABLE iet_obj_visible 
 ADD CONSTRAINT fk_relacion_objetivo_visible FOREIGN KEY (id_objetivo) REFERENCES iet_objetivo(id_objetivo);
+
+ALTER TABLE iet_rel_visible 
+ADD CONSTRAINT fk_relacion_relacion_visible FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
 
 ------------------------------------------------------------
 ---                       Data                           ---
