@@ -33,6 +33,8 @@ public abstract class RelationWindowOption {
 
 	public abstract Boolean isValid();
 	
+	public abstract Boolean clear();
+	
 	@SuppressWarnings({"rawtypes","unchecked"})
 	protected void setId(Map params) {
 		List seleccionados = relationWindow.getGrid().getSelectionModel().getSelection();
@@ -42,6 +44,8 @@ public abstract class RelationWindowOption {
 				BaseModel baseModel = (BaseModel) it.next();
 				params.put(ParamsConst.ID, baseModel.get(ParamsConst.ID));
 			}
+		} else {
+			params.put(ParamsConst.ID, null);
 		}
 	}
 	

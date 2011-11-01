@@ -122,11 +122,22 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		return null;
 	}
 
+	public Grid(Seleccionable seleccionable, String serviceName, List<ColumnConfig> configs, final Integer pageSize, Map params) {
+		// Se invoca al constructor padre para que se inicialice todo
+		// convenientemente
+		super(new ListStore(new Loader(serviceName, null, params)), new ColumnModel(configs));
+		initialize(seleccionable, pageSize);
+	}
 
 	public Grid(Seleccionable seleccionable, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {
 		// Se invoca al constructor padre para que se inicialice todo
 		// convenientemente
 		super(new ListStore(new Loader(serviceName, null)), new ColumnModel(configs));
+		initialize(seleccionable, pageSize);
+
+	}
+
+	public void initialize(Seleccionable seleccionable, final Integer pageSize) {
 		this.seleccionable = seleccionable;
 
 		// Se obtiene el loader para indicarle cual es la grilla con la que
@@ -161,7 +172,6 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		// Habilitamos para que se muestre una mascara mientras se esta cargando
 		// la grilla
 		setLoadMask(Boolean.TRUE);
-
 	}
 	
 	/**

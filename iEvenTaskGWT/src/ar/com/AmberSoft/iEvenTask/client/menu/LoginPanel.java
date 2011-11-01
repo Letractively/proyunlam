@@ -9,6 +9,7 @@ import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
+import ar.com.AmberSoft.iEvenTask.shared.exceptions.BDConnectionException;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -149,7 +150,12 @@ public class LoginPanel extends LayoutContainer {
 	
 				@Override
 				public void onFailure(Throwable caught) {
-					DialogFactory.error("Usuario o contrase\u00f1a incorrectos.");
+					if (caught instanceof BDConnectionException) {
+						DialogFactory.error("Problemas de conectividad con la BD. Comuniquese con soporte.");	
+					} else {
+						DialogFactory.error("Usuario o contrase\u00f1a incorrectos.");
+					}
+					
 					unmask();
 				}
 	

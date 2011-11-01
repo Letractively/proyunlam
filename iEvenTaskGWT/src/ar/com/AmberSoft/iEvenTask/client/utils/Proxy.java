@@ -20,6 +20,12 @@ public class Proxy extends RpcProxy {
 		return params;
 	}
 
+	public Proxy(String service, Grid grid, Map params){
+		callback = new GridDataCallback(grid);
+		this.params.putAll(params);
+		this.params.put(ServiceNameConst.SERVICIO, service);
+	}
+	
 	public Proxy(String service, Grid grid){
 		callback = new GridDataCallback(grid);
 		params.put(ServiceNameConst.SERVICIO, service);

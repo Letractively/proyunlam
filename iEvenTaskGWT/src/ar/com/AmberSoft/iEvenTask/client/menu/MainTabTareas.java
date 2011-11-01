@@ -105,7 +105,9 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 						if ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) || 
 								(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
 										&& Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS_NO_ASIGNADOS))){
-							Context.getInstance().windowShow(new CommentWindows((Integer)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NOMBRE_TAREA)));
+							//Context.getInstance().windowShow(new CommentWindows((Integer)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NOMBRE_TAREA)));
+							CommentWindows windows = new CommentWindows((Integer)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NOMBRE_TAREA));
+							windows.show();
 						} else {
 							DialogFactory.info("No tiene permisos para agregar comentarios en tareas no asignadas");
 						}

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -16,6 +17,7 @@ import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -28,12 +30,13 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.user.client.rpc.AsyncCallback;
   
-public class ObjectiveWindow extends Window  {
+public class ObjectiveWindow extends Window implements Seleccionable {
 	
-	public static final Integer WINDOW_WIDTH = 400;
-	public static final Integer WINDOW__HEIGTH = 365;
+	public static final Integer WINDOW_WIDTH = 450;
+	public static final Integer WINDOW__HEIGTH = 450;
 	public static final Integer OBJECTIVE_PANEL_WIDTH = WINDOW_WIDTH;
 	
 	private final Button btnView = new Button("Opciones de visibilidad");
@@ -61,6 +64,10 @@ public class ObjectiveWindow extends Window  {
     Button btnCancelar = new Button("Cancelar");  
     Integer id_obj;
     Map<Object, Object> actual;
+    
+    private Grid grid = null;
+    
+    private HorizontalPanel panel = new HorizontalPanel();
 	
     /**
 	 * @param guardar: boolean true para guardar / boolean false para modificar
@@ -140,6 +147,7 @@ public class ObjectiveWindow extends Window  {
 					}
 
 				});
+		fldUser.setFieldLabel("Responsable");
 		fldUser.setEditable(Boolean.FALSE);
 		fldUser.setTypeAhead(true);  
 		fldUser.setTriggerAction(TriggerAction.ALL); 
@@ -153,6 +161,10 @@ public class ObjectiveWindow extends Window  {
 				modal.show();
 			}
 		});
+		
+		panel.setSize(WINDOW_WIDTH, 150);
+		objPanel.add(panel);
+		
 		
 		FormButtonBinding binding = new FormButtonBinding(objPanel);  
 		if(guardar){
@@ -173,6 +185,9 @@ public class ObjectiveWindow extends Window  {
 			public void componentSelected(ButtonEvent ce) {
 				cerrarVentana();}});
 		objPanel.addButton(btnCancelar);
+		
+		
+		
 		
 	    
 	    this.add(objPanel);
@@ -315,13 +330,13 @@ public class ObjectiveWindow extends Window  {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void setValuesToUpdate(Map<Object, Object> actual){
 		this.setId_obj(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
-		objName.setValue(actual.get(ParamsConst.NOMBRE_OBJETIVO).toString());
-		objType.setValue(actual.get(ParamsConst.TIPO_OBJETIVO).toString());
-		objScale.setValue(actual.get(ParamsConst.ESCALA_MEDICION).toString());
+		objName.setValue((String) actual.get(ParamsConst.NOMBRE_OBJETIVO));
+		objType.setValue((String) actual.get(ParamsConst.TIPO_OBJETIVO));
+		objScale.setValue((String) actual.get(ParamsConst.ESCALA_MEDICION));
 		fecha_finalizacion.setValue((Date)actual.get(ParamsConst.FECHA_FINALIZACION));
 		objPond.setValue((Number) actual.get(ParamsConst.PONDERACION));
-		setCombo(fldUser, actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString());
-		description.setValue(actual.get(ParamsConst.DESCRIPCION).toString());
+		setCombo(fldUser, (String) actual.get(ParamsConst.ID_USUARIO_ASIGNADO));
+		description.setValue((String) actual.get(ParamsConst.DESCRIPCION));
 		
 		Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
 		if (visibles!=null){
@@ -334,6 +349,12 @@ public class ObjectiveWindow extends Window  {
 		} else {
 			Context.getInstance().addDetailExecution("Visibles es nulo");
 		}
+		
+		Map paramsGrid = new HashMap();
+		paramsGrid.put(ParamsConst.ID_OBJETIVO, actual.get(ParamsConst.ID));
+		grid = new Grid(this, ServiceNameConst.LIST_TASK_BY_OBJECTIVE, getGridConfig(), 10, paramsGrid);
+		grid.setSize(WINDOW_WIDTH, 150);
+		panel.add(grid);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -357,4 +378,41 @@ public class ObjectiveWindow extends Window  {
 		this.unmask();
 	}
 
+	/**
+	 * Retorna la configuracion de la grilla
+	 */
+	private List getGridConfig() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+
+		// Se agrega esta columna para mantener el identificador de los perfiles
+		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
+		clmncnfgId.setHidden(Boolean.TRUE);
+		configs.add(clmncnfgId);
+
+		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 150);
+		configs.add(clmncnfg1);
+
+		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PESO, "Peso", 30);
+		configs.add(clmncnfg2);
+
+		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento", 30);
+		configs.add(clmncnfg3);
+
+		return configs;
+	}
+	@Override
+	public void onDelete() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onSelect(List selected) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onModify() {
+		// TODO Auto-generated method stub
+		
+	}
 }

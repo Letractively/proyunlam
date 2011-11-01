@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.hibernate.exception.JDBCConnectionException;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.client.ServiceDispatcher;
@@ -17,6 +18,7 @@ import ar.com.AmberSoft.iEvenTask.server.utils.GWTCompatibilityEvaluatorTypes;
 import ar.com.AmberSoft.iEvenTask.server.utils.Tools;
 import ar.com.AmberSoft.iEvenTask.services.Service;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
+import ar.com.AmberSoft.iEvenTask.shared.exceptions.BDConnectionException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceClassNotFoundException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceInstantationException;
 import ar.com.AmberSoft.iEvenTask.shared.exceptions.ServiceNameNotFoundException;
@@ -75,6 +77,9 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 				return map;
 			}
 			return null;
+		} catch (JDBCConnectionException e) {
+			logger.error(Tools.getStackTrace(e));
+			throw new BDConnectionException();
 		} catch (Exception e) {
 			logger.error(Tools.getStackTrace(e));
 			throw new ServiceInstantationException();
