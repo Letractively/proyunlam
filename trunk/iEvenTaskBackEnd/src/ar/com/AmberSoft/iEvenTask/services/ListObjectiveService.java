@@ -80,7 +80,7 @@ public class ListObjectiveService extends ListService {
 					}
 					objetivo.setTareas(nuevasTareas);
 				}*/
-				
+				objetivo.setTareas(null);
 				
 				
 			}
