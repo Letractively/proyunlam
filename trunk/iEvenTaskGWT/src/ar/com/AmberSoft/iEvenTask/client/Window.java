@@ -114,10 +114,12 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 			Iterator it = selected.iterator();
 			if (it.hasNext()) {
 				beforeUpdate((BaseModel) it.next());
+				Context.getInstance().addDetailExecution("windowState=UPDATE_STATE");
 				windowState = State.UPDATE_STATE;
 			}
 		} else {
 			clear();
+			Context.getInstance().addDetailExecution("windowState=UNKNOW_STATE");
 			windowState = State.UNKNOW_STATE;
 		}
 	}

@@ -42,5 +42,12 @@ public class RelationWindowOptionModifyState extends RelationWindowOption {
 		return boolean1 && boolean2;
 	}
 
+	@Override
+	public Boolean clear() {
+		relationWindow.getFldFromState().clear();
+		relationWindow.getFldToState().clear();
+		return null;
+	}
+
 
 }

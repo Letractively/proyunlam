@@ -1,5 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,6 +94,21 @@ public class Context {
 		}
 	}
 
+	public void addComment(Integer id, String comment, Date date, String usuario){
+		addComment(comment, date, usuario);
+		Map actualEnPrincipal = Context.getInstance().getTaskGrid().search(ParamsConst.ID, id);
+		Collection comentarios = (Collection) actualEnPrincipal.get(ParamsConst.COMENTARIOS);
+		if (comentarios==null){
+			comentarios = new ArrayList();
+		}
+		Map comentario = new HashMap();
+		comentario.put(ParamsConst.COMENTARIO, comment);
+		comentario.put(ParamsConst.FECHA, date); 
+		comentario.put(ParamsConst.USUARIO, usuario);
+		comentarios.add(comentario);
+		actualEnPrincipal.put(ParamsConst.COMENTARIOS, comentarios);
+	}
+	
 	public void addComment(String comment, Date date, String usuario){
 		StringBuffer textToAdd = new StringBuffer();
 		
@@ -117,6 +133,7 @@ public class Context {
 		}
 
 		htmlEditor.setValue(textToAdd.toString());
+		
 	}
 
 	public void setHtmlEditor(HtmlEditor htmlEditor) {

@@ -1,12 +1,11 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
-import ar.com.AmberSoft.iEvenTask.client.menu.MainTabTareas;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -24,7 +23,6 @@ import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class CommentWindows extends Window {
@@ -141,13 +139,14 @@ public class CommentWindows extends Window {
 							// de lo contrario luego de guardar un comentario al ir y volver entre tareas da la impresion de que el comentario se pierde
 							// aunque lo almacena correctamente
 							Context.getInstance().addComment(
+									id,
 									htmlEditor.getValue(),
 									new Date(), 
 									Context.getInstance().getUserName());
 							
-							Context.getInstance().getWindowInstance(CommentWindows.class).setVisible(Boolean.FALSE);
 							clear();
 							maskDisable();
+							close();
 						}
 
 					});
@@ -157,6 +156,7 @@ public class CommentWindows extends Window {
 			maskDisable();
 		}
 	}
+	
 	
 	protected Boolean isValid() {
 		return (htmlEditor.getValue()!=null) && !"".equals(htmlEditor.getValue().trim());

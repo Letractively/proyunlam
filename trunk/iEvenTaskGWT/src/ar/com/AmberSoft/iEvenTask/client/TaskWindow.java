@@ -398,6 +398,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.USERS_VIEW, toSend);
 		}
 	}
+	
 	private void modificarTarea(){
 		maskAvaiable();
 		if (isValid()){

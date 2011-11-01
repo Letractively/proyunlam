@@ -16,14 +16,17 @@ import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.data.ModelData;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.TextField;
@@ -44,7 +47,7 @@ public class RelationWindow extends Window {
 	public static final Integer FIELD_WIDTH = 150;
 	public static final Integer LABEL_WIDTH = 150;
 	
-	public static final Integer DETAILS_HEIGTH = 72;
+	public static final Integer DETAILS_HEIGTH = 90;
 	
 	public static final Integer ESPECIFIC_PANEL_WIDTH = LABEL_WIDTH + FIELD_WIDTH;
 	public static final Integer ESPECIFIC_PANEL_HEIGTH = 70;
@@ -59,6 +62,9 @@ public class RelationWindow extends Window {
 
 	private final Grid grid = new Grid(this, ServiceNameConst.LIST_RELATION, getGridConfig(), 10);
 	
+	private final Button btnView = new Button("Opciones de visibilidad");
+	private Collection usersView = new ArrayList();
+	
 	// Campos
 	private final ComboBox fldEventType = new ComboBox();
 	private final ComboBox fldEvent = new ComboBox();
@@ -69,8 +75,7 @@ public class RelationWindow extends Window {
 
 	// Campos para Creacion de Tareas
 	private final TextField fldName = new TextField();
-	private final ComboBox fldUser = new ComboBox();
-	
+	private final ComboBox fldUser = new ComboBox();	
 	// Campos para Modificacion de Estados
 	private final ComboBox fldFromState = new ComboBox();
 	private final ComboBox fldToState = new ComboBox();;
@@ -102,7 +107,7 @@ public class RelationWindow extends Window {
 		return fldName;
 	}
 
-	public TextField getFldUser() {
+	public ComboBox getFldUser() {
 		return fldUser;
 	}
 	
@@ -143,6 +148,14 @@ public class RelationWindow extends Window {
 		
 		horizontalPanel.add(vPanelCreateTask);
 		horizontalPanel.add(vPanelModifyStatus);
+		vPanelCreateTask.add(btnView);
+		btnView.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				UserViewWindow modal = new UserViewWindow(usersView);
+				modal.show();
+			}
+		});
 
 		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
 		
@@ -150,6 +163,26 @@ public class RelationWindow extends Window {
 		
 
 	}
+	
+	public void setUsersVisibles(Map<Object, Object> params) {
+		Collection toSend = new ArrayList<String>();
+		if (usersView!=null){
+			Iterator<ModelData> users = usersView.iterator();
+			while (users.hasNext()) {
+				String id = "";
+				Object actualUser = users.next();
+				if (actualUser instanceof ModelData) {
+					ModelData modelData = (ModelData) actualUser;
+					id = modelData.get("id");
+				} else {
+					id = (String) actualUser;
+				}
+				toSend.add(id);
+			}
+			params.put(ParamsConst.USERS_VIEW, toSend);
+		}
+	}
+
 
 	/**
 	 * Inicializa la ventana actual
@@ -414,6 +447,7 @@ public class RelationWindow extends Window {
 
 		if (actual != null) {
 			
+			Context.getInstance().addDetailExecution("RelationWindow 1");
 			relationWindowOption = RelationWindowOptionFactory.getInstance().getRelationWindowOption((String)actual.get(ParamsConst.CLASS), this);
 			setCombo(getFldEventType(), (String) entityServiceRelation.get((String)((Map)actual.get("event")).get(ParamsConst.CLASS)));
 			UpdateFldEvent(getFldEventType().getValue(), new UpdateFldEventListener() {
@@ -422,10 +456,23 @@ public class RelationWindow extends Window {
 					setCombo(getFldEvent(), ((Map)actual.get("event")).get(ParamsConst.ID).toString());
 				}
 			});
-			
+			Context.getInstance().addDetailExecution("RelationWindow 2");
 			setCombo(getFldAction(), (String)(actual.get(ParamsConst.CLASS)));
+			Context.getInstance().addDetailExecution("RelationWindow 3");
 			relationWindowOption.beforeUpdate(actual);
-
+			Context.getInstance().addDetailExecution("RelationWindow 4");
+			Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
+			if (visibles!=null){
+				Iterator<Map> itVisibles = visibles.iterator();
+				while (itVisibles.hasNext()) {
+					Map map = (Map) itVisibles.next();
+					Context.getInstance().addDetailExecution("Agregando a usersView:"+map.get(ParamsConst.USUARIO));
+					usersView.add(map.get(ParamsConst.USUARIO));
+				}
+			} else {
+				Context.getInstance().addDetailExecution("Visibles es nulo");
+			}
+			Context.getInstance().addDetailExecution("RelationWindow 5");
 		}
 		
 	}
@@ -436,7 +483,7 @@ public class RelationWindow extends Window {
 		if (isValid()) {
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.EVENT,	((ModelData)fldEvent.getValue()).get("key"));
-
+			setUsersVisibles(params);
 			relationWindowOption.onSave(params);
 			
 			DispatcherUtil.getDispatcher().execute(params,
@@ -512,5 +559,13 @@ public class RelationWindow extends Window {
 		fldUser.setTypeAhead(true);  
 		fldUser.setTriggerAction(TriggerAction.ALL); 
 		
+	}
+	
+	@Override
+	protected void clear() {
+		super.clear();
+		if (relationWindowOption!=null){
+			relationWindowOption.clear();
+		}
 	}
 }
