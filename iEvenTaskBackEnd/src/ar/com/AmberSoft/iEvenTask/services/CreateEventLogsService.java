@@ -19,7 +19,9 @@ public class CreateEventLogsService extends CreateService {
 		EventLogs event = new EventLogs();
 		event.setName((String) params.get(ParamsConst.NAME));
 		event.setPeriodicity(Service.stringToInteger((String)params.get(ParamsConst.PERIODICITY)));
-		event.setExpiration(new Date((Long)params.get(ParamsConst.EXPIRATION)));
+		if (params.get(ParamsConst.EXPIRATION)!=null){
+			event.setExpiration(new Date((Long)params.get(ParamsConst.EXPIRATION)));
+		}
 		event.setIterations(Service.stringToInteger((String)params.get(ParamsConst.ITERATIONS)));
 		event.setPath((String) params.get(ParamsConst.PATH));
 		event.setPatern((String) params.get(ParamsConst.PATERN));
