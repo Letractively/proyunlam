@@ -31,6 +31,7 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	public static final String SELECT_ALL = "Seleccionar Todos";
 	public static final String DELETE = "Elminar";
 	public static final String MODIFY = "Modificar";
+	public static final String DIVIDIR = "Dividir";
 
 	/**
 	 * Ventana actual con la que trabaja la grilla
@@ -64,6 +65,12 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	 * la grilla
 	 */
 	private MenuItem itemModify;
+	
+	/**
+	 * Item del menu por default cuya funcionalidad es dividir una tarea
+	 */
+	private MenuItem itemDividir;
+
 
 	/**
 	 * Barra de herramientas que se muestra debajo de la grilla
@@ -245,6 +252,13 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				seleccionable.onModify();
 			}
 		});
+		itemDividir = addContextMenuItem(DIVIDIR, Boolean.FALSE,
+				new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				seleccionable.onDividir();
+			}
+		});
 	}
 
 	/**
@@ -291,7 +305,8 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 			public void handleEvent(BaseEvent be) {
 				List seleccionados = getSelectionModel().getSelection();
 				itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
-				itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
+				itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
+				itemDividir.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
 				seleccionable.onSelect(seleccionados);
 			}
 		});		
