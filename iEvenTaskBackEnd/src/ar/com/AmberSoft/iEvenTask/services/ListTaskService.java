@@ -61,24 +61,28 @@ public class ListTaskService extends ListService {
 				}
 
 				Collection<Comentario> comentarios = tarea.getComentarios();
-				Iterator<Comentario> itComentarios = comentarios.iterator();
-				Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
-				while (itComentarios.hasNext()) {
-					Comentario comentario = (Comentario) itComentarios.next();
-					comentario.setTarea(null);
-					nuevosComentarios.add(comentario);
+				if (comentarios!=null){
+					Iterator<Comentario> itComentarios = comentarios.iterator();
+					Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
+					while (itComentarios.hasNext()) {
+						Comentario comentario = (Comentario) itComentarios.next();
+						comentario.setTarea(null);
+						nuevosComentarios.add(comentario);
+					}
+					tarea.setComentarios(nuevosComentarios);
 				}
-				tarea.setComentarios(nuevosComentarios);
-
+				
 				Collection<Visible> visibles = tarea.getVisibles();
-				Iterator<Visible> itVisibles = visibles.iterator();
-				Set<Visible> nuevosVisibles = new HashSet<Visible>();
-				while (itVisibles.hasNext()) {
-					Visible visible = (Visible) itVisibles.next();
-					visible.setTarea(null);
-					nuevosVisibles.add(visible);
+				if (visibles!=null){
+					Iterator<Visible> itVisibles = visibles.iterator();
+					Set<Visible> nuevosVisibles = new HashSet<Visible>();
+					while (itVisibles.hasNext()) {
+						Visible visible = (Visible) itVisibles.next();
+						visible.setTarea(null);
+						nuevosVisibles.add(visible);
+					}
+					tarea.setVisibles(nuevosVisibles);
 				}
-				tarea.setVisibles(nuevosVisibles);
 
 			}
 		} catch (UnsupportedEncodingException e) {
