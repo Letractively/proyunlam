@@ -48,6 +48,7 @@ public abstract class ParamsConst {
 	public static final String CUMPLIMIENTO = "cumplimiento";
 	public static final String TIPO_TAREA = "tipoTarea";
 	public static final String COMMENT = "comment";
+	public static final String CANTIDAD = "cantidad";
 	
 	//CONSTANTES PARA OBJETIVOS
 	public static final String  NOMBRE_OBJETIVO = "nombreObjetivo";
