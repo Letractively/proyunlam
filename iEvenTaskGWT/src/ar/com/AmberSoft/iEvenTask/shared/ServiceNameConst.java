@@ -32,6 +32,7 @@ public abstract class ServiceNameConst {
 	public static final String LIST_TASK = "ar.com.AmberSoft.iEvenTask.services.ListTaskService";
 	public static final String LIST_TASK_WITH_VISIBLE_FILTER = "ar.com.AmberSoft.iEvenTask.services.ListTaskWithVisibleFilterService";
 	public static final String LIST_TASK_BY_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.ListTaskByObjectiveService";
+	public static final String DIVIDE_TASK = "ar.com.AmberSoft.iEvenTask.services.DivideTaskService";
 
 	public static final String CREATE_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.CreateObjectiveService";
 	public static final String UPDATE_OBJECTIVE = "ar.com.AmberSoft.iEvenTask.services.UpdateObjectiveService";
