@@ -18,4 +18,10 @@ public interface Seleccionable {
 	 * Se invoca cuando se realiza una accion de modificacion
 	 */
 	void onModify();
+	
+	/**
+	 * Se invoca cuando se realiza una accion de dividir
+	 */
+	void onDividir();
+
 }

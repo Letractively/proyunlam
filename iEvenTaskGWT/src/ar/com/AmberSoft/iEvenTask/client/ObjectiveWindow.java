@@ -415,4 +415,9 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void onDividir() {
+	}
+
 }

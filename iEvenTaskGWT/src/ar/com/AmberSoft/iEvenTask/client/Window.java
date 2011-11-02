@@ -202,4 +202,8 @@ public abstract class Window extends com.extjs.gxt.ui.client.widget.Window imple
 		this.unmask();
 	}
 	
+	@Override
+	public void onDividir() {
+	}
+
 }

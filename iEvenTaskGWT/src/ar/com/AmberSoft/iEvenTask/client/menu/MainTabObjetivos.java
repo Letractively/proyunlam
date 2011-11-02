@@ -195,6 +195,10 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 				
 			}
 		}
-		
 	}
+	
+	@Override
+	public void onDividir() {
+	}
+
 }
