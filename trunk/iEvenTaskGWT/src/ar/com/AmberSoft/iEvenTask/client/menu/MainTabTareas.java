@@ -282,4 +282,9 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 			}
 		}
 	}
+
+	@Override
+	public void onDividir() {
+		DialogFactory.division("probando", this);
+	}
 }

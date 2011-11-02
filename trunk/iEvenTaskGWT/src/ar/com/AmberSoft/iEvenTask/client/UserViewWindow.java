@@ -90,4 +90,8 @@ public class UserViewWindow extends Window implements Seleccionable{
 	public void onModify() {
 	}
 
+	@Override
+	public void onDividir() {
+	}
+
 }
