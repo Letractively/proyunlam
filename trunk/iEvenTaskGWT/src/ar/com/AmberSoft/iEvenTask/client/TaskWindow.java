@@ -36,9 +36,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class TaskWindow extends Window implements Seleccionable{
 	
-	public static final Integer WINDOW_WIDTH = 400;
-	public static final Integer WINDOW_HEIGTH = 490;
-	public static final Integer TASK_PANEL_WIDTH = WINDOW_WIDTH;
+	public static final Integer WINDOW_WIDTH = 410;
+	public static final Integer WINDOW_HEIGTH = 475;
+	public static final Integer TASK_PANEL_WIDTH = 400;
 	
 	
 	private final Button btnView = new Button("Opciones de visibilidad");
@@ -76,6 +76,7 @@ public class TaskWindow extends Window implements Seleccionable{
 	public TaskWindow(final boolean guardar) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW_HEIGTH);
+		setResizable(false);
 		
 		Context.getInstance().addDetailExecution("TaskWindows 1");
 		if(guardar){
@@ -89,7 +90,8 @@ public class TaskWindow extends Window implements Seleccionable{
 		Context.getInstance().addDetailExecution("TaskWindows 3");
 		taskName.setFieldLabel("Nombre");  
 		taskName.setAllowBlank(false);  
-		taskName.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());  
+		taskName.getFocusSupport().setPreviousId(taskPanel.getButtonBar().getId());
+		taskName.setMaxLength(30);
 		taskPanel.add(taskName);
 		Context.getInstance().addDetailExecution("TaskWindows 4");
 		fecha_com.setFieldLabel("Fecha Comienzo");  

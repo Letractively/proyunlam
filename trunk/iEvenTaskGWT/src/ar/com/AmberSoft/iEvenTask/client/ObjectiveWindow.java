@@ -35,9 +35,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
   
 public class ObjectiveWindow extends Window implements Seleccionable {
 	
-	public static final Integer WINDOW_WIDTH = 450;
-	public static final Integer WINDOW__HEIGTH = 450;
-	public static final Integer OBJECTIVE_PANEL_WIDTH = WINDOW_WIDTH;
+	public static final Integer WINDOW_WIDTH = 460;
+	public static final Integer WINDOW__HEIGTH = 370;
+	public static final Integer OBJECTIVE_PANEL_WIDTH = 450;
 	
 	private final Button btnView = new Button("Opciones de visibilidad");
 	private Collection usersView = new ArrayList();
@@ -76,6 +76,7 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 	public ObjectiveWindow(boolean guardar) {
 		super();
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
+		setResizable(false);
 		
 		if(guardar){
 			objPanel.setHeading("Nuevo Objetivo");
@@ -100,6 +101,8 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		objPond.setFieldLabel("Ponderacion");  
 		objPond.setAllowBlank(false);  
 		objPond.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
+		objPond.setMinValue(0);
+		objPond.setMaxValue(100);
 		objPanel.add(objPond);
 
 		objScale.setFieldLabel("Escala de Medicion");  
@@ -162,8 +165,8 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 			}
 		});
 		
-		panel.setSize(WINDOW_WIDTH, 150);
-		objPanel.add(panel);
+//		panel.setSize(WINDOW_WIDTH, 100);
+//		objPanel.add(panel);
 		
 		
 		FormButtonBinding binding = new FormButtonBinding(objPanel);  
@@ -400,8 +403,6 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 
 		return configs;
 	}
-	
-	
 	@Override
 	public void onDelete() {
 		// TODO Auto-generated method stub
