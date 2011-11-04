@@ -18,11 +18,11 @@ public class CreateEventServicesService extends CreateService {
 	public Entity getEntity(Map params) {
 		EventServices event = new EventServices();
 		event.setName((String) params.get(ParamsConst.NAME));
-		event.setPeriodicity(Service.stringToInteger((String)params.get(ParamsConst.PERIODICITY)));
+		event.setPeriodicity((Integer)params.get(ParamsConst.PERIODICITY));
 		if (params.get(ParamsConst.EXPIRATION)!=null){
 			event.setExpiration(new Date((Long)params.get(ParamsConst.EXPIRATION)));
 		}
-		event.setIterations(Service.stringToInteger((String)params.get(ParamsConst.ITERATIONS)));
+		event.setIterations((Integer)params.get(ParamsConst.ITERATIONS));
 		event.setHost((String) params.get(ParamsConst.HOST));
 		event.setPort((String) params.get(ParamsConst.PORT));
 		return event;
