@@ -41,6 +41,7 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 	private String asignado;
 	private Set<VisibleObjetivo> visibles;
 	private Set<Tarea> tareas;
+	private Integer cumplimiento;
 	
 	@Id @Column (name="id_objetivo")
 	public Integer getId() {
@@ -166,4 +167,26 @@ public class Objetivo extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity
 	public void setTareas(Set<Tarea> tareas) {
 		this.tareas = tareas;
 	}
+	
+	@Transient
+	public Integer getCumplimiento() {
+		Integer cumplimiento = 0;
+		Set<Tarea> tareas = this.getTareas();
+		if (tareas!=null){
+			Iterator<Tarea> itTareas = tareas.iterator();
+			while (itTareas.hasNext()) {
+				Tarea tarea = (Tarea) itTareas.next();
+				if (tarea.getPeso()!=null){
+					cumplimiento += tarea.getPeso() * tarea.getCumplimiento() / 100;
+				}
+				
+			}
+		}
+		
+		return cumplimiento;
+	}
+	public void setCumplimiento(Integer cumplimiento) {
+	}
+	
+	
 }
