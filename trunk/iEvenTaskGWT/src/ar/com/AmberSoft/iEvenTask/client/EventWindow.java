@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
-import ar.com.AmberSoft.iEvenTask.client.validaciones.IntegerValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -34,6 +33,7 @@ import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
+import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -67,9 +67,9 @@ public class EventWindow extends Window {
 	
 	// Campos
 	private final TextField fldName = new TextField();
-	private final TextField fldPeriodicity = new TextField();
+	private final NumberField fldPeriodicity = new NumberField();
 	private final DateField fldExpiration = new DateField();
-	private final TextField fldIterations = new TextField();
+	private final NumberField fldIterations = new NumberField();
 	private final ComboBox fldType = new ComboBox();
 	@SuppressWarnings("unchecked")
 	private final Grid grid = new Grid(this, ServiceNameConst.LIST_EVENT, getGridConfig(), 10);
@@ -251,11 +251,14 @@ public class EventWindow extends Window {
 		
 		verticalPanel.add(getFieldHorizontalLine(fldName, "Nombre", FIELD_WIDTH, LABEL_WIDTH));
 		fldName.setAllowBlank(Boolean.FALSE);
+		fldName.setMaxLength(30);
 		registerField(fldName);
 		
 		verticalPanel.add(getFieldHorizontalLine(fldPeriodicity, "Periodicidad", FIELD_WIDTH, LABEL_WIDTH));
 		fldPeriodicity.setAllowBlank(Boolean.FALSE);
-		fldPeriodicity.setValidator(new IntegerValidator());
+		fldPeriodicity.setPropertyEditorType(Integer.class);
+//		fldPeriodicity.setValidator(new IntegerValidator());
+		fldPeriodicity.setMinValue(1);
 		registerField(fldPeriodicity);
 
 		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", FIELD_WIDTH, LABEL_WIDTH));
@@ -263,8 +266,10 @@ public class EventWindow extends Window {
 		registerField(fldExpiration);
 
 		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", FIELD_WIDTH, LABEL_WIDTH));
-		fldIterations.setValidator(new IntegerValidator());
+//		fldIterations.setValidator(new IntegerValidator());
 		//field.setAllowBlank(Boolean.FALSE);
+		fldIterations.setPropertyEditorType(Integer.class);
+		fldIterations.setMinValue(1);
 		registerField(fldIterations);
 
 		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", FIELD_WIDTH, LABEL_WIDTH));
@@ -544,14 +549,12 @@ public class EventWindow extends Window {
 			eventWindowOption = EventWindowOptionFactory.getInstance().getEventWindowOption((String)actual.get(ParamsConst.CLASS), this);
 			
 			fldName.setValue(actual.get(ParamsConst.NAME));
-			fldPeriodicity.setValue(actual.get(ParamsConst.PERIODICITY));
+			fldPeriodicity.setValue((Number)actual.get(ParamsConst.PERIODICITY));
 			fldExpiration.setValue((Date)actual.get(ParamsConst.EXPIRATION));
-			fldIterations.setValue(actual.get(ParamsConst.ITERATIONS));
+			fldIterations.setValue((Number)actual.get(ParamsConst.ITERATIONS));
 			
 			eventWindowOption.beforeUpdate(actual);
-
 		}
-		
 	}
 
 	@SuppressWarnings({"unchecked"})
@@ -559,16 +562,14 @@ public class EventWindow extends Window {
 	public void onSave() {
 		maskAvaiable();
 		if (isValid()) {
-			Map params = new HashMap<String, String>();
+			Map params = new HashMap<Object, Object>();
 			params.put(ParamsConst.NAME, fldName.getValue());
 			params.put(ParamsConst.PERIODICITY, fldPeriodicity.getValue());
 			if (fldExpiration.getValue()!=null){
 				params.put(ParamsConst.EXPIRATION, fldExpiration.getValue().getTime());
 			}
 			params.put(ParamsConst.ITERATIONS,	fldIterations.getValue());
-
 			eventWindowOption.onSave(params);
-			
 			DispatcherUtil.getDispatcher().execute(params,
 					new AsyncCallback() {
 
@@ -577,7 +578,6 @@ public class EventWindow extends Window {
 							maskDisable();
 							DialogFactory.error("No pudo almacenarse el evento. Aguarde un momento y vuelva a intentarlo.");
 						}
-
 						@Override
 						public void onSuccess(Object result) {
 							maskDisable();
@@ -588,7 +588,6 @@ public class EventWindow extends Window {
 		} else {
 			maskDisable();
 		}
-		
 	}
 
 	@Override
