@@ -35,7 +35,7 @@ public class DialogDivision extends Dialog {
 		 cantidad.getPropertyEditor().setType(Integer.class);  
 		 cantidad.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
 		 cantidad.setFieldLabel("Cantidad");
-		 cantidad.setMinValue(0);  
+		 cantidad.setMinValue(2);  
 		 cantidad.setMaxValue(100);  
 		 
 		 add(cantidad);
