@@ -355,7 +355,9 @@ public class TaskWindow extends Window implements Seleccionable{
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ESTADO, fldStatus.getValue().get("key"));
+			if (fldStatus.getValue()!=null){
+				params.put(ParamsConst.ESTADO, fldStatus.getValue().get("key"));
+			}
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			}
@@ -416,7 +418,9 @@ public class TaskWindow extends Window implements Seleccionable{
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ESTADO, fldStatus.getValue().get("key"));
+			if (fldStatus.getValue()!=null){
+				params.put(ParamsConst.ESTADO, fldStatus.getValue().get("key"));
+			}
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			}
