@@ -42,6 +42,7 @@ public abstract class ParamsConst {
 	public static final String USERS_VIEW = "usersView";
 	public static final String VISIBLES = "visibles";
 	public static final String CUMPLIMIENTO = "cumplimiento";
+	public static final String TIENE_SUBTAREAS = "tieneSubtareas";
 	//constantes para tareas que no son utilizadas
 	public static final String DURACION = "duracion";
 	public static final String HORASASIGNADAS = "horas";

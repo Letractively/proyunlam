@@ -400,6 +400,8 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 
 		return configs;
 	}
+	
+	
 	@Override
 	public void onDelete() {
 		// TODO Auto-generated method stub
