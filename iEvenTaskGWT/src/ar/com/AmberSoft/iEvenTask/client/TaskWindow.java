@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.client.validaciones.StarDateValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -96,7 +97,8 @@ public class TaskWindow extends Window implements Seleccionable{
 		Context.getInstance().addDetailExecution("TaskWindows 4");
 		fecha_com.setFieldLabel("Fecha Comienzo");  
 		taskPanel.add(fecha_com);  
-		fecha_fin.setFieldLabel("Fecha Fin");  
+		fecha_fin.setFieldLabel("Fecha Fin");
+//		fecha_fin.setValidator(new StarDateValidator(fecha_com.getValue()));
 		taskPanel.add(fecha_fin);  
 		Context.getInstance().addDetailExecution("TaskWindows 5");
 		completed.setIncrement(1d);  
