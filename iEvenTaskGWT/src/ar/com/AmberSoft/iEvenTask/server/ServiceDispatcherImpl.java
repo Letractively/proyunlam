@@ -41,7 +41,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 
 	public Map execute(Map params) throws IllegalArgumentException {
 		
-		//logger.debug("Inicio ServiceDispatcher");
+		logger.debug("Inicio ServiceDispatcher");
 		
 		if ((params==null)||(params.get(ServiceNameConst.SERVICIO)==null)){
 			throw new ServiceNameNotFoundException();
@@ -84,7 +84,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 			logger.error(Tools.getStackTrace(e));
 			throw new ServiceInstantationException();
 		} finally {
-			//logger.debug("Fin ServiceDispatcher");
+			logger.debug("Fin ServiceDispatcher");
 		}
 	}
 
