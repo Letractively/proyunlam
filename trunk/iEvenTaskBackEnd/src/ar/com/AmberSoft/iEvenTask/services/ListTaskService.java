@@ -83,6 +83,23 @@ public class ListTaskService extends ListService {
 					}
 					tarea.setVisibles(nuevosVisibles);
 				}
+				
+				//Este seteo previene un ciclo infinito en la adaptacion de tipos, previo a la vista
+				//tarea.setSubtareas(null);
+				//FIXME: No necesario lo vamos a resolver en otro servicio
+				Collection<Tarea> subtareas = tarea.getSubtareas();
+				if (subtareas!=null){
+					Iterator<Tarea> itTareas = subtareas.iterator();
+					Set<Tarea> nuevasSubTareas = new HashSet<Tarea>();
+					while (itTareas.hasNext()) {
+						Tarea subTarea = (Tarea) itTareas.next();
+						subTarea.setSubtareas(null);
+						subTarea.setTareaPadre(null);
+						nuevasSubTareas.add(subTarea);
+					}
+					tarea.setSubtareas(nuevasSubTareas);
+				}
+				
 
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -107,6 +124,8 @@ public class ListTaskService extends ListService {
 			Tarea tarea = (Tarea) it.next();
 			preventLazy(tarea.getComentarios());
 			preventLazy(tarea.getVisibles());
+			//FIXME: No necesario se resuelve en otro servicio
+			preventLazy(tarea.getSubtareas());
 		}
 
 		return result;
@@ -166,6 +185,18 @@ public class ListTaskService extends ListService {
 		setVisible(tarea, visibles, "3");
 		setVisible(tarea, visibles, "5");
 		tarea.setVisibles(visibles);
+		
+		Tarea tarea2 = new Tarea();
+		tarea2.setId(generator.getIntLastTime());
+		tarea2.setNombreTarea("Tarea" + generator.getPk());
+		tarea2.setFechaComienzo(new Date());
+		tarea2.setFechaFin(new Date());
+		tarea2.setDescripcion("Descripcion" + generator.getPk());
+		tarea2.setId_usuario(generator.getPk());
+		Set subtareas = new HashSet();
+		subtareas.add(tarea2);
+		tarea.setSubtareas(subtareas);
+				
 		list.add(tarea);
 	}
 

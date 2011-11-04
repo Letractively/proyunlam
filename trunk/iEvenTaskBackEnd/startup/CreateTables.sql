@@ -33,7 +33,8 @@ create table iet_tarea (
 	tipo_tarea int,
 	id_objetivo int,
 	peso int,
-	eliminado datetime
+	eliminado datetime,
+	id_tarea_padre int
 );
 
 create table iet_subtarea (

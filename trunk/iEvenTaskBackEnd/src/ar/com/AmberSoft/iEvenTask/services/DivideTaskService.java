@@ -24,6 +24,7 @@ public class DivideTaskService extends Service {
 			nueva.setNombreTarea(tarea.getNombreTarea() + " - Parte " + i);
 			nueva.setId_usuario(tarea.getId_usuario());
 			nueva.setAsignado(tarea.getAsignado());
+			nueva.setTareaPadre(tarea);
 			nueva.defaultVisibles();
 			//FIXME: Revisar si es necesario setear algun otro valor adicional
 			getSession().save(nueva);

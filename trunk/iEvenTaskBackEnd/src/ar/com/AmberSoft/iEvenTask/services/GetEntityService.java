@@ -37,7 +37,6 @@ public abstract class GetEntityService extends Service {
 
 	@Override
 	public Map onEmulate(Map params) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

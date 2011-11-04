@@ -54,6 +54,36 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private Objetivo objetivo;
 	private Integer peso;
 	
+	private Set<Tarea> subtareas;
+	private Tarea tareaPadre;
+	
+	@Transient
+	public Boolean getTieneSubtareas() {
+		return ((this.subtareas!=null) && (this.subtareas.size()>0));
+	}
+
+	public void setTieneSubtareas(Boolean tieneSubtareas) {
+	}
+
+	@OneToMany (mappedBy="tareaPadre", fetch=FetchType.LAZY, cascade=CascadeType.ALL )
+	public Set<Tarea> getSubtareas() {
+		return subtareas;
+	}
+
+	public void setSubtareas(Set<Tarea> subtareas) {
+		this.subtareas = subtareas;
+	}
+
+	@ManyToOne (fetch=FetchType.LAZY)
+	@JoinColumn (name="id_tarea_padre")
+	public Tarea getTareaPadre() {
+		return tareaPadre;
+	}
+
+	public void setTareaPadre(Tarea tareaPadre) {
+		this.tareaPadre = tareaPadre;
+	}
+
 	public Tarea() {
 		super();
 	}
@@ -149,7 +179,23 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	}
 	@Basic @Column (name="cumplimiento")
 	public int getCumplimiento() {
-		return cumplimiento;
+		if (getTieneSubtareas()){
+			Integer cumplimiento = 0;
+			Set<Tarea> tareas = this.getSubtareas();
+			if (tareas!=null){
+				Iterator<Tarea> itTareas = tareas.iterator();
+				while (itTareas.hasNext()) {
+					Tarea tarea = (Tarea) itTareas.next();
+					if (tarea.getPeso()!=null){
+						cumplimiento += tarea.getPeso() * tarea.getCumplimiento() / 100;
+					}
+					
+				}
+			}
+			return cumplimiento;
+		} else {
+			return cumplimiento;
+		}
 	}
 	public void setCumplimiento(int cumplimiento) {
 		this.cumplimiento = cumplimiento;
