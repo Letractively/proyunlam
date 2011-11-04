@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -17,6 +18,7 @@ import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Window;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
@@ -28,10 +30,11 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.SpinnerField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class TaskWindow extends Window {
+public class TaskWindow extends Window implements Seleccionable{
 	
 	public static final Integer WINDOW_WIDTH = 400;
 	public static final Integer WINDOW_HEIGTH = 490;
@@ -42,6 +45,9 @@ public class TaskWindow extends Window {
 	private Collection usersView = new ArrayList();
 	
 	FormPanel taskPanel = new FormPanel();
+	
+	HorizontalPanel panelGrilla = new HorizontalPanel();
+	
 	@SuppressWarnings("rawtypes")
 	List<Field> toValidate = new ArrayList<Field>();
 	@SuppressWarnings("unused")
@@ -51,9 +57,6 @@ public class TaskWindow extends Window {
     DateField fecha_fin = new DateField();  
     SpinnerField completed = new SpinnerField();  
     TextArea description = new TextArea();  
-    //TextField<String> responsable = new TextField<String>();
-    @SuppressWarnings("rawtypes")
-	private final ComboBox fldUser = new ComboBox();
     Button btnGuardar = new Button("Guardar");
     Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
@@ -64,10 +67,7 @@ public class TaskWindow extends Window {
     private final SpinnerField fldPeso = new SpinnerField();  
     
     private final ComboBox fldStatus = new ComboBox();
-    
-    
-    
-    
+    private final ComboBox fldUser = new ComboBox();    
     
     /**
 	 * @param guardar: boolean true para guardar / boolean false para modificar
@@ -125,6 +125,9 @@ public class TaskWindow extends Window {
 			}
 		});
 		Context.getInstance().addDetailExecution("TaskWindows 10");
+		
+		taskPanel.add(panelGrilla);
+		
 		FormButtonBinding binding = new FormButtonBinding(taskPanel);  
 		if(guardar){
 			btnGuardar.addSelectionListener(new SelectionListener<ButtonEvent>() {
@@ -153,7 +156,11 @@ public class TaskWindow extends Window {
 	public void addStatus(){
 
 		fldStatus.setFieldLabel("Estado");
-		fldStatus.setEnabled(Boolean.TRUE);
+		//fldStatus.setEnabled(Boolean.TRUE);
+		fldStatus.setStore(new ListStore<ModelData>());
+		fldStatus.setEditable(Boolean.FALSE);
+		fldStatus.setTypeAhead(true); 
+		fldStatus.setTriggerAction(TriggerAction.ALL); 
 		
 		ListStore listStore = new ListStore();
 		listStore.add(getModelData("Pendiente", "Pendiente"));
@@ -161,9 +168,7 @@ public class TaskWindow extends Window {
 		listStore.add(getModelData("Finalizada", "Finalizada"));
 		listStore.add(getModelData("Suspendida", "Suspendida"));
 		
-		fldStatus.setStore(listStore);
-		fldStatus.setEditable(Boolean.FALSE);
-		fldUser.setTypeAhead(true);  
+		fldStatus.setStore(listStore);		 
 
 		taskPanel.add(fldStatus);
 		
@@ -296,19 +301,21 @@ public class TaskWindow extends Window {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void setCombo(ComboBox comboBox, String key) {
-		ListStore<ModelData> listStore = comboBox.getStore();
-		ModelData modelData = null;
-		if (listStore!=null){
-			Iterator it = listStore.getModels().iterator();
-			while (it.hasNext()) {
-				ModelData mdAux = (ModelData) it.next();
-				Context.getInstance().addDetailExecution("Comparando " + key + " con " + mdAux.get("key"));
-				if (key.equals(mdAux.get("key"))){
-					modelData = mdAux;
+		if (key!=null){
+			ListStore<ModelData> listStore = comboBox.getStore();
+			ModelData modelData = null;
+			if (listStore!=null){
+				Iterator it = listStore.getModels().iterator();
+				while (it.hasNext()) {
+					ModelData mdAux = (ModelData) it.next();
+					Context.getInstance().addDetailExecution("Comparando " + key + " con " + mdAux.get("key"));
+					if (key.equals(mdAux.get("key"))){
+						modelData = mdAux;
+					}
 				}
 			}
+			comboBox.setValue(modelData);
 		}
-		comboBox.setValue(modelData);
 	}
 	 
 	/**
@@ -348,7 +355,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ESTADO, fldStatus.getValue());
+			params.put(ParamsConst.ESTADO, fldStatus.getValue().get("key"));
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			}
@@ -409,7 +416,7 @@ public class TaskWindow extends Window {
 			params.put(ParamsConst.FECHA_FIN, fecha_fin.getValue());
 			params.put(ParamsConst.CUMPLIMIENTO, completed.getValue());
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
-			params.put(ParamsConst.ESTADO, fldStatus.getValue());
+			params.put(ParamsConst.ESTADO, fldStatus.getValue().get("key"));
 			if (fldUser.getValue()!=null){
 				params.put(ParamsConst.ID_USUARIO, fldUser.getValue().get("key"));
 			}
@@ -463,9 +470,23 @@ public class TaskWindow extends Window {
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.5");
 		fecha_fin.setValue((Date) actual.get(ParamsConst.FECHA_FIN));
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.6");
+		setCombo(fldStatus, (String) actual.get(ParamsConst.ESTADO));
+		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 1.7");
 		if (actual.get(ParamsConst.CUMPLIMIENTO)!=null){
 			try {
 				completed.setValue(Long.valueOf(actual.get(ParamsConst.CUMPLIMIENTO).toString()));
+				Context.getInstance().addDetailExecution("TaskWindow tieneSubtareas = " +  actual.get(ParamsConst.TIENE_SUBTAREAS));
+				if  (Boolean.TRUE.equals(actual.get(ParamsConst.TIENE_SUBTAREAS))){
+					completed.setEnabled(Boolean.FALSE);
+					Context.getInstance().addDetailExecution("TaskWindow Generando grilla de tareas relacionadas");
+					Map params = new HashMap();
+					params.put(ParamsConst.ID, actual.get(ParamsConst.ID));
+					Grid grid = new Grid(this, ServiceNameConst.LIST_TASK_BY_TASK, getGridConfig(), 10, params);
+					grid.setSize(WINDOW_WIDTH, 150);
+					panelGrilla.add(grid);
+					panelGrilla.setSize(WINDOW_WIDTH, 150);
+					
+				}
 			} catch (Exception e){
 				Context.getInstance().addDetailExecution("TaskWindow cumplimiento debe ser Long (" + actual.get(ParamsConst.DURACION).toString() + ")");
 			}
@@ -487,6 +508,30 @@ public class TaskWindow extends Window {
 		Context.getInstance().addDetailExecution("TaskWindow setValuesToUpdate 4");
 		fldPeso.setValue((Number) actual.get(ParamsConst.PESO));
 	}
+	
+	/**
+	 * Retorna la configuracion de la grilla
+	 */
+	private List getGridConfig() {
+		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
+
+		// Se agrega esta columna para mantener el identificador de los perfiles
+		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, ParamsConst.ID, 1);
+		clmncnfgId.setHidden(Boolean.TRUE);
+		configs.add(clmncnfgId);
+
+		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 150);
+		configs.add(clmncnfg1);
+
+		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PESO, "Peso", 30);
+		configs.add(clmncnfg2);
+
+		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento", 30);
+		configs.add(clmncnfg3);
+
+		return configs;
+	}
+
 
 	public Integer getId_tarea() {
 		return id_tarea;
@@ -502,6 +547,30 @@ public class TaskWindow extends Window {
 	
 	public void maskDisable(){
 		this.unmask();
+	}
+
+	@Override
+	public void onDelete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSelect(List selected) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onModify() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onDividir() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
