@@ -15,6 +15,7 @@ import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -25,10 +26,10 @@ import com.google.gwt.user.client.ui.Widget;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class IEvenTask implements EntryPoint {
 	
-	public static final Integer APP_WINDOW_WIDTH = 1024;
-	public static final Integer APP_WINDOW_HEIGTH = 650;
-	public static final Integer DEFAULT_MENU_HEIGTH = 24;
-	public static final Integer MAIN_TAB_PANEL_HEIGTH = 400;
+	public static final Integer APP_WINDOW_WIDTH = 1275;
+	public static final Integer APP_WINDOW_HEIGTH = 600;
+	public static final Integer DEFAULT_MENU_HEIGTH = 30;
+	public static final Integer MAIN_TAB_PANEL_HEIGTH = 480;
 	
 	public static final Integer DELAY = 1000;
 	
@@ -36,23 +37,11 @@ public class IEvenTask implements EntryPoint {
 	
 	private InitializePanel initializePanel;
 	
-	/*public static native void getUserLogon() /*-{
-		var objNet = CreateObject("WScript.NetWork") 
-		alert("Hola Mundo")
-		var strInfo
-		strInfo = "User Name is     " & objNet.UserName & vbCRLF & _
-		          "Computer Name is " & objNet.ComputerName & vbCRLF & _
-		          "Domain Name is   " & objNet.UserDomain
-		alert( strInfo)
-			
-	}-*/
-	//;
-
 	public void onModuleLoad(){
 		rootPanel = RootPanel.get();
 		rootPanel.setStyleName("body");
 		rootPanel.setSize(APP_WINDOW_WIDTH.toString(), APP_WINDOW_HEIGTH.toString());
-		
+
 		Map params = new HashMap();
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.CHECK_USER);
 		params.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
