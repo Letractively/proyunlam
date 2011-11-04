@@ -54,6 +54,7 @@ public abstract class Service {
 	}
 	
 	public Map execute(Map params){
+		logger.info("Ejecutando " + this.getClass().getName());
 		if (AppAdmin.getInstance().getConfig().isEmulate()){
 			return onEmulate(params);
 		}
@@ -78,7 +79,7 @@ public abstract class Service {
 				logger.error(Tools.getStackTrace(e));
 			}
 		}
-		
+		logger.info("Fin ejecucion " + this.getClass().getName());
 		return result;
 	}
 	
