@@ -124,7 +124,6 @@ public class ListTaskService extends ListService {
 			Tarea tarea = (Tarea) it.next();
 			preventLazy(tarea.getComentarios());
 			preventLazy(tarea.getVisibles());
-			//FIXME: No necesario se resuelve en otro servicio
 			preventLazy(tarea.getSubtareas());
 		}
 
