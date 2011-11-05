@@ -111,7 +111,7 @@ public class LDAPUtils {
 			// Se autentica el usuario
 			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, password);
 			
-			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", 
+			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC="+config.getString(DOMAIN)+",DC=local", 
 					LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
 
 			while (ldapSearchResults.hasMore()){
@@ -175,7 +175,7 @@ public class LDAPUtils {
 			// Se autentica el usuario
 			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, password);
 			
-			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
+			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC="+config.getString(DOMAIN)+",DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
 
 			while (ldapSearchResults.hasMore()){
 				LDAPEntry ldapEntry = ldapSearchResults.next();
@@ -205,7 +205,7 @@ public class LDAPUtils {
 			// Se autentica el usuario
 			connection.bind(LDAPConnection.LDAP_V3, config.getString(DOMAIN)+ DOUBLE_BAR + user, password);
 			
-			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC=amber,DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
+			LDAPSearchResults ldapSearchResults = connection.search("CN=Users,DC="+config.getString(DOMAIN)+",DC=local", LDAPConnection.SCOPE_SUB, "(&(objectCategory=person)(objectClass=user))", null, Boolean.FALSE);
 
 			while (ldapSearchResults.hasMore()){
 				LDAPEntry ldapEntry = ldapSearchResults.next();
