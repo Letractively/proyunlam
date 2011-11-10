@@ -53,6 +53,7 @@ public class CommentWindows extends Window {
 		addToolBar();
 		
 		TabPanel tabPanel = new TabPanel();
+		tabPanel.setTabScroll(true);
 		TabItem tbtmDetalles = new TabItem("Detalles");
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		tabPanel.add(tbtmDetalles);
@@ -61,7 +62,7 @@ public class CommentWindows extends Window {
 
 		horizontalPanel.add(getPanelFields());
 
-		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
+		add(tabPanel, new RowData(495.0, 330.0, new Margins()));
 		
 	}
 
@@ -71,7 +72,6 @@ public class CommentWindows extends Window {
 	private void initialize(String name) {
 		setInitialWidth(WINDOW_WIDTH);
 		setHeight(WINDOW_HEIGTH);
-		setMaximizable(true);
 		setTitleCollapse(true);
 		setHeading("Comentario para la tarea " + name);
 		setLayout(new RowLayout(Orientation.VERTICAL));
@@ -98,14 +98,15 @@ public class CommentWindows extends Window {
 		//Se agrega editor HTML
 		HorizontalPanel fieldHorizontalLine = new HorizontalPanel();
 		fieldHorizontalLine.setWidth(new Integer(WINDOW_WIDTH));
-		fieldHorizontalLine.add(htmlEditor);
+		htmlEditor.setWidth("494px");
 		// Realiza la validacion del campo cuando pierde el foco
 		htmlEditor.setAutoValidate(Boolean.TRUE);
 		htmlEditor.setValidateOnBlur(Boolean.TRUE);
-		htmlEditor.setWidth(FIELD_WIDTH);
+//		htmlEditor.setWidth(FIELD_WIDTH);
 		//htmlEditor.setHeight(DETAILS_HEIGTH);
 		verticalPanel.add(fieldHorizontalLine);
 		//htmlEditor.setAllowBlank(Boolean.FALSE);
+		fieldHorizontalLine.add(htmlEditor);
 		registerField(htmlEditor);
 		
 		return verticalPanel;
