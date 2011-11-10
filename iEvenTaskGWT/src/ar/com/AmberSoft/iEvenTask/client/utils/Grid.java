@@ -260,6 +260,26 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 			}
 		});
 	}
+	/**
+	 * Este metodo es igual al anterior, pero este es para objetivos, con la unica diferencia que se agrega el item "modificar"
+	 */
+	public void defaultContextMenuObjective() {
+		addMenuItemSelectAll();
+		itemDelete = addContextMenuItem(DELETE, Boolean.FALSE,
+				new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				seleccionable.onDelete();
+			}
+		});
+		itemModify = addContextMenuItem(MODIFY, Boolean.FALSE,
+				new SelectionListener<MenuEvent>() {
+			@Override
+			public void componentSelected(MenuEvent ce) {
+				seleccionable.onModify();
+			}
+		});
+	}
 
 	/**
 	 * Agrega al menu contextual un item que permite seleccionar todos los elementos
@@ -307,6 +327,22 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 				itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
 				itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
 				itemDividir.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
+				seleccionable.onSelect(seleccionados);
+			}
+		});		
+	}
+	/**
+	 * Accion que realizará por defecto al seleccionar un registro de la grilla de Objetivos
+	 */
+	public void defaultActionOnSelectItemObjective(){
+		// Acciones a realizar cuando selecciona algun registro de la grilla
+		getSelectionModel().addListener(Events.SelectionChange,
+				new Listener() {
+			@Override
+			public void handleEvent(BaseEvent be) {
+				List seleccionados = getSelectionModel().getSelection();
+				itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
+				itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
 				seleccionable.onSelect(seleccionados);
 			}
 		});		

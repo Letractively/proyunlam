@@ -57,8 +57,8 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		
 		//seteo las propiedades al componente Grid
 		grid.setSize(GRID_WIDTH, GRID_HEIGTH);
-		grid.defaultContextMenuTask();
-		grid.defaultActionOnSelectItemTask();
+		grid.defaultContextMenuObjective();
+		grid.defaultActionOnSelectItemObjective();
 		grid.setBorders(true);
 		verticalPanel_grilla.add(grid.getToolBar());
 		verticalPanel_grilla.add(grid);

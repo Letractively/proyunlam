@@ -36,7 +36,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class ObjectiveWindow extends Window implements Seleccionable {
 	
 	public static final Integer WINDOW_WIDTH = 460;
-	public static final Integer WINDOW__HEIGTH = 370;
+	public static final Integer WINDOW__HEIGTH = 385;
 	public static final Integer OBJECTIVE_PANEL_WIDTH = 450;
 	
 	private final Button btnView = new Button("Opciones de visibilidad");
