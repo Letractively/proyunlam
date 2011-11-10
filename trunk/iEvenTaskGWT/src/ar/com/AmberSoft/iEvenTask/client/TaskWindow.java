@@ -110,7 +110,8 @@ public class TaskWindow extends Window implements Seleccionable{
 		taskPanel.add(completed);  
 		Context.getInstance().addDetailExecution("TaskWindows 6");
 		description.setPreventScrollbars(true);  
-		description.setFieldLabel("Descripcion");  
+		description.setFieldLabel("Descripcion");
+		description.setMaxLength(254);
 		taskPanel.add(description);
 		
 		addStatus();

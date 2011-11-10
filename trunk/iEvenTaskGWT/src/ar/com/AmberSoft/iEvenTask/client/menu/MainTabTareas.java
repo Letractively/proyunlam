@@ -41,7 +41,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer GRID_WIDTH = IEvenTask.APP_WINDOW_WIDTH - (IEvenTask.APP_WINDOW_WIDTH/4);
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
-	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
+	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH + 10;
 	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
 	public static final Integer COMMENT_BOX_HEIGTH = 350;
 	
@@ -85,9 +85,9 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	private ContentPanel addComentarios(){
 		
 		final ContentPanel commentPanel = new ContentPanel();
-		commentPanel.setScrollMode(Scroll.AUTO);
 		commentPanel.setHeading("Comentarios");
 		commentPanel.setSize(COMMENT_WIDTH.toString(), COMMENT_HEIGTH.toString());
+//		commentPanel.setScrollMode(Scroll.AUTOy);
 
 		if ((Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS)) 
 			|| (Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS_NO_ASIGNADOS))){
