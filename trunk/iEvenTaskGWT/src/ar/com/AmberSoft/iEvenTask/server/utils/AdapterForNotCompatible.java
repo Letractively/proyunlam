@@ -20,9 +20,11 @@ public class AdapterForNotCompatible implements Compatibilizable {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object adapt(Object actual) {
+		
 		Map map = new HashMap();
 		if (actual != null){
 			try {
+				logger.info("actual=" + actual.getClass().getName());
 				map.put(ParamsConst.CLASS, actual.getClass().getName());
 				Collection properties = Arrays.asList(PropertyUtils
 						.getPropertyDescriptors(actual));
@@ -44,6 +46,7 @@ public class AdapterForNotCompatible implements Compatibilizable {
 						GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(propertyValue);
 						Compatibilizable compatibilizable = evaluatorTypes.getCompatibilizableAdapter();
 						if (propertyValue!=null){
+							logger.info("propertyValue=" + propertyValue.getClass().getName());
 							propertyValue = compatibilizable.adapt(propertyValue);
 						}
 						map.put(descriptor.getName(), propertyValue);

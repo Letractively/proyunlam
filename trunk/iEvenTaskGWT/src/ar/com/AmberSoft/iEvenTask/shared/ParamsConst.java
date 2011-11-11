@@ -40,6 +40,7 @@ public abstract class ParamsConst {
 	public static final String ASIGNADO = "asignado";
 	public static final String DESCRIPCION = "descripcion";
 	public static final String USERS_VIEW = "usersView";
+	public static final String TASK_SELECTED = "tareasSeleccionadas";
 	public static final String VISIBLES = "visibles";
 	public static final String CUMPLIMIENTO = "cumplimiento";
 	public static final String TIENE_SUBTAREAS = "tieneSubtareas";
@@ -90,4 +91,8 @@ public abstract class ParamsConst {
 	
 	public static final String USUARIO = "usuario";
 	public static final String FECHA = "fecha";
+	
+	public static final String TIPO = "tipo";
+	public static final String NOMBRE_EVENTO = "nombreEvento";
+	public static final String ACCION = "accion";
 }
