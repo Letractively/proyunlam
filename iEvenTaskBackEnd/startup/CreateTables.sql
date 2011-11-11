@@ -98,14 +98,19 @@ create table iet_relacion (
 create table iet_relacion_nueva_tarea (
 	id_relacion int primary key,
 	id_user varchar(255) not null,
-	nombre varchar(255) not null
+	nombre varchar(255) not null,
+	id_tarea int 
 );
 
 create table iet_relacion_modifica_estado (
 	id_relacion int primary key,
-	id_tarea int not null,
 	estado_inicial varchar(10) not null,
 	estado_final varchar(10) not null
+);
+
+create table iet_relacion_modifica_estado_tarea (
+	id_relacion int not null,
+	id_tarea int not null,
 );
 
 create table iet_objetivo (
@@ -191,10 +196,22 @@ ALTER TABLE iet_relacion
 ADD CONSTRAINT fk_relacion_evento FOREIGN KEY (id_evento) REFERENCES iet_evento(id_evento);
 
 ALTER TABLE iet_relacion_nueva_tarea 
+ADD CONSTRAINT fk_relacion_nueva_tarea_tarea FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id_tarea);
+
+ALTER TABLE iet_relacion_nueva_tarea 
 ADD CONSTRAINT fk_relacion_nueva_tarea_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
 
 ALTER TABLE iet_relacion_modifica_estado 
 ADD CONSTRAINT fk_relacion_modifica_estado_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion(id_relacion);
+
+ALTER TABLE iet_relacion_modifica_estado_tarea 
+ADD CONSTRAINT fk_relacion_modifica_estado_tarea_relacion FOREIGN KEY (id_relacion) REFERENCES iet_relacion_modifica_estado(id_relacion);
+
+ALTER TABLE iet_relacion_modifica_estado_tarea 
+ADD CONSTRAINT fk_relacion_modifica_estado_tarea_tarea FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id_tarea);
+
+ALTER TABLE iet_relacion_modifica_estado_tarea 
+ADD CONSTRAINT pk_relacion_modifica_estado_tarea PRIMARY KEY (id_relacion, id_tarea);
 
 ALTER TABLE iet_visible 
 ADD CONSTRAINT fk_relacion_tarea_visible FOREIGN KEY (id_tarea) REFERENCES iet_tarea(id_tarea);

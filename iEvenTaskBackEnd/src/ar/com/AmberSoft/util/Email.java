@@ -113,7 +113,6 @@ public class Email {
 	      message.setSubject(asunto);
 	      Transport.send(message);
 	    } catch (Throwable e) {
-	    	e.printStackTrace();
 	    	logger.error(Tools.getStackTrace(e));
 	    }
 	 
