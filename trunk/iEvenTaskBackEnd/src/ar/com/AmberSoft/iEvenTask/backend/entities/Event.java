@@ -1,8 +1,10 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -22,7 +24,7 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Table (name="iet_evento")
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Event extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity {
-
+	
 	/**
 	 * 
 	 */

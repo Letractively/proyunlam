@@ -1,6 +1,8 @@
 package ar.com.AmberSoft.iEvenTask.backend.entities;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -23,6 +26,10 @@ import ar.com.AmberSoft.util.PKGenerator;
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity  {
 	
+	public static final String EVENT_FILES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles";
+	public static final String EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";
+	public static final String EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
+	public static final String EVENT_SERVICES = "ar.com.AmberSoft.iEvenTask.backend.entities.EventServices";
 	/**
 	 * 
 	 */
@@ -30,7 +37,38 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 	private Integer id;
 	private Event event;
 	private Set<VisibleRelation> visibles;
-
+	
+	@Transient
+	public String getTipo(){
+		Map tipos = new HashMap();
+		tipos.put(EVENT_LDAP, "LDAP");
+		tipos.put(EVENT_LOGS, "Patron en logs");
+		tipos.put(EVENT_FILES, "Archivos");
+		tipos.put(EVENT_SERVICES, "Servicios");
+		return (String) tipos.get(this.getEvent().getClass().getName());
+	}
+	
+	public void setTipo(String tipo){}
+	
+	@Transient
+	public String getNombreEvento(){
+		return this.event.getName();
+	}
+	
+	public void setNombreEvento(String nombre){}
+	
+	@Transient
+	public String getAccion(){
+		if (this instanceof RelationWithActionCreateTask) {
+			return "Crear Tarea";
+			
+		}
+		return "Modificar Estado";
+	}
+	
+	public void setAccion(String accion){}
+	
+	
 	@Transient
 	public void addVisible(String usuario){
 		if (visibles==null){
@@ -40,7 +78,7 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 		visibles.add(visible);
 	}
 	
-	@OneToMany (mappedBy="relation", fetch=FetchType.LAZY, cascade=CascadeType.ALL )
+	@OneToMany (mappedBy="relation", fetch=FetchType.EAGER, cascade=CascadeType.ALL )
 	public Set<VisibleRelation> getVisibles() {
 		return visibles;
 	}
@@ -71,6 +109,6 @@ public abstract class Relation extends ar.com.AmberSoft.iEvenTask.backend.entiti
 		this.event = event;
 	}
 	
-	public abstract void execute();
+	public abstract void execute()  throws Exception ;
 
 }

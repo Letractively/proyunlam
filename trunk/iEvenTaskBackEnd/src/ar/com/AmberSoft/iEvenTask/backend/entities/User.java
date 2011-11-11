@@ -13,8 +13,14 @@ public class User {
 	private Date lastLogoff;
 	private byte[] password;
 	
-	
+	private Date lockTime;
 
+	public Date getLockTime() {
+		return lockTime;
+	}
+	public void setLockTime(Date lockTime) {
+		this.lockTime = lockTime;
+	}
 	public byte[] getPassword() {
 		return password;
 	}
