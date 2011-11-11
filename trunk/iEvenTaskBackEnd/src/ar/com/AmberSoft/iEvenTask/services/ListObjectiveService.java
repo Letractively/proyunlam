@@ -24,7 +24,7 @@ public class ListObjectiveService extends ListService {
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	public Map execute(Map params) {
+	public Map execute(Map params)  throws Exception {
 
 		Map result = super.execute(params);
 		

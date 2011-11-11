@@ -13,7 +13,7 @@ import ar.com.AmberSoft.util.ProfileManager;
 public class CreateProfileService extends CreateService {
 
 	@Override
-	public Map execute(Map params) {
+	public Map execute(Map params)  throws Exception {
 		Map result = super.execute(params);
 		ProfileManager.getInstance().load();
 		return result;

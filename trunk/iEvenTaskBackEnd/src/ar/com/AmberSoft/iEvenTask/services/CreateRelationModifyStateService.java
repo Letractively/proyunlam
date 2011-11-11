@@ -8,26 +8,24 @@ import java.util.Map;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Relation;
-import ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask;
+import ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithModifyStateTask;
 import ar.com.AmberSoft.util.ParamsConst;
-@SuppressWarnings({"rawtypes","unchecked"})
-public class CreateRelationCreateTaskService extends CreateService {
+
+public class CreateRelationModifyStateService extends CreateService {
 
 	@Override
-	public Map onEmulate(Map params) {
-		return null;
-	}
-
-	@Override
-	public Entity getEntity(Map params)  throws Exception {
-		RelationWithActionCreateTask relation = new RelationWithActionCreateTask();
+	public Entity getEntity(Map params) throws Exception {
+		RelationWithModifyStateTask relation = new RelationWithModifyStateTask();
 		String eventId = (String) params.get(ParamsConst.EVENT);
 		Event event = getEvent(eventId);
 		relation.setEvent(event);
-		relation.setName((String) params.get(ParamsConst.NAME));
-		relation.setUser((String) params.get(ParamsConst.USER));
-		setVisibles(params, relation);
-		return relation;
+		
+		relation.setFromState((String) params.get(ParamsConst.FROM_STATE));
+		relation.setToState((String) params.get(ParamsConst.TO_STATE));
+	
+		setTareas(params, relation);
+		
+		return relation;	
 	}
 	
 	public Event getEvent(String eventId)  throws Exception {
@@ -39,15 +37,20 @@ public class CreateRelationCreateTaskService extends CreateService {
 		return (Event) result.get(ParamsConst.ENTITY);
 	}
 	
-	public void setVisibles(Map params, Relation relation) {
-		Collection usersView = (Collection) params.get(ParamsConst.USERS_VIEW);
-		if (usersView!=null){
-			Iterator<String> itUsers = usersView.iterator();
-			while (itUsers.hasNext()) {
-				String actual = (String) itUsers.next();
-				relation.addVisible(actual);	
+	public void setTareas(Map params, RelationWithModifyStateTask relation) {
+		Collection tareas = (Collection) params.get(ParamsConst.TASK_SELECTED);
+		if (tareas!=null){
+			Iterator<Integer> itTareas = tareas.iterator();
+			while (itTareas.hasNext()) {
+				Integer actual = (Integer) itTareas.next();
+				relation.addTarea(actual);	
 			}
 		}
+	}
+
+	@Override
+	public Map onEmulate(Map params) {
+		return null;
 	}
 
 }

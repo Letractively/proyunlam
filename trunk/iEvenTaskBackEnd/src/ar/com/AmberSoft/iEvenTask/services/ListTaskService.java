@@ -28,7 +28,7 @@ public class ListTaskService extends ListService {
 	private static Logger logger = Logger.getLogger(ListTaskService.class);
 
 	@Override
-	public Map execute(Map params) {
+	public Map execute(Map params) throws Exception  {
 
 		Map result = super.execute(params);
 

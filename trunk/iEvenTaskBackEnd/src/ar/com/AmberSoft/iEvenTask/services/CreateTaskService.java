@@ -22,7 +22,7 @@ public class CreateTaskService extends CreateService {
 	}
 
 	@Override
-	public Entity getEntity(Map params) {
+	public Entity getEntity(Map params)  throws Exception {
 		
 		Tarea tarea = null;
 		if (params.get(ParamsConst.ENTITY)!=null){
@@ -71,12 +71,6 @@ public class CreateTaskService extends CreateService {
 		
 		setVisibles(params, tarea);
 		
-//		tarea.setHorasAsignadas((Integer) params.get(ParamsConst.HORASASIGNADAS));
-//		tarea.setFechaModificacion((Date) params.get(ParamsConst.FECHAMODIFICACION));
-//		tarea.setCumplimiento((Integer) params.get(ParamsConst.CUMPLIMIENTO));
-//		tarea.setTipo_tarea((Integer) params.get(ParamsConst.TIPO_TAREA));
-		
-		//private Set<Comentario> comentarios;
 		return tarea;
 	}
 

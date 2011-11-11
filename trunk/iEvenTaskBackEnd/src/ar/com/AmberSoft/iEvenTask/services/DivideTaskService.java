@@ -8,7 +8,7 @@ import ar.com.AmberSoft.util.ParamsConst;
 public class DivideTaskService extends Service {
 
 	@Override
-	public Map onExecute(Map params) {
+	public Map onExecute(Map params)  throws Exception {
 
 		Integer cantidad = (Integer) params.get(ParamsConst.CANTIDAD);
 		Integer id = (Integer) params.get(ParamsConst.ID);

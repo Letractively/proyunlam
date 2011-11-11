@@ -13,14 +13,14 @@ public class UpdateTaskService extends CreateTaskService {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Entity getEntity(Map params) {
+	public Entity getEntity(Map params)  throws Exception {
 		Tarea tarea = (Tarea) super.getEntity(params);
 		tarea.setId((Integer) params.get(ParamsConst.ID));
 		return tarea;
 	}
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Map onExecute(Map params) {
+	public Map onExecute(Map params)  throws Exception {
 		
 		deleteOldVisible((Integer) params.get(ParamsConst.ID));
 		
