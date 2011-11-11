@@ -10,7 +10,7 @@
 		<property name="dialect">org.hibernate.dialect.SQLServer2005Dialect</property>
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
-		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.format_sql">false</property>
 		<!-- Disable the second-level cache -->
 		<!-- property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property -->
 		<property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
@@ -35,9 +35,10 @@
 		<!-- Conexion con Database Server 1 -->
 		<property name="connection.url">jdbc:jtds:sqlserver://5.183.8.31:1433/ieventask</property>
 		<!-- Conexion con Database Server 2 -->
-<!-- 		<property name="connection.url">jdbc:jtds:sqlserver://5.40.97.203:1433/ieventask</property> -->
-		<!-- Conexion con Database Server All In One -->
-<!-- 		<property name="connection.url">jdbc:jtds:sqlserver://192.168.2.11:1433/ieventask</property> -->
+		<!-- property name="connection.url">jdbc:jtds:sqlserver://5.40.97.203:1433/ieventask</property -->
+		<!-- Conexion con Database Server 3 -->
+		<!-- property name="connection.url">jdbc:jtds:sqlserver://192.168.2.11:1433/ieventask</property -->
+		
 		<property name="connection.username">sa</property>
 		<property name="connection.password">Amber2011</property>
 
@@ -60,8 +61,8 @@
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.EventServices" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Relation" />
-		<mapping
-			class="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask" />
+		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithModifyStateTask" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Tarea" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Comentario" />
 		<mapping class="ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo" />
