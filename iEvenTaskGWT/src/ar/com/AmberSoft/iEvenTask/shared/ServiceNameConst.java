@@ -19,6 +19,9 @@ public abstract class ServiceNameConst {
 	public static final String CHECK_USER = "ar.com.AmberSoft.iEvenTask.services.CheckUserLogonService";
 	public static final String EXIT = "ar.com.AmberSoft.iEvenTask.services.ExitService";
 	
+	public static final String LOCK = "ar.com.AmberSoft.iEvenTask.services.LockService";
+	public static final String UNLOCK = "ar.com.AmberSoft.iEvenTask.services.UnLockService";
+	
 	public static final String BROWSE_FILE = "ar.com.AmberSoft.iEvenTask.services.BrowseFilesService";
 	
 	public static final String CREATE_PROFILE = "ar.com.AmberSoft.iEvenTask.services.CreateProfileService";

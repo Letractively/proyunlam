@@ -120,7 +120,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		}
 	}
 
-	private Map invokeExecute(Object instance, Map params) {
+	private Map invokeExecute(Object instance, Map params)  throws Exception {
 		if ((instance!=null) && (instance instanceof Service)){
 			Service service = (Service) instance;
 			return service.execute(params);
