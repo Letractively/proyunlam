@@ -90,6 +90,7 @@ public abstract class ParamsConst {
 	public static final String PROFILE = "profile";
 	
 	public static final String USUARIO = "usuario";
+	public static final String USUARIO_NOMBRE = "nombreUsuario";
 	public static final String FECHA = "fecha";
 	
 	public static final String TIPO = "tipo";

@@ -39,7 +39,7 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	
 	@SuppressWarnings("unchecked")
-	public final Grid grid = new Grid(this, ServiceNameConst.LIST_OBJECTIVE_WITH_VISIBLE_FILTER, getGridConfig(), 10);
+	public final Grid grid = new Grid(this, ServiceNameConst.LIST_OBJECTIVE_WITH_VISIBLE_FILTER, getGridConfig(), 18);
 	private final ListStore<ModelData> storeTareas = new ListStore<ModelData>();
 	private final com.extjs.gxt.ui.client.widget.grid.Grid<ModelData> gridTareas = new com.extjs.gxt.ui.client.widget.grid.Grid<ModelData>(storeTareas, new ColumnModel(getGridConfig()));
 
@@ -94,7 +94,7 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		ColumnConfig clmncnfgPonderacion = new ColumnConfig(ParamsConst.PONDERACION, "Ponderacion", 80);
 		configs.add(clmncnfgPonderacion);
 
-		ColumnConfig clmncnfgUsuarioAsignado = new ColumnConfig(ParamsConst.ID_USUARIO_ASIGNADO, "Asignado a", 100);
+		ColumnConfig clmncnfgUsuarioAsignado = new ColumnConfig(ParamsConst.ASIGNADO, "Asignado a", 100);
 		configs.add(clmncnfgUsuarioAsignado);
 
 		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 344);
