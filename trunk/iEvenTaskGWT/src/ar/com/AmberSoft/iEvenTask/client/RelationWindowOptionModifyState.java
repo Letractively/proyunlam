@@ -11,8 +11,9 @@ public class RelationWindowOptionModifyState extends RelationWindowOption {
 
 	@Override
 	public void onSave(Map params) {
-		params.put(ParamsConst.FROM_STATE, relationWindow.getFldFromState().getValue());
-		params.put(ParamsConst.TO_STATE, relationWindow.getFldToState().getValue());
+		params.put(ParamsConst.FROM_STATE, relationWindow.getFldFromState().getValue().get("key"));
+		params.put(ParamsConst.TO_STATE, relationWindow.getFldToState().getValue().get("key"));
+		//params.put(ParamsConst.DESCRIPCION, relationWindow.getFldDescription().getValue());
 		if (relationWindow.getWindowState().equals(State.UPDATE_STATE)) {
 			setId(params);
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_RELATION_MODIFY_STATE);
@@ -29,7 +30,6 @@ public class RelationWindowOptionModifyState extends RelationWindowOption {
 
 	@Override
 	public void beforeUpdate(Map actual) {
-		relationWindow.setCombo(relationWindow.getFldFromState(),(String) actual.get(ParamsConst.FROM_STATE));
 		relationWindow.setCombo(relationWindow.getFldFromState(),(String) actual.get(ParamsConst.FROM_STATE));
 		relationWindow.setCombo(relationWindow.getFldToState(),(String) actual.get(ParamsConst.TO_STATE));
 		setVisiblePanel();

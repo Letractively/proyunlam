@@ -5,15 +5,23 @@ import java.util.Iterator;
 import java.util.List;
 
 import ar.com.AmberSoft.iEvenTask.client.Context;
-import ar.com.AmberSoft.iEvenTask.client.UserViewWindow;
+import ar.com.AmberSoft.iEvenTask.client.TaskSelectWindow;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.data.ModelData;
 
-public class UserGridDataCallback extends GridDataCallback {
+public class TaskGridDataCallback extends GridDataCallback {
 	
-	UserViewWindow window;
+	TaskSelectWindow window;
+	
+	public TaskGridDataCallback(TaskSelectWindow window, Grid grid) {
+		super(grid);
+		this.window = window;
+	}
+
+
+	
 
 	@Override
 	public void onSuccess(Object result) {
@@ -21,34 +29,30 @@ public class UserGridDataCallback extends GridDataCallback {
 		List selection = new ArrayList();
 		Iterator<String> it = window.getSelecteds().iterator();
 		if (window.getSelecteds().size()<=0){
-			Context.getInstance().addDetailExecution("UG - No hay seleccionados" );
+			Context.getInstance().addDetailExecution("TG - No hay seleccionados" );
 		}
 		while (it.hasNext()) {
-			String actual = getActual(it.next());
+			Integer actual = getActual(it.next());
 			ModelData data = (ModelData)grid.searchModel(ParamsConst.ID, actual);
 			if (data!=null){
-				Context.getInstance().addDetailExecution("UG - Agregando " + data.get(ParamsConst.NAME));
+				Context.getInstance().addDetailExecution("TG - Agregando " + data.get(ParamsConst.NAME));
 				selection.add(data);
 
 			} else {
-				Context.getInstance().addDetailExecution("UG - No se encontro" + actual );
+				Context.getInstance().addDetailExecution("TG - No se encontro" + actual );
 			}
 		}
 		grid.getSelectionModel().setSelection(selection);
 	}
 
-	public String getActual(Object object){
+	public Integer getActual(Object object){
 		if (object instanceof BaseModel) {
 			BaseModel model = (BaseModel) object;
 			return model.get(ParamsConst.ID);
 		}
-		return (String) object;
+		return (Integer) object;
 	}
 	
-	public UserGridDataCallback(UserViewWindow window, Grid grid) {
-		super(grid);
-		this.window = window;
-	}
 	
 	
 	/**
