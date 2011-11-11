@@ -34,6 +34,7 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class MainTabTareas extends TabItem implements Seleccionable {
@@ -47,6 +48,8 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	
 	public static final String COMMENT_FORMAT_START = "<STRONG><EM><FONT size=2>";
 	public static final String COMMENT_FORMAT_END = "</FONT></EM></STRONG>";
+	
+	public static Integer DELAY = 1000000000;
 	
 	@SuppressWarnings("unchecked")
 	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK_WITH_VISIBLE_FILTER, getGridConfig(), 10);
@@ -80,6 +83,19 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		
 		horizontalPanel.add(verticalPanel_comentarios);
 		this.add(horizontalPanel);
+		
+		autoRefresh();
+	}
+
+	public void autoRefresh() {
+		Timer timer = new Timer() {
+			
+			@Override
+			public void run() {
+				Context.getInstance().getTaskGrid().getStore().getLoader().load();
+			}
+		};
+		timer.scheduleRepeating(DELAY);
 	}
 	
 	private ContentPanel addComentarios(){
@@ -87,7 +103,6 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		final ContentPanel commentPanel = new ContentPanel();
 		commentPanel.setHeading("Comentarios");
 		commentPanel.setSize(COMMENT_WIDTH.toString(), COMMENT_HEIGTH.toString());
-//		commentPanel.setScrollMode(Scroll.AUTOy);
 
 		if ((Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS)) 
 			|| (Context.getInstance().isAvaiable(PermissionsConst.COMENTARIOS_NO_ASIGNADOS))){
@@ -251,10 +266,36 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		if ((Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) || 
 			(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
 					&& Context.getInstance().isAvaiable(PermissionsConst.TAREAS_NO_ASIGNADAS))){
-			TaskWindow taskWindow = new TaskWindow(false);
-			Context.getInstance().addDetailExecution("TaskWindow llamada a setear valores");
-			taskWindow.setValuesToUpdate(actual);
-			taskWindow.show();
+			
+			// Antes de abrir la ventana de modificacion, se verifica si no esta siendo modificado por otro usuario
+			final Map<Object,Object> actualFinal = actual;
+			Map params = new HashMap<String, String>();
+			params.put(ParamsConst.ID, actual.get(ParamsConst.ID));
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOCK);
+			DispatcherUtil.getDispatcher().execute(params,
+					new AsyncCallback() {
+	
+						@Override
+						public void onFailure(Throwable caught) {
+							DialogFactory.error("No se ha podido bloquear la tarea a editar.");
+						}
+	
+						@Override
+						public void onSuccess(Object result) {
+							Map user = (Map)((Map)result).get(ParamsConst.USER);
+							if (user!=null){
+								DialogFactory.info("La tarea se encuentra bloqueada por el usuario " + user.get(ParamsConst.NAME));
+							} else {
+								TaskWindow taskWindow = new TaskWindow(false);
+								Context.getInstance().addDetailExecution("TaskWindow llamada a setear valores");
+								taskWindow.setValuesToUpdate(actualFinal);
+								taskWindow.show();
+							}
+						}
+	
+					});
+			
+			
 		} else {
 			DialogFactory.info("No tiene permisos para modificar tareas no asignadas.");
 		}

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
-import ar.com.AmberSoft.iEvenTask.client.validaciones.StarDateValidator;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -78,7 +77,7 @@ public class TaskWindow extends Window implements Seleccionable{
 		super();
 		setSize(WINDOW_WIDTH, WINDOW_HEIGTH);
 		setResizable(false);
-		
+
 		Context.getInstance().addDetailExecution("TaskWindows 1");
 		if(guardar){
 			taskPanel.setHeading("Nueva Tarea");
@@ -168,10 +167,10 @@ public class TaskWindow extends Window implements Seleccionable{
 		fldStatus.setTriggerAction(TriggerAction.ALL); 
 		
 		ListStore listStore = new ListStore();
-		listStore.add(getModelData("Pendiente", "Pendiente"));
-		listStore.add(getModelData("En Curso", "En Curso"));
-		listStore.add(getModelData("Finalizada", "Finalizada"));
-		listStore.add(getModelData("Suspendida", "Suspendida"));
+		listStore.add(getModelData(StatusConst.PENDIENTE, StatusConst.PENDIENTE));
+		listStore.add(getModelData(StatusConst.EN_CURSO, StatusConst.EN_CURSO));
+		listStore.add(getModelData(StatusConst.FINALIZADA, StatusConst.FINALIZADA));
+		listStore.add(getModelData(StatusConst.SUSPENDIDA, StatusConst.SUSPENDIDA));
 		
 		fldStatus.setStore(listStore);		 
 
@@ -461,7 +460,41 @@ public class TaskWindow extends Window implements Seleccionable{
 	
 	@SuppressWarnings("deprecation")
 	private void cerrarVentana(){
+		desbloquear();
 		this.close();
+	}
+	
+	@Override
+	protected void onDisable() {
+		desbloquear();
+		super.onDisable();
+	}
+	
+	  @Override
+	  protected void onHide() {
+		  desbloquear();
+		  super.onHide();
+	  }
+
+	public void desbloquear() {
+		if (actual!=null){
+			Map params = new HashMap<String, String>();
+			params.put(ParamsConst.ID, actual.get(ParamsConst.ID));
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UNLOCK);
+			DispatcherUtil.getDispatcher().execute(params,
+					new AsyncCallback() {
+	
+						@Override
+						public void onFailure(Throwable caught) {
+							DialogFactory.error("No se ha podido desbloquear la tarea.");
+						}
+	
+						@Override
+						public void onSuccess(Object result) {
+						}
+	
+					});
+		}
 	}
 	
 	public void setValuesToUpdate(Map<Object, Object> actual){

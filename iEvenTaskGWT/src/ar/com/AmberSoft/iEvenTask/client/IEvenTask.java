@@ -14,8 +14,9 @@ import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowCloseListener;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -69,6 +70,21 @@ public class IEvenTask implements EntryPoint {
 	}
 	
 	public static void iniciarSesion() {
+		//FIXME: Atrapamos el evento de cierre del explorador
+		Window.addWindowCloseListener(new WindowCloseListener() {
+			
+			@Override
+			public String onWindowClosing() {
+				cerrarSesion();
+				return null;
+			}
+			
+			@Override
+			public void onWindowClosed() {
+				
+			}
+		});
+		
 		//elimino del panel de logins
 		if (RootPanel.get("login_panel")!=null){
 			rootPanel.remove(RootPanel.get("login_panel"));
@@ -93,42 +109,6 @@ public class IEvenTask implements EntryPoint {
 		rootPanel.add(mainTabPanel);
 		rootPanel.setWidgetPosition(mainTabPanel, 0, new Integer(2*DEFAULT_MENU_HEIGTH));
 		
-		
-		/*final ToolBar toolBar = new ToolBar();
-		Timer timer = new Timer() {
-			
-			@Override
-			public void run() {
-				Map params = new HashMap();
-				params.put(ServiceNameConst.SERVICIO, ServiceNameConst.BACKGROUND_PROCESS_CONSULTING);
-				
-				DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
-
-					@Override
-					public void onFailure(Throwable caught) {
-						DialogFactory.error("Ocurrio un error al intentar consultar los procesos activos");
-					}
-
-					@Override
-					public void onSuccess(Object result) {
-						Map map = (Map) result;
-						Map processes = (Map) map.get(ParamsConst.PROCESS);
-						toolBar.setVisible(!processes.isEmpty());
-						
-						Iterator it = processes.keySet().iterator();
-						while (it.hasNext()) {
-							Integer key = (Integer) it.next();
-							Map actual = (Map) processes.get(key);
-							
-						}
-					}
-				});
-			}
-		};
-		timer.scheduleRepeating(DELAY);
-		rootPanel.add(toolBar);
-		rootPanel.setWidgetPosition(toolBar, 0, new Integer((2*DEFAULT_MENU_HEIGTH) + MAIN_TAB_PANEL_HEIGTH - 50));
-		*/
 		//cargo la barra de estado
 		MainStatusBar mainStatusBar = new MainStatusBar();
 		mainStatusBar.setId("main_status_bar");

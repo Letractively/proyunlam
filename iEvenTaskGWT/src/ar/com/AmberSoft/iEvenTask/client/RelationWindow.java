@@ -28,6 +28,7 @@ import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -64,6 +65,9 @@ public class RelationWindow extends Window {
 	
 	private final Button btnView = new Button("Opciones de visibilidad");
 	private Collection usersView = new ArrayList();
+
+	private final Button btnTask = new Button("Seleccion de tareas");
+	private Collection taskSelected = new ArrayList();
 	
 	// Campos
 	private final ComboBox fldEventType = new ComboBox();
@@ -76,6 +80,7 @@ public class RelationWindow extends Window {
 	// Campos para Creacion de Tareas
 	private final TextField fldName = new TextField();
 	private final ComboBox fldUser = new ComboBox();	
+	//TextArea fldDescription = new TextArea();  
 	// Campos para Modificacion de Estados
 	private final ComboBox fldFromState = new ComboBox();
 	private final ComboBox fldToState = new ComboBox();;
@@ -87,6 +92,11 @@ public class RelationWindow extends Window {
 	 */
 	private RelationWindowOption relationWindowOption;
 
+	
+	/*public TextArea getFldDescription() {
+		return fldDescription;
+	}*/
+	
 	public ComboBox getFldEventType() {
 		return fldEventType;
 	}
@@ -156,7 +166,16 @@ public class RelationWindow extends Window {
 				modal.show();
 			}
 		});
-
+		vPanelModifyStatus.add(btnTask);
+		btnTask.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				Context.getInstance().addDetailExecution("RelationWindow - invocando TaskSelectWindow");
+				Context.getInstance().addDetailExecution("RelationWindow - cantidad taskSelected:" + taskSelected.size());
+				TaskSelectWindow modal = new TaskSelectWindow(taskSelected);
+				modal.show();
+			}
+		});
 		add(tabPanel, new RowData(WINDOW_WIDTH, Style.DEFAULT, new Margins()));
 		
 		addGrid();
@@ -181,6 +200,36 @@ public class RelationWindow extends Window {
 			}
 			params.put(ParamsConst.USERS_VIEW, toSend);
 		}
+	}
+	
+	public void setTareas(Map<Object, Object> params) {
+		Collection toSend = new ArrayList<Integer>();
+		Context.getInstance().addDetailExecution("RelationWindow - setTareas 1");
+		if (taskSelected!=null){
+			Context.getInstance().addDetailExecution("RelationWindow - setTareas 2");
+			Iterator<ModelData> t = taskSelected.iterator();
+			Context.getInstance().addDetailExecution("RelationWindow - setTareas 3");
+			while (t.hasNext()) {
+				Context.getInstance().addDetailExecution("RelationWindow - setTareas 4");
+				Integer id = null;
+				Object actual = t.next();
+				if (actual instanceof ModelData) {
+					Context.getInstance().addDetailExecution("RelationWindow - setTareas 5");
+					Context.getInstance().addDetailExecution("RelationWindow - actual:" + actual.getClass().getName());
+					ModelData modelData = (ModelData) actual;
+					id = modelData.get("id");
+				} else {
+					Context.getInstance().addDetailExecution("RelationWindow - setTareas 6");
+					if (actual!=null){
+						id = (Integer) actual;
+					}
+				}
+				toSend.add(id);
+			}
+			Context.getInstance().addDetailExecution("RelationWindow - setTareas 7");
+			params.put(ParamsConst.TASK_SELECTED, toSend);
+		}
+		Context.getInstance().addDetailExecution("RelationWindow - setTareas 8");
 	}
 
 
@@ -354,6 +403,11 @@ public class RelationWindow extends Window {
 		bodyCaption.add(getFieldHorizontalLine(fldUser, "Usuario responsable", FIELD_WIDTH, LABEL_WIDTH));
 		fldUser.setAllowBlank(Boolean.FALSE);
 		addResponsable();
+
+		/*fldDescription.setPreventScrollbars(true);  
+		fldDescription.setFieldLabel("Descripcion");  
+		bodyCaption.add(fldDescription);
+		*/
 		caption.add(bodyCaption);
 		
 		vPanel.setVisible(Boolean.FALSE);
@@ -367,8 +421,11 @@ public class RelationWindow extends Window {
 		caption.setSize(ESPECIFIC_PANEL_WIDTH.toString(), ESPECIFIC_PANEL_HEIGTH.toString());
 
 		ListStore listStoreState = new ListStore();
-		listStoreState.add(getModelData("Creada", "Creada"));
-		listStoreState.add(getModelData("En curso", "En curso"));
+		listStoreState.add(getModelData(StatusConst.PENDIENTE, StatusConst.PENDIENTE));
+		listStoreState.add(getModelData(StatusConst.EN_CURSO, StatusConst.EN_CURSO));
+		listStoreState.add(getModelData(StatusConst.FINALIZADA, StatusConst.FINALIZADA));
+		listStoreState.add(getModelData(StatusConst.SUSPENDIDA, StatusConst.SUSPENDIDA));
+		
 
 		VerticalPanel bodyCaption = new VerticalPanel();
 		bodyCaption.add(getFieldHorizontalLine(fldFromState, "Estado inicial", FIELD_WIDTH, LABEL_WIDTH));
@@ -400,11 +457,17 @@ public class RelationWindow extends Window {
 
 		// Se agrega esta columna para mantener el identificador de los perfiles
 		ColumnConfig clmncnfgId = new ColumnConfig(ParamsConst.ID, "Identificador", 150);
-		//clmncnfgId.setHidden(Boolean.TRUE);
+		clmncnfgId.setHidden(Boolean.TRUE);
 		configs.add(clmncnfgId);
 
-		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NAME, "Nombre del Evento", 300);
+		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.TIPO, "Tipo de Evento", 100);
 		configs.add(clmncnfg1);
+		
+		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.NOMBRE_EVENTO, "Nombre", 300);
+		configs.add(clmncnfg2);
+
+		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.ACCION, "Accion", 150);
+		configs.add(clmncnfg3);
 
 		return configs;
 	}
@@ -461,6 +524,7 @@ public class RelationWindow extends Window {
 			Context.getInstance().addDetailExecution("RelationWindow 3");
 			relationWindowOption.beforeUpdate(actual);
 			Context.getInstance().addDetailExecution("RelationWindow 4");
+			
 			Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
 			if (visibles!=null){
 				Iterator<Map> itVisibles = visibles.iterator();
@@ -472,6 +536,20 @@ public class RelationWindow extends Window {
 			} else {
 				Context.getInstance().addDetailExecution("Visibles es nulo");
 			}
+			
+
+			Collection tareas = (Collection) actual.get(ParamsConst.TAREAS);
+			if (tareas!=null){
+				Iterator<Map> itVisibles = tareas.iterator();
+				while (itVisibles.hasNext()) {
+					Map map = (Map) itVisibles.next();
+					Context.getInstance().addDetailExecution("Agregando a Tareas Seleccionadas:"+map.get(ParamsConst.ID));
+					taskSelected.add(map.get(ParamsConst.ID));
+				}
+			} else {
+				Context.getInstance().addDetailExecution("Visibles es nulo");
+			}
+			
 			Context.getInstance().addDetailExecution("RelationWindow 5");
 		}
 		
@@ -479,32 +557,44 @@ public class RelationWindow extends Window {
 
 	@Override
 	public void onSave() {
+		Context.getInstance().addDetailExecution("Relation Window onSave 1");
 		maskAvaiable();
+		Context.getInstance().addDetailExecution("Relation Window onSave 2");
 		if (isValid()) {
+			Context.getInstance().addDetailExecution("Relation Window onSave 3");
 			Map params = new HashMap<String, String>();
 			params.put(ParamsConst.EVENT,	((ModelData)fldEvent.getValue()).get("key"));
+			Context.getInstance().addDetailExecution("Relation Window onSave 4");
 			setUsersVisibles(params);
+			Context.getInstance().addDetailExecution("Relation Window onSave 5");
+			setTareas(params);
+			Context.getInstance().addDetailExecution("Relation Window onSave 6");
 			relationWindowOption.onSave(params);
+			Context.getInstance().addDetailExecution("Relation Window onSave 7");
 			
 			DispatcherUtil.getDispatcher().execute(params,
 					new AsyncCallback() {
 
 						@Override
 						public void onFailure(Throwable caught) {
+							Context.getInstance().addDetailExecution("Relation Window onSave 8");
 							maskDisable();
 							DialogFactory.error("No pudo almacenarse el evento. Aguarde un momento y vuelva a intentarlo.");
 						}
 
 						@Override
 						public void onSuccess(Object result) {
+							Context.getInstance().addDetailExecution("Relation Window onSave 9");
 							maskDisable();
 							DialogFactory.info("Se almaceno el evento con exito.");
 							clear();
 							grid.getStore().getLoader().load();						}
 					});
 		} else {
+			Context.getInstance().addDetailExecution("Relation Window onSave 10");
 			maskDisable();
 		}
+		Context.getInstance().addDetailExecution("Relation Window onSave 11");
 	}
 
 	@Override

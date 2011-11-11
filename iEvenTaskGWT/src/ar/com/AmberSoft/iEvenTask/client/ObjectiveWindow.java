@@ -75,28 +75,29 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ObjectiveWindow(boolean guardar) {
 		super();
+		Context.getInstance().addDetailExecution("ObjectiveWindow 1");
 		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
 		setResizable(false);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 2");
 		if(guardar){
 			objPanel.setHeading("Nuevo Objetivo");
 		}else{
 			objPanel.setHeading("Modificar Objetivo");
 		}
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 3");
 		objPanel.setFrame(true);
 		objPanel.setWidth(OBJECTIVE_PANEL_WIDTH);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 4");
 		objName.setFieldLabel("Nombre");  
 		objName.setAllowBlank(false);  
 		objName.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
 		objPanel.add(objName);
-
+		Context.getInstance().addDetailExecution("ObjectiveWindow 5");
 		objType.setFieldLabel("Tipo");  
 		objType.setAllowBlank(false);  
 		objType.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
 		objPanel.add(objType);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 6");
 		objPond.setPropertyEditorType(Integer.class);
 		objPond.setFieldLabel("Ponderacion");  
 		objPond.setAllowBlank(false);  
@@ -104,19 +105,19 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		objPond.setMinValue(0);
 		objPond.setMaxValue(100);
 		objPanel.add(objPond);
-
+		Context.getInstance().addDetailExecution("ObjectiveWindow 7");
 		objScale.setFieldLabel("Escala de Medicion");  
 		objScale.setAllowBlank(false);  
 		objScale.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
 		objPanel.add(objScale);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 8");
 		fecha_finalizacion.setFieldLabel("Fecha Finalizacion");  
 		objPanel.add(fecha_finalizacion);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 9");
 		description.setPreventScrollbars(true);  
 		description.setFieldLabel("Descripcion");  
 		objPanel.add(description);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 10");
 		fldUser.setStore(new ListStore<ModelData>());
 		Map params = new HashMap<String, String>();
 		params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LIST_USERS);
@@ -125,6 +126,7 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						Context.getInstance().addDetailExecution("ObjectiveWindow 11");
 						Info.display(
 								"iEvenTask",
 								"No se han podido consultar los usuarios LDAP.");
@@ -132,30 +134,36 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 
 					@Override
 					public void onSuccess(Object result) {
+						Context.getInstance().addDetailExecution("ObjectiveWindow 12");
 						Map map = (Map) result;
 						Collection users = (Collection) map.get(ParamsConst.DATA);
 						ListStore listStore = new ListStore();
 						Iterator it = users.iterator();
 						while (it.hasNext()) {
-							Map actual = (Map) it.next();
-							listStore.add(getModelData((String)actual.get(ParamsConst.ID), (String)actual.get(ParamsConst.NAME)));
+							Map actualUser = (Map) it.next();
+							listStore.add(getModelData((String)actualUser.get(ParamsConst.ID), (String)actualUser.get(ParamsConst.NAME)));
 						}
-						
+						Context.getInstance().addDetailExecution("ObjectiveWindow 13");
 						fldUser.setStore(listStore);
-						String user = Context.getInstance().getUserName();
-						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO)!=null)){
-							user = actual.get(ParamsConst.ID_USUARIO).toString();
+						
+						String user = Context.getInstance().getUserID();
+						Context.getInstance().addDetailExecution("ObjectiveWindow - user=" + user);
+						if ((actual!=null) && (actual.get(ParamsConst.ID_USUARIO_ASIGNADO)!=null)){
+							user = actual.get(ParamsConst.ID_USUARIO_ASIGNADO).toString();
+							Context.getInstance().addDetailExecution("ObjectiveWindow - actual.get(ParamsConst.ID_USUARIO_ASIGNADO)=" + user);
 						}
 						setCombo(fldUser, user);
+						Context.getInstance().addDetailExecution("ObjectiveWindow 14");
 					}
 
 				});
+		Context.getInstance().addDetailExecution("ObjectiveWindow 15");
 		fldUser.setFieldLabel("Responsable");
 		fldUser.setEditable(Boolean.FALSE);
 		fldUser.setTypeAhead(true);  
 		fldUser.setTriggerAction(TriggerAction.ALL); 
 		objPanel.add(fldUser);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 16");
 		objPanel.add(btnView);
 		btnView.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			@Override
@@ -167,7 +175,7 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		
 //		panel.setSize(WINDOW_WIDTH, 100);
 //		objPanel.add(panel);
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 17");
 		
 		FormButtonBinding binding = new FormButtonBinding(objPanel);  
 		if(guardar){
@@ -183,14 +191,14 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 			objPanel.addButton(btnModificar);
 			binding.addButton(btnModificar);  
 		}
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 18");
 		btnCancelar.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
 				cerrarVentana();}});
 		objPanel.addButton(btnCancelar);
 		
 		
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 19");
 		
 	    
 	    this.add(objPanel);
@@ -284,12 +292,21 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void setUsersVisibles(Map<Object, Object> params) {
 		Collection toSend = new ArrayList<String>();
-		Iterator<ModelData> users = usersView.iterator();
-		while (users.hasNext()) {
-			ModelData modelData = (ModelData) users.next();
-			toSend.add(modelData.get("id"));
+		if (usersView!=null){
+			Iterator<ModelData> users = usersView.iterator();
+			while (users.hasNext()) {
+				String id = "";
+				Object actualUser = users.next();
+				if (actualUser instanceof ModelData) {
+					ModelData modelData = (ModelData) actualUser;
+					id = modelData.get("id");
+				} else {
+					id = (String) actualUser;
+				}
+				toSend.add(id);
+			}
+			params.put(ParamsConst.USERS_VIEW, toSend);
 		}
-		params.put(ParamsConst.USERS_VIEW, toSend);
 	}
 	
 	private void modificarObjetivo(){
@@ -297,28 +314,38 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		if (isValid()){
 			Map<Object,Object> params = new HashMap<Object,Object>();
 			
+			Context.getInstance().addDetailExecution("modificarObjetivo 1");
 			params.put(ParamsConst.NOMBRE_OBJETIVO, objName.getValue());
+			Context.getInstance().addDetailExecution("modificarObjetivo 2");
 			params.put(ParamsConst.TIPO_OBJETIVO, objType.getValue());
+			Context.getInstance().addDetailExecution("modificarObjetivo 3");
 			params.put(ParamsConst.ESCALA_MEDICION, objScale.getValue());
+			Context.getInstance().addDetailExecution("modificarObjetivo 4");
 			params.put(ParamsConst.FECHA_FINALIZACION, fecha_finalizacion.getValue());
+			Context.getInstance().addDetailExecution("modificarObjetivo 5");
 			params.put(ParamsConst.PONDERACION, objPond.getValue());
+			Context.getInstance().addDetailExecution("modificarObjetivo 6");
 			params.put(ParamsConst.ID_USUARIO_ASIGNADO, fldUser.getValue().get("key"));
+			Context.getInstance().addDetailExecution("modificarObjetivo 7");
 			params.put(ParamsConst.DESCRIPCION, description.getValue());
+			Context.getInstance().addDetailExecution("modificarObjetivo 8");
 			params.put(ParamsConst.ID, this.getId_obj());
-			
+			Context.getInstance().addDetailExecution("modificarObjetivo 9");
 			setUsersVisibles(params);
-			
+			Context.getInstance().addDetailExecution("modificarObjetivo 10");
 			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UPDATE_OBJECTIVE);
 			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback<Object>() {
 				
 				@Override
 				public void onFailure(Throwable caught) {
+					Context.getInstance().addDetailExecution("modificarObjetivo 11");
 					maskDisable();
 					DialogFactory.error("No pudo modificarse el objetivo. Aguarde un momento y vuelva a intentarlo.");
 				}
 				
 				@Override
 				public void onSuccess(Object result) {
+					Context.getInstance().addDetailExecution("modificarObjetivo 12");
 					maskDisable();
 					DialogFactory.info("Se modifico el objetivo con exito.");
 					Context.getInstance().getObjectiveGrid().getStore().getLoader().load();
@@ -326,21 +353,26 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 				}
 			});
 		} else {
+			Context.getInstance().addDetailExecution("modificarObjetivo 13");
 			maskDisable();
 		}
+		Context.getInstance().addDetailExecution("modificarObjetivo 14");
 	}
 	
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void setValuesToUpdate(Map<Object, Object> actual){
+		this.actual=actual;
+		Context.getInstance().addDetailExecution("ObjectiveWindow 20");
 		this.setId_obj(Integer.valueOf(actual.get(ParamsConst.ID).toString()));
 		objName.setValue((String) actual.get(ParamsConst.NOMBRE_OBJETIVO));
 		objType.setValue((String) actual.get(ParamsConst.TIPO_OBJETIVO));
 		objScale.setValue((String) actual.get(ParamsConst.ESCALA_MEDICION));
 		fecha_finalizacion.setValue((Date)actual.get(ParamsConst.FECHA_FINALIZACION));
 		objPond.setValue((Number) actual.get(ParamsConst.PONDERACION));
+		Context.getInstance().addDetailExecution("ObjectiveWindow 21");
 		setCombo(fldUser, (String) actual.get(ParamsConst.ID_USUARIO_ASIGNADO));
 		description.setValue((String) actual.get(ParamsConst.DESCRIPCION));
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 22");
 		Collection visibles = (Collection) actual.get(ParamsConst.VISIBLES);
 		if (visibles!=null){
 			Iterator<Map> itVisibles = visibles.iterator();
@@ -352,12 +384,13 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		} else {
 			Context.getInstance().addDetailExecution("Visibles es nulo");
 		}
-		
+		Context.getInstance().addDetailExecution("ObjectiveWindow 23");
 		Map paramsGrid = new HashMap();
 		paramsGrid.put(ParamsConst.ID_OBJETIVO, actual.get(ParamsConst.ID));
 		grid = new Grid(this, ServiceNameConst.LIST_TASK_BY_OBJECTIVE, getGridConfig(), 10, paramsGrid);
 		grid.setSize(WINDOW_WIDTH, 150);
 		panel.add(grid);
+		Context.getInstance().addDetailExecution("ObjectiveWindow 24");
 	}
 	
 	@SuppressWarnings("deprecation")
