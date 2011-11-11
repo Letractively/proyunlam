@@ -48,13 +48,25 @@ ALTER TABLE iet_evento_servicios
 DROP CONSTRAINT fk_evento_eventoservicios;
 
 ALTER TABLE iet_relacion 
-DROP CONSTRAINT fk_relacion_evento;
+DROP CONSTRAINT fk_relacion_evento 
 
 ALTER TABLE iet_relacion_nueva_tarea 
-DROP CONSTRAINT fk_relacion_nueva_tarea_relacion;
+DROP CONSTRAINT fk_relacion_nueva_tarea_tarea
+
+ALTER TABLE iet_relacion_nueva_tarea 
+DROP CONSTRAINT fk_relacion_nueva_tarea_relacion
 
 ALTER TABLE iet_relacion_modifica_estado 
-DROP CONSTRAINT fk_relacion_modifica_estado_relacion;
+DROP CONSTRAINT fk_relacion_modifica_estado_relacion
+
+ALTER TABLE iet_relacion_modifica_estado_tarea 
+DROP CONSTRAINT fk_relacion_modifica_estado_tarea_relacion
+
+ALTER TABLE iet_relacion_modifica_estado_tarea 
+DROP CONSTRAINT fk_relacion_modifica_estado_tarea_tarea
+
+ALTER TABLE iet_relacion_modifica_estado_tarea 
+DROP CONSTRAINT pk_relacion_modifica_estado_tarea
 
 ALTER TABLE iet_visible 
 DROP CONSTRAINT fk_relacion_tarea_visible;
@@ -97,6 +109,8 @@ DROP TABLE iet_relacion;
 DROP TABLE iet_relacion_nueva_tarea;
 
 DROP TABLE iet_relacion_modifica_estado;
+
+DROP TABLE iet_relacion_modifica_estado_tarea;
 
 DROP TABLE iet_objetivo;
 

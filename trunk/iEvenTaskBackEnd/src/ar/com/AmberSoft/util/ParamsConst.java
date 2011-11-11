@@ -40,6 +40,7 @@ public abstract class ParamsConst {
 	public static final String ID_USUARIO = "id_usuario";
 	public static final String ID_OBJETIVO = "id_objetivo";
 	public static final String USERS_VIEW = "usersView";
+	public static final String TASK_SELECTED = "tareasSeleccionadas";
 	public static final String PESO = "peso";
 	//constantes para tareas que no son utilizadas
 	public static final String HORASASIGNADAS = "horas";
@@ -74,6 +75,7 @@ public abstract class ParamsConst {
 	public static final String FROM_STATE = "fromState";
 	public static final String TO_STATE = "toState";
 	
+	public static final String GET_ENTITY = "getentity";
 	public static final String ENTITY = "entity";
 	
 	public static final String EVENT = "event";
