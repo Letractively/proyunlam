@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import ar.com.AmberSoft.util.PKGenerator;
 
@@ -20,8 +21,18 @@ public class Comentario {
 	private String comentario;
 	private Tarea tarea;
 	private String usuario;
+	private String nombreUsuario;
 	private Date fecha;
 	
+	@Transient
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
 	@Basic @Column(name="id_usuario")
 	public String getUsuario() {
 		return usuario;
