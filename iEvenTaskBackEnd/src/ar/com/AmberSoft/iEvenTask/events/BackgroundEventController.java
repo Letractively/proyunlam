@@ -14,6 +14,7 @@ import org.hibernate.Transaction;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
 import ar.com.AmberSoft.iEvenTask.services.ListEventService;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
 
 /**
@@ -89,27 +90,31 @@ public class BackgroundEventController extends TimerTask {
 	 * el resto de ejecuciones se planifica segun la periodicidad definida en configuracion
 	 */
 	public void run() {
-		logger.debug("Ejecutando BackgroundEventController");
-	
-		ListEventService listEventService = new ListEventService();
-		Transaction transaction = listEventService.getSession().beginTransaction();
-		Map param = new HashMap();
-		param.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
-		Map result = listEventService.execute(param);
-		
-		Collection events = (Collection) result.get(ParamsConst.DATA);
-		// Se lanza la deteccion para los eventos que tienen alguna relacion establecida
-		// y que no se encuentren actualmente en ejecucion
-		for (Iterator iterator = events.iterator(); iterator.hasNext();) {
-			Event event = (Event) iterator.next();
-			Set relations = event.getRelationsAvaiable();
-			if ((activeProcesses.get(event.getId())==null) && (relations!=null) && (relations.size()>0)){
-				activeProcesses.put(event.getId(), factory.getProcess(event));
+		try {
+			logger.debug("Ejecutando BackgroundEventController");
+			
+			ListEventService listEventService = new ListEventService();
+			Transaction transaction = listEventService.getSession().beginTransaction();
+			Map param = new HashMap();
+			param.put(ParamsConst.TRANSACTION_CONTROL, Boolean.FALSE);
+			Map result = listEventService.execute(param);
+			
+			Collection events = (Collection) result.get(ParamsConst.DATA);
+			// Se lanza la deteccion para los eventos que tienen alguna relacion establecida
+			// y que no se encuentren actualmente en ejecucion
+			for (Iterator iterator = events.iterator(); iterator.hasNext();) {
+				Event event = (Event) iterator.next();
+				Set relations = event.getRelationsAvaiable();
+				if ((activeProcesses.get(event.getId())==null) && (relations!=null) && (relations.size()>0)){
+					activeProcesses.put(event.getId(), factory.getProcess(event));
+				}
 			}
+			transaction.commit();
+			new BackgroundEventController(this);
+			logger.debug("Fin BackgroundEventController");
+		} catch (Exception e){
+			logger.error(Tools.getStackTrace(e));
 		}
-		transaction.commit();
-		new BackgroundEventController(this);
-		logger.debug("Fin BackgroundEventController");
 	}
 
 	public BackgroundEventFactory getFactory() {

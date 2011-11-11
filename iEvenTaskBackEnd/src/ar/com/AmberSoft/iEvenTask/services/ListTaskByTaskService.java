@@ -7,13 +7,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class ListTaskByTaskService extends GetTaskService {
 
+	private static Logger logger = Logger.getLogger(ListTaskByTaskService.class);
+	
 	@Override
-	public Map execute(Map params) {
+	public Map execute(Map params)  throws Exception {
 
 		Map result = super.execute(params);
 		
@@ -64,7 +69,12 @@ public class ListTaskByTaskService extends GetTaskService {
 	@Override
 	public Map onEmulate(Map params) {
 		ListTaskService listTask = new ListTaskService();
-		return listTask.execute(new HashMap());
+		try {
+			return listTask.execute(new HashMap());
+		} catch (Exception e) {
+			logger.error(Tools.getStackTrace(e));
+		}
+		return null;
 	}
 
 

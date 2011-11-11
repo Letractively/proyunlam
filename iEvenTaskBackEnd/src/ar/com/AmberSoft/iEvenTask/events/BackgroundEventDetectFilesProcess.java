@@ -10,13 +10,15 @@ import org.apache.log4j.Logger;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
 import ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles;
 import ar.com.AmberSoft.iEvenTask.services.UpdateEntityService;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
 
-@SuppressWarnings({"rawtypes","unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class BackgroundEventDetectFilesProcess extends
 		BackgroundEventDetectProcess {
-	
-	private static Logger logger = Logger.getLogger(BackgroundEventDetectFilesProcess.class);
+
+	private static Logger logger = Logger
+			.getLogger(BackgroundEventDetectFilesProcess.class);
 
 	public BackgroundEventDetectFilesProcess(Event event) {
 		super(event);
@@ -28,30 +30,37 @@ public class BackgroundEventDetectFilesProcess extends
 		Boolean detected = Boolean.FALSE;
 		File file = new File(getEvent().getPath());
 		// Se esta detectando una creacion
-		if (getEvent().getControlType() == 1){
-			if (file.exists()){
-				logger.debug("Se detecta la creacion del archivo:" + getEvent().getPath());
+		if (getEvent().getControlType() == 1) {
+			if (file.exists()) {
+				logger.debug("Se detecta la creacion del archivo:"
+						+ getEvent().getPath());
 				detected = Boolean.TRUE;
 			}
 		} else {
 			// Se esta detectando una modificacion
 			Date lastModified = new Date(file.lastModified());
-			if ((getEvent().getLastModification()!=null) && (!getEvent().getLastModification().equals(lastModified))){
-				logger.debug("Se detecta la modificacion del archivo:" + getEvent().getPath());
+			if ((getEvent().getLastModification() != null)
+					&& (!getEvent().getLastModification().equals(lastModified))) {
+				logger.debug("Se detecta la modificacion del archivo:"
+						+ getEvent().getPath());
 				detected = Boolean.TRUE;
-			} 
+			}
 			getEvent().setLastModification(lastModified);
 			UpdateEntityService entityService = new UpdateEntityService();
 			Map params = new HashMap();
 			params.put(ParamsConst.ENTITY, getEvent());
-			entityService.execute(params);
+			try {
+				entityService.execute(params);
+			} catch (Exception e) {
+				logger.error(Tools.getStackTrace(e));
+			}
 		}
-		
+
 		logger.debug("Fin deteccion de archivos");
 		return detected;
 	}
-	
-	public EventFiles getEvent(){
+
+	public EventFiles getEvent() {
 		return (EventFiles) event;
 	}
 
