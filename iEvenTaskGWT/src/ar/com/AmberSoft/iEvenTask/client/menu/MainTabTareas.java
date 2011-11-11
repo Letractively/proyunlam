@@ -52,7 +52,7 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static Integer DELAY = 1000000000;
 	
 	@SuppressWarnings("unchecked")
-	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK_WITH_VISIBLE_FILTER, getGridConfig(), 10);
+	public final Grid grid = new Grid(this, ServiceNameConst.LIST_TASK_WITH_VISIBLE_FILTER, getGridConfig(), 18);
 	
 	
 	public MainTabTareas(){
@@ -319,13 +319,13 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 				Context.getInstance().addComment(
 						(String) actual.get(ParamsConst.COMENTARIO),
 						(Date) actual.get(ParamsConst.FECHA), 
-						(String) actual.get(ParamsConst.USUARIO));
+						(String) actual.get(ParamsConst.USUARIO_NOMBRE));
 			}
 		}
 	}
 
 	@Override
 	public void onDividir() {
-		DialogFactory.division("probando", this);
+		DialogFactory.division("en:", this);
 	}
 }
