@@ -48,8 +48,7 @@ public class ListTaskService extends ListService {
 				}
 			}
 
-			Collection<Tarea> tareas = (Collection<Tarea>) result
-					.get(ParamsConst.DATA);
+			Collection<Tarea> tareas = (Collection<Tarea>) result.get(ParamsConst.DATA);
 			Iterator<Tarea> it = tareas.iterator();
 			while (it.hasNext()) {
 				Tarea tarea = (Tarea) it.next();
@@ -66,6 +65,12 @@ public class ListTaskService extends ListService {
 					Set<Comentario> nuevosComentarios = new HashSet<Comentario>();
 					while (itComentarios.hasNext()) {
 						Comentario comentario = (Comentario) itComentarios.next();
+						if (users != null) {
+							User commentUser = users.get(comentario.getUsuario());
+							if (commentUser != null) {
+								comentario.setNombreUsuario(commentUser.getName());
+							}
+						}
 						comentario.setTarea(null);
 						nuevosComentarios.add(comentario);
 					}
