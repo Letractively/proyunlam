@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
+import ar.com.AmberSoft.iEvenTask.client.validaciones.ValidateFecha;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
@@ -30,6 +31,7 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.SpinnerField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -53,8 +55,8 @@ public class TaskWindow extends Window implements Seleccionable{
 	@SuppressWarnings("unused")
 	private Boolean editing = Boolean.FALSE;
     TextField<String> taskName = new TextField<String>();
-    DateField fecha_com = new DateField();  
-    DateField fecha_fin = new DateField();  
+    private final DateField fecha_com = new DateField();  
+    private final DateField fecha_fin = new DateField();  
     SpinnerField completed = new SpinnerField();  
     TextArea description = new TextArea();  
     Button btnGuardar = new Button("Guardar");
@@ -97,7 +99,9 @@ public class TaskWindow extends Window implements Seleccionable{
 		fecha_com.setFieldLabel("Fecha Comienzo");  
 		taskPanel.add(fecha_com);  
 		fecha_fin.setFieldLabel("Fecha Fin");
-//		fecha_fin.setValidator(new StarDateValidator(fecha_com.getValue()));
+		fecha_fin.setValidator(new ValidateFecha(fecha_com));
+
+		
 		taskPanel.add(fecha_fin);  
 		Context.getInstance().addDetailExecution("TaskWindows 5");
 		completed.setIncrement(1d);  

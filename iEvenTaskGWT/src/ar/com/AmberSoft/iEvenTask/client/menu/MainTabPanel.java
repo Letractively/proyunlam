@@ -19,9 +19,9 @@ public class MainTabPanel extends TabPanel {
 			this.add(mainTabTareas);
 		}
 		//agrego el tab de objetivos
-		if (Context.getInstance().isAvaiable(PermissionsConst.OBJETIVOS)){
+		//if (Context.getInstance().isAvaiable(PermissionsConst.OBJETIVOS)){
 			MainTabObjetivos mainTabObjetivos = new MainTabObjetivos();
 			this.add(mainTabObjetivos);
-		}
+		//}
 	}
 }
