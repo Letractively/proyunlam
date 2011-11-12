@@ -91,12 +91,14 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		Context.getInstance().addDetailExecution("ObjectiveWindow 4");
 		objName.setFieldLabel("Nombre");  
 		objName.setAllowBlank(false);  
-		objName.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
+		objName.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());
+		objName.setMaxLength(30);
 		objPanel.add(objName);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 5");
 		objType.setFieldLabel("Tipo");  
 		objType.setAllowBlank(false);  
-		objType.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
+		objType.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());
+		objType.setMaxLength(20);
 		objPanel.add(objType);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 6");
 		objPond.setPropertyEditorType(Integer.class);
@@ -107,8 +109,10 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		objPond.setMaxValue(100);
 		objPanel.add(objPond);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 7");
-		objScale.setFieldLabel("Escala de Medicion");  
-		objScale.setAllowBlank(false);  
+		objScale.setFieldLabel("Escala de Medicion");
+		objScale.setMaxLength(255);
+		objScale.setAllowBlank(false);
+		
 		objScale.getFocusSupport().setPreviousId(objPanel.getButtonBar().getId());  
 		objPanel.add(objScale);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 8");
@@ -127,6 +131,7 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		Context.getInstance().addDetailExecution("ObjectiveWindow 9");
 		description.setPreventScrollbars(true);  
 		description.setFieldLabel("Descripcion");  
+		description.setMaxLength(255);
 		objPanel.add(description);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 10");
 		fldUser.setStore(new ListStore<ModelData>());
