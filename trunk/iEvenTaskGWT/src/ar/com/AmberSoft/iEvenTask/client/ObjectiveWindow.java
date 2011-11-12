@@ -30,6 +30,7 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.google.gwt.user.client.rpc.AsyncCallback;
   
@@ -112,6 +113,16 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		objPanel.add(objScale);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 8");
 		fecha_finalizacion.setFieldLabel("Fecha Finalizacion");  
+		fecha_finalizacion.setValidator(new Validator() {
+			
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (((DateField)field).getValue().before(new Date())){
+					return "La fecha de finalizacion debe ser posterior a la fecha actual.";
+				}
+				return null;
+			}
+		});
 		objPanel.add(fecha_finalizacion);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 9");
 		description.setPreventScrollbars(true);  

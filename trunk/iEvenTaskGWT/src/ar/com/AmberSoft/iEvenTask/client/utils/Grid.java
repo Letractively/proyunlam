@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.AmberSoft.iEvenTask.client.Context;
+import ar.com.AmberSoft.iEvenTask.client.PermissionsConst;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
 
 import com.extjs.gxt.ui.client.core.El;
@@ -341,8 +343,10 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 			@Override
 			public void handleEvent(BaseEvent be) {
 				List seleccionados = getSelectionModel().getSelection();
-				itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
-				itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
+				if (Context.getInstance().isAvaiable(PermissionsConst.OBJETIVOS)){
+					itemDelete.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty())));
+					itemModify.setEnabled(((seleccionados!=null) && (!seleccionados.isEmpty()) && (seleccionados.size()==1)));
+				}
 				seleccionable.onSelect(seleccionados);
 			}
 		});		
