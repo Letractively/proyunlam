@@ -59,12 +59,31 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	
 	@Transient
 	public Boolean getTieneSubtareas() {
-		return ((this.subtareas!=null) && (this.subtareas.size()>0));
+		return ((this.getSubtareasActivas()!=null) && (this.getSubtareasActivas().size()>0));
 	}
 
 	public void setTieneSubtareas(Boolean tieneSubtareas) {
 	}
 
+	
+	@Transient
+	public Set<Tarea> getSubtareasActivas() {
+		Set<Tarea> activas = new HashSet<Tarea>();
+		if (subtareas!=null){
+			Iterator itSubtareas = subtareas.iterator();
+			while (itSubtareas.hasNext()) {
+				Tarea tarea = (Tarea) itSubtareas.next();
+				if (tarea.getDelete()==null){
+					activas.add(tarea);
+				}
+			}
+		}
+		return activas; 
+	}
+
+	public void setSubtareasActivas(Set<Tarea> subtareas) {
+	}
+	
 	@OneToMany (mappedBy="tareaPadre", fetch=FetchType.LAZY, cascade=CascadeType.ALL )
 	public Set<Tarea> getSubtareas() {
 		return subtareas;
