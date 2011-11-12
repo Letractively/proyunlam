@@ -241,15 +241,229 @@ insert into iet_permiso values (10, 'Reasignar Tareas');
 insert into iet_permiso values (11, 'Subdividir Tareas');
 insert into iet_permiso values (12, 'Relacionar con objetivo');
 
-insert into iet_permiso_perfil values (1,1);
-insert into iet_permiso_perfil values (2,1);
-insert into iet_permiso_perfil values (3,1);
-insert into iet_permiso_perfil values (4,1);
-insert into iet_permiso_perfil values (5,1);
-insert into iet_permiso_perfil values (6,1);
-insert into iet_permiso_perfil values (7,1);
-insert into iet_permiso_perfil values (8,1);
-insert into iet_permiso_perfil values (9,1);
-insert into iet_permiso_perfil values (10,1);
-insert into iet_permiso_perfil values (11,1);
-insert into iet_permiso_perfil values (12,1);
+------------------------------------------------------------
+---              CARGA DE PERFILES                       ---
+------------------------------------------------------------
+
+INSERT INTO dbo.iet_perfil
+(id_perfil, grupo_ldap, eliminado)
+VALUES
+(-2045373390, 'G_ieventask_director', NULL);
+
+INSERT INTO dbo.iet_perfil
+(id_perfil, grupo_ldap, eliminado)
+VALUES
+(-1932950264, 'G_ieventask_gerente_lider', NULL);
+
+INSERT INTO dbo.iet_perfil
+(id_perfil, grupo_ldap, eliminado)
+VALUES
+(-1932893422, 'G_ieventask_analista', NULL);
+
+------------------------------------------------------------
+---            CARGA DE PERMISOS PERFILES                ---
+------------------------------------------------------------
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(1, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(2, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(2, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(2, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(2, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(3, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(3, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(3, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(3, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(4, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(4, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(4, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(4, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(5, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(5, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(5, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(6, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(6, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(6, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(7, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(7, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(7, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(7, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(8, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(8, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(8, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(8, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(9, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(9, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(9, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(9, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(10, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(10, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(10, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(10, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(11, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(11, -1932950264);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(11, 1);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(12, -2045373390);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(12, -1932893422);
+
+INSERT INTO dbo.iet_permiso_perfil
+(id_permiso, id_perfil)
+VALUES
+(12, 1);
