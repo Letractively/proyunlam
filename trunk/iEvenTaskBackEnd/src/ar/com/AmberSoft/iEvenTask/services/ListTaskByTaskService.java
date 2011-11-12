@@ -33,7 +33,9 @@ public class ListTaskByTaskService extends GetTaskService {
 				Tarea subTarea = (Tarea) itTareas.next();
 				subTarea.setSubtareas(null);
 				subTarea.setTareaPadre(null);
-				nuevasSubTareas.add(subTarea);
+				if (subTarea.getDelete()==null){
+					nuevasSubTareas.add(subTarea);
+				}
 			}
 		}
 		
