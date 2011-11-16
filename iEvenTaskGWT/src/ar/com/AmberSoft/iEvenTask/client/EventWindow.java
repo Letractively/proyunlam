@@ -36,6 +36,7 @@ import com.extjs.gxt.ui.client.widget.form.LabelField;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.Validator;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
@@ -258,11 +259,21 @@ public class EventWindow extends Window {
 		fldPeriodicity.setAllowBlank(Boolean.FALSE);
 		fldPeriodicity.setPropertyEditorType(Integer.class);
 //		fldPeriodicity.setValidator(new IntegerValidator());
-		fldPeriodicity.setMinValue(1);
+		fldPeriodicity.setMinValue(10000);
+		fldPeriodicity.setMaxValue(2147483646);//maximo valor de un int en sql server
 		registerField(fldPeriodicity);
 
 		verticalPanel.add(getFieldHorizontalLine(fldExpiration, "Fecha de Expiracion", FIELD_WIDTH, LABEL_WIDTH));
-		//field.setAllowBlank(Boolean.FALSE);
+		fldExpiration.setValidator(new Validator() {
+			
+			@Override
+			public String validate(Field<?> field, String value) {
+				if (((DateField)field).getValue().before(new Date())){
+					return "La fecha de expiracion debe ser posterior a la fecha actual.";
+				}
+				return null;
+			}
+		});
 		registerField(fldExpiration);
 
 		verticalPanel.add(getFieldHorizontalLine(fldIterations, "Cantidad de iteraciones", FIELD_WIDTH, LABEL_WIDTH));
@@ -270,6 +281,7 @@ public class EventWindow extends Window {
 		//field.setAllowBlank(Boolean.FALSE);
 		fldIterations.setPropertyEditorType(Integer.class);
 		fldIterations.setMinValue(1);
+		fldIterations.setMaxValue(2147483646);//maximo valor de un int en sql server
 		registerField(fldIterations);
 
 		verticalPanel.add(getFieldHorizontalLine(fldType, "Tipo de Evento", FIELD_WIDTH, LABEL_WIDTH));
@@ -377,7 +389,7 @@ public class EventWindow extends Window {
 		
 		bodyCaption.add(getFieldHorizontalLine(fldPatern, "Patron", FIELD_WIDTH, LABEL_WIDTH));
 		fldPatern.setAllowBlank(Boolean.FALSE);
-		
+		fldPatern.setMaxLength(255);
 	}
 
 	@SuppressWarnings({"unchecked"})
@@ -410,6 +422,7 @@ public class EventWindow extends Window {
 	public void addFileSearch(VerticalPanel bodyCaption) {
 		bodyCaption.add(getFieldHorizontalLine(fldPath, btnPath, "Ruta", FIELD_WIDTH, LABEL_WIDTH));
 		fldPath.setAllowBlank(Boolean.FALSE);
+		fldPath.setMaxLength(255);
 		btnPath.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			@Override
 			public void componentSelected(ButtonEvent ce) {
