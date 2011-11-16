@@ -1,9 +1,14 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Visible;
 import ar.com.AmberSoft.util.ParamsConst;
+import ar.com.AmberSoft.util.StatusConst;
 
 public class DivideTaskService extends Service {
 
@@ -25,8 +30,28 @@ public class DivideTaskService extends Service {
 			nueva.setId_usuario(tarea.getId_usuario());
 			nueva.setAsignado(tarea.getAsignado());
 			nueva.setTareaPadre(tarea);
+			nueva.setFechaComienzo(tarea.getFechaComienzo());
+			nueva.setFechaFin(tarea.getFechaFin());
+			nueva.setFechaCreacion(new Date());
+			nueva.setEstado(StatusConst.PENDIENTE);
+			
+			Set<Visible> visibles =  tarea.getVisibles();
+			if (visibles!=null){
+				Iterator<Visible> itVisible = visibles.iterator();
+				while (itVisible.hasNext()) {
+					Visible visible = (Visible) itVisible.next();
+					nueva.addVisible(visible.getUsuario());
+				}
+			}
+			
+			if (tarea.getPeso()!=null){
+				nueva.setPeso(tarea.getPeso()/cantidad);
+			} else {
+				nueva.setPeso(0);
+			}
+			
 			nueva.defaultVisibles();
-			//FIXME: Revisar si es necesario setear algun otro valor adicional
+
 			getSession().save(nueva);
 		}
 

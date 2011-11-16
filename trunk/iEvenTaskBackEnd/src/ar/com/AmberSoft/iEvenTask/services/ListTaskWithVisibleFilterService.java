@@ -1,10 +1,19 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.Query;
+
+import com.extjs.gxt.ui.client.data.BaseFilterConfig;
+
+import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
+import ar.com.AmberSoft.iEvenTask.utils.FiltersWrapperFactory;
+import ar.com.AmberSoft.iEvenTask.utils.Wrapper;
 import ar.com.AmberSoft.util.ParamsConst;
 
 public class ListTaskWithVisibleFilterService extends ListTaskService {
@@ -46,5 +55,23 @@ public class ListTaskWithVisibleFilterService extends ListTaskService {
 		query.setString("uservisible", user.getId());
 		queryCount.setString("uservisible", user.getId());
 	}
-
+	
+	@Override
+	public void setFiltersInQueryText(Map params) {
+		queryText.append(WHERE);
+		queryText.append(Entity.DELETE_COLUMN);
+		queryText.append(IS_NULL);
+		Collection filters = (Collection) params.get(FILTERS);
+		if (filters!=null){
+			Iterator it = filters.iterator();
+			while (it.hasNext()) {
+				queryText.append(AND);
+				BaseFilterConfig filter = (BaseFilterConfig) it.next();
+				queryText.append(" T." + filter.getField());
+				queryText.append(operatorOnWhere.get(filter.getClass().getName()));
+				queryText.append(QUESTION_SYMBOL);
+			}
+		}
+	}
+	
 }
