@@ -136,6 +136,7 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 		// convenientemente
 		super(new ListStore(new Loader(serviceName, null, params)), new ColumnModel(configs));
 		initialize(seleccionable, pageSize);
+		
 	}
 
 	public Grid(Seleccionable seleccionable, String serviceName, List<ColumnConfig> configs, final Integer pageSize) {

@@ -52,6 +52,8 @@ public class ObjectiveWindow extends Window implements Seleccionable {
     TextField<String> objType = new TextField<String>();
     NumberField objPond = new NumberField();
     
+    NumberField cumplimiento = new NumberField();
+    
     TextField<String> objScale = new TextField<String>();
     DateField fecha_finalizacion = new DateField();  
     TextArea description = new TextArea();  
@@ -188,6 +190,10 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 				modal.show();
 			}
 		});
+		
+		this.cumplimiento.setVisible(Boolean.FALSE);
+		this.cumplimiento.setEnabled(Boolean.FALSE);
+		this.cumplimiento.setFieldLabel("Porcentaje de cumplimiento:");
 		
 //		panel.setSize(WINDOW_WIDTH, 100);
 //		objPanel.add(panel);
@@ -405,6 +411,8 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		paramsGrid.put(ParamsConst.ID_OBJETIVO, actual.get(ParamsConst.ID));
 		grid = new Grid(this, ServiceNameConst.LIST_TASK_BY_OBJECTIVE, getGridConfig(), 10, paramsGrid);
 		grid.setSize(WINDOW_WIDTH, 150);
+		this.cumplimiento.setVisible(Boolean.TRUE);
+		this.cumplimiento.setValue((Number) actual.get(ParamsConst.CUMPLIMIENTO));
 		panel.add(grid);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 24");
 	}

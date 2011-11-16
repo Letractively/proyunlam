@@ -53,8 +53,8 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		
 		try {
 			logger.debug("Invocando " + params.get(ServiceNameConst.SERVICIO));
-			Class type = getType(params);
-			Map toReturn = invokeExecute(type.newInstance(), params);
+			
+			Map toReturn = invoke(params);
 			
 			if (toReturn!=null){
 				
@@ -86,6 +86,13 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		} finally {
 			logger.debug("Fin ServiceDispatcher");
 		}
+	}
+
+	public Map invoke(Map params) throws Exception, InstantiationException,
+			IllegalAccessException {
+		Class type = getType(params);
+		Map toReturn = invokeExecute(type.newInstance(), params);
+		return toReturn;
 	}
 
 	public void validateActiveSession(Map params) {
@@ -120,7 +127,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		}
 	}
 
-	private Map invokeExecute(Object instance, Map params)  throws Exception {
+	private static Map invokeExecute(Object instance, Map params)  throws Exception {
 		if ((instance!=null) && (instance instanceof Service)){
 			Service service = (Service) instance;
 			return service.execute(params);
@@ -128,7 +135,7 @@ public class ServiceDispatcherImpl extends RemoteServiceServlet implements
 		return null;
 	}
 
-	private Class getType(Map params) {
+	private static Class getType(Map params) {
 		String serviceName = (String) params.get(ServiceNameConst.SERVICIO);
 		Class type;
 		try {

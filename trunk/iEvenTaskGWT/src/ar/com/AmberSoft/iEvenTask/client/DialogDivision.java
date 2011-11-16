@@ -1,8 +1,6 @@
 package ar.com.AmberSoft.iEvenTask.client;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +11,6 @@ import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
 import com.extjs.gxt.ui.client.data.ModelData;
-import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.Dialog;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.SpinnerField;
@@ -70,7 +67,7 @@ public class DialogDivision extends Dialog {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								DialogFactory.error("No se ha dividir la tarea.");
+								DialogFactory.error("No se fue posible dividir la tarea.");
 							}
 
 							@Override

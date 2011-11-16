@@ -2,9 +2,13 @@
 <module rename-to='ieventask'>
 	<!-- Inherit the core Web Toolkit stuff.                        -->
 	<inherits name='com.google.gwt.user.User' />
-  	<inherits name="com.google.gwt.i18n.I18N"/>
-  	
-<!-- 	<set-property name="locale" value="es_AR" /> -->
+	<inherits name="com.google.gwt.i18n.I18N"/>
+
+	<extend-property name="locale" values="es"/>
+	
+	<set-property-fallback name="locale" value="es"/>	
+    
+
 	<!-- Inherit the default GWT style sheet.  You can change       -->
 	<!-- the theme of your GWT application by uncommenting          -->
 	<!-- any one of the following lines.                            -->
