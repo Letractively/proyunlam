@@ -23,6 +23,7 @@ public abstract class ServiceNameConst {
 	public static final String UNLOCK = "ar.com.AmberSoft.iEvenTask.services.UnLockService";
 	
 	public static final String BROWSE_FILE = "ar.com.AmberSoft.iEvenTask.services.BrowseFilesService";
+	public static final String SET_PARAMS_ON_SESSION = "ar.com.AmberSoft.iEvenTask.services.SetParamsOnSessionService";
 	
 	public static final String CREATE_PROFILE = "ar.com.AmberSoft.iEvenTask.services.CreateProfileService";
 	public static final String UPDATE_PROFILE = "ar.com.AmberSoft.iEvenTask.services.UpdateProfileService";

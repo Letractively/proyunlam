@@ -13,7 +13,7 @@
 
   <servlet>
     <servlet-name>report</servlet-name>
-    <servlet-class>ar.com.AmberSoft.iEvenTask.server.reports.ReportDispatcher</servlet-class>
+    <servlet-class>ar.com.AmberSoft.iEvenTask.reports.ReportDispatcher</servlet-class>
   </servlet>
   
   <servlet-mapping>

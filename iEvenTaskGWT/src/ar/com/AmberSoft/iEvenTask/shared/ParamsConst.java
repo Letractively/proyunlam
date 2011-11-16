@@ -5,11 +5,14 @@ public abstract class ParamsConst {
 	private ParamsConst(){}
 	
 	public static final String CLASS = "class";
+	public static final String LOAD_CONFIG = "loadConfig";
+	public static final String COLUMN_MODEL = "columnModel";
 	public static final String EVENT_LDAP = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP";
 	public static final String EVENT_FILE = "ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles";
 	public static final String EVENT_SERVICE = "ar.com.AmberSoft.iEvenTask.backend.entities.EventServices";
 	public static final String EVENT_LOGS = "ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs";
-	
+	public static final String TITLE = "title";
+		
 	public static final String ERROR = "ERROR";
 	public static final String REQUEST = "REQUEST";
 	public static final String TRANSACTION_CONTROL = "TRANSACTION_CONTROL";
@@ -54,6 +57,7 @@ public abstract class ParamsConst {
 	public static final String COMENTARIOS = "comentarios";
 	public static final String COMENTARIO = "comentario";
 	public static final String TAREAS = "tareas";
+	public static final String TAREA_PADRE = "tareaPadre";
 	public static final String CANTIDAD = "cantidad";
 	
 	//CONSTANTES PARA OBJETIVOS

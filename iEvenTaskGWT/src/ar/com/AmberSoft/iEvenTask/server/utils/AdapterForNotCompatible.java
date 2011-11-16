@@ -46,7 +46,7 @@ public class AdapterForNotCompatible implements Compatibilizable {
 						GWTCompatibilityEvaluatorTypes evaluatorTypes = new GWTCompatibilityEvaluatorTypes(propertyValue);
 						Compatibilizable compatibilizable = evaluatorTypes.getCompatibilizableAdapter();
 						if (propertyValue!=null){
-							logger.info("propertyValue=" + propertyValue.getClass().getName());
+							//logger.info("propertyValue=" + propertyValue.getClass().getName());
 							propertyValue = compatibilizable.adapt(propertyValue);
 						}
 						map.put(descriptor.getName(), propertyValue);
@@ -54,7 +54,8 @@ public class AdapterForNotCompatible implements Compatibilizable {
 				}
 	
 			} catch (Exception e) {
-				logger.error(Tools.getStackTrace(e));
+				logger.error("Se continua adaptando a la vista a pesar del:" + e.getMessage());
+				//logger.error(Tools.getStackTrace(e));
 			}
 		}
 
