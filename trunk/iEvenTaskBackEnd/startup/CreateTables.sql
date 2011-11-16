@@ -118,7 +118,7 @@ create table iet_objetivo (
 	tipo_objetivo varchar(20),
 	nombre_objetivo varchar(255),
 	descripcion varchar(255),
-	escala_medicion varchar(20),
+	escala_medicion varchar(255),
 	fecha_finalizacion datetime,
 	ponderacion int,
 	id_usuario_asignado varchar(255),
