@@ -33,7 +33,7 @@ public class DialogDivision extends Dialog {
 		 cantidad.getPropertyEditor().setFormat(NumberFormat.getFormat("00"));  
 		 cantidad.setFieldLabel("Cantidad");
 		 cantidad.setMinValue(2);  
-		 cantidad.setMaxValue(100);  
+		 cantidad.setMaxValue(10);  
 		 
 		 add(cantidad);
 			
@@ -67,7 +67,7 @@ public class DialogDivision extends Dialog {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								DialogFactory.error("No se fue posible dividir la tarea.");
+								DialogFactory.error("No fue posible dividir la tarea.");
 							}
 
 							@Override
