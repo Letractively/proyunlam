@@ -50,6 +50,7 @@ public class Proxy extends RpcProxy {
 			params.putAll(config.getProperties());
 		}
 		callback.setProxyCallback(proxyCallback);
+		
 		DispatcherUtil.getDispatcher().execute(params, callback);
 	}
 }

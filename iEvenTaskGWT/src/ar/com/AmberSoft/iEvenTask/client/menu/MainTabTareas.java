@@ -22,7 +22,6 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
-import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -33,6 +32,9 @@ import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.extjs.gxt.ui.client.widget.grid.filters.DateFilter;
+import com.extjs.gxt.ui.client.widget.grid.filters.NumericFilter;
+import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -57,6 +59,13 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	
 	public MainTabTareas(){
 		super("Tareas");
+
+		grid.addFilter(new StringFilter(ParamsConst.NOMBRE_TAREA));
+		grid.addFilter(new DateFilter(ParamsConst.FECHA_COMIENZO));
+		grid.addFilter(new DateFilter(ParamsConst.FECHA_FIN));
+		grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));
+		grid.addFilter(new StringFilter(ParamsConst.ESTADO));
+		grid.addFilter(new StringFilter(ParamsConst.DESCRIPCION));
 		
 		Context.getInstance().setTaskGrid(grid);
 		
@@ -169,17 +178,20 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 
 		ColumnConfig clmncnfgNombreTarea = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 100);
 		configs.add(clmncnfgNombreTarea);
-
+		
 		ColumnConfig clmncnfgFechaComienzo = new ColumnConfig(ParamsConst.FECHA_COMIENZO, "Fecha de Comienzo", 130);
 		clmncnfgFechaComienzo.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaComienzo);
-
+		
 		ColumnConfig clmncnfgFechaFin = new ColumnConfig(ParamsConst.FECHA_FIN, "Fecha de Fin", 130);
 		clmncnfgFechaFin.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaFin);
 
 		ColumnConfig clmncnfgCumplimiento = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento (%)", 100);
 		configs.add(clmncnfgCumplimiento);
+
+		ColumnConfig clmncnfgEstado = new ColumnConfig(ParamsConst.ESTADO, "Estado", 50);
+		configs.add(clmncnfgEstado);
 		
 		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 140);
 		configs.add(clmncnfgDescripcion);

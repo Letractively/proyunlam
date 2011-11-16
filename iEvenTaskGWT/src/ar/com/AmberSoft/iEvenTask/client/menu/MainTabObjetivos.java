@@ -100,6 +100,9 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 344);
 		configs.add(clmncnfgDescripcion);
 
+		ColumnConfig clmncnfgCumplimiento = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento (%)", 344);
+		configs.add(clmncnfgCumplimiento);
+		
 		return configs;
 	}
 

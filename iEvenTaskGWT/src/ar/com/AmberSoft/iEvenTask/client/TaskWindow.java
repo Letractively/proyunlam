@@ -58,7 +58,8 @@ public class TaskWindow extends Window implements Seleccionable{
     private final DateField fecha_com = new DateField();  
     private final DateField fecha_fin = new DateField();  
     SpinnerField completed = new SpinnerField();  
-    TextArea description = new TextArea();  
+    TextArea description = new TextArea();
+    TextField tareaPadre = new TextArea();  
     Button btnGuardar = new Button("Guardar");
     Button btnModificar = new Button("Modificar");
     Button btnCancelar = new Button("Cancelar");  
@@ -285,6 +286,9 @@ public class TaskWindow extends Window implements Seleccionable{
 			fldObjective.setEnabled(Boolean.FALSE);
 		}
 		taskPanel.add(fldObjective);
+		tareaPadre.setVisible(Boolean.FALSE);
+		tareaPadre.setFieldLabel("Nombre tarea padre:");
+		taskPanel.add(tareaPadre);
 		
 		fldPeso.setIncrement(1d);  
 		fldPeso.getPropertyEditor().setType(Integer.class);  
@@ -523,6 +527,19 @@ public class TaskWindow extends Window implements Seleccionable{
 				completed.setValue(Long.valueOf(actual.get(ParamsConst.CUMPLIMIENTO).toString()));
 				Context.getInstance().addDetailExecution("TaskWindow tieneSubtareas = " +  actual.get(ParamsConst.TIENE_SUBTAREAS));
 				if  (Boolean.TRUE.equals(actual.get(ParamsConst.TIENE_SUBTAREAS))){
+					
+					fldObjective.setVisible(Boolean.FALSE);
+					tareaPadre.setVisible(Boolean.TRUE);
+					fldPeso.setFieldLabel("Peso sobre Tarea Padre (%)");
+					
+					Map padre = (Map) actual.get(ParamsConst.TAREA_PADRE);
+					if(padre!=null){
+						String nombre = (String) padre.get(ParamsConst.NOMBRE_TAREA);
+						if (nombre!=null){
+							tareaPadre.setValue(nombre);
+						}
+					} 
+					
 					completed.setEnabled(Boolean.FALSE);
 					Context.getInstance().addDetailExecution("TaskWindow Generando grilla de tareas relacionadas");
 					Map params = new HashMap();
@@ -532,6 +549,8 @@ public class TaskWindow extends Window implements Seleccionable{
 					panelGrilla.add(grid);
 					panelGrilla.setSize(WINDOW_WIDTH, 150);
 					
+				} else {
+					tareaPadre.setVisible(Boolean.FALSE);
 				}
 			} catch (Exception e){
 				Context.getInstance().addDetailExecution("TaskWindow cumplimiento debe ser Long (" + actual.get(ParamsConst.DURACION).toString() + ")");
