@@ -268,6 +268,9 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	
 	@Transient
 	public void addVisible(String usuario){
+		if (visibles==null){
+			visibles = new HashSet<Visible>();
+		}
 		Visible visible = new Visible(this, usuario);
 		visibles.add(visible);
 	}

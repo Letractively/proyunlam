@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo;
+import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.util.ParamsConst;
 
@@ -17,7 +18,14 @@ public class CreateObjectiveService extends CreateService {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Entity getEntity(Map params) {
-		Objetivo objetivo = new Objetivo();
+		
+		Objetivo objetivo = null;
+		if (params.get(ParamsConst.ENTITY)!=null){
+			objetivo = (Objetivo) params.get(ParamsConst.ENTITY);
+		} else {
+			objetivo = new Objetivo();
+		}
+		
 		objetivo.setNombreObjetivo((String)params.get(ParamsConst.NOMBRE_OBJETIVO));
 		objetivo.setTipoObjetivo((String)params.get(ParamsConst.TIPO_OBJETIVO));
 		objetivo.setEscalaMedicion((String)params.get(ParamsConst.ESCALA_MEDICION));

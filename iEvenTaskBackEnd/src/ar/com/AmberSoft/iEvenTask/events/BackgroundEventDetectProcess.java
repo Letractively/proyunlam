@@ -81,11 +81,12 @@ public abstract class BackgroundEventDetectProcess extends TimerTask {
 				if (event.getExecutions() != null) {
 					executionCount = event.getExecutions();
 				}
-				executionCount++;
-				logger.debug("Ejecucion " + executionCount.toString()
-						+ " , deteccion evento: " + event.getName());
 
 				if (eventDetect()) {
+					executionCount++;
+					logger.debug("Ejecucion " + executionCount.toString()
+							+ " , deteccion evento: " + event.getName());
+					
 					Iterator<Relation> iRelations = relations.iterator();
 					while (iRelations.hasNext()) {
 						Relation relation = (Relation) iRelations.next();

@@ -13,9 +13,12 @@ public abstract class ParamsConst {
 	private ParamsConst(){}
 	
 	public static final String PAGING_LOAD_RESULT = "PAGING_LOAD_RESULT";
+	public static final String LOAD_CONFIG = "loadConfig";
+	public static final String COLUMN_MODEL = "columnModel";
 	public static final String ERROR = "ERROR";
 	public static final String REQUEST = "REQUEST";
-	
+	public static final String PARAMS = "REQUEST";
+	public static final String TITLE = "title";
 	
 	public static final String DATA = "DATA";
 	public static final String OFFSET = "OFFSET";

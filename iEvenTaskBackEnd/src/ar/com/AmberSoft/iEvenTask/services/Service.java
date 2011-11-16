@@ -14,6 +14,7 @@ import ar.com.AmberSoft.iEvenTask.utils.Tools;
 import ar.com.AmberSoft.util.ParamsConst;
 
 import com.extjs.gxt.ui.client.data.BaseStringFilterConfig;
+import com.extjs.gxt.ui.client.widget.grid.filters.NumericFilter;
 
 public abstract class Service {
 
@@ -45,6 +46,7 @@ public abstract class Service {
 		if (Service.operatorOnWhere == null) {
 			operatorOnWhere = new HashMap();
 			operatorOnWhere.put(BaseStringFilterConfig.class.getName(), LIKE);
+			operatorOnWhere.put(NumericFilter.class.getName(), EQUAL);
 		}
 		// Si no se esta emulando obtenemos una session de hibernate
 		if (!AppAdmin.getInstance().getConfig().isEmulate()) {
