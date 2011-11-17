@@ -24,24 +24,23 @@ import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.ToolBar;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.extjs.gxt.ui.client.widget.ContentPanel;
 
 public class CommentWindows extends Window {
 
-	public static final Integer WINDOW_WIDTH = 510;
-	public static final Integer WINDOW_HEIGTH = 390;
+	public static final Integer WINDOW_WIDTH = 515;
+	public static final Integer WINDOW_HEIGTH = 380;
 	
 	public static final Integer FIELD_WIDTH = WINDOW_WIDTH - 10;
 	public static final Integer LABEL_WIDTH = 400;
 	
 	public static final Integer DETAILS_HEIGTH = 72;
 	
-	// Campos
-	private final HtmlEditor htmlEditor = new HtmlEditor();
-	
 	private Integer id;
 	
 	final Button save = new SaveButton(this);
 	final Button cancel = new CancelButton(this);
+	HtmlEditor htmlEditor = new HtmlEditor();
 	
 	public CommentWindows(Integer id, String name) {
 		super();
@@ -52,17 +51,11 @@ public class CommentWindows extends Window {
 
 		addToolBar();
 		
-		TabPanel tabPanel = new TabPanel();
-		tabPanel.setTabScroll(true);
-		TabItem tbtmDetalles = new TabItem("Detalles");
-		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		tabPanel.add(tbtmDetalles);
-		tbtmDetalles.add(horizontalPanel);
-		tbtmDetalles.setHeight(DETAILS_HEIGTH.toString());
-
-		horizontalPanel.add(getPanelFields());
-
-		add(tabPanel, new RowData(495.0, 330.0, new Margins()));
+		ContentPanel cntntpnlNewContentpanel = new ContentPanel();
+		cntntpnlNewContentpanel.setHeaderVisible(false);
+		
+		cntntpnlNewContentpanel.add(htmlEditor);
+		add(cntntpnlNewContentpanel, new RowData(Style.DEFAULT, 300.0, new Margins()));
 		
 	}
 
@@ -71,7 +64,7 @@ public class CommentWindows extends Window {
 	 */
 	private void initialize(String name) {
 		setInitialWidth(WINDOW_WIDTH);
-		setHeight(WINDOW_HEIGTH);
+		setHeight(362);
 		setTitleCollapse(true);
 		setHeading("Comentario para la tarea " + name);
 		setLayout(new RowLayout(Orientation.VERTICAL));
@@ -86,30 +79,6 @@ public class CommentWindows extends Window {
 		toolBar.add(save);
 		toolBar.add(cancel);
 		add(toolBar);
-	}
-
-	/**
-	 * Agrega los campos 
-	 * @param verticalPanel
-	 */
-	private VerticalPanel getPanelFields() {
-		VerticalPanel verticalPanel = new VerticalPanel();
-
-		//Se agrega editor HTML
-		HorizontalPanel fieldHorizontalLine = new HorizontalPanel();
-		fieldHorizontalLine.setWidth(new Integer(WINDOW_WIDTH));
-		htmlEditor.setWidth("494px");
-		// Realiza la validacion del campo cuando pierde el foco
-		htmlEditor.setAutoValidate(Boolean.TRUE);
-		htmlEditor.setValidateOnBlur(Boolean.TRUE);
-//		htmlEditor.setWidth(FIELD_WIDTH);
-		//htmlEditor.setHeight(DETAILS_HEIGTH);
-		verticalPanel.add(fieldHorizontalLine);
-		//htmlEditor.setAllowBlank(Boolean.FALSE);
-		fieldHorizontalLine.add(htmlEditor);
-		registerField(htmlEditor);
-		
-		return verticalPanel;
 	}
 
 	@Override

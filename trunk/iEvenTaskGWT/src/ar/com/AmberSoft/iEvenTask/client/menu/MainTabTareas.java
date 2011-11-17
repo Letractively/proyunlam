@@ -22,6 +22,7 @@ import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
 import ar.com.AmberSoft.iEvenTask.shared.ServiceNameConst;
 
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseModel;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -45,8 +46,8 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 	public static final Integer GRID_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH;
 	public static final Integer COMMENT_WIDTH = IEvenTask.APP_WINDOW_WIDTH - GRID_WIDTH;
 	public static final Integer COMMENT_HEIGTH = IEvenTask.MAIN_TAB_PANEL_HEIGTH + 10;
-	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 10; //estos 10 son para que se vea la barra de scroll
-	public static final Integer COMMENT_BOX_HEIGTH = 350;
+	public static final Integer COMMENT_BOX_WIDTH = COMMENT_WIDTH - 5; //estos 10 son para que se vea la barra de scroll
+	public static final Integer COMMENT_BOX_HEIGTH = 390;
 	
 	public static final String COMMENT_FORMAT_START = "<STRONG><EM><FONT size=2>";
 	public static final String COMMENT_FORMAT_END = "</FONT></EM></STRONG>";
@@ -179,29 +180,29 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		ColumnConfig clmncnfgNombreTarea = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 100);
 		configs.add(clmncnfgNombreTarea);
 		
-		ColumnConfig clmncnfgFechaComienzo = new ColumnConfig(ParamsConst.FECHA_COMIENZO, "Fecha de Comienzo", 130);
+		ColumnConfig clmncnfgFechaComienzo = new ColumnConfig(ParamsConst.FECHA_COMIENZO, "Fecha de Comienzo", 100);
 		clmncnfgFechaComienzo.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaComienzo);
 		
-		ColumnConfig clmncnfgFechaFin = new ColumnConfig(ParamsConst.FECHA_FIN, "Fecha de Fin", 130);
+		ColumnConfig clmncnfgFechaFin = new ColumnConfig(ParamsConst.FECHA_FIN, "Fecha de Fin", 100);
 		clmncnfgFechaFin.setDateTimeFormat(dtf);
 		configs.add(clmncnfgFechaFin);
 
 		ColumnConfig clmncnfgCumplimiento = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento (%)", 100);
 		configs.add(clmncnfgCumplimiento);
 
-		ColumnConfig clmncnfgEstado = new ColumnConfig(ParamsConst.ESTADO, "Estado", 50);
+		ColumnConfig clmncnfgEstado = new ColumnConfig(ParamsConst.ESTADO, "Estado", 130);
 		configs.add(clmncnfgEstado);
-		
-		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 140);
-		configs.add(clmncnfgDescripcion);
 		
 		ColumnConfig clmncnfgResponsable = new ColumnConfig(ParamsConst.ID_USUARIO, "Responsable", 140);
 		configs.add(clmncnfgResponsable);
 		clmncnfgResponsable.setHidden(Boolean.TRUE);
 
-		ColumnConfig clmncnfgAsignado = new ColumnConfig(ParamsConst.ASIGNADO, "Responsable", 140);
+		ColumnConfig clmncnfgAsignado = new ColumnConfig(ParamsConst.ASIGNADO, "Responsable", 100);
 		configs.add(clmncnfgAsignado);
+
+		ColumnConfig clmncnfgDescripcion = new ColumnConfig(ParamsConst.DESCRIPCION, "Descripcion", 325);
+		configs.add(clmncnfgDescripcion);
 
 		return configs;
 	}
@@ -299,6 +300,8 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 								DialogFactory.info("La tarea se encuentra bloqueada por el usuario " + user.get(ParamsConst.NAME));
 							} else {
 								TaskWindow taskWindow = new TaskWindow(false);
+								//TODO si no tiene hijos, no se setea esta propiedad
+								taskWindow.setScrollMode(Scroll.AUTOY);
 								Context.getInstance().addDetailExecution("TaskWindow llamada a setear valores");
 								taskWindow.setValuesToUpdate(actualFinal);
 								taskWindow.show();

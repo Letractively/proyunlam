@@ -39,7 +39,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class TaskWindow extends Window implements Seleccionable{
 	
 	public static final Integer WINDOW_WIDTH = 410;
-	public static final Integer WINDOW_HEIGTH = 475;
+	public static final Integer WINDOW_HEIGTH = 480;
 	public static final Integer TASK_PANEL_WIDTH = 400;
 	
 	
@@ -588,10 +588,10 @@ public class TaskWindow extends Window implements Seleccionable{
 		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 150);
 		configs.add(clmncnfg1);
 
-		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PESO, "Peso", 30);
+		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PESO, "Peso", 110);
 		configs.add(clmncnfg2);
 
-		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento", 30);
+		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento", 110);
 		configs.add(clmncnfg3);
 
 		return configs;
