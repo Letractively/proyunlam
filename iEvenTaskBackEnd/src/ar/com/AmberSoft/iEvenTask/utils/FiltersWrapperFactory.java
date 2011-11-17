@@ -25,7 +25,9 @@ public class FiltersWrapperFactory {
 	
 	public Wrapper getWrapper(BaseFilterConfig filter){
 		Wrapper wrapper = (Wrapper) wrappers.get(filter.getClass().getName());
-		wrapper.setFilter(filter);
+		if (wrapper!=null){
+			wrapper.setFilter(filter);
+		}
 		return wrapper;
 	}
 

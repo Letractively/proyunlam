@@ -75,6 +75,8 @@ public abstract class ParamsConst {
 	
 	public static final String CODE = "code";
 	
+	public static final String NOT_COMMON_PAGING = "NOT_COMMON_PAGING";
+	
 	public static final String FROM_STATE = "fromState";
 	public static final String TO_STATE = "toState";
 	

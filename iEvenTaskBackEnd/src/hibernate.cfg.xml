@@ -10,7 +10,7 @@
 		<property name="dialect">org.hibernate.dialect.SQLServer2005Dialect</property>
 		<!-- Echo all executed SQL to stdout -->
 		<property name="show_sql">true</property>
-		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.format_sql">false</property>
 		<!-- Disable the second-level cache -->
 		<!-- property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property -->
 		<property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
