@@ -289,7 +289,7 @@ public class EventWindow extends Window {
 		registerField(fldType);
 
 		ListStore listStore = new ListStore();
-		listStore.add(getModelData(EventWindowOption.LDAP, "LDAP"));
+		//listStore.add(getModelData(EventWindowOption.LDAP, "LDAP"));
 		listStore.add(getModelData(EventWindowOption.LOGS, "Patron en logs"));
 		listStore.add(getModelData(EventWindowOption.FILES, "Archivos"));
 		listStore.add(getModelData(EventWindowOption.SERVICES, "Servicios"));

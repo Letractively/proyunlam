@@ -148,6 +148,9 @@ public class Grid extends com.extjs.gxt.ui.client.widget.grid.Grid {
 	}
 
 	public void initialize(Seleccionable seleccionable, final Integer pageSize) {
+		
+		this.view = new GridView();
+		
 		this.seleccionable = seleccionable;
 
 		// Se obtiene el loader para indicarle cual es la grilla con la que

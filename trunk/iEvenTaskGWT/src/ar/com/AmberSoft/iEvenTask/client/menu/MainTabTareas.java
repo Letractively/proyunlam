@@ -34,7 +34,6 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.filters.DateFilter;
-import com.extjs.gxt.ui.client.widget.grid.filters.NumericFilter;
 import com.extjs.gxt.ui.client.widget.grid.filters.StringFilter;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
@@ -64,9 +63,11 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 		grid.addFilter(new StringFilter(ParamsConst.NOMBRE_TAREA));
 		grid.addFilter(new DateFilter(ParamsConst.FECHA_COMIENZO));
 		grid.addFilter(new DateFilter(ParamsConst.FECHA_FIN));
-		grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));
+		//FIXME: revisar como filtrar correctamente los numero
+		//grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));
 		grid.addFilter(new StringFilter(ParamsConst.ESTADO));
 		grid.addFilter(new StringFilter(ParamsConst.DESCRIPCION));
+		grid.addFilter(new StringFilter(ParamsConst.ASIGNADO));
 		
 		Context.getInstance().setTaskGrid(grid);
 		
