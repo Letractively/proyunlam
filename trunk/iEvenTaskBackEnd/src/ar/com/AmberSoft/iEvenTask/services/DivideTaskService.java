@@ -43,13 +43,7 @@ public class DivideTaskService extends Service {
 					nueva.addVisible(visible.getUsuario());
 				}
 			}
-			
-			if (tarea.getPeso()!=null){
-				nueva.setPeso(tarea.getPeso()/cantidad);
-			} else {
-				nueva.setPeso(0);
-			}
-			
+			nueva.setPeso(100/cantidad);
 			nueva.defaultVisibles();
 
 			getSession().save(nueva);

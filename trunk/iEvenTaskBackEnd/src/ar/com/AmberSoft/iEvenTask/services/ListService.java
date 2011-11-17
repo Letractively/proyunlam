@@ -1,6 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,7 +14,9 @@ import ar.com.AmberSoft.iEvenTask.utils.FiltersWrapperFactory;
 import ar.com.AmberSoft.iEvenTask.utils.Wrapper;
 import ar.com.AmberSoft.util.ParamsConst;
 
+import com.extjs.gxt.ui.client.data.BaseDateFilterConfig;
 import com.extjs.gxt.ui.client.data.BaseFilterConfig;
+import com.extjs.gxt.ui.client.data.BaseNumericFilterConfig;
 
 public abstract class ListService extends Service {
 	
@@ -49,11 +52,14 @@ public abstract class ListService extends Service {
 		query = getSession().createQuery(queryText.toString());
 		queryCount = getSession().createQuery(SELECT_COUNT + queryTextWithoutOrder.toString());
 		
-		if (params.get(OFFSET)!=null){
-			query.setFirstResult((Integer) params.get(OFFSET));
-		}
-		if (params.get(LIMIT)!=null){
-			query.setMaxResults((Integer) params.get(LIMIT));
+		Boolean notCommonPaging = (Boolean)params.get(ParamsConst.NOT_COMMON_PAGING);
+		if ((notCommonPaging==null) ||(!notCommonPaging)){
+			if (params.get(OFFSET)!=null){
+				query.setFirstResult((Integer) params.get(OFFSET));
+			}
+			if (params.get(LIMIT)!=null){
+				query.setMaxResults((Integer) params.get(LIMIT));
+			}
 		}
 		
 		postCreateQuery(params);
@@ -76,7 +82,7 @@ public abstract class ListService extends Service {
 	}
 
 
-	private void setOrder(Map params) {
+	public void setOrder(Map params) {
 		String sortField = (String) params.get(SORT_FIELD); 
 		Object sortDir = params.get(SORT_DIR);
 		
@@ -89,7 +95,6 @@ public abstract class ListService extends Service {
 				queryText.append(sortDirText);
 			} catch (Exception e) {
 			}
-
 		}
 	}
 	
@@ -102,7 +107,15 @@ public abstract class ListService extends Service {
 			while (it.hasNext()) {
 				BaseFilterConfig filter = (BaseFilterConfig) it.next();
 				Wrapper wrapper = FiltersWrapperFactory.getInstance().getWrapper(filter);
-				wrapper.setValueOnQuery(query, index);
+				if (wrapper!=null){
+					wrapper.setValueOnQuery(query, index);
+				} else {
+					if (filter instanceof BaseDateFilterConfig) {
+						query.setDate(index, (Date)filter.getValue());
+					} else if (filter instanceof BaseNumericFilterConfig) {
+						query.setDouble(index, (Double)filter.getValue());
+					}
+				}
 				index++;
 			}
 		}
@@ -119,7 +132,23 @@ public abstract class ListService extends Service {
 				queryText.append(AND);
 				BaseFilterConfig filter = (BaseFilterConfig) it.next();
 				queryText.append(filter.getField());
-				queryText.append(operatorOnWhere.get(filter.getClass().getName()));
+				String operator = (String)operatorOnWhere.get(filter.getClass().getName());
+				if (operator !=null){
+					queryText.append(operator);
+				} else {
+					if (filter instanceof BaseDateFilterConfig) {
+						BaseDateFilterConfig dateFilter = (BaseDateFilterConfig) filter;
+						if ("before".equals(dateFilter.getComparison())){
+							queryText.append(" < ");
+						} else if ("after".equals(dateFilter.getComparison())){
+							queryText.append(" > ");
+						} else {
+							queryText.append(EQUAL);		
+						}
+					} else {
+						queryText.append(EQUAL);
+					}
+				}
 				queryText.append(QUESTION_SYMBOL);
 			}
 		}

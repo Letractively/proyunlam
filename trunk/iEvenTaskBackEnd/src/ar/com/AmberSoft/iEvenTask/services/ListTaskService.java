@@ -3,15 +3,19 @@ package ar.com.AmberSoft.iEvenTask.services;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
 import ar.com.AmberSoft.iEvenTask.backend.entities.Comentario;
@@ -19,6 +23,9 @@ import ar.com.AmberSoft.iEvenTask.backend.entities.Tarea;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Visible;
 import ar.com.AmberSoft.iEvenTask.utils.AppAdmin;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
+import ar.com.AmberSoft.util.AsignadoTareaComparatorASC;
+import ar.com.AmberSoft.util.AsignadoTareaComparatorDESC;
 import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.PKGenerator;
 import ar.com.AmberSoft.util.ParamsConst;
@@ -98,21 +105,54 @@ public class ListTaskService extends ListService {
 					Set<Tarea> nuevasSubTareas = new HashSet<Tarea>();
 					while (itTareas.hasNext()) {
 						Tarea subTarea = (Tarea) itTareas.next();
-						subTarea.setSubtareas(null);
-						subTarea.setTareaPadre(null);
-						nuevasSubTareas.add(subTarea);
+						Tarea nuevaSubTarea = new Tarea();
+						PropertyUtils.copyProperties(nuevasSubTareas, subTarea);
+						nuevaSubTarea.setSubtareas(null);
+						nuevaSubTarea.setTareaPadre(null);
+						nuevasSubTareas.add(nuevaSubTarea);
 					}
 					tarea.setSubtareas(nuevasSubTareas);
 				}
-				
-
 			}
+			ordenarAsignado(params, result);
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 
 		return result;
 
+	}
+	
+
+	protected void ordenarAsignado(Map params, Map map) {
+		Boolean notCommonPaging = (Boolean)params.get(ParamsConst.NOT_COMMON_PAGING);
+		if ((notCommonPaging!=null) && (notCommonPaging)){
+			List list = (List)map.get(ParamsConst.DATA);
+			
+			if (list!=null){
+				Object sortDir = params.get(SORT_DIR);
+				String sortDirText="";
+				try {
+					sortDirText = (String) MethodUtils.invokeExactMethod(sortDir, NAME, null);
+				} catch (Exception e) {
+					logger.error(Tools.getStackTrace(e));
+				}
+				if ("ASC".equalsIgnoreCase(sortDirText)){
+					Collections.sort(list, new AsignadoTareaComparatorASC());
+				} else {
+					Collections.sort(list, new AsignadoTareaComparatorDESC());
+				}
+				Integer offset = (Integer)params.get(OFFSET);
+				Integer limit = (Integer)params.get(LIMIT);
+				List nueva = new ArrayList();
+				Integer indice = offset;
+				while ((indice<limit) && (indice<list.size())){
+					nueva.add(list.get(indice));
+					indice++;
+				}
+				map.put(ParamsConst.DATA, nueva);
+			}
+		}
 	}
 
 	@Override
