@@ -71,7 +71,7 @@ public class IEvenTask implements EntryPoint {
 	
 	public static void iniciarSesion() {
 		//FIXME: Atrapamos el evento de cierre del explorador
-		Window.addWindowCloseListener(new WindowCloseListener() {
+		/*Window.addWindowCloseListener(new WindowCloseListener() {
 			
 			@Override
 			public String onWindowClosing() {
@@ -83,7 +83,7 @@ public class IEvenTask implements EntryPoint {
 			public void onWindowClosed() {
 				
 			}
-		});
+		});*/
 		
 		//elimino del panel de logins
 		if (RootPanel.get("login_panel")!=null){
