@@ -10,6 +10,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -55,7 +56,7 @@ public class RelationWithModifyStateTask extends Relation {
 		
 	}
 	
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(name = "iet_relacion_modifica_estado_tarea", 
 			joinColumns = { @JoinColumn(name = "id_relacion") }, inverseJoinColumns = { @JoinColumn(name = "id_tarea") })
 	public Set<Tarea> getTareas() {
@@ -89,14 +90,14 @@ public class RelationWithModifyStateTask extends Relation {
 				Tarea tarea = (Tarea) it.next();
 				if (fromState.equals(tarea.getEstado())){
 					tarea.setEstado(toState);
-				}
-				UpdateEntityService entityService = new UpdateEntityService();
-				Map params = new HashMap();
-				params.put(ParamsConst.ENTITY, tarea);
-				try {
-					entityService.execute(params);
-				} catch (Exception e) {
-					logger.error(Tools.getStackTrace(e));
+					UpdateEntityService entityService = new UpdateEntityService();
+					Map params = new HashMap();
+					params.put(ParamsConst.ENTITY, tarea);
+					try {
+						entityService.execute(params);
+					} catch (Exception e) {
+						logger.error(Tools.getStackTrace(e));
+					}
 				}
 			}
 		}		
