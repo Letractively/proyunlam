@@ -4,8 +4,19 @@
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
         
 	
-	  <appender name="iEvenTaskLog" class="org.apache.log4j.RollingFileAppender">
-	    <param name="File" value="C:\\log\\iEvenTask.log"/>
+	  <appender name="iet_consola" class="org.apache.log4j.RollingFileAppender">
+	    <param name="File" value="C:\\log\\iet_consola.log"/>
+	    <param name="MaxFileSize" value="1000KB"/>
+	    <param name="MaxBackupIndex" value="5"/>    
+	    <param name="Append" value="true"/>
+	    <layout class="org.apache.log4j.PatternLayout">
+	       <param name="ConversionPattern"
+		              value="[%d] [%c] [%p]%m%n" />
+	    </layout>
+	  </appender>
+	  
+	  <appender name="iet_all" class="org.apache.log4j.RollingFileAppender">
+	    <param name="File" value="C:\\log\\iet_all.log"/>
 	    <param name="MaxFileSize" value="1000KB"/>
 	    <param name="MaxBackupIndex" value="5"/>    
 	    <param name="Append" value="true"/>
@@ -15,8 +26,8 @@
 	    </layout>
 	  </appender>
 
-	  <appender name="iEvenTaskBackgroundLog" class="org.apache.log4j.RollingFileAppender">
-	    <param name="File" value="C:\\log\\iEvenTaskBackground.log"/>
+	  <appender name="iet_event_file" class="org.apache.log4j.RollingFileAppender">
+	    <param name="File" value="C:\\log\\iet_event_file.log"/>
 	    <param name="MaxFileSize" value="1000KB"/>
 	    <param name="MaxBackupIndex" value="5"/>    
 	    <param name="Append" value="true"/>
@@ -25,34 +36,55 @@
 		              value="[%d] [%c] [%p]%m%n" />
 	    </layout>
 	  </appender>
-	
-	  <appender name="console" class="org.apache.log4j.ConsoleAppender"> 
-	    <param name="Target" value="System.out"/> 
-	    <layout class="org.apache.log4j.PatternLayout"> 
-	      <param name="ConversionPattern" value="%-5p %c{1} - %m%n"/> 
-	    </layout> 
-	  </appender> 
 
-	<logger name="ar.com.AmberSoft.iEvenTask.events">
-	      <level value="all"></level>
-	      <appender-ref ref="iEvenTaskBackgroundLog"/>
-	  </logger>
+	  <appender name="iet_event_logs" class="org.apache.log4j.RollingFileAppender">
+	    <param name="File" value="C:\\log\\iet_event_logs.log"/>
+	    <param name="MaxFileSize" value="1000KB"/>
+	    <param name="MaxBackupIndex" value="5"/>    
+	    <param name="Append" value="true"/>
+	    <layout class="org.apache.log4j.PatternLayout">
+	       <param name="ConversionPattern"
+		              value="[%d] [%c] [%p]%m%n" />
+	    </layout>
+	  </appender>
 
-  <logger name="ar.com.AmberSoft.iEvenTask" >
-      <level value="all"></level>
-      <appender-ref ref="iEvenTaskLog"/>
-  </logger>
-  
-   <logger name="org.hibernate">
-      <level value="all"></level>
-      <appender-ref ref="iEvenTaskLog"/>
-  </logger>
+	  <appender name="iet_event_services" class="org.apache.log4j.RollingFileAppender">
+	    <param name="File" value="C:\\log\\iet_event_services.log"/>
+	    <param name="MaxFileSize" value="1000KB"/>
+	    <param name="MaxBackupIndex" value="5"/>    
+	    <param name="Append" value="true"/>
+	    <layout class="org.apache.log4j.PatternLayout">
+	       <param name="ConversionPattern"
+		              value="[%d] [%c] [%p]%m%n" />
+	    </layout>
+	  </appender>
 
   	<!-- Esto tracea lo que sale por consola en el archivo de log (MUY COSTOSO) -->
-   <!-- root> 
+   <root> 
     <priority value ="all" /> 
-    <appender-ref ref="iEvenTaskLog" /> 
-  </root -->  
+    <appender-ref ref="iet_consola" />
+    <appender-ref ref="iet_all" />  
+  </root>  	
+
+	<logger name="ar.com.AmberSoft.iEvenTask">
+	      <level value="all"></level>
+	      <appender-ref ref="iet_all"/>
+	  </logger>
+
+	<logger name="ar.com.AmberSoft.iEvenTask.events.BackgroundEventDetectFilesProcess">
+	      <level value="all"></level>
+	      <appender-ref ref="iet_event_file"/>
+	  </logger>
+
+	<logger name="ar.com.AmberSoft.iEvenTask.events.BackgroundEventDetectLogsProcess">
+	      <level value="all"></level>
+	      <appender-ref ref="iet_event_logs"/>
+	  </logger>
+
+	<logger name="ar.com.AmberSoft.iEvenTask.events.BackgroundEventDetectServicesProcess">
+	      <level value="all"></level>
+	      <appender-ref ref="iet_event_services"/>
+	  </logger>
   
 
 </log4j:configuration>

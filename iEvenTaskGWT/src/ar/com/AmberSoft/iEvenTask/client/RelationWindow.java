@@ -290,7 +290,7 @@ public class RelationWindow extends Window {
 		registerField(fldEvent);
 		
 		ListStore listStoreEventType = new ListStore();
-		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_LDAP, "LDAP"));
+		//listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_LDAP, "LDAP"));
 		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_LOGS, "Patron en logs"));
 		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_FILES, "Archivos"));
 		listStoreEventType.add(getModelData(ServiceNameConst.LIST_EVENT_SERVICES, "Servicios"));

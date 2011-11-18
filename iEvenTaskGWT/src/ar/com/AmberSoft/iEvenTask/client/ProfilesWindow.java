@@ -316,7 +316,7 @@ public class ProfilesWindow extends Window {
 					evaluarPermiso(permiso, fldAsignarTareas, 			"9");
 					evaluarPermiso(permiso, fldReasignarTareas, 		"10");
 					evaluarPermiso(permiso, fldSubdividirTareas, 		"11");
-					
+					evaluarPermiso(permiso, fldRelacionarObjetivo, 		"12");
 				}
 			}
 		}
@@ -365,25 +365,30 @@ public class ProfilesWindow extends Window {
 			} else {
 				params.put(ServiceNameConst.SERVICIO,ServiceNameConst.CREATE_PROFILE);
 			}
+			Context.getInstance().addDetailExecution("Retornando de operacion de guardado de perfil");
 			DispatcherUtil.getDispatcher().execute(params,new AsyncCallback() {
 
 						@Override
 						public void onFailure(Throwable caught) {
+							Context.getInstance().addDetailExecution("Retornando de operacion de guardado de perfil 0");
 							DialogFactory.error("No pudo almacenarse el perfil. Aguarde un momento y vuelva a intentarlo.");
 							maskDisable();
 						}
 
 						@Override
 						public void onSuccess(Object result) {
+							Context.getInstance().addDetailExecution("Retornando de operacion de guardado de perfil");
 							if (result!=null){
+								Context.getInstance().addDetailExecution("Retornando de operacion de guardado de perfil 1");
 								Map response = (Map) result;
-								if (response.get(ParamsConst.ERROR).equals("ConstraintViolationException")){
+								if ("ConstraintViolationException".equals(response.get(ParamsConst.ERROR))){
 									DialogFactory.info("El Grupo ya existe como perfil, no es posible duplicarlos.");
 								} 
-							} else {
-								clear();
-								grid.getStore().getLoader().load();
 							}
+							Context.getInstance().addDetailExecution("Retornando de operacion de guardado de perfil 2");
+							clear();
+							grid.getStore().getLoader().load();
+							Context.getInstance().addDetailExecution("Retornando de operacion de guardado de perfil 3");
 							maskDisable();
 						}
 

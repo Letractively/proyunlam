@@ -38,7 +38,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class TaskWindow extends Window implements Seleccionable {
 
 	public static final Integer WINDOW_WIDTH = 410;
-	public static final Integer WINDOW_HEIGTH = 480;
+	public static final Integer WINDOW_HEIGTH = 490;
 	public static final Integer TASK_PANEL_WIDTH = 400;
 
 	private final Button btnView = new Button("Opciones de visibilidad");

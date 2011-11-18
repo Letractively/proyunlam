@@ -301,8 +301,6 @@ public class MainTabTareas extends TabItem implements Seleccionable {
 								DialogFactory.info("La tarea se encuentra bloqueada por el usuario " + user.get(ParamsConst.NAME));
 							} else {
 								TaskWindow taskWindow = new TaskWindow(false);
-								//TODO si no tiene hijos, no se setea esta propiedad
-								taskWindow.setScrollMode(Scroll.AUTOY);
 								Context.getInstance().addDetailExecution("TaskWindow llamada a setear valores");
 								taskWindow.setValuesToUpdate(actualFinal);
 								taskWindow.show();
