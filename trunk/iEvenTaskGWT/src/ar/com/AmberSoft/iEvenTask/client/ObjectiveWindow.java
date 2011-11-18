@@ -302,7 +302,13 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 			public void onSuccess(Object result) {
 				maskDisable();
 				DialogFactory.info("Se guardo el objetivo con exito.");
-				Context.getInstance().getObjectiveGrid().getStore().getLoader().load();
+				if (Context.getInstance().getObjectiveGrid()!=null){
+					Context.getInstance().getObjectiveGrid().getStore().getLoader().load();
+					Context.getInstance().addDetailExecution("Se recargo la grilla de objetivos");
+				} else {
+					Context.getInstance().addDetailExecution("No fue posible recargar la grilla de objetivos");
+				}
+				Context.getInstance().addDetailExecution("cerrando ventana");
 				cerrarVentana();
 			}
 			});
@@ -419,7 +425,20 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 	
 	@SuppressWarnings("deprecation")
 	private void cerrarVentana(){
+		desbloquear();
 		this.close();
+	}
+	
+	@Override
+	protected void onDisable() {
+		desbloquear();
+		super.onDisable();
+	}
+
+	@Override
+	protected void onHide() {
+		desbloquear();
+		super.onHide();
 	}
 
 	public Integer getId_obj() {
@@ -479,5 +498,27 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 	@Override
 	public void onDividir() {
 	}
+	
+	public void desbloquear() {
+		if (actual != null) {
+			Map params = new HashMap<String, String>();
+			params.put(ParamsConst.ID, actual.get(ParamsConst.ID));
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.UNLOCK);
+			DispatcherUtil.getDispatcher().execute(params, new AsyncCallback() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					DialogFactory
+							.error("No se ha podido desbloquear el objetivo.");
+				}
+
+				@Override
+				public void onSuccess(Object result) {
+				}
+
+			});
+		}
+	}
+
 
 }

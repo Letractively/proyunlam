@@ -104,13 +104,19 @@ public class ReportMenu extends Menu {
 				Map params = new HashMap();
 				params.put(ParamsConst.TITLE, "Listado de Objetivos");
 				params.put(ServiceNameConst.SERVICIO + "2", ServiceNameConst.LIST_OBJECTIVE_WITH_VISIBLE_FILTER);
+				Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 1");
 				ColumnModel cm = Context.getInstance().getObjectiveGrid().getColumnModel();
+				Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 2");
 				if (cm!=null){
+					Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 3");
 					Collection<ColumnConfig> configs = cm.getColumns();
 					if (configs!=null){
+						Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 4");
 						Collection definiciones = new ArrayList();
 						Iterator itConfigs = configs.iterator();
+						Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 5");
 						while (itConfigs.hasNext()) {
+							Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 6");
 							ColumnConfig config = (ColumnConfig) itConfigs.next();
 							
 							ColumnDefine define = new ColumnDefine();
@@ -123,13 +129,20 @@ public class ReportMenu extends Menu {
 							if (Style.HorizontalAlignment.RIGHT.equals(config.getAlignment())) {
 								define.setHorizontalAlignment(2);
 							}
+							Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 7");
 							define.setId(config.getId());
+							Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 8");
 							define.setName(config.getHeader());
+							Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 9");
 							define.setSize(new Integer(config.getWidth()));
+							Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 10");
 							define.setHidden(config.isHidden());
+							Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 11");
 							definiciones.add(define);
 						}
+						Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 12");
 						params.put(ParamsConst.COLUMN_MODEL, definiciones);		
+						Context.getInstance().addDetailExecution("Seteando atributos previos para el reporte 13");
 					}
 				}
 				

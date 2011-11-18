@@ -13,6 +13,7 @@ import ar.com.AmberSoft.iEvenTask.client.IEvenTask;
 import ar.com.AmberSoft.iEvenTask.client.ObjectiveWindow;
 import ar.com.AmberSoft.iEvenTask.client.PermissionsConst;
 import ar.com.AmberSoft.iEvenTask.client.Seleccionable;
+import ar.com.AmberSoft.iEvenTask.client.TaskWindow;
 import ar.com.AmberSoft.iEvenTask.client.utils.Grid;
 import ar.com.AmberSoft.iEvenTask.shared.DispatcherUtil;
 import ar.com.AmberSoft.iEvenTask.shared.ParamsConst;
@@ -56,8 +57,8 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 		//grid.addFilter(new NumericFilter(ParamsConst.PONDERACION));
 		grid.addFilter(new StringFilter(ParamsConst.ASIGNADO));
 		grid.addFilter(new StringFilter(ParamsConst.DESCRIPCION));
-		//grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));
-		Context.getInstance().setObjectiveGrid(grid);*/
+		//grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));*/
+		Context.getInstance().setObjectiveGrid(grid);
 		
 		// TODO acomodar posicion
 		setSize(IEvenTask.APP_WINDOW_WIDTH.toString(), IEvenTask.DEFAULT_MENU_HEIGTH.toString());
@@ -187,9 +188,35 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 				(!(Context.getInstance().getUsuario().get(ParamsConst.ID).equals(actual.get(ParamsConst.ID_USUARIO))) 
 						&& Context.getInstance().isAvaiable(PermissionsConst.OBJETIVOS_NO_ASIGNADOS))){
 
-			ObjectiveWindow objectiveWindow = new ObjectiveWindow(false);
-			objectiveWindow.setValuesToUpdate(actual);
-			objectiveWindow.show();
+			
+			// Antes de abrir la ventana de modificacion, se verifica si no esta siendo modificado por otro usuario
+			final Map<Object,Object> actualFinal = actual;
+			Map params = new HashMap<String, String>();
+			params.put(ParamsConst.ID, actual.get(ParamsConst.ID));
+			params.put(ServiceNameConst.SERVICIO, ServiceNameConst.LOCK);
+			final Map finalActual = actual;
+			DispatcherUtil.getDispatcher().execute(params,
+					new AsyncCallback() {
+	
+						@Override
+						public void onFailure(Throwable caught) {
+							DialogFactory.error("No se ha podido bloquear el objetivo a editar.");
+						}
+	
+						@Override
+						public void onSuccess(Object result) {
+							Map user = (Map)((Map)result).get(ParamsConst.USER);
+							if (user!=null){
+								DialogFactory.info("El objetivo se encuentra bloqueada por el usuario " + user.get(ParamsConst.NAME));
+							} else {
+								ObjectiveWindow objectiveWindow = new ObjectiveWindow(false);
+								Context.getInstance().addDetailExecution("ObjectiveWindow llamada a setear valores");
+								objectiveWindow.setValuesToUpdate(finalActual);
+								objectiveWindow.show();
+							}
+						}
+	
+					});
 		} else {
 			DialogFactory.info("No tiene permisos para modificar objetivos no asignadas.");
 		}
