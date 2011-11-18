@@ -36,9 +36,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
   
 public class ObjectiveWindow extends Window implements Seleccionable {
 	
-	public static final Integer WINDOW_WIDTH = 460;
-	public static final Integer WINDOW__HEIGTH = 385;
-	public static final Integer OBJECTIVE_PANEL_WIDTH = 450;
+	public static final Integer WINDOW_WIDTH = 500;
+	public static final Integer WINDOW_HEIGTH = 550;
+	public static final Integer OBJECTIVE_PANEL_WIDTH = 500;
 	
 	private final Button btnView = new Button("Opciones de visibilidad");
 	private Collection usersView = new ArrayList();
@@ -79,7 +79,7 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 	public ObjectiveWindow(boolean guardar) {
 		super();
 		Context.getInstance().addDetailExecution("ObjectiveWindow 1");
-		setSize(WINDOW_WIDTH, WINDOW__HEIGTH);
+		setSize(WINDOW_WIDTH, WINDOW_HEIGTH);
 		setResizable(false);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 2");
 		if(guardar){
@@ -195,8 +195,8 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		this.cumplimiento.setEnabled(Boolean.FALSE);
 		this.cumplimiento.setFieldLabel("Porcentaje de cumplimiento:");
 		
-//		panel.setSize(WINDOW_WIDTH, 100);
-//		objPanel.add(panel);
+		panel.setSize(WINDOW_WIDTH, 100);
+		objPanel.add(panel);
 		Context.getInstance().addDetailExecution("ObjectiveWindow 17");
 		
 		FormButtonBinding binding = new FormButtonBinding(objPanel);  
@@ -452,10 +452,10 @@ public class ObjectiveWindow extends Window implements Seleccionable {
 		ColumnConfig clmncnfg1 = new ColumnConfig(ParamsConst.NOMBRE_TAREA, "Nombre", 150);
 		configs.add(clmncnfg1);
 
-		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PESO, "Peso", 30);
+		ColumnConfig clmncnfg2 = new ColumnConfig(ParamsConst.PESO, "Peso", 110);
 		configs.add(clmncnfg2);
 
-		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento", 30);
+		ColumnConfig clmncnfg3 = new ColumnConfig(ParamsConst.CUMPLIMIENTO, "Cumplimiento", 110);
 		configs.add(clmncnfg3);
 
 		return configs;
