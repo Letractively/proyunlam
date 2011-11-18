@@ -33,7 +33,7 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	private String descripcion;
 
 	private String estado; //estado de la tarea "pendiente", "en curso", "suspendida"
-	private int cumplimiento; //porcentaje de completitud de la tarea
+	private Integer cumplimiento = 0; //porcentaje de completitud de la tarea
 	/**
 	 * Usuario creador de la tarea
 	 */
@@ -140,13 +140,7 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	public void setFechaComienzo(Date fechaComienzo) {
 		this.fechaComienzo = fechaComienzo;
 	}
-	/*@Basic @Column (name="duracion")
-	public String getDuracion() {
-		return duracion;
-	}
-	public void setDuracion(String duracion) {
-		this.duracion = duracion;
-	}*/
+
 	@Basic @Column (name="descripcion")
 	public String getDescripcion() {
 		return descripcion;
@@ -195,20 +189,31 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 	}
 	public void setEstado(String estado) {
 		this.estado = estado;
+		if ((estado!=null)&&("Finalizada".equalsIgnoreCase(estado))){
+			cumplimiento=100;
+		}
 	}
 	@Basic @Column (name="cumplimiento")
-	public int getCumplimiento() {
+	public Integer getCumplimiento() {
 		if (getTieneSubtareas()){
-			Integer cumplimiento = 0;
-			Set<Tarea> tareas = this.getSubtareas();
+			if (cumplimiento!=null){
+				System.err.println(this.getNombreTarea() + ":" + cumplimiento);
+			}
+			
+			Set<Tarea> tareas = this.getSubtareasActivas();
 			if (tareas!=null){
+				Integer calculado = 0;
 				Iterator<Tarea> itTareas = tareas.iterator();
 				while (itTareas.hasNext()) {
 					Tarea tarea = (Tarea) itTareas.next();
 					if (tarea.getPeso()!=null){
-						cumplimiento += tarea.getPeso() * tarea.getCumplimiento() / 100;
+						if (!((tarea.getCumplimiento()==null)||(tarea.getCumplimiento()==0))){
+							calculado += tarea.getPeso() * tarea.getCumplimiento() / 100;	
+						}
 					}
-					
+				}
+				if(calculado!=0){
+					cumplimiento=calculado;
 				}
 			}
 			return cumplimiento;
@@ -216,9 +221,16 @@ public class Tarea extends ar.com.AmberSoft.iEvenTask.backend.entities.Entity im
 			return cumplimiento;
 		}
 	}
-	public void setCumplimiento(int cumplimiento) {
+	public void setCumplimiento(Integer cumplimiento) {
 		this.cumplimiento = cumplimiento;
+		if ((cumplimiento!=null)&&(cumplimiento>=100)){
+			cumplimiento=100;
+			if (!"Finalizada".equalsIgnoreCase(estado)){
+				estado = "Finalizada";
+			}
+		}
 	}
+	
 	@Basic @Column (name="tipo_tarea")
 	public int getTipo_tarea() {
 		return tipo_tarea;

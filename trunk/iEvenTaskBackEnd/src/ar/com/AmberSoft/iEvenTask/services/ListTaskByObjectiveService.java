@@ -19,8 +19,6 @@ public class ListTaskByObjectiveService extends ListTaskService {
 		userQuery.append(" objetivo.id ");
 		userQuery.append(EQUAL);
 		userQuery.append(" :idObjective ");
-		userQuery.append(AND);
-		userQuery.append(" delete is null ");
 		
 		queryText.append(userQuery);
 		queryTextWithoutOrder.append(userQuery);

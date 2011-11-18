@@ -67,7 +67,7 @@ public class ListObjectiveService extends ListService {
 					objetivo.setVisibles(nuevosVisibles);
 				} 
 				
-				/*Set<Tarea> tareas = objetivo.getTareas();
+				Set<Tarea> tareas = objetivo.getTareas();
 				if (tareas!=null){
 					Set<Tarea> nuevasTareas = new HashSet<Tarea>();
 					Iterator<Tarea> itTareas = tareas.iterator();
@@ -76,11 +76,12 @@ public class ListObjectiveService extends ListService {
 						tarea.setComentarios(null);
 						tarea.setObjetivo(null);
 						tarea.setVisibles(null);
+						tarea.setSubtareas(null);
 						nuevasTareas.add(tarea);
 					}
 					objetivo.setTareas(nuevasTareas);
-				}*/
-				objetivo.setTareas(null);
+				}
+				//objetivo.setTareas(null);
 				
 				
 			}
@@ -101,6 +102,7 @@ public class ListObjectiveService extends ListService {
 		while (it.hasNext()) {
 			Objetivo objetivo = (Objetivo) it.next();
 			preventLazy(objetivo.getVisibles());
+			preventLazy(objetivo.getTareas());
 		}
 		return result;
 	}

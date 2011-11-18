@@ -38,9 +38,14 @@ public class BackgroundEventDetectFilesProcess extends
 			}
 		} else {
 			// Se esta detectando una modificacion
-			Date lastModified = new Date(file.lastModified());
-			if ((getEvent().getLastModification() != null)
-					&& (!getEvent().getLastModification().equals(lastModified))) {
+			Date lastModified = null;
+			if (file.lastModified()!=0){
+				lastModified = new Date(file.lastModified());
+			}
+			
+			
+			if ((getEvent().getLastModification() != null) && (lastModified != null)
+					&& ((lastModified.getTime() - getEvent().getLastModification().getTime()) >  100)) {
 				logger.debug("Se detecta la modificacion del archivo:"
 						+ getEvent().getPath());
 				detected = Boolean.TRUE;
