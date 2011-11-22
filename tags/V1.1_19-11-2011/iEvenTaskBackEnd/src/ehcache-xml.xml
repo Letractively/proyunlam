@@ -1,0 +1,109 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://ehcache.sf.net/ehcache.xsd">
+	
+    <defaultCache
+    	maxElementsInMemory="2000"
+        eternal="true"
+        overflowToDisk="false"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120"
+        memoryStoreEvictionPolicy="LRU"
+        />
+      
+  <cache overflowToDisk="false" eternal="true" maxElementsInMemory="50" 
+  name="org.hibernate.cache.UpdateTimestampsCache"/>
+  
+  <cache overflowToDisk="false" eternal="true" maxElementsInMemory="50"
+  name="org.hibernate.cache.StandardQueryCache"/>
+     
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Comentario"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>
+
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Event"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>
+     
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>
+ 
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.EventLDAP"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+  
+  <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.EventLogs"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>    
+     
+  <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.EventServices"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>    
+  
+  <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Objetivo"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>    
+     
+  <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Permission"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>    
+     
+  <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Profile"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>    
+     
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Relation"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithActionCreateTask"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.RelationWithModifyStateTask"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Tarea"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.Visible"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+
+ <cache name="ar.com.AmberSoft.iEvenTask.backend.entities.VisibleObjetivo"
+     maxElementsInMemory="60"
+     eternal="true" 
+     timeToLiveSeconds="600"
+     overflowToDisk="false"/>     
+
+</ehcache>

@@ -1,0 +1,72 @@
+package ar.com.AmberSoft.iEvenTask.events;
+
+import java.io.File;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import ar.com.AmberSoft.iEvenTask.backend.entities.Event;
+import ar.com.AmberSoft.iEvenTask.backend.entities.EventFiles;
+import ar.com.AmberSoft.iEvenTask.services.UpdateEntityService;
+import ar.com.AmberSoft.iEvenTask.utils.Tools;
+import ar.com.AmberSoft.util.ParamsConst;
+
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public class BackgroundEventDetectFilesProcess extends
+		BackgroundEventDetectProcess {
+
+	private static Logger logger = Logger
+			.getLogger(BackgroundEventDetectFilesProcess.class);
+
+	public BackgroundEventDetectFilesProcess(Event event) {
+		super(event);
+	}
+
+	@Override
+	public Boolean eventDetect() {
+		logger.debug("Iniciando deteccion de archivos");
+		Boolean detected = Boolean.FALSE;
+		File file = new File(getEvent().getPath());
+		// Se esta detectando una creacion
+		if (getEvent().getControlType() == 1) {
+			if (file.exists()) {
+				logger.debug("Se detecta la creacion del archivo:"
+						+ getEvent().getPath());
+				detected = Boolean.TRUE;
+			}
+		} else {
+			// Se esta detectando una modificacion
+			Date lastModified = null;
+			if (file.lastModified()!=0){
+				lastModified = new Date(file.lastModified());
+			}
+			
+			
+			if ((getEvent().getLastModification() != null) && (lastModified != null)
+					&& ((lastModified.getTime() - getEvent().getLastModification().getTime()) >  100)) {
+				logger.debug("Se detecta la modificacion del archivo:"
+						+ getEvent().getPath());
+				detected = Boolean.TRUE;
+			}
+			getEvent().setLastModification(lastModified);
+			UpdateEntityService entityService = new UpdateEntityService();
+			Map params = new HashMap();
+			params.put(ParamsConst.ENTITY, getEvent());
+			try {
+				entityService.execute(params);
+			} catch (Exception e) {
+				logger.error(Tools.getStackTrace(e));
+			}
+		}
+
+		logger.debug("Fin deteccion de archivos");
+		return detected;
+	}
+
+	public EventFiles getEvent() {
+		return (EventFiles) event;
+	}
+
+}
