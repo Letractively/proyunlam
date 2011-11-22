@@ -1,11 +1,7 @@
 package ar.com.AmberSoft.iEvenTask.services;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +13,6 @@ import org.hibernate.Query;
 import ar.com.AmberSoft.iEvenTask.backend.entities.Entity;
 import ar.com.AmberSoft.iEvenTask.backend.entities.User;
 import ar.com.AmberSoft.iEvenTask.utils.Tools;
-import ar.com.AmberSoft.util.AsignadoTareaComparatorASC;
-import ar.com.AmberSoft.util.AsignadoTareaComparatorDESC;
 import ar.com.AmberSoft.util.LDAPUtils;
 import ar.com.AmberSoft.util.ParamsConst;
 
@@ -68,8 +62,8 @@ public class ListTaskWithVisibleFilterService extends ListTaskService {
 					params.put(ParamsConst.NOT_COMMON_PAGING, Boolean.TRUE);
 				}
 			} catch (Exception e) {
+				logger.error(Tools.getStackTrace(e));
 			}
-
 		}
 	}
 
