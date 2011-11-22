@@ -49,15 +49,15 @@ public class MainTabObjetivos extends TabItem implements Seleccionable{
 	public MainTabObjetivos() {
 		super("Objetivos");
 		
-		/*grid.addFilter(new StringFilter(ParamsConst.NOMBRE_OBJETIVO));
+		grid.addFilter(new StringFilter(ParamsConst.NOMBRE_OBJETIVO));
 		grid.addFilter(new StringFilter(ParamsConst.TIPO_OBJETIVO));
 		grid.addFilter(new DateFilter(ParamsConst.FECHA_FINALIZACION));
 		grid.addFilter(new StringFilter(ParamsConst.ESCALA_MEDICION));
 		//FIXME: revisar como filtrar correctamente los numero
 		//grid.addFilter(new NumericFilter(ParamsConst.PONDERACION));
-		grid.addFilter(new StringFilter(ParamsConst.ASIGNADO));
+		//grid.addFilter(new StringFilter(ParamsConst.ASIGNADO));
 		grid.addFilter(new StringFilter(ParamsConst.DESCRIPCION));
-		//grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));*/
+		//grid.addFilter(new NumericFilter(ParamsConst.CUMPLIMIENTO));
 		Context.getInstance().setObjectiveGrid(grid);
 		
 		// TODO acomodar posicion
